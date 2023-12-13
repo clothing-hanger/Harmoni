@@ -7,6 +7,7 @@ function SongSelectState:enter()
         printableList = printableList .. songList[i] .. "\n"
     end
     selectedSong = 1
+    inMenu = true
 end
 
 function SongSelectState:update(dt)

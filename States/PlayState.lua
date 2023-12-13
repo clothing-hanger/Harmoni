@@ -40,6 +40,7 @@ function PlayState:enter()
     Good = love.graphics.newImage("Images/JUDGEMENTS/Good.png")
     Okay = love.graphics.newImage("Images/JUDGEMENTS/Okay.png")
     Miss = love.graphics.newImage("Images/JUDGEMENTS/Miss.png")
+    HealthImage = love.graphics.newImage("Images/HUD/health.png")
 
 
     marvTiming = 43+10
@@ -63,11 +64,14 @@ function PlayState:enter()
 
     --set variables
     MusicTime = -10000
-    speed = 1.4
+    speed = 1.6
     LaneWidth = 120
+    health = 1
+    paused = false
     judgeColors = {0,0,0,0,0,0}
     judgePos = {0}
     backgroundDim = {0}
+    inMenu = false
     comboSize = {1}
     backgroundDimSetting = 0.9
     score = 0
@@ -75,7 +79,9 @@ function PlayState:enter()
     currentBestPossibleScore = 0
     combo = 0
     printableScore = {score}
+    printableHealth = {health}
     convertedAccuracy = 0
+    printableAccuracy = {accuracy}
 
 
     BotPlay = false
@@ -89,16 +95,77 @@ end
 function PlayState:update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
-
+    if paused then
+        MusicTime = PausedMusicTime
+    end
 
     if BotPlay then
         checkBotInput()
     else
         checkInput()
     end
+    checkMiss()
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
+    end
+
+    if Input:pressed("GameConfirm") then
+        pause()
+    end
+
+
+
+    if (#lane1+#lane2+#lane3+#lane4 == 0) or (printableHealth[1] <= 0) and not inMenu then
+        --State.switch(States.ResultsState)
+    end    
+
+
+end
+
+function pause()
+    paused = not paused
+    PausedMusicTime = MusicTime
+    if paused then
+        song:pause()
+    else
+        song:play()
+    end
+end
+
+
+function checkMiss()
+    for i = 1,#lane1 do
+        if MusicTime - lane1[i] > missTiming then
+            judge(MusicTime - i)
+            table.remove(lane1, i)
+            health = health - 0.03
+            break
+        end
+    end
+    for i = 1,#lane2 do
+        if MusicTime - lane2[i] > missTiming then
+            judge(MusicTime - i)
+            table.remove(lane2, i)
+            health = health - 0.03
+            break
+        end
+    end
+    for i = 1,#lane3 do
+        if MusicTime - lane3[i] > missTiming then
+            judge(MusicTime - i)
+            table.remove(lane3, i)
+            health = health - 0.03
+            break
+        end
+    end
+    for i = 1,#lane4 do
+        if MusicTime - lane4[i] > missTiming then
+            judge(MusicTime - i)
+            table.remove(lane4, i)
+            health = health - 0.03
+            break
+        end
     end
 end
 
@@ -120,18 +187,21 @@ function judge(noteTime)
         marvCount = marvCount + 1
         judgeCountTween(1)
         incrementCombo()
+        health = math.min(health + 0.025, 1)
     elseif noteTime < perfTiming then  -- perfect
         score = score + (bestScorePerNote/2)
         judgeColors = {0,1,0,0,0,0}
         judgeCountTween(2)
         incrementCombo()
         perfCount = perfCount + 1
+        health = math.min(health + 0.02, 1)
     elseif noteTime < greatTiming then  -- great
         score = score + (bestScorePerNote/3)
         greatCount = greatCount + 1
         judgeColors = {0,0,1,0,0,0}
         judgeCountTween(3)
         incrementCombo()
+        health = math.min(health + 0.01, 1)
     elseif noteTime < goodTiming then  -- good
         score = score + (bestScorePerNote/4)
         judgeColors = {0,0,0,1,0,0}
@@ -144,17 +214,20 @@ function judge(noteTime)
         judgeCountTween(5)
         incrementCombo()
         okayCount = okayCount + 1
+        health = health - 0.01
     else                        -- miss lmao fuckin loser
         score = math.max(score - bestScorePerNote,0)
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
         combo = 0
+        health = health - 0.03
     end
 
     currentBestPossibleScore = currentBestPossibleScore + bestScorePerNote
     accuracy = score/currentBestPossibleScore
     convertedAccuracy = accuracy*100
+
 
     printableScoreTween()
 
@@ -162,6 +235,7 @@ function judge(noteTime)
         Timer.cancel(judgeTween)
     end
     judgeTween = Timer.tween(0.1, judgePos, {0}, "out-quad")
+
 end
 
 function judgeCountTween(index)
@@ -174,8 +248,12 @@ end
 function printableScoreTween()
     if scoreTween then
         Timer.cancel(scoreTween)
+        Timer.cancel(accuracyTween)
+        Timer.cancel(healthTween)
     end
     scoreTween = Timer.tween(0.5, printableScore, {score}, "out-quad")
+    accuracyTween = Timer.tween(0.5, printableAccuracy, {convertedAccuracy}, "out-quad")
+    healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
 end
 
 
@@ -384,12 +462,25 @@ function PlayState:draw()
     end
 
     love.graphics.setColor(0,0.5,1)
-    love.graphics.printf(string.format("%.2f", tostring(math.min((convertedAccuracy))), 100).."%", 3, 3, love.graphics.getWidth(), "right")
+    love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, love.graphics.getWidth(), "right")
     love.graphics.setColor(1,1,1)
 
-    love.graphics.printf(string.format("%.2f", tostring(math.min((convertedAccuracy))), 100).."%", 0, 0, love.graphics.getWidth(), "right")
+    accuracyColor = printableAccuracy[1]/100
+
+    love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
+
+
+    love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, love.graphics.getWidth(), "right")
 
     love.graphics.setFont(DefaultFont)
+
+
+    love.graphics.setColor(0,1,1)
+
+
+    love.graphics.rectangle("fill", 900, 632, 20, -printableHealth[1]*500)
+    love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
+
 
 
     --love.graphics.line(0, love.graphics.getHeight()/2, love.graphics.getWidth(), love.graphics.getHeight()/2)
