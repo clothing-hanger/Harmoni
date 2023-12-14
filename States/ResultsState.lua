@@ -1,7 +1,6 @@
 local ResultsState = State()
 
 function ResultsState:enter()
-    inMenu = true
     ResultsScreenImage = love.graphics.newImage("Images/RESULTS/ResultsScreen.png")
 end
 

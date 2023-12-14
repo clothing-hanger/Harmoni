@@ -71,9 +71,8 @@ function PlayState:enter()
     judgeColors = {0,0,0,0,0,0}
     judgePos = {0}
     backgroundDim = {0}
-    inMenu = false
     comboSize = {1}
-    backgroundDimSetting = 0.9
+    backgroundDimSetting = 0.9 
     score = 0
     accuracy = 0
     currentBestPossibleScore = 0
@@ -116,7 +115,7 @@ function PlayState:update(dt)
 
 
 
-    if (#lane1+#lane2+#lane3+#lane4 == 0) or (printableHealth[1] <= 0) and not inMenu then
+    if (#lane1+#lane2+#lane3+#lane4 == 0) or (printableHealth[1] <= 0) then
         --State.switch(States.ResultsState)
     end    
 
@@ -216,7 +215,6 @@ function judge(noteTime)
         okayCount = okayCount + 1
         health = health - 0.01
     else                        -- miss lmao fuckin loser
-        score = math.max(score - bestScorePerNote,0)
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
