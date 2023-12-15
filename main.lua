@@ -20,7 +20,11 @@ function love.load()
             GameDown  =  { "key:f" },
             GameUp    =  { "key:j" },
             GameRight =  { "key:k" },
-            GameConfirm  =  { "key:space", "key:return" }
+            GameConfirm  =  { "key:space", "key:return" },
+            MenuUp = { "key:up" },
+            MenuDown = { "key:down" },
+            MenuConfirm = { "key:space", "key:return" },
+            setFullscreen = { "key:f" }
         }
     })
     Class = require("Libraries.Class")

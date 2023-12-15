@@ -2,7 +2,7 @@ local SongSelectState = State()
 
 function SongSelectState:enter()
     backgroundFade = {0}
-
+    songMenuBounceIn = {450}
     songList = love.filesystem.getDirectoryItems("Music")
     printableList = ""
     for i = 1,#songList do
@@ -15,27 +15,34 @@ function SongSelectState:enter()
     for i = 1,#songList do
         table.insert(songListXPPos,900)
     end
+    
+    Timer.tween(2, songMenuBounceIn, {0}, "in-bounce")
 end
 
 function SongSelectState:update(dt)
-    if Input:pressed("GameDown") then
+
+    if Input:pressed("MenuDown") then
         if selectedSong ~= #songList then
             selectedSong = selectedSong + 1
         else
             selectedSong = 1
         end
         SongSelectState:TweenSongList()
-    elseif Input:pressed("GameUp") then
+    elseif Input:pressed("MenuUp") then
         if selectedSong == 1 then
             selectedSong = #songList
         else
             selectedSong = selectedSong - 1
         end
         SongSelectState:TweenSongList()
-    elseif Input:pressed("GameConfirm") then
+    elseif Input:pressed("MenuConfirm") then
         State.switch(States.PlayState)
         MenuMusic:stop()
+    elseif Input:pressed("setFullscreen") then
+        isFullscreen = not isFullscreen
+        love.window.setFullscreen(isFullscreen, "exclusive")
     end
+
 
     for i = 1,#songListXPPos do
         local songOutPos = 800
@@ -86,11 +93,22 @@ function SongSelectState:draw()
     if background then
         love.graphics.draw(background)
     end
+    love.graphics.setColor(0,0,0,0.9)
+    love.graphics.rectangle("fill", 0, 0, 500, 200)
+    love.graphics.setColor(0,1,1)
+    love.graphics.rectangle("line", 0, 0, 500, 200)
+    love.graphics.print("Now Playing: ", 20, 20)
+    love.graphics.print(songList[selectedSong], 20, 40)
+
+
+
+
+
     love.graphics.setColor(0,0,0,backgroundFade[1])
     love.graphics.rectangle("fill", 0,0,love.graphics.getWidth(),love.graphics.getHeight())
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
-    love.graphics.translate(0, 300)
+    love.graphics.translate(songMenuBounceIn[1], 300)
 
 
     for i = 1,#songList do
