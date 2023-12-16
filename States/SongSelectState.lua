@@ -45,7 +45,7 @@ function SongSelectState:update(dt)
         love.window.setFullscreen(isFullscreen, "exclusive")
     end
 
-
+ 
     for i = 1,#songListXPPos do
         local songOutPos = 800
         local songInPos = 900
