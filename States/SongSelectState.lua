@@ -17,6 +17,8 @@ function SongSelectState:enter()
     end
     
     Timer.tween(2, songMenuBounceIn, {0}, "in-bounce")
+    disc = love.graphics.newImage("Images/SONGSELECT/disc.png")
+    discRotation = 0
 end
 
 function SongSelectState:update(dt)
@@ -58,6 +60,7 @@ function SongSelectState:update(dt)
             end
         end
     end
+    discRotation = discRotation + 5*dt
 end
 
 function SongSelectState:PlayMenuMusic()
@@ -70,6 +73,7 @@ function SongSelectState:PlayMenuMusic()
     if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
     backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
+        discRotation = 0
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
@@ -97,8 +101,26 @@ function SongSelectState:draw()
     love.graphics.rectangle("fill", 0, 0, 500, 200)
     love.graphics.setColor(0,1,1)
     love.graphics.rectangle("line", 0, 0, 500, 200)
-    love.graphics.print("Now Playing: ", 20, 20)
-    love.graphics.print(songList[selectedSong], 20, 40)
+    love.graphics.setFont(MenuFontBig)
+    love.graphics.printf("Now Playing: ", 20, 20, 500)
+    love.graphics.setFont(MenuFontSmall)
+
+    love.graphics.printf(songList[selectedSong], 20, 60, 480)
+
+
+
+    love.graphics.setColor(0,0,0,0.9)
+    love.graphics.rectangle("fill", love.graphics.getWidth()-250, 0, 250, 50)
+    love.graphics.setColor(0,1,1)
+
+    love.graphics.rectangle("line", love.graphics.getWidth()-250, 0, 250, 50)
+    love.graphics.printf(#songList.." Songs Found", love.graphics.getWidth()-240, 10, 240, "left")
+    love.graphics.push()
+
+    love.graphics.setColor(0.75,0.75,0.75)
+
+    love.graphics.draw(disc, 450, 150, discRotation, 0.08, 0.08,disc:getWidth()/2,disc:getHeight()/2)
+    love.graphics.pop()
 
 
 
@@ -126,6 +148,8 @@ function SongSelectState:draw()
             love.graphics.print(songList[i], songListXPPos[i]+10, (110*i)+10-(printableSongList[1] *110))
         end
     end
+    love.graphics.setFont(DefaultFont)
+
     love.graphics.pop()
 end
 

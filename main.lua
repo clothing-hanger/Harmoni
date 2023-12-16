@@ -24,7 +24,7 @@ function love.load()
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },
             MenuConfirm = { "key:space", "key:return" },
-            setFullscreen = { "key:f" }
+            setFullscreen = { "key:f11" }
         }
     })
     Class = require("Libraries.Class")
@@ -42,6 +42,8 @@ function love.load()
 
     BigFont = love.graphics.newFont("Fonts/framdit.ttf", 50)
     MediumFont = love.graphics.newFont("Fonts/framdit.ttf", 25)
+    MenuFontBig = love.graphics.newFont("Fonts/verdana.ttf", 30)
+    MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
 
     DefaultFont = love.graphics.newFont(12)
     State.switch(States.SongSelectState)
