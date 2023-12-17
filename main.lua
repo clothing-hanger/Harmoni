@@ -46,13 +46,18 @@ function love.load()
     MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
 
     DefaultFont = love.graphics.newFont(12)
-    State.switch(States.SongSelectState)
+    State.switch(States.TitleState)
 end
 
 function love.update(dt)
     Input:update()
     State.update(dt)
     Timer.update(dt)
+end
+
+function love.wheelmoved(x,y)
+    --if State.current() == SongSelectState then
+        scrollSongs(y)
 end
 
 function love.draw()

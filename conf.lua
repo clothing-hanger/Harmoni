@@ -1,5 +1,5 @@
 function love.conf(t)
-    t.window.title = "idfk"
+    t.window.title = "Harmoni"
 
     t.window.width = 1280
     t.window.height = 720

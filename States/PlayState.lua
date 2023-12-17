@@ -2,7 +2,7 @@ local PlayState = State()
 function PlayState:enter()
 
     --load assets
-    chart = require("Music/" .. songList[selectedSong] .. "/chart")
+    chart = love.filesystem.load("Music/" .. songList[selectedSong] .. "/chart.lua")()
     bestScorePerNote = 1000000/#chart
     lane1 = {}
     lane2 = {}
@@ -335,7 +335,8 @@ function checkBotInput()
 end
 function PlayState:draw()
     love.graphics.setCanvas(GameScreen)
-    love.graphics.draw(background)
+        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
+
     love.graphics.setColor(0,0,0,backgroundDim[1])
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
     love.graphics.setColor(1,1,1,1)

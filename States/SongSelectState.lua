@@ -8,7 +8,7 @@ function SongSelectState:enter()
     for i = 1,#songList do
         printableList = printableList .. songList[i] .. "\n"
     end
-    selectedSong = 1
+    selectedSong = randomSong
     printableSongList = {selectedSong}
     SongSelectState:PlayMenuMusic()
     songListXPPos = {}
@@ -39,6 +39,7 @@ function SongSelectState:update(dt)
         SongSelectState:TweenSongList()
     elseif Input:pressed("MenuConfirm") then
         State.switch(States.PlayState)
+        MusicTime = -math.huge  -- there is no fucking way this isnt low enough of a number
         MenuMusic:stop()
     elseif Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
@@ -63,12 +64,27 @@ function SongSelectState:update(dt)
     discRotation = discRotation + 5*dt
 end
 
+function scrollSongs(scroll)
+    selectedSong = selectedSong-scroll
+    if selectedSong > #songList then
+        selectedSong = 1
+    elseif selectedSong < 1 then 
+        selectedSong = #songList 
+    end
+    SongSelectState:TweenSongList()
+end
+
 function SongSelectState:PlayMenuMusic()
     if MenuMusic then
         MenuMusic:stop()
     end
     MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
+
+    MenuMusic:seek(titleSongLocation)
+    titleSongLocation = 0
     MenuMusic:play()
+
+
 
     if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
@@ -95,7 +111,8 @@ end
 function SongSelectState:draw()
 
     if background then
-        love.graphics.draw(background)
+            love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
+
     end
     love.graphics.setColor(0,0,0,0.9)
     love.graphics.rectangle("fill", 0, 0, 500, 200)
