@@ -7,10 +7,13 @@ function TitleState:enter()
     backgroundFade = {0}
 
     onTitle = true
+    logoYPos = {20}
+    titleState = 1
+    curScreen = "title"
 
 
     H = love.graphics.newImage("Images/TITLE/H.png")
-    R = love.graphics.newImage("Images/TITLE/R.png")
+    R = love.graphics.newImage("Images/TITLE/R.png")  -- the notes in the background originally were part of the logo, thats why their file name is letters
     O = love.graphics.newImage("Images/TITLE/O.png")
     I = love.graphics.newImage("Images/TITLE/I.png")
 
@@ -26,6 +29,10 @@ function TitleState:enter()
     titleSong:play()
     MusicTime = 0
     logoSize = 1
+
+    curSelection = 1
+    buttonWidth = {0,0,0}
+
 end
 
 function TitleState:update(dt)
@@ -39,16 +46,40 @@ function TitleState:update(dt)
             break
         end
     end
+    for i = 1,3 do
+        if i == curSelection then
+            buttonWidth[i] = math.min(15, buttonWidth[i] + 250*dt)
+        else
+            buttonWidth[i] = math.max(0, buttonWidth[i] - 250*dt)
+        end
+    end
 
     logoSize = math.max(logoSize - 0.15*dt, 1)
 
     if Input:pressed("MenuConfirm") then
-        titleSongLocation = titleSong:tell()
-        titleSongNumber = randomSong
-        comingFromTitle = true
-        onTitle = false
-        titleSong:stop()
-        State.switch(States.SongSelectState)
+        if titleState == 1 then
+            TitleState:switchMenu()
+
+        elseif titleState == 2 then
+            titleSongLocation = titleSong:tell()
+            titleSongNumber = randomSong
+            comingFromTitle = true
+            onTitle = false
+            titleSong:stop()
+            State.switch(States.SongSelectState)
+        end
+    elseif Input:pressed("MenuDown") then
+        if curSelection < 3 then
+            curSelection = curSelection + 1
+        else
+            curSelection = 1
+        end
+    elseif Input:pressed("MenuUp") then
+        if curSelection == 1 then
+            curSelection = 3
+        else
+            curSelection = curSelection - 1
+        end
     end
 
     if not titleSong:isPlaying() and onTitle then
@@ -57,6 +88,20 @@ function TitleState:update(dt)
 
     printableSpeed = speed *(logoSize+0.7)
 
+end
+
+function scrollTitleButtons(scroll)
+    curSelection = curSelection-scroll
+    if curSelection > 3 then
+        curSelection = 1
+    elseif curSelection < 1 then 
+        curSelection = 3 
+    end
+end
+
+function TitleState:switchMenu()
+    Timer.tween(1, logoYPos, {-200}, "out-expo")
+    titleState = 2
 end
 
 function TitleState:PlayMenuMusic()
@@ -124,10 +169,29 @@ function TitleState:draw()
             love.graphics.setColor(1,1,1,1)
         end
     end
-    love.graphics.translate(love.graphics.getWidth()/2-logo:getWidth()/2,20)
+    love.graphics.translate(love.graphics.getWidth()/2-logo:getWidth()/2,logoYPos[1])
 
 
     love.graphics.draw(logo, logo:getWidth()/2, love.graphics.getHeight()/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
+    love.graphics.translate(0,logoYPos[1])
+    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
+    love.graphics.setFont(MenuFontExtraSmall)
+
+    love.graphics.printf("Marge Simpson Tiddy Gallery", logo:getWidth()/2-120, 850, 240, "center")
+    love.graphics.setFont(MenuFontSmall)
+
+
+    love.graphics.translate(0,-30)
+    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[2], 850, 240+(buttonWidth[2]*2), 25)
+    love.graphics.printf("Options", logo:getWidth()/2-120, 850, 240, "center")
+
+
+
+    love.graphics.translate(0,-30)
+    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[1], 850, 240+(buttonWidth[1]*2), 25)
+    love.graphics.printf("Play", logo:getWidth()/2-120, 850, 240, "center")
+
+
 end
 
 return TitleState

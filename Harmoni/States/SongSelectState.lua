@@ -20,6 +20,7 @@ function SongSelectState:enter()
     disc = love.graphics.newImage("Images/SONGSELECT/disc.png")
     loading = love.graphics.newImage("Images/SONGSELECT/loading.png")
     discRotation = 0
+    curScreen = "songSelect"
 end
 
 function SongSelectState:update(dt)

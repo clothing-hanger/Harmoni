@@ -40,10 +40,33 @@ function love.load()
     require("Modules.Debug")
 
 
+    volumeOpacity = {0}
+    volumeVelocity = 0
+    printableVolume = {love.audio.getVolume()}
+    maxVolVelocity = 25
+    volume = love.audio.getVolume()
+
+
+    Tips = {
+        "Press F11 to Fullscreen.",
+        "Please report any bugs you find by opening a Github issue",
+        "Press R in the Song Select menu to pick a random song", -- this isnt even added yet lmfao
+        "Request features by opening a Github issue",
+        "Don't miss",
+        "Settings will be added eventually I promise lmao"
+    }
+
+    extremeRareTips = {
+        ""
+    }
+
+    ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
     BigFont = love.graphics.newFont("Fonts/framdit.ttf", 50)
     MediumFont = love.graphics.newFont("Fonts/framdit.ttf", 25)
     MenuFontBig = love.graphics.newFont("Fonts/verdana.ttf", 30)
     MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
+    MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
+
 
     DefaultFont = love.graphics.newFont(12)
     State.switch(States.TitleState)
@@ -53,22 +76,61 @@ function love.update(dt)
     Input:update()
     State.update(dt)
     Timer.update(dt)
+    volumeOpacity[1] = volumeOpacity[1] - 1*dt
+    volumeVelocity = math.max(0, volumeVelocity-100*dt)
+
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen, "exclusive")
     end
+    love.audio.setVolume(volume)
+
+end
+
+function tweenVolumeDisplay()
+    if volumeTween then
+        Timer.cancel(volumeTween)
+    end
+    volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-quad")
 end
 
 function love.wheelmoved(x,y)
-    --if State.current() == SongSelectState then
+
+    if love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt") then
+        tweenVolumeDisplay()
+        volumeOpacity[1] = 1
+        volumeVelocity = math.min(maxVolVelocity, volumeVelocity+2.5)
+        if y < 0 then  -- down
+            if math.abs(volumeVelocity) < 6 then
+                volume = math.max(love.audio.getVolume()+(y*0.01),0)
+            else
+                volume = math.max(love.audio.getVolume()+(y*0.01)*(volumeVelocity),0)
+            end
+        else        -- up
+            if math.abs(volumeVelocity) < 6 then
+                volume = math.min(love.audio.getVolume()+(y*0.01),1)
+            else
+                volume = math.min(love.audio.getVolume()+(y*0.01)*(volumeVelocity),1)
+            end
+        end
+    elseif curScreen == "songSelect" then
         scrollSongs(y)
+    elseif curScreen == "title" then
+        scrollTitleButtons(y)
+    end
 end
+
+
+
 
 function love.draw()
     love.graphics.push()
         love.graphics.setCanvas(GameScreen)
             love.graphics.clear(0,0,0,1)
             State.draw()
+
+
+
         love.graphics.setCanvas()
     love.graphics.pop()
 
@@ -79,9 +141,27 @@ function love.draw()
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+
     love.graphics.setShader()
 
     debug.printInfo()
+    love.graphics.setFont(ExtraBigFont)
+    love.graphics.setColor(1,1,1,volumeOpacity[1])
+    love.graphics.setColor(0,0,0,volumeOpacity[1])
+    love.graphics.arc("fill",200,300,100,0, printableVolume[1]*math.pi*2)
+    love.graphics.setLineWidth(5)
+    love.graphics.setColor(0,1,1,volumeOpacity[1])
+    if printableVolume[1] < 0.98 then
+        love.graphics.arc("line",200,300,100,0, printableVolume[1]*math.pi*2)
+    else
+        love.graphics.circle("line",200,300,100)
+    end
+    love.graphics.setColor(1,1,1,volumeOpacity[1])
+
+    love.graphics.print(math.floor(love.audio.getVolume()*100) .. "%",200-85,300-40)
+    love.graphics.setColor(1,1,1)
+
+
 end
 
 function love.resize(w, h)

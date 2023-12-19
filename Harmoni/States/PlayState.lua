@@ -124,7 +124,7 @@ function PlayState:update(dt)
         printableHealth[1] = 0
     end
 
-    if not song:isPlaying() and MusicTime > 1 then
+    if #lane1 + #lane2 + #lane3 + #lane4 == 0 and MusicTime > 1 then
         resultsScreen = true
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
