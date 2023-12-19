@@ -177,7 +177,7 @@ function TitleState:draw()
     love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
     love.graphics.setFont(MenuFontExtraSmall)
 
-    love.graphics.printf("Marge Simpson Tiddy Gallery", logo:getWidth()/2-120, 850, 240, "center")
+    love.graphics.printf("Credits", logo:getWidth()/2-120, 850, 240, "center")
     love.graphics.setFont(MenuFontSmall)
 
 
