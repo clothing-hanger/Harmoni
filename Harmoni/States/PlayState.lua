@@ -25,6 +25,7 @@ function PlayState:enter()
 
 
     songLength = song:getDuration()
+    songLengthToLastNote = chart[#chart][1]/1000
     ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
     ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
     ReceptorUp = love.graphics.newImage("Images/RECEPTORS/ReceptorUp.png")
@@ -68,6 +69,10 @@ function PlayState:enter()
     --set variables
     MusicTime = -10000
     speed = 1.6
+    speed1 = speed
+    speed2 = speed
+    speed3 = speed
+    speed4 = speed
     LaneWidth = 120
     health = 1
     timeRemainingBar = {love.graphics.getWidth()}
@@ -114,7 +119,8 @@ function PlayState:update(dt)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
-        songLengthTimer = (Timer.tween(songLength, timeRemainingBar, {0}))  -- if it works it works lmfao
+        -- songLengthTimer = (Timer.tween(songLength, timeRemainingBar, {0}))  -- if it works it works lmfao
+        songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
     end
 
     if Input:pressed("GameConfirm") then
@@ -125,7 +131,7 @@ function PlayState:update(dt)
         printableHealth[1] = 0
     end
 
-    if not song:isPlaying() and MusicTime > 1 then
+    if (#lane1+#lane2+#lane3+#lane4 == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
@@ -144,12 +150,14 @@ function PlayState:update(dt)
 end
 
 function pause()
-    paused = not paused
-    PausedMusicTime = MusicTime
-    if paused then
-        song:pause()
-    else
-        song:play()
+    if not resultsScreen then
+        paused = not paused
+        PausedMusicTime = MusicTime
+        if paused then
+            song:pause()
+        else
+            song:play()
+        end
     end
 end
 
@@ -169,6 +177,8 @@ function PlayState:leave(state)
     song = nil
     background = nil
     State.switch(state)
+    resultsScreenTranslate = nil
+    resultsScreenTween = nil
 end
 
 
@@ -433,39 +443,17 @@ function PlayState:draw()
 
        love.graphics.setFont(MediumFont)
 
-        if marvCount ~= 0 then
             love.graphics.print(marvCount,judgeCounterXPos[1], (love.graphics.getHeight()/2)-100)
-        else
-            love.graphics.print("Marvelous",0, (love.graphics.getHeight()/2)-100)
-        end
-        if perfCount ~= 0 then
+
             love.graphics.print(perfCount,judgeCounterXPos[2], (love.graphics.getHeight()/2)-50)
-        else
-            love.graphics.print("Perfect",0, (love.graphics.getHeight()/2)-50)
-        end
         love.graphics.setColor(92/255,1, 82/255)
 
-        if greatCount ~= 0 then
             love.graphics.print(greatCount,judgeCounterXPos[3], (love.graphics.getHeight()/2)+0)
-        else
-            love.graphics.print("Great",0, (love.graphics.getHeight()/2)+0)
-        end
-        if goodCount ~= 0 then
             love.graphics.print(goodCount,judgeCounterXPos[4], (love.graphics.getHeight()/2)+50)
-        else
-            love.graphics.print("Good",0, (love.graphics.getHeight()/2)+50)
-        end
         love.graphics.setColor(1,65/255,65/255)
-        if okayCount ~= 0 then
             love.graphics.print(okayCount,judgeCounterXPos[5], (love.graphics.getHeight()/2)+100)
-        else
-            love.graphics.print("Okay",0, (love.graphics.getHeight()/2)+100)
-        end
-        if missCount ~= 0 then
         love.graphics.print(missCount,judgeCounterXPos[6], (love.graphics.getHeight()/2)+150)
-        else
-            love.graphics.print("Miss",0, (love.graphics.getHeight()/2)+150)
-        end
+
         love.graphics.pop()
         love.graphics.push()
 
@@ -550,60 +538,62 @@ function PlayState:draw()
         love.graphics.setColor(1,1,1,1)
     
         love.graphics.rectangle("fill", 0, love.graphics.getHeight()-20, timeRemainingBar[1], 20)
-    
-    
-        if Input:down("GameLeft") then
-            love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
-        else
-            love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
-        end
-    
-        if Input:down("GameDown") then
-            love.graphics.draw(ReceptorDownPressed, love.graphics.getWidth()/2-(LaneWidth), 0)
-        else
-            love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
-        end
-    
-        if Input:down("GameUp") then
-            love.graphics.draw(ReceptorUpPressed, love.graphics.getWidth()/2, 0)
-        else    
-            love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
-        end
-    
-        if Input:down("GameRight") then
-            love.graphics.draw(ReceptorRightPressed, love.graphics.getWidth()/2+(LaneWidth), 0)
-        else
-            love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
-        end
-    
+        love.graphics.pop()
+
         love.graphics.push()
-        if gameOverNotePush[1] ~= 0 then
-            love.graphics.translate(0, gameOverNotePush[1])
-        end
-    
-            for i = 1,#lane1 do
-                if -(MusicTime - lane1[i])*speed < love.graphics.getHeight() then
-                    love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed)
-                end
+       -- love.graphics.translate(0, love.graphics.getHeight()/2-NoteUp:getHeight())
+            if Input:down("GameLeft") then
+                love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
+            else
+                love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
             end
-    
-            for i = 1,#lane2 do
-                if -(MusicTime - lane2[i])*speed < love.graphics.getHeight() then
-                    love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed)
-                end
+        
+            if Input:down("GameDown") then
+                love.graphics.draw(ReceptorDownPressed, love.graphics.getWidth()/2-(LaneWidth), 0)
+            else
+                love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
             end
-    
-    
-            for i = 1,#lane3 do
-                if -(MusicTime - lane3[i])*speed < love.graphics.getHeight() then
-                    love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed)
-                end
+        
+            if Input:down("GameUp") then
+                love.graphics.draw(ReceptorUpPressed, love.graphics.getWidth()/2, 0)
+            else    
+                love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
             end
-            for i = 1,#lane4 do
-                if -(MusicTime - lane4[i])*speed < love.graphics.getHeight() then
-                    love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed)
-                end
+        
+            if Input:down("GameRight") then
+                love.graphics.draw(ReceptorRightPressed, love.graphics.getWidth()/2+(LaneWidth), 0)
+            else
+                love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
             end
+        
+            love.graphics.push()
+            if gameOverNotePush[1] ~= 0 then
+                love.graphics.translate(0, gameOverNotePush[1])
+            end
+        
+                for i = 1,#lane1 do
+                    if -(MusicTime - lane1[i])*speed1 < love.graphics.getHeight() then
+                        love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed1)
+                    end
+                end
+        
+                for i = 1,#lane2 do
+                    if -(MusicTime - lane2[i])*speed2 < love.graphics.getHeight() then
+                        love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed2)
+                    end
+                end
+        
+        
+                for i = 1,#lane3 do
+                    if -(MusicTime - lane3[i])*speed3 < love.graphics.getHeight() then
+                        love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed3)
+                    end
+                end
+                for i = 1,#lane4 do
+                    if -(MusicTime - lane4[i])*speed4 < love.graphics.getHeight() then
+                        love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed4)
+                    end
+                end
             love.graphics.pop()
     
             love.graphics.setFont(BigFont)
