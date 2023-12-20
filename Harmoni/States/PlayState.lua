@@ -4,6 +4,7 @@ function PlayState:enter()
     --load assets
     chart = love.filesystem.load("Music/" .. songList[selectedSong] .. "/chart.lua")()
     bestScorePerNote = 1000000/#chart
+    hitTimes = {}
     lane1 = {}
     lane2 = {}
     lane3 = {}
@@ -124,7 +125,7 @@ function PlayState:update(dt)
         printableHealth[1] = 0
     end
 
-    if #lane1 + #lane2 + #lane3 + #lane4 == 0 and MusicTime > 1 then
+    if not song:isPlaying() and MusicTime > 1 then
         resultsScreen = true
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
@@ -216,36 +217,38 @@ function incrementCombo()
 end
 
 function judge(noteTime)
+    
     judgePos = {-10}
+    table.insert(hitTimes, {noteTime, MusicTime})
 
-    if noteTime < marvTiming then  -- marvelous
+    if math.abs(noteTime) < marvTiming then  -- marvelous
         score = score + bestScorePerNote
         judgeColors = {1,0,0,0,0,0}
         marvCount = marvCount + 1
         judgeCountTween(1)
         incrementCombo()
         health = math.min(health + 0.025, 1)
-    elseif noteTime < perfTiming then  -- perfect
+    elseif math.abs(noteTime) < perfTiming then  -- perfect
         score = score + (bestScorePerNote/2)
         judgeColors = {0,1,0,0,0,0}
         judgeCountTween(2)
         incrementCombo()
         perfCount = perfCount + 1
         health = math.min(health + 0.02, 1)
-    elseif noteTime < greatTiming then  -- great
+    elseif math.abs(noteTime) < greatTiming then  -- great
         score = score + (bestScorePerNote/3)
         greatCount = greatCount + 1
         judgeColors = {0,0,1,0,0,0}
         judgeCountTween(3)
         incrementCombo()
         health = math.min(health + 0.01, 1)
-    elseif noteTime < goodTiming then  -- good
+    elseif math.abs(noteTime) < goodTiming then  -- good
         score = score + (bestScorePerNote/4)
         judgeColors = {0,0,0,1,0,0}
         judgeCountTween(4)
         incrementCombo()
         goodCount = goodCount + 1
-    elseif noteTime < okayTiming then  -- okay
+    elseif math.abs(noteTime) < okayTiming then  -- okay
         score = score + (bestScorePerNote/5)
         judgeColors = {0,0,0,0,1,0}
         judgeCountTween(5)
@@ -304,7 +307,7 @@ end
 
 function checkInput()
     for i = 1,#lane1 do
-        local noteTime = math.abs(lane1[i] - MusicTime)
+        local noteTime = lane1[i] - MusicTime
         if noteTime < missTiming and Input:pressed("GameLeft")then
             judge(noteTime)
             table.remove(lane1, i)
@@ -313,7 +316,7 @@ function checkInput()
 
     end
     for i = 1,#lane2 do
-        local noteTime = math.abs(lane2[i] - MusicTime)
+        local noteTime = lane2[i] - MusicTime
         if noteTime < missTiming and Input:pressed("GameDown")then
             judge(noteTime)
             table.remove(lane2, i)
@@ -321,7 +324,7 @@ function checkInput()
         end
     end
     for i = 1,#lane3 do
-        local noteTime = math.abs(lane3[i] - MusicTime)
+        local noteTime = lane3[i] - MusicTime
         if noteTime < missTiming and Input:pressed("GameUp")then
             judge(noteTime)
             table.remove(lane3, i)
@@ -329,7 +332,7 @@ function checkInput()
         end
     end
     for i = 1,#lane4 do
-        local noteTime = math.abs(lane4[i] - MusicTime)
+        local noteTime = lane4[i] - MusicTime
         if noteTime < missTiming and Input:pressed("GameRight")then
             judge(noteTime)
             table.remove(lane4, i)
@@ -375,173 +378,209 @@ function checkBotInput()
 end
 function PlayState:draw()
     love.graphics.setCanvas(GameScreen)
-        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
-
-    love.graphics.setColor(0,0,0,backgroundDim[1])
-    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    love.graphics.setColor(1,1,1,1)
-
-    love.graphics.rectangle("fill", 0, love.graphics.getHeight()-20, timeRemainingBar[1], 20)
-
-
-    if Input:down("GameLeft") then
-        love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
-    else
-        love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
-    end
-
-    if Input:down("GameDown") then
-        love.graphics.draw(ReceptorDownPressed, love.graphics.getWidth()/2-(LaneWidth), 0)
-    else
-        love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
-    end
-
-    if Input:down("GameUp") then
-        love.graphics.draw(ReceptorUpPressed, love.graphics.getWidth()/2, 0)
-    else    
-        love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
-    end
-
-    if Input:down("GameRight") then
-        love.graphics.draw(ReceptorRightPressed, love.graphics.getWidth()/2+(LaneWidth), 0)
-    else
-        love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
-    end
-
-    love.graphics.push()
-    if gameOverNotePush[1] ~= 0 then
-        love.graphics.translate(0, gameOverNotePush[1])
-    end
-
-        for i = 1,#lane1 do
-            if -(MusicTime - lane1[i])*speed < love.graphics.getHeight() then
-                love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed)
-            end
-        end
-
-        for i = 1,#lane2 do
-            if -(MusicTime - lane2[i])*speed < love.graphics.getHeight() then
-                love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed)
-            end
-        end
-
-
-        for i = 1,#lane3 do
-            if -(MusicTime - lane3[i])*speed < love.graphics.getHeight() then
-                love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed)
-            end
-        end
-        for i = 1,#lane4 do
-            if -(MusicTime - lane4[i])*speed < love.graphics.getHeight() then
-                love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed)
-            end
-        end
-        love.graphics.pop()
-
-        love.graphics.setFont(BigFont)
-        love.graphics.setColor(0,0.5,1)
-        love.graphics.print(math.floor(printableScore[1]),3,3)
-        love.graphics.setColor(1,1,1)
-
-        love.graphics.print(math.floor(printableScore[1]))
-
-        love.graphics.setFont(DefaultFont)
-
-
-
-
-    love.graphics.setColor(1,1,1,judgeColors[1])
-    love.graphics.draw(Marvelous, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
-    love.graphics.setColor(1,1,1,judgeColors[2])
-    love.graphics.draw(Perfect, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])         
-    love.graphics.setColor(1,1,1,judgeColors[3])
-    love.graphics.draw(Great, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
-    love.graphics.setColor(1,1,1,judgeColors[4])
-    love.graphics.draw(Good, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
-    love.graphics.setColor(1,1,1,judgeColors[5])
-    love.graphics.draw(Okay, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
-    love.graphics.setColor(1,1,1,judgeColors[6])
-    love.graphics.draw(Miss, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.setFont(MediumFont)
-
-    if marvCount ~= 0 then
-        love.graphics.print(marvCount,judgeCounterXPos[1], (love.graphics.getHeight()/2)-100)
-    else
-        love.graphics.print("Marvelous",0, (love.graphics.getHeight()/2)-100)
-    end
-    if perfCount ~= 0 then
-        love.graphics.print(perfCount,judgeCounterXPos[2], (love.graphics.getHeight()/2)-50)
-    else
-        love.graphics.print("Perfect",0, (love.graphics.getHeight()/2)-50)
-    end
-    love.graphics.setColor(92/255,1, 82/255)
-
-    if greatCount ~= 0 then
-        love.graphics.print(greatCount,judgeCounterXPos[3], (love.graphics.getHeight()/2)+0)
-    else
-        love.graphics.print("Great",0, (love.graphics.getHeight()/2)+0)
-    end
-    if goodCount ~= 0 then
-        love.graphics.print(goodCount,judgeCounterXPos[4], (love.graphics.getHeight()/2)+50)
-    else
-        love.graphics.print("Good",0, (love.graphics.getHeight()/2)+50)
-    end
-    love.graphics.setColor(1,65/255,65/255)
-    if okayCount ~= 0 then
-        love.graphics.print(okayCount,judgeCounterXPos[5], (love.graphics.getHeight()/2)+100)
-    else
-        love.graphics.print("Okay",0, (love.graphics.getHeight()/2)+100)
-    end
-    if missCount ~= 0 then
-       love.graphics.print(missCount,judgeCounterXPos[6], (love.graphics.getHeight()/2)+150)
-    else
-        love.graphics.print("Miss",0, (love.graphics.getHeight()/2)+150)
-    end
-
-
-
-
-
-
-    love.graphics.setColor(1,1,1,1)
-    love.graphics.setFont(BigFont)
-    if combo > 0 then
-        love.graphics.printf(combo, 0, 240+judgePos[1], love.graphics.getWidth(), "center")
-    end
 
 
     if resultsScreen then
-        love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, love.graphics.getWidth(), "center")
 
-        love.graphics.printf("Press Enter to Continue.", 0, 320, love.graphics.getWidth(), "center")
+        love.graphics.push()
+        --love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, love.graphics.getWidth(), "center")
+
+       -- love.graphics.printf("Press Enter to Continue.", 0, 320, love.graphics.getWidth(), "center")
+
+        love.graphics.translate(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
+        love.graphics.setLineWidth(1)
+        love.graphics.scale(1, 0.5)
+
+        graphWidth = 500
+        love.graphics.line(0, marvTiming, graphWidth, marvTiming)
+        love.graphics.line(0, perfTiming, graphWidth, perfTiming)
+        love.graphics.line(0, greatTiming, graphWidth,greatTiming)
+        love.graphics.line(0, goodTiming, graphWidth, goodTiming)
+        love.graphics.line(0, okayTiming, graphWidth, okayTiming)
+        love.graphics.line(0, missTiming, graphWidth, missTiming)
+        love.graphics.line(0, 0, graphWidth, 0)
+        love.graphics.line(0, -marvTiming, graphWidth, -marvTiming)
+        love.graphics.line(0, -perfTiming, graphWidth, -perfTiming)
+        love.graphics.line(0, -greatTiming, graphWidth, -greatTiming)
+        love.graphics.line(0, -goodTiming, graphWidth, -goodTiming)
+        love.graphics.line(0, -okayTiming, graphWidth, -okayTiming)
+        love.graphics.line(0, -missTiming, graphWidth, -missTiming)
+
+
+        for i = 1,#hitTimes do
+           -- love.graphics.circle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3)
+            love.graphics.rectangle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3, 6)
+        end
+
+
+
+        --love.graphics.rectangle("line", )
+
+        love.graphics.setLineWidth(5)
+
+        love.graphics.pop()
+
+    else
+        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
+
+        love.graphics.setColor(0,0,0,backgroundDim[1])
+        love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+        love.graphics.setColor(1,1,1,1)
+    
+        love.graphics.rectangle("fill", 0, love.graphics.getHeight()-20, timeRemainingBar[1], 20)
+    
+    
+        if Input:down("GameLeft") then
+            love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
+        else
+            love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
+        end
+    
+        if Input:down("GameDown") then
+            love.graphics.draw(ReceptorDownPressed, love.graphics.getWidth()/2-(LaneWidth), 0)
+        else
+            love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
+        end
+    
+        if Input:down("GameUp") then
+            love.graphics.draw(ReceptorUpPressed, love.graphics.getWidth()/2, 0)
+        else    
+            love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
+        end
+    
+        if Input:down("GameRight") then
+            love.graphics.draw(ReceptorRightPressed, love.graphics.getWidth()/2+(LaneWidth), 0)
+        else
+            love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
+        end
+    
+        love.graphics.push()
+        if gameOverNotePush[1] ~= 0 then
+            love.graphics.translate(0, gameOverNotePush[1])
+        end
+    
+            for i = 1,#lane1 do
+                if -(MusicTime - lane1[i])*speed < love.graphics.getHeight() then
+                    love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed)
+                end
+            end
+    
+            for i = 1,#lane2 do
+                if -(MusicTime - lane2[i])*speed < love.graphics.getHeight() then
+                    love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed)
+                end
+            end
+    
+    
+            for i = 1,#lane3 do
+                if -(MusicTime - lane3[i])*speed < love.graphics.getHeight() then
+                    love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed)
+                end
+            end
+            for i = 1,#lane4 do
+                if -(MusicTime - lane4[i])*speed < love.graphics.getHeight() then
+                    love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed)
+                end
+            end
+            love.graphics.pop()
+    
+            love.graphics.setFont(BigFont)
+            love.graphics.setColor(0,0.5,1)
+            love.graphics.print(math.floor(printableScore[1]),3,3)
+            love.graphics.setColor(1,1,1)
+    
+            love.graphics.print(math.floor(printableScore[1]))
+    
+            love.graphics.setFont(DefaultFont)
+    
+    
+    
+    
+        love.graphics.setColor(1,1,1,judgeColors[1])
+        love.graphics.draw(Marvelous, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.setColor(1,1,1,judgeColors[2])
+        love.graphics.draw(Perfect, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])         
+        love.graphics.setColor(1,1,1,judgeColors[3])
+        love.graphics.draw(Great, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.setColor(1,1,1,judgeColors[4])
+        love.graphics.draw(Good, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.setColor(1,1,1,judgeColors[5])
+        love.graphics.draw(Okay, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.setColor(1,1,1,judgeColors[6])
+        love.graphics.draw(Miss, (love.graphics.getWidth()/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.setFont(MediumFont)
+    
+        if marvCount ~= 0 then
+            love.graphics.print(marvCount,judgeCounterXPos[1], (love.graphics.getHeight()/2)-100)
+        else
+            love.graphics.print("Marvelous",0, (love.graphics.getHeight()/2)-100)
+        end
+        if perfCount ~= 0 then
+            love.graphics.print(perfCount,judgeCounterXPos[2], (love.graphics.getHeight()/2)-50)
+        else
+            love.graphics.print("Perfect",0, (love.graphics.getHeight()/2)-50)
+        end
+        love.graphics.setColor(92/255,1, 82/255)
+    
+        if greatCount ~= 0 then
+            love.graphics.print(greatCount,judgeCounterXPos[3], (love.graphics.getHeight()/2)+0)
+        else
+            love.graphics.print("Great",0, (love.graphics.getHeight()/2)+0)
+        end
+        if goodCount ~= 0 then
+            love.graphics.print(goodCount,judgeCounterXPos[4], (love.graphics.getHeight()/2)+50)
+        else
+            love.graphics.print("Good",0, (love.graphics.getHeight()/2)+50)
+        end
+        love.graphics.setColor(1,65/255,65/255)
+        if okayCount ~= 0 then
+            love.graphics.print(okayCount,judgeCounterXPos[5], (love.graphics.getHeight()/2)+100)
+        else
+            love.graphics.print("Okay",0, (love.graphics.getHeight()/2)+100)
+        end
+        if missCount ~= 0 then
+           love.graphics.print(missCount,judgeCounterXPos[6], (love.graphics.getHeight()/2)+150)
+        else
+            love.graphics.print("Miss",0, (love.graphics.getHeight()/2)+150)
+        end
+    
+    
+    
+    
+    
+    
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.setFont(BigFont)
+        if combo > 0 then
+            love.graphics.printf(combo, 0, 240+judgePos[1], love.graphics.getWidth(), "center")
+        end
+        love.graphics.setColor(0,0.5,1)
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, love.graphics.getWidth(), "right")
+        love.graphics.setColor(1,1,1)
+    
+        accuracyColor = printableAccuracy[1]/100
+    
+        love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
+    
+    
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, love.graphics.getWidth(), "right")
+    
+        love.graphics.setFont(DefaultFont)
+        love.graphics.setColor(0,0,0)
+    
+        love.graphics.rectangle("fill", 896, 636, 13, -508)
+    
+        love.graphics.setColor(0,0.5,1)
+    
+    
+        love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+        --love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
+    
+    
+    
+        --love.graphics.line(0, love.graphics.getHeight()/2, love.graphics.getWidth(), love.graphics.getHeight()/2)
     end
-
-    love.graphics.setColor(0,0.5,1)
-    love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, love.graphics.getWidth(), "right")
-    love.graphics.setColor(1,1,1)
-
-    accuracyColor = printableAccuracy[1]/100
-
-    love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
-
-
-    love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, love.graphics.getWidth(), "right")
-
-    love.graphics.setFont(DefaultFont)
-    love.graphics.setColor(0,0,0)
-
-    love.graphics.rectangle("fill", 896, 636, 13, -508)
-
-    love.graphics.setColor(0,0.5,1)
-
-
-    love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
-    --love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
-
-
-
-    --love.graphics.line(0, love.graphics.getHeight()/2, love.graphics.getWidth(), love.graphics.getHeight()/2)
 
 
 end
