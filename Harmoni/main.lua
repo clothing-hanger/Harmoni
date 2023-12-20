@@ -61,6 +61,8 @@ function love.load()
     }
 
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
+    ReallyFuckingBigFont = love.graphics.newFont("Fonts/framdit.ttf", 400)
+
     BigFont = love.graphics.newFont("Fonts/framdit.ttf", 50)
     MediumFont = love.graphics.newFont("Fonts/framdit.ttf", 25)
     MenuFontBig = love.graphics.newFont("Fonts/verdana.ttf", 30)

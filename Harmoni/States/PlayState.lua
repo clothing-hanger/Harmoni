@@ -382,35 +382,157 @@ function PlayState:draw()
 
     if resultsScreen then
 
+
+        if convertedAccuracy == 100 then
+            grade = "SS"
+        elseif convertedAccuracy > 95 then
+            grade = "S"
+        elseif convertedAccuracy > 90 then
+            grade = "A"
+        elseif convertedAccuracy > 80 then
+            grade = "B"
+        elseif convertedAccuracy > 70 then
+            grade = "C"
+        else 
+            grade = "D"
+        end
+
+        if gameOver then
+            grade = "F"
+        end
+
+        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
+
+        love.graphics.setColor(0,0,0,backgroundDim[1])
+        love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+        love.graphics.setColor(1,1,1,1)
+    
+        love.graphics.rectangle("fill", 0, love.graphics.getHeight()-20, timeRemainingBar[1], 20)
+
         love.graphics.push()
         --love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, love.graphics.getWidth(), "center")
 
        -- love.graphics.printf("Press Enter to Continue.", 0, 320, love.graphics.getWidth(), "center")
+       if not resultsScreenTranslate then
+        resultsScreenTranslate = {0, 0}
+       end
+
+        if resultsScreenTween then
+            Timer.cancel(resultsScreenTween)
+        end
+        resultsScreenTween = Timer.tween(0.5, resultsScreenTranslate, {[1] = love.graphics.getWidth()/2 - 50, [2] = -50}, "out-expo")
+    
+        
+
+       love.graphics.translate(resultsScreenTranslate[1], resultsScreenTranslate[2])
+
+       love.graphics.setFont(ReallyFuckingBigFont)
+
+        love.graphics.print(grade, -400, love.graphics.getHeight()/2-150)
+
+
+       love.graphics.setFont(MediumFont)
+
+        if marvCount ~= 0 then
+            love.graphics.print(marvCount,judgeCounterXPos[1], (love.graphics.getHeight()/2)-100)
+        else
+            love.graphics.print("Marvelous",0, (love.graphics.getHeight()/2)-100)
+        end
+        if perfCount ~= 0 then
+            love.graphics.print(perfCount,judgeCounterXPos[2], (love.graphics.getHeight()/2)-50)
+        else
+            love.graphics.print("Perfect",0, (love.graphics.getHeight()/2)-50)
+        end
+        love.graphics.setColor(92/255,1, 82/255)
+
+        if greatCount ~= 0 then
+            love.graphics.print(greatCount,judgeCounterXPos[3], (love.graphics.getHeight()/2)+0)
+        else
+            love.graphics.print("Great",0, (love.graphics.getHeight()/2)+0)
+        end
+        if goodCount ~= 0 then
+            love.graphics.print(goodCount,judgeCounterXPos[4], (love.graphics.getHeight()/2)+50)
+        else
+            love.graphics.print("Good",0, (love.graphics.getHeight()/2)+50)
+        end
+        love.graphics.setColor(1,65/255,65/255)
+        if okayCount ~= 0 then
+            love.graphics.print(okayCount,judgeCounterXPos[5], (love.graphics.getHeight()/2)+100)
+        else
+            love.graphics.print("Okay",0, (love.graphics.getHeight()/2)+100)
+        end
+        if missCount ~= 0 then
+        love.graphics.print(missCount,judgeCounterXPos[6], (love.graphics.getHeight()/2)+150)
+        else
+            love.graphics.print("Miss",0, (love.graphics.getHeight()/2)+150)
+        end
+        love.graphics.pop()
+        love.graphics.push()
+
 
         love.graphics.translate(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
         love.graphics.setLineWidth(1)
         love.graphics.scale(1, 0.5)
 
         graphWidth = 500
+        love.graphics.setColor(1,1,1)
         love.graphics.line(0, marvTiming, graphWidth, marvTiming)
+
+        love.graphics.setColor(1,1,78/255)
         love.graphics.line(0, perfTiming, graphWidth, perfTiming)
+        
+        love.graphics.setColor(92/255, 1, 82/255)
         love.graphics.line(0, greatTiming, graphWidth,greatTiming)
+
+        love.graphics.setColor(0,61/255,1)
         love.graphics.line(0, goodTiming, graphWidth, goodTiming)
+
+        love.graphics.setColor(129/255,0,1)
         love.graphics.line(0, okayTiming, graphWidth, okayTiming)
+
+        love.graphics.setColor(1,65/255,65/255)
         love.graphics.line(0, missTiming, graphWidth, missTiming)
+
+        love.graphics.setColor(1,1,1)
         love.graphics.line(0, 0, graphWidth, 0)
+
+        love.graphics.setColor(1,1,1)
         love.graphics.line(0, -marvTiming, graphWidth, -marvTiming)
+
+        love.graphics.setColor(1,1,78/255)
         love.graphics.line(0, -perfTiming, graphWidth, -perfTiming)
+
+        love.graphics.setColor(92/255, 1, 82/255)
         love.graphics.line(0, -greatTiming, graphWidth, -greatTiming)
+
+        love.graphics.setColor(0,61/255,1)
         love.graphics.line(0, -goodTiming, graphWidth, -goodTiming)
+
+        love.graphics.setColor(129/255,0,1)
         love.graphics.line(0, -okayTiming, graphWidth, -okayTiming)
+
+        love.graphics.setColor(1,65/255,65/255)
         love.graphics.line(0, -missTiming, graphWidth, -missTiming)
 
 
         for i = 1,#hitTimes do
-           -- love.graphics.circle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3)
-            love.graphics.rectangle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3, 6)
+            local noteHitTime = math.abs(hitTimes[i][1])
+            if noteHitTime < marvTiming then
+                love.graphics.setColor(1,1,1)
+            elseif noteHitTime < perfTiming then
+                love.graphics.setColor(1,1,78/255)
+            elseif noteHitTime < greatTiming then
+                love.graphics.setColor(92/255, 1, 82/255)
+            elseif noteHitTime < goodTiming then
+                love.graphics.setColor(0,61/255,1)
+            elseif noteHitTime < okayTiming then
+                love.graphics.setColor(129/255,0,1)
+            elseif noteHitTime < missTiming then
+                love.graphics.setColor(1,65/255,65/255)
+            end
+            love.graphics.rectangle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3, 6, 1.5, 3)
         end
+
 
 
 
