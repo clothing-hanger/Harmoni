@@ -29,6 +29,8 @@ function love.load()
     })
     Class = require("Libraries.Class")
     State = require("Libraries.State")
+    tinyyaml = require("Libraries.tinyyaml")
+
     Timer = require("Libraries.Timer")
 
     GameScreen = love.graphics.newCanvas(Inits.GameWidth, Inits.GameHeight)

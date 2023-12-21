@@ -2,30 +2,73 @@ local PlayState = State()
 function PlayState:enter()
 
     --load assets
-    chart = love.filesystem.load("Music/" .. songList[selectedSong] .. "/chart.lua")()
-    bestScorePerNote = 1000000/#chart
+
+
     hitTimes = {}
+
+    quaverFile = false
+
     lane1 = {}
     lane2 = {}
     lane3 = {}
     lane4 = {}
-    for i = 1,#chart do
-        if chart[i][2] == 1 then
-            table.insert(lane1, chart[i][1])
-        elseif chart[i][2] == 2 then
-            table.insert(lane2, chart[i][1])
-        elseif chart[i][2] == 3 then
-            table.insert(lane3, chart[i][1])
-        elseif chart[i][2] == 4 then
-            table.insert(lane4, chart[i][1])
+
+    if not quaverFile then
+        chart = love.filesystem.load("Music/" .. songList[selectedSong] .. "/chart.lua")()
+        bestScorePerNote = 1000000/#chart
+
+        for i = 1,#chart do
+            if chart[i][2] == 1 then
+                table.insert(lane1, chart[i][1])
+            elseif chart[i][2] == 2 then
+                table.insert(lane2, chart[i][1])
+            elseif chart[i][2] == 3 then
+                table.insert(lane3, chart[i][1])
+            elseif chart[i][2] == 4 then
+                table.insert(lane4, chart[i][1])
+            end
         end
+        song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
+        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
+
+        lastNoteTime = chart[#chart][1]
+    
+    else
+        chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/chart.qua"))
+        song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
+        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
+    
+
+
+
+        for i = 1,#chart.HitObjects do -- credits to Rit for some of this
+            local hitObject = chart.HitObjects[i]
+            local startTime = hitObject.StartTime
+            local endTime = hitObject.EndTime or 0
+            local lane = hitObject.Lane
+
+            if lane == 1 then
+                table.insert(lane1, startTime)
+            elseif lane == 2 then
+                table.insert(lane2, startTime)
+            elseif lane == 3 then
+                table.insert(lane3, startTime)
+            elseif lane == 4 then
+                table.insert(lane4, startTime)
+            end
+            lastNoteTime = startTime -- this should work because the last time its run will be the last note
+        end
+
+
+        bestScorePerNote = 1000000/(#lane1+#lane2+#lane3+#lane4)
     end
-    song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
-    background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
+
+
+
 
 
     songLength = song:getDuration()
-    songLengthToLastNote = chart[#chart][1]/1000
+    songLengthToLastNote = lastNoteTime/1000
     ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
     ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
     ReceptorUp = love.graphics.newImage("Images/RECEPTORS/ReceptorUp.png")
@@ -69,6 +112,10 @@ function PlayState:enter()
     --set variables
     MusicTime = -10000
     speed = 1.6
+    downScroll = false
+    if downScroll then
+        speed = -speed
+    end
     speed1 = speed
     speed2 = speed
     speed3 = speed
@@ -95,10 +142,11 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
 
 
+
+
     BotPlay = false
 
 
-    --nothing after this is for loading shit
     dimBackground()
 
 
@@ -148,7 +196,7 @@ function PlayState:update(dt)
 
 
 end
-
+ 
 function pause()
     if not resultsScreen then
         paused = not paused
@@ -394,7 +442,7 @@ function PlayState:draw()
 
 
         if convertedAccuracy == 100 then
-            grade = "SS"
+            grade = "S+"
         elseif convertedAccuracy > 95 then
             grade = "S"
         elseif convertedAccuracy > 90 then
@@ -541,7 +589,9 @@ function PlayState:draw()
         love.graphics.pop()
 
         love.graphics.push()
-       -- love.graphics.translate(0, love.graphics.getHeight()/2-NoteUp:getHeight())
+        if downScroll then
+            love.graphics.translate(0, love.graphics.getHeight()-NoteUp:getHeight()) 
+        end   -- downscroll
             if Input:down("GameLeft") then
                 love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
             else
@@ -595,6 +645,9 @@ function PlayState:draw()
                     end
                 end
             love.graphics.pop()
+
+        love.graphics.pop()
+        love.graphics.push()
     
             love.graphics.setFont(BigFont)
             love.graphics.setColor(0,0.5,1)
