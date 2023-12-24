@@ -28,7 +28,8 @@ function love.load()
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },
             MenuConfirm = { "key:space", "key:return" },
-            setFullscreen = { "key:f11" }
+            setFullscreen = { "key:f11" },
+            MenuBack = { "key:escape", "key:backspace" },
         }
     })
     Class = require("Libraries.Class")

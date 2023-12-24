@@ -5,6 +5,7 @@ function PlayState:enter()
 
 
     hitTimes = {}
+    curScreen = "play"
 
     
     lane1 = {}

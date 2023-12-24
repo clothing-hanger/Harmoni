@@ -58,6 +58,10 @@ function SongSelectState:update(dt)
 
         MusicTime = -math.huge
 
+    elseif Input:pressed("MenuBack") then
+        if difficultySelect then
+            difficultySelect = false
+        end
     end
 
  
@@ -65,22 +69,38 @@ function SongSelectState:update(dt)
         local songOutPos = 800
         local songInPos = 900
 
-
         if i ~= selectedSong then
             if songListXPPos[i] ~= songInPos then
-                songListXPPos[i] = math.max(songListXPPos[i]+1500*dt, songInPos)
+                songListXPPos[i] = math.min(songListXPPos[i]+800*dt, songInPos)
             end
         else
             if songListXPPos[i] ~= songOutPos then
-                songListXPPos[i] = math.max(songListXPPos[i]-1500*dt, songOutPos)
+                songListXPPos[i] = math.max(songListXPPos[i]-800*dt, songOutPos)
             end
         end
     end
+    for i = 1,#diffListXPPos do
+        local songOutPos = 800
+        local songInPos = 900
+        if i ~= selectedDiff then
+            if diffListXPPos[i] ~= songInPos then
+                diffListXPPos[i] = math.min(diffListXPPos[i]+800*dt, songInPos)
+            end
+        else
+            if diffListXPPos[i] ~= songOutPos then
+                diffListXPPos[i] = math.max(diffListXPPos[i]-800*dt, songOutPos)
+            end
+        end
+    end
+
     
     discRotation = discRotation + 5*dt
 end
 
 function scrollSongs(scroll)
+    MenuMusic:stop()
+    MenuMusic = nil
+    background = nil
     if not difficultySelect then
         selectedSong = selectedSong-scroll
         if selectedSong > #songList then
@@ -91,12 +111,23 @@ function scrollSongs(scroll)
         SongSelectState:TweenSongList()
         resetDiffListXPPos()
     else
+--[[
+        if scroll < 0 then
+            selectedDiff = selectedDiff + 1
+        else
+            selectedDiff = selectedDiff - 1
+        end
+--]]
         selectedDiff = selectedDiff-scroll
         if selectedDiff > #diffList then
             selectedDiff = 1
-        elseif selectedDiff < 1 then 
-            selectedDiff = #diffList 
+        elseif selectedDiff < 1 then
+            selectedDiff = #diffList
         end
+        print(selectedDiff)
+        
+        resetDiffListXPPos()
+
         SongSelectState:TweenSongList()
     end
 end
@@ -114,8 +145,10 @@ function SongSelectState:PlayMenuMusic()
             table.insert(diffList, file)
         end
     end
-    randomDifficulty = love.math.random(1,#diffList)
-    chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+    if selectedDiff > #diffList then
+        selectedDiff = 1
+    end
+    chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff]))
     for i = 1,#diffList do
         table.insert(DiffNameList, chart.DifficultyName)
     end
@@ -184,7 +217,7 @@ function SongSelectState:draw()
     love.graphics.printf("Now Playing: ", 20, 20, 500)
     love.graphics.setFont(MenuFontSmall)
 
-    love.graphics.printf(songList[selectedSong], 20, 60, 480)
+    love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 20, 60, 480)
 
 
 
