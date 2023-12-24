@@ -6,14 +6,19 @@ function PlayState:enter()
 
     hitTimes = {}
 
-    quaverFile = false
-
+    
     lane1 = {}
     lane2 = {}
     lane3 = {}
     lane4 = {}
 
-    if not quaverFile then
+    MusicTime = -2000
+
+
+    if MenuMusic then
+        MenuMusic:stop()
+    end
+    if oldFormat then
         chart = love.filesystem.load("Music/" .. songList[selectedSong] .. "/chart.lua")()
         bestScorePerNote = 1000000/#chart
 
@@ -33,15 +38,35 @@ function PlayState:enter()
 
         lastNoteTime = chart[#chart][1]
     
-    else
-        chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/chart.qua"))
-        song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
-        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
-    
+    else                         -- huge credits to https://github.com/AGORI-Studios/Rit for this part
 
 
 
-        for i = 1,#chart.HitObjects do -- credits to Rit for some of this
+        chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff]))
+
+
+            metaData = {
+                name = chart.Title,
+                song = chart.AudioFile,
+                artist = chart.Artist,
+                source = chart.Source, -- not sure what this one even is really
+                tags = chart.Tags, -- not gonna be used in this file but im putting it here for now so i dont forget it
+                diffName = chart.DifficultyName,
+                creator = chart.Creator,
+                background = chart.BackgroundFile,
+                previewTime = chart.PreviewTime or 0, -- also wont be used here
+                noteCount = 0,
+                length = 0,
+                bpm = 0,   -- idk if ill ever use bpm 😭😭 idk how it works
+                inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
+            }
+
+            song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+            background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+
+
+
+        for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
             local startTime = hitObject.StartTime
             local endTime = hitObject.EndTime or 0
@@ -222,7 +247,7 @@ function PlayState:gameOver()
 end
 
 function PlayState:leave(state)
-    song = nil
+    --song = nil
     background = nil
     State.switch(state)
     resultsScreenTranslate = nil

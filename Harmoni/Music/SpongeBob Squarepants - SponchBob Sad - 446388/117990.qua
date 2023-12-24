@@ -1,0 +1,177 @@
+AudioFile: audio.mp3
+BackgroundFile: imagesdasdas.png
+BannerFile: imagesdasdas.png
+MapId: 117990
+MapSetId: 26755
+Mode: Keys4
+Title: SponchBob Sad
+Artist: SpongeBob Squarepants
+Source: spongebob, show
+Tags: spongebob, sad, emo, hard, insane, difficult, easy, impossible
+Creator: haeydngd
+DifficultyName: ;C
+Description: Created at 1685576156000
+BPMDoesNotAffectScrollVelocity: true
+InitialScrollVelocity: 1
+EditorLayers: []
+CustomAudioSamples: []
+SoundEffects: []
+TimingPoints:
+- Bpm: 120
+SliderVelocities: []
+HitObjects:
+- StartTime: 312
+  Lane: 1
+  KeySounds: []
+- StartTime: 375
+  Lane: 2
+  KeySounds: []
+- StartTime: 437
+  Lane: 3
+  KeySounds: []
+- StartTime: 437
+  Lane: 1
+  KeySounds: []
+- StartTime: 500
+  Lane: 4
+  KeySounds: []
+- StartTime: 562
+  Lane: 3
+  KeySounds: []
+- StartTime: 625
+  Lane: 2
+  KeySounds: []
+- StartTime: 625
+  Lane: 4
+  KeySounds: []
+- StartTime: 687
+  Lane: 1
+  KeySounds: []
+- StartTime: 687
+  Lane: 3
+  KeySounds: []
+- StartTime: 750
+  Lane: 2
+  KeySounds: []
+- StartTime: 812
+  Lane: 3
+  KeySounds: []
+- StartTime: 812
+  Lane: 4
+  KeySounds: []
+- StartTime: 875
+  Lane: 2
+  KeySounds: []
+- StartTime: 937
+  Lane: 1
+  KeySounds: []
+- StartTime: 1000
+  Lane: 2
+  KeySounds: []
+- StartTime: 1062
+  Lane: 4
+  KeySounds: []
+- StartTime: 1187
+  Lane: 2
+  EndTime: 1312
+  KeySounds: []
+- StartTime: 1312
+  Lane: 4
+  KeySounds: []
+- StartTime: 1375
+  Lane: 3
+  KeySounds: []
+- StartTime: 1437
+  Lane: 1
+  KeySounds: []
+- StartTime: 1500
+  Lane: 2
+  KeySounds: []
+- StartTime: 1562
+  Lane: 4
+  KeySounds: []
+- StartTime: 1593
+  Lane: 3
+  KeySounds: []
+- StartTime: 1625
+  Lane: 1
+  KeySounds: []
+- StartTime: 1656
+  Lane: 2
+  KeySounds: []
+- StartTime: 1708
+  Lane: 3
+  KeySounds: []
+- StartTime: 1750
+  Lane: 2
+  KeySounds: []
+- StartTime: 1791
+  Lane: 4
+  KeySounds: []
+- StartTime: 1833
+  Lane: 3
+  KeySounds: []
+- StartTime: 1875
+  Lane: 1
+  KeySounds: []
+- StartTime: 1906
+  Lane: 2
+  KeySounds: []
+- StartTime: 1958
+  Lane: 4
+  KeySounds: []
+- StartTime: 2000
+  Lane: 3
+  KeySounds: []
+- StartTime: 2031
+  Lane: 1
+  KeySounds: []
+- StartTime: 2083
+  Lane: 2
+  KeySounds: []
+- StartTime: 2125
+  Lane: 4
+  KeySounds: []
+- StartTime: 2156
+  Lane: 3
+  KeySounds: []
+- StartTime: 2187
+  Lane: 1
+  KeySounds: []
+- StartTime: 2218
+  Lane: 2
+  KeySounds: []
+- StartTime: 2250
+  Lane: 4
+  KeySounds: []
+- StartTime: 2281
+  Lane: 3
+  KeySounds: []
+- StartTime: 2312
+  Lane: 1
+  KeySounds: []
+- StartTime: 2343
+  Lane: 2
+  KeySounds: []
+- StartTime: 2375
+  Lane: 4
+  KeySounds: []
+- StartTime: 2406
+  Lane: 3
+  KeySounds: []
+- StartTime: 2437
+  Lane: 1
+  KeySounds: []
+- StartTime: 2468
+  Lane: 2
+  EndTime: 4093
+  KeySounds: []
+- StartTime: 3375
+  Lane: 1
+  KeySounds: []
+- StartTime: 3458
+  Lane: 3
+  KeySounds: []
+- StartTime: 3541
+  Lane: 4
+  KeySounds: []

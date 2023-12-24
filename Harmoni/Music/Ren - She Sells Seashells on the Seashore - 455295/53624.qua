@@ -1,0 +1,111 @@
+AudioFile: audio.mp3
+BackgroundFile: shells.png
+BannerFile: BN.png
+MapId: 53624
+MapSetId: 9604
+Mode: Keys4
+Title: She Sells Seashells on the Seashore
+Artist: Ren
+Source: Money Game pt. 2
+Tags: rap, luigi, capitalism
+Creator: NeonDrakon
+DifficultyName: Shjacks
+Description: Created at 1628103254000
+EditorLayers: []
+CustomAudioSamples: []
+SoundEffects: []
+TimingPoints:
+- StartTime: 124
+  Bpm: 196
+SliderVelocities: []
+HitObjects:
+- StartTime: 430
+  Lane: 1
+  KeySounds: []
+- StartTime: 430
+  Lane: 2
+  KeySounds: []
+- StartTime: 430
+  Lane: 4
+  KeySounds: []
+- StartTime: 583
+  Lane: 3
+  KeySounds: []
+- StartTime: 583
+  Lane: 4
+  KeySounds: []
+- StartTime: 583
+  Lane: 1
+  KeySounds: []
+- StartTime: 736
+  Lane: 3
+  KeySounds: []
+- StartTime: 736
+  Lane: 1
+  KeySounds: []
+- StartTime: 736
+  Lane: 2
+  KeySounds: []
+- StartTime: 889
+  Lane: 2
+  KeySounds: []
+- StartTime: 889
+  Lane: 3
+  KeySounds: []
+- StartTime: 889
+  Lane: 4
+  KeySounds: []
+- StartTime: 1042
+  Lane: 3
+  KeySounds: []
+- StartTime: 1042
+  Lane: 2
+  KeySounds: []
+- StartTime: 1042
+  Lane: 1
+  KeySounds: []
+- StartTime: 1195
+  Lane: 2
+  KeySounds: []
+- StartTime: 1195
+  Lane: 3
+  KeySounds: []
+- StartTime: 1195
+  Lane: 4
+  KeySounds: []
+- StartTime: 1348
+  Lane: 3
+  KeySounds: []
+- StartTime: 1348
+  Lane: 2
+  KeySounds: []
+- StartTime: 1348
+  Lane: 1
+  KeySounds: []
+- StartTime: 1501
+  Lane: 2
+  KeySounds: []
+- StartTime: 1501
+  Lane: 3
+  KeySounds: []
+- StartTime: 1501
+  Lane: 4
+  KeySounds: []
+- StartTime: 1654
+  Lane: 3
+  KeySounds: []
+- StartTime: 1654
+  Lane: 2
+  KeySounds: []
+- StartTime: 1654
+  Lane: 1
+  KeySounds: []
+- StartTime: 1807
+  Lane: 2
+  KeySounds: []
+- StartTime: 1807
+  Lane: 3
+  KeySounds: []
+- StartTime: 1807
+  Lane: 4
+  KeySounds: []

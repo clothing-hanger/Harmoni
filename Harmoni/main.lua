@@ -12,6 +12,10 @@ function toGameScreen(x, y)
     return x, y
 end
 
+function love.directorydropped(file)
+    love.filesystem.mount(file, "Music")
+end
+
 function love.load()
     -- Setup Libraries
     Input = (require("Libraries.Baton")).new({
@@ -39,6 +43,8 @@ function love.load()
     States = require("Modules.States")
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
+    String = require("Modules.String")
+
     require("Modules.Debug")
 
 

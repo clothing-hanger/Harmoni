@@ -1,21 +1,29 @@
 local SongSelectState = State()
 
 function SongSelectState:enter()
+
     backgroundFade = {0}
     songMenuBounceIn = {450}
     songList = love.filesystem.getDirectoryItems("Music")
-    printableList = ""
-    for i = 1,#songList do
-        printableList = printableList .. songList[i] .. "\n"
-    end
-    selectedSong = randomSong
+    --selectedSong = randomSong
+    selectedDiff = 1
     printableSongList = {selectedSong}
+    printableDiffList = {selectedDiff}
+    
+
     SongSelectState:PlayMenuMusic()
     songListXPPos = {}
     for i = 1,#songList do
         table.insert(songListXPPos,900)
     end
-    
+    resetDiffListXPPos = function()
+        diffListXPPos = {}
+
+        for i = 1,#diffList do
+            table.insert(diffListXPPos,900)
+        end
+    end
+    resetDiffListXPPos()
     Timer.tween(2, songMenuBounceIn, {0}, "in-bounce")
     disc = love.graphics.newImage("Images/SONGSELECT/disc.png")
     loading = love.graphics.newImage("Images/SONGSELECT/loading.png")
@@ -25,6 +33,7 @@ end
 
 function SongSelectState:update(dt)
 
+
     if Input:pressed("MenuDown") then
         if selectedSong ~= #songList then
             selectedSong = selectedSong + 1
@@ -32,6 +41,7 @@ function SongSelectState:update(dt)
             selectedSong = 1
         end
         SongSelectState:TweenSongList()
+        resetDiffListXPPos()
     elseif Input:pressed("MenuUp") then
         if selectedSong == 1 then
             selectedSong = #songList
@@ -39,10 +49,15 @@ function SongSelectState:update(dt)
             selectedSong = selectedSong - 1
         end
         SongSelectState:TweenSongList()
+        resetDiffListXPPos()
     elseif Input:pressed("MenuConfirm") then
-        State.switch(States.PlayState)
-        MusicTime = -math.huge  -- there is no fucking way this isnt low enough of a number
-        MenuMusic:stop()
+        if difficultySelect then
+            State.switch(States.PlayState)
+        end
+        difficultySelect = not difficultySelect
+
+        MusicTime = -math.huge
+
     end
 
  
@@ -50,34 +65,77 @@ function SongSelectState:update(dt)
         local songOutPos = 800
         local songInPos = 900
 
+
         if i ~= selectedSong then
             if songListXPPos[i] ~= songInPos then
-                songListXPPos[i] = math.min(songListXPPos[i]+800*dt, songInPos)
+                songListXPPos[i] = math.max(songListXPPos[i]+1500*dt, songInPos)
             end
         else
             if songListXPPos[i] ~= songOutPos then
-                songListXPPos[i] = math.max(songListXPPos[i]-800*dt, songOutPos)
+                songListXPPos[i] = math.max(songListXPPos[i]-1500*dt, songOutPos)
             end
         end
     end
+    
     discRotation = discRotation + 5*dt
 end
 
 function scrollSongs(scroll)
-    selectedSong = selectedSong-scroll
-    if selectedSong > #songList then
-        selectedSong = 1
-    elseif selectedSong < 1 then 
-        selectedSong = #songList 
+    if not difficultySelect then
+        selectedSong = selectedSong-scroll
+        if selectedSong > #songList then
+            selectedSong = 1
+        elseif selectedSong < 1 then 
+            selectedSong = #songList 
+        end
+        SongSelectState:TweenSongList()
+        resetDiffListXPPos()
+    else
+        selectedDiff = selectedDiff-scroll
+        if selectedDiff > #diffList then
+            selectedDiff = 1
+        elseif selectedDiff < 1 then 
+            selectedDiff = #diffList 
+        end
+        SongSelectState:TweenSongList()
     end
-    SongSelectState:TweenSongList()
 end
 
 function SongSelectState:PlayMenuMusic()
     if MenuMusic then
         MenuMusic:stop()
     end
-    MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
+    diffList = {}
+    DiffNameList = {}
+    diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
+    for i = 1,#diffListAndOtherShitIdfk do 
+        local file = diffListAndOtherShitIdfk[i]
+        if file:endsWith("qua") then
+            table.insert(diffList, file)
+        end
+    end
+    randomDifficulty = love.math.random(1,#diffList)
+    chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+    for i = 1,#diffList do
+        table.insert(DiffNameList, chart.DifficultyName)
+    end
+    metaData = {
+        name = chart.Title,
+        song = chart.AudioFile,
+        artist = chart.Artist,
+        source = chart.Source, -- not sure what this one even is really
+        tags = chart.Tags, -- not gonna be used in this file but im putting it here for now so i dont forget it
+        diffName = chart.DifficultyName,
+        creator = chart.Creator,
+        background = chart.BackgroundFile,
+        previewTime = chart.PreviewTime or 0, -- also wont be used here
+        noteCount = 0,
+        length = 0,
+        bpm = 0,   -- idk if ill ever use bpm 😭😭 idk how it works
+        inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
+    }
+    MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+
 
     MenuMusic:seek(titleSongLocation)
     titleSongLocation = 0
@@ -89,7 +147,7 @@ function SongSelectState:PlayMenuMusic()
 
     backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
         discRotation = 0
-        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
+        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
     end)
@@ -105,6 +163,11 @@ function SongSelectState:TweenSongList()
     end
     songListTween = Timer.tween(0.3, printableSongList, {selectedSong}, "out-quad")
     SongSelectState:PlayMenuMusic()
+
+    if diffListTween then
+        Timer.cancel(diffListTween)
+    end
+    diffListTween = Timer.tween(0.3, printableDiffList, {selectedDiff}, "out-quad")
 end
 
 function SongSelectState:draw()
@@ -158,22 +221,44 @@ function SongSelectState:draw()
     love.graphics.push()
     love.graphics.translate(songMenuBounceIn[1], 300)
 
+    if not difficultySelect then
 
-    for i = 1,#songList do
-        if i == selectedSong then
-            love.graphics.setColor(0,0,0,0.9)
-            love.graphics.rectangle("fill", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
-            love.graphics.setColor(0,1,1)
-            love.graphics.rectangle("line", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
-            love.graphics.print(songList[i], songListXPPos[i]+10, (110*i)+10-(printableSongList[1] *110))
-        else
-            love.graphics.setColor(0,0,0,0.9)
-            love.graphics.rectangle("fill", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
-            love.graphics.setColor(0,1,1)
-            love.graphics.rectangle("line", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
-            love.graphics.print(songList[i], songListXPPos[i]+10, (110*i)+10-(printableSongList[1] *110))
+        for i = 1,#songList do
+            if i == selectedSong then
+                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.rectangle("fill", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
+                love.graphics.setColor(0,1,1)
+                love.graphics.rectangle("line", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
+                love.graphics.print(songList[i], songListXPPos[i]+10, (110*i)+10-(printableSongList[1] *110))
+            else
+                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.rectangle("fill", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
+                love.graphics.setColor(0,1,1)
+                love.graphics.rectangle("line", songListXPPos[i], (110*i)-(printableSongList[1]*110), 3000, 100)
+                love.graphics.print(songList[i], songListXPPos[i]+10, (110*i)+10-(printableSongList[1] *110))
+            end
+        end
+    else
+        for i = 1,#diffList do        -- diffList, selectedDiff, diffListXPPos, printableDiffList
+            if i == selectedDiff then
+                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.rectangle("fill", diffListXPPos[i], (110*i)-(printableDiffList[1]*110), 3000, 100)
+                love.graphics.setColor(0,1,1)
+                love.graphics.rectangle("line", diffListXPPos[i], (110*i)-(printableDiffList[1]*110), 3000, 100)
+                love.graphics.print(diffList[i], diffListXPPos[i]+10, (110*i)+10-(printableDiffList[1] *110))
+            else
+                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.rectangle("fill", diffListXPPos[i], (110*i)-(printableDiffList[1]*110), 3000, 100)
+                love.graphics.setColor(0,1,1)
+                love.graphics.rectangle("line", diffListXPPos[i], (110*i)-(printableDiffList[1]*110), 3000, 100)
+                love.graphics.print(diffList[i], diffListXPPos[i]+10, (110*i)+10-(printableDiffList[1] *110))
+            end
         end
     end
+
+    
+
+
     love.graphics.setFont(DefaultFont)
 
     love.graphics.pop()
