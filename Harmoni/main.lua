@@ -95,6 +95,7 @@ function love.update(dt)
         love.window.setFullscreen(isFullscreen, "exclusive")
     end
     love.audio.setVolume(volume)
+    tweenVolumeDisplay()
 
 end
 
@@ -102,13 +103,12 @@ function tweenVolumeDisplay()
     if volumeTween then
         Timer.cancel(volumeTween)
     end
-    volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-quad")
+    volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-back")  --using out-back makes it feel snappier
 end
 
 function love.wheelmoved(x,y)
 
     if love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt") then
-        tweenVolumeDisplay()
         volumeOpacity[1] = 1
         volumeVelocity = math.min(maxVolVelocity, volumeVelocity+2.5)
         if y < 0 then  -- down
