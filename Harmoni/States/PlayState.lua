@@ -170,7 +170,7 @@ function PlayState:enter()
 
 
 
-    BotPlay = false
+    BotPlay = true
 
 
     dimBackground()
