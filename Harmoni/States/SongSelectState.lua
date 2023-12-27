@@ -138,12 +138,23 @@ function SongSelectState:update(dt)
         end
     end
     if #lane1+#lane2+#lane3+#lane4 > 0 then
-       --  checkBotInput()
+         SongSelectState:checkBotInput()
     end
-    discRotation = discRotation + 5*dt
+    if MenuMusic and MenuMusic:isPlaying() then  --not sure why it only works like this
+        discRotation = discRotation + 5*dt
+    else
+        lane1 = {}
+        lane2 = {}
+        lane3 = {}
+        lane4 = {}
+    end
 end
 
 function SongSelectState:displayChart()
+    lane1 = {}
+    lane2 = {}
+    lane3 = {}
+    lane4 = {}
     quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff])
     MusicTime = 0
 end
@@ -179,7 +190,7 @@ function scrollSongs(scroll)
 end  
 
 function SongSelectState:PlayMenuMusic()
-    
+
     if MenuMusic then
         MenuMusic:stop()
     end
@@ -195,7 +206,7 @@ function SongSelectState:PlayMenuMusic()
     if selectedDiff > #diffList then
         selectedDiff = 1
     end
-    chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff]))
+    SongSelectState:displayChart()
     for i = 1,#diffList do
         table.insert(DiffNameList, chart.DifficultyName)
     end
@@ -219,12 +230,12 @@ function SongSelectState:PlayMenuMusic()
 
     MenuMusic:seek(titleSongLocation)
     titleSongLocation = 0
-    SongSelectState:displayChart()
 
     MenuMusic:play()
+    MusicTime = 0
 
 
-
+    SongSelectState:displayChart()
     if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
     backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
@@ -235,6 +246,37 @@ function SongSelectState:PlayMenuMusic()
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
     end)
+end
+
+function SongSelectState:checkBotInput()
+    for i = 1, #lane1 do
+        local NoteTime = lane1[i] - MusicTime
+        if NoteTime < 0 then
+            table.remove(lane1, i)
+            break
+        end
+    end
+    for i = 1, #lane2 do
+        local NoteTime = lane2[i] - MusicTime
+        if NoteTime < 0 then
+            table.remove(lane2, i)
+            break
+        end
+    end
+    for i = 1, #lane3 do
+        local NoteTime = lane3[i] - MusicTime
+        if NoteTime < 0 then
+            table.remove(lane3, i)
+            break
+        end
+    end
+    for i = 1, #lane4 do
+        local NoteTime = lane4[i] - MusicTime
+        if NoteTime < 0 then
+            table.remove(lane4, i)
+            break
+        end
+    end
 end
 
 function switchMenuAssets()
@@ -349,7 +391,7 @@ function SongSelectState:draw()
     love.graphics.setColor(1,1,1,1)
 
     love.graphics.push()
-    love.graphics.translate(190,320)
+    love.graphics.translate(-390,200)
    -- love.graphics.scale(0.5,0.5)
     love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
     love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)

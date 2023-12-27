@@ -68,7 +68,7 @@ function PlayState:enter()
     --set variables
     MusicTime = -10000
     speed = 1.6
-    downScroll = true
+    downScroll = false
     if downScroll then
         speed = -speed
     end
@@ -366,7 +366,7 @@ end
 function checkBotInput()
     for i = 1, #lane1 do
         local NoteTime = lane1[i] - MusicTime
-        if NoteTime < missTiming then
+        if NoteTime < -marvTiming/2 then
             judge(NoteTime)
             table.remove(lane1, i)
             break
@@ -374,7 +374,7 @@ function checkBotInput()
     end
     for i = 1, #lane2 do
         local NoteTime = lane2[i] - MusicTime
-        if NoteTime < missTiming then
+        if NoteTime < -marvTiming/2 then
             judge(NoteTime)
             table.remove(lane2, i)
             break
@@ -382,7 +382,7 @@ function checkBotInput()
     end
     for i = 1, #lane3 do
         local NoteTime = lane3[i] - MusicTime
-        if NoteTime < missTiming then
+        if NoteTime < -marvTiming/2 then
             judge(NoteTime)
             table.remove(lane3, i)
             break
@@ -390,7 +390,7 @@ function checkBotInput()
     end
     for i = 1, #lane4 do
         local NoteTime = lane4[i] - MusicTime
-        if NoteTime < missTiming then
+        if NoteTime < -marvTiming/2 then
             judge(NoteTime)
             table.remove(lane4, i)
             break
