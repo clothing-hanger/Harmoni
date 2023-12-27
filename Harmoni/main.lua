@@ -45,6 +45,7 @@ function love.load()
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
     String = require("Modules.String")
+    ChartParse = require("Modules.ChartParse")
 
     require("Modules.Debug")
 
