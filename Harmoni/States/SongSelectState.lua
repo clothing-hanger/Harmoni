@@ -97,11 +97,12 @@ function SongSelectState:update(dt)
         resetDiffListXPPos()
     elseif Input:pressed("MenuConfirm") then
         if difficultySelect then
+            MusicTime = -math.huge
+
             State.switch(States.PlayState)
         end
         difficultySelect = not difficultySelect
 
-        MusicTime = -math.huge
 
     elseif Input:pressed("MenuBack") then
         if difficultySelect then
@@ -132,7 +133,7 @@ function SongSelectState:update(dt)
                 diffListXPPos[i] = math.min(diffListXPPos[i]+800*dt, songInPos)
             end
         else
-            if diffListXPPos[i] ~= songOutPos then
+             if diffListXPPos[i] ~= songOutPos then
                 diffListXPPos[i] = math.max(diffListXPPos[i]-800*dt, songOutPos)
             end
         end
@@ -142,12 +143,13 @@ function SongSelectState:update(dt)
     end
     if MenuMusic and MenuMusic:isPlaying() then  --not sure why it only works like this
         discRotation = discRotation + 5*dt
-    else
-        lane1 = {}
-        lane2 = {}
-        lane3 = {}
-        lane4 = {}
     end
+    --else
+      --  lane1 = {}
+        --lane2 = {}
+        --lane3 = {}
+        --lane4 = {}
+   -- end
 end
 
 function SongSelectState:displayChart()
@@ -391,7 +393,7 @@ function SongSelectState:draw()
     love.graphics.setColor(1,1,1,1)
 
     love.graphics.push()
-    love.graphics.translate(-390,200)
+    love.graphics.translate(-390,205)
    -- love.graphics.scale(0.5,0.5)
     love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
     love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)

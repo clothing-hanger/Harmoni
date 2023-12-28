@@ -123,6 +123,7 @@ function PlayState:update(dt)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
+    
         -- songLengthTimer = (Timer.tween(songLength, timeRemainingBar, {0}))  -- if it works it works lmfao
         songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
     end
