@@ -1,16 +1,12 @@
 function quaverParse(file)
     print("quaverParse()")
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part
-        --chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff]))
         chart = tinyyaml.parse(love.filesystem.read(file))
-
         lane1 = {}
         lane2 = {}
         lane3 = {}
         lane4 = {}
-      --  lane5 = {}
-       -- lane6 = {}
-       -- lane7 = {}
+
         metaData = {
             name = chart.Title,
             song = chart.AudioFile,
