@@ -306,8 +306,7 @@ end
 function SongSelectState:draw()
 
     if background then
-            love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
-
+        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
     end
     love.graphics.setColor(0,0,0,0.9)
     love.graphics.rectangle("fill", 0, 0, 500, 200)
@@ -316,40 +315,20 @@ function SongSelectState:draw()
     love.graphics.setFont(MenuFontBig)
     love.graphics.printf("Now Playing: ", 20, 20, 500)
     love.graphics.setFont(MenuFontSmall)
-
     love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 20, 60, 480)
-
-
-
     love.graphics.setColor(0,0,0,0.9)
     love.graphics.rectangle("fill", love.graphics.getWidth()-250, 0, 250, 50)
     love.graphics.setColor(0,1,1)
-
     love.graphics.rectangle("line", love.graphics.getWidth()-250, 0, 250, 50)
     love.graphics.printf(#songList.." Songs Found", love.graphics.getWidth()-240, 10, 240, "left")
     love.graphics.push()
-
     love.graphics.setColor(0.75,0.75,0.75)
-
     love.graphics.draw(disc, 450, 150, discRotation, 0.08, 0.08,disc:getWidth()/2,disc:getHeight()/2)
-
-
-
     love.graphics.pop()
-
-
-
-
-
     love.graphics.setColor(0,0,0,backgroundFade[1])
-
-    
     love.graphics.rectangle("fill", 0,0,love.graphics.getWidth(),love.graphics.getHeight())
-    
-   love.graphics.setColor(1,1,1, backgroundFade[1])
-
+    love.graphics.setColor(1,1,1, backgroundFade[1])
     love.graphics.draw(loading, love.graphics.getWidth()/2, love.graphics.getHeight()/2, -discRotation, 0.08, 0.08,loading:getWidth()/2,loading:getHeight()/2)
-
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
     love.graphics.translate(songMenuBounceIn[1], 300)

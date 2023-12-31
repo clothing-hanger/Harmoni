@@ -1,7 +1,7 @@
 local TitleState = State()
 local noteLanes = {}
 function TitleState:enter()
-    resetTitleSong = function()
+    resetMenuMusic = function()
         songList = love.filesystem.getDirectoryItems("Music")
         randomSong = love.math.random(1,#songList)
         diffList = {}
@@ -67,12 +67,12 @@ function TitleState:enter()
             table.insert(bumpNotes, startTime)
             lastNoteTime = startTime -- this should work because the last time its run will be the last note
         end
-        titleSong = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+        MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
-        titleSong:play()
+        MenuMusic:play()
         MusicTime = 0
     end
-    resetTitleSong()
+    resetMenuMusic()
 end
 
 function TitleState:update(dt)
@@ -101,11 +101,11 @@ function TitleState:update(dt)
             TitleState:switchMenu()
 
         elseif titleState == 2 then
-            titleSongLocation = titleSong:tell()
-            titleSongNumber = randomSong
+            MenuMusicLocation = MenuMusic:tell()
+            MenuMusicNumber = randomSong
             comingFromTitle = true
             onTitle = false
-            titleSong:stop()
+            MenuMusic:stop()
             State.switch(States.SongSelectState)
         end
     elseif Input:pressed("MenuDown") then
@@ -122,8 +122,8 @@ function TitleState:update(dt)
         end
     end
 
-    if not titleSong:isPlaying() and onTitle then
-        resetTitleSong()
+    if not MenuMusic:isPlaying() and onTitle then
+        resetMenuMusic()
     end
 
     printableSpeed = speed *(logoSize+0.7)
