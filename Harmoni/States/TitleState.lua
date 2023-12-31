@@ -186,10 +186,10 @@ function TitleState:draw()
     love.graphics.draw(logo, logo:getWidth()/2, love.graphics.getHeight()/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
     love.graphics.translate(0,logoYPos[1])
     love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
-    love.graphics.setFont(MenuFontExtraSmall)
+    --love.graphics.setFont(MenuFontExtraSmall)
+    love.graphics.setFont(MenuFontSmall)
 
     love.graphics.printf("Credits", logo:getWidth()/2-120, 850, 240, "center")
-    love.graphics.setFont(MenuFontSmall)
 
 
     love.graphics.translate(0,-30)
