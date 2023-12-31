@@ -4,7 +4,13 @@ function quaverParse(file)
         --chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff]))
         chart = tinyyaml.parse(love.filesystem.read(file))
 
-
+        lane1 = {}
+        lane2 = {}
+        lane3 = {}
+        lane4 = {}
+      --  lane5 = {}
+       -- lane6 = {}
+       -- lane7 = {}
         metaData = {
             name = chart.Title,
             song = chart.AudioFile,
@@ -21,6 +27,9 @@ function quaverParse(file)
             inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
         }
 
+        if tostring(metaData.inputMode) == "7" and curScreen ~= "songSelect" then
+            love.window.showMessageBox("Unsupported Chart Type", "7 Key charts are not properly supported. Please choose a different chart or difficulty.", "error")
+        end
         song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
     for i = 1,#chart.HitObjects do
@@ -37,6 +46,12 @@ function quaverParse(file)
             table.insert(lane3, startTime)
         elseif lane == 4 then
             table.insert(lane4, startTime)
+        elseif lane == 5 then
+            --table.insert(lane5, startTime)
+        elseif lane == 6 then
+           -- table.insert(lane6, startTime)
+        elseif lane == 7 then
+           -- table.insert(lane7, startTime)
         end
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end

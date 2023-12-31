@@ -1,5 +1,5 @@
 Inits = require("inits")
-
+function print() end
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
