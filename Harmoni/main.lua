@@ -1,7 +1,10 @@
 Inits = require("inits")
 love.keyboard.setKeyRepeat(true)
 local utf8 = require("utf8")
---function print() end
+require("settings")
+if disablePrint then
+    function print() end
+end
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
@@ -57,7 +60,6 @@ function love.load()
     volumeVelocity = 0
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
-    volume = love.audio.getVolume()
 
 
     Tips = {
@@ -103,6 +105,11 @@ function love.update(dt)
     love.audio.setVolume(volume)
     tweenVolumeDisplay()
 
+    if songSelectSearch then
+        searchSongs()
+    end
+
+
 end
 
 function love.textinput(t)
@@ -112,9 +119,7 @@ function love.textinput(t)
 end
 
 function love.keypressed(key)
-    if songSelectSearch then
-        searchSongs()
-    end
+
     if key == "backspace" then
         -- get the byte offset to the last UTF-8 character in the string.
         local byteoffset = utf8.offset(search, -1)

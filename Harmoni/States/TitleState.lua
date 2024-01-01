@@ -105,7 +105,13 @@ function TitleState:update(dt)
             comingFromTitle = true
             onTitle = false
            -- MenuMusic:stop()
-            State.switch(States.SongSelectState)
+           if curSelection == 1 then
+                State.switch(States.SongSelectState)
+           elseif curSelection == 2 then
+                love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
+           elseif curSelection == 3 then
+            love.window.showMessageBox("Not Implimented Yet :(", "no credits menu yet, but credits are to me (clothing hanger) for like most of it, \nguglioisstupid and Rit for quaver chart parsing code, \nand the charters to all the songs i stole from quaver \n(they are listed at the top right of the screen in the song select menu)")
+           end
         end
     elseif Input:pressed("MenuDown") then
         if curSelection < 3 then

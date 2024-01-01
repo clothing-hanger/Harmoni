@@ -67,16 +67,8 @@ function PlayState:enter()
 
     --set variables
     MusicTime = -10000
-    speed = 1.6
-    downScroll = false
-    if downScroll then
-        speed = -speed
-    end
-    speed1 = speed
-    speed2 = speed
-    speed3 = speed
-    speed4 = speed
-    LaneWidth = 120
+
+
     health = 1
     timeRemainingBar = {love.graphics.getWidth()}
     paused = false
@@ -87,7 +79,6 @@ function PlayState:enter()
     gameOverSongSlowdown = {1}
     backgroundDim = {0}
     comboSize = {1}
-    backgroundDimSetting = 0.9 
     score = 0
     accuracy = 0
     currentBestPossibleScore = 0
@@ -100,7 +91,6 @@ function PlayState:enter()
 
 
 
-    BotPlay = false
 
 
     dimBackground()
@@ -157,7 +147,7 @@ function PlayState:update(dt)
 end
  
 function pause()
-    if not resultsScreen then
+    if not resultsScreen and MusicTime > 1 then
         paused = not paused
         PausedMusicTime = MusicTime
         if paused then
@@ -185,6 +175,7 @@ end
 
 function PlayState:leave(state)
     --song = nil
+    comingFromPlay = true
     background = nil
     State.switch(state)
     resultsScreenTranslate = nil
@@ -552,8 +543,10 @@ function PlayState:draw()
 
         love.graphics.push()
         if downScroll then
-            love.graphics.translate(0, love.graphics.getHeight()-NoteUp:getHeight()) 
-        end   -- downscroll
+            love.graphics.translate(0, love.graphics.getHeight()-NoteUp:getHeight()-verticalNoteOffset) 
+        else
+            love.graphics.translate(0, verticalNoteOffset)
+        end
             if Input:down("GameLeft") then
                 love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
             else
