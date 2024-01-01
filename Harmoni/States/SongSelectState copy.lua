@@ -17,6 +17,7 @@ function SongSelectState:enter()
             table.insert(diffList, file)
         end
     end
+
     speed = 1.6
     lane1={}
     lane2={}
