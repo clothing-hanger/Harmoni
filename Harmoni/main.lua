@@ -1,5 +1,7 @@
 Inits = require("inits")
-function print() end
+love.keyboard.setKeyRepeat(true)
+local utf8 = require("utf8")
+--function print() end
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
@@ -30,6 +32,7 @@ function love.load()
             MenuConfirm = { "key:space", "key:return" },
             setFullscreen = { "key:f11" },
             MenuBack = { "key:escape", "key:backspace" },
+            SearchToggle = { "key:tab"},
         }
     })
     Class = require("Libraries.Class")
@@ -85,6 +88,8 @@ function love.load()
 end
 
 function love.update(dt)
+    MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
+    previousFrameTime = love.timer.getTime() * 1000
     Input:update()
     State.update(dt)
     Timer.update(dt)
@@ -98,6 +103,28 @@ function love.update(dt)
     love.audio.setVolume(volume)
     tweenVolumeDisplay()
 
+end
+
+function love.textinput(t)
+    if songSelectSearch then
+        search = search .. t
+    end
+end
+
+function love.keypressed(key)
+    if songSelectSearch then
+        searchSongs()
+    end
+    if key == "backspace" then
+        -- get the byte offset to the last UTF-8 character in the string.
+        local byteoffset = utf8.offset(search, -1)
+
+        if byteoffset then
+            -- remove the last UTF-8 character.
+            -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
+            search = string.sub(search, 1, byteoffset - 1)
+        end
+    end
 end
 
 function tweenVolumeDisplay()

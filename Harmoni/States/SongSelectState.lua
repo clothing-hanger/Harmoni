@@ -9,7 +9,7 @@ function SongSelectState:enter()
     selectedDiff = 1
     printableSongList = {selectedSong}
     printableDiffList = {selectedDiff}
-    
+    search = ""
     lane1 = {}
     lane2 = {}
     lane3 = {}
@@ -60,8 +60,7 @@ end
 
 function SongSelectState:update(dt)
     resetDiffListXPPos()
-    MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
-    previousFrameTime = love.timer.getTime() * 1000
+
 
     if Input:pressed("MenuDown") then
         if not difficultySelect then
