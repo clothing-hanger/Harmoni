@@ -4,6 +4,8 @@ keybinds are dfjk (cant be changed yet)
 
 to fullscreen pressed f11 on the song select menu
 
+to edit settings edit settings.lua
+
 and uhh to import your own songs, open quaver, export a song, then extract the files from the QP, then go into the folder Harmoni/Music and create a new folder. 
 name this folder the name of the song, with no slashes or periods.
 drag the desired QUA into the file converter.py (make sure you have python installed to path), then rename the created file "chart.lua".

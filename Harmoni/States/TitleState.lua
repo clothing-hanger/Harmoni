@@ -76,8 +76,7 @@ function TitleState:enter()
 end
 
 function TitleState:update(dt)
-    MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
-    previousFrameTime = love.timer.getTime() * 1000
+
 
     for i = 1,#bumpNotes do
         if -(MusicTime - bumpNotes[i]) < 10 then
@@ -101,12 +100,18 @@ function TitleState:update(dt)
             TitleState:switchMenu()
 
         elseif titleState == 2 then
-            MenuMusicLocation = MenuMusic:tell()
-            MenuMusicNumber = randomSong
+           -- MenuMusicLocation = MenuMusic:tell()
+           -- MenuMusicNumber = randomSong
             comingFromTitle = true
             onTitle = false
-            MenuMusic:stop()
-            State.switch(States.SongSelectState)
+           -- MenuMusic:stop()
+           if curSelection == 1 then
+                State.switch(States.SongSelectState)
+           elseif curSelection == 2 then
+                love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
+           elseif curSelection == 3 then
+            love.window.showMessageBox("Not Implimented Yet :(", "no credits menu yet, but credits are to me (clothing hanger) for like most of it, \nguglioisstupid and Rit for quaver chart parsing code, \nand the charters to all the songs i stole from quaver \n(they are listed at the top right of the screen in the song select menu)")
+           end
         end
     elseif Input:pressed("MenuDown") then
         if curSelection < 3 then
@@ -154,8 +159,12 @@ function TitleState:draw()
     love.graphics.setColor(1,1,1,0.5)
 
     love.graphics.draw(background, love.graphics.getWidth()/2, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/background:getWidth()+(logoSize-1)/6,love.graphics.getHeight()/background:getHeight()+(logoSize-1)/6, background:getWidth()/2, background:getHeight()/2)
-    love.graphics.setColor(1,1,1,(logoSize-1)+0.15)
+    love.graphics.setColor(1,1,1,(logoSize-1))
     love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),(love.graphics.getHeight()/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),(love.graphics.getHeight()/gradient:getHeight()/2))
+
+    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),-(love.graphics.getHeight()/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),-(love.graphics.getHeight()/gradient:getHeight()/2))
     love.graphics.setColor(1,1,1,1)
 
     love.graphics.setColor(0,0,0,backgroundFade[1])
