@@ -300,7 +300,7 @@ function SongSelectState:draw()
         end
         love.graphics.pop()
 
-    endA
+    end
     love.graphics.pop()
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
