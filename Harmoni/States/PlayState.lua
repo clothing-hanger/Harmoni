@@ -1,29 +1,35 @@
 local PlayState = State()
+
+local allInputs = {
+    "GameLeft",
+    "GameDown",
+    "GameUp",
+    "GameRight",
+}
+local AllDirections = {
+    "Left",
+    "Down",
+    "Up",
+    "Right",
+}
+
 function PlayState:enter()
-
     --load assets
-
-
     hitTimes = {}
     curScreen = "play"
 
-    
-    lane1 = {}
-    lane2 = {}
-    lane3 = {}
-    lane4 = {}
+    lanes = {}
+    for i = 1, 4 do
+        table.insert(lanes, {})
+    end
 
     MusicTime = -2000
-
 
     if MenuMusic then
         MenuMusic:stop()
     end
 
     quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
-
-
-
 
     ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
     ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
@@ -61,13 +67,8 @@ function PlayState:enter()
     missCount = 0
     judgeCounterXPos = {0,0,0,0,0,0}
 
-
-
-
-
     --set variables
     MusicTime = -10000
-
 
     health = 1
     timeRemainingBar = {love.graphics.getWidth()}
@@ -88,14 +89,7 @@ function PlayState:enter()
     convertedAccuracy = 0
     printableAccuracy = {accuracy}
 
-
-
-
-
-
     dimBackground()
-
-
 end
 function PlayState:update(dt)
     if paused or gameOver then
@@ -107,6 +101,7 @@ function PlayState:update(dt)
     else
         checkInput()
     end
+
     checkMiss()
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
@@ -124,7 +119,7 @@ function PlayState:update(dt)
         printableHealth[1] = 0
     end
 
-    if (#lane1+#lane2+#lane3+#lane4 == 0) or gameOver and MusicTime > 1 and not paused then
+    if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
@@ -142,8 +137,6 @@ function PlayState:update(dt)
         song:setPitch(gameOverSongSlowdown[1])
         print(gameOverSongSlowdown[1])
     end
-
-
 end
  
 function pause()
@@ -184,36 +177,14 @@ end
 
 
 function checkMiss()
-    for i = 1,#lane1 do
-        if MusicTime - lane1[i] > missTiming then
-            judge(MusicTime - i)
-            table.remove(lane1, i)
-            health = health - 0.03
-            break
-        end
-    end
-    for i = 1,#lane2 do
-        if MusicTime - lane2[i] > missTiming then
-            judge(MusicTime - i)
-            table.remove(lane2, i)
-            health = health - 0.03
-            break
-        end
-    end
-    for i = 1,#lane3 do
-        if MusicTime - lane3[i] > missTiming then
-            judge(MusicTime - i)
-            table.remove(lane3, i)
-            health = health - 0.03
-            break
-        end
-    end
-    for i = 1,#lane4 do
-        if MusicTime - lane4[i] > missTiming then
-            judge(MusicTime - i)
-            table.remove(lane4, i)
-            health = health - 0.03
-            break
+    for i, lane in ipairs(lanes) do
+        for j, note in ipairs(lane) do
+            if MusicTime - note > missTiming then
+                judge(MusicTime - note)
+                table.remove(lane, j)
+                health = health - 0.03
+                break
+            end
         end
     end
 end
@@ -278,7 +249,6 @@ function judge(noteTime)
     accuracy = score/currentBestPossibleScore
     convertedAccuracy = accuracy*100
 
-
     printableScoreTween()
 
     if judgeTween then
@@ -304,10 +274,7 @@ function printableScoreTween()
     scoreTween = Timer.tween(0.5, printableScore, {score}, "out-quad")
     accuracyTween = Timer.tween(0.5, printableAccuracy, {convertedAccuracy}, "out-quad")
     healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
-
-
 end
-
 
 function dimBackground()
     Timer.tween(1.5, backgroundDim, {backgroundDimSetting}, "linear", function()
@@ -315,75 +282,29 @@ function dimBackground()
     end)
 end
 
-
 function checkInput()
-    for i = 1,#lane1 do
-        local noteTime = lane1[i] - MusicTime
-        if noteTime < missTiming and Input:pressed("GameLeft")then
-            judge(noteTime)
-            table.remove(lane1, i)
-            break
-        end
-
-    end
-    for i = 1,#lane2 do
-        local noteTime = lane2[i] - MusicTime
-        if noteTime < missTiming and Input:pressed("GameDown")then
-            judge(noteTime)
-            table.remove(lane2, i)
-            break
-        end
-    end
-    for i = 1,#lane3 do
-        local noteTime = lane3[i] - MusicTime
-        if noteTime < missTiming and Input:pressed("GameUp")then
-            judge(noteTime)
-            table.remove(lane3, i)
-            break
-        end
-    end
-    for i = 1,#lane4 do
-        local noteTime = lane4[i] - MusicTime
-        if noteTime < missTiming and Input:pressed("GameRight")then
-            judge(noteTime)
-            table.remove(lane4, i)
-            break
+    for i, lane in ipairs(lanes) do
+        for j, note in ipairs(lane) do
+            if MusicTime - note < missTiming and MusicTime - note > -missTiming then
+                if Input:pressed(allInputs[i]) then
+                    judge(MusicTime - note)
+                    table.remove(lane, j)
+                    break
+                end
+            end
         end
     end
 end
 
 
 function checkBotInput()
-    for i = 1, #lane1 do
-        local NoteTime = lane1[i] - MusicTime
-        if NoteTime < -marvTiming/2 then
-            judge(NoteTime)
-            table.remove(lane1, i)
-            break
-        end
-    end
-    for i = 1, #lane2 do
-        local NoteTime = lane2[i] - MusicTime
-        if NoteTime < -marvTiming/2 then
-            judge(NoteTime)
-            table.remove(lane2, i)
-            break
-        end
-    end
-    for i = 1, #lane3 do
-        local NoteTime = lane3[i] - MusicTime
-        if NoteTime < -marvTiming/2 then
-            judge(NoteTime)
-            table.remove(lane3, i)
-            break
-        end
-    end
-    for i = 1, #lane4 do
-        local NoteTime = lane4[i] - MusicTime
-        if NoteTime < -marvTiming/2 then
-            judge(NoteTime)
-            table.remove(lane4, i)
-            break
+    for i, lane in ipairs(lanes) do
+        for j, note in ipairs(lane) do
+            if MusicTime - note < -marvTiming/2 then
+                judge(MusicTime - note)
+                table.remove(lane, j)
+                break
+            end
         end
     end
 end
@@ -542,61 +463,30 @@ function PlayState:draw()
         love.graphics.pop()
 
         love.graphics.push()
-        if downScroll then
-            love.graphics.translate(0, love.graphics.getHeight()-NoteUp:getHeight()-verticalNoteOffset) 
-        else
-            love.graphics.translate(0, verticalNoteOffset)
-        end
-            if Input:down("GameLeft") then
-                love.graphics.draw(ReceptorLeftPressed, love.graphics.getWidth()/2-(LaneWidth*2), 0)
+            if downScroll then
+                love.graphics.translate(0, love.graphics.getHeight()-NoteUp:getHeight()-verticalNoteOffset) 
             else
-                love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
+                love.graphics.translate(0, verticalNoteOffset)
             end
-        
-            if Input:down("GameDown") then
-                love.graphics.draw(ReceptorDownPressed, love.graphics.getWidth()/2-(LaneWidth), 0)
-            else
-                love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
-            end
-        
-            if Input:down("GameUp") then
-                love.graphics.draw(ReceptorUpPressed, love.graphics.getWidth()/2, 0)
-            else    
-                love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
-            end
-        
-            if Input:down("GameRight") then
-                love.graphics.draw(ReceptorRightPressed, love.graphics.getWidth()/2+(LaneWidth), 0)
-            else
-                love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
+
+            for i = 1,4 do
+                local inp = allInputs[i]
+                local spr = _G["Receptor" .. AllDirections[i]]
+                if Input:down(inp) then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                love.graphics.draw(spr, love.graphics.getWidth()/2-(LaneWidth*(3-i)), 0)
             end
         
             love.graphics.push()
-            if gameOverNotePush[1] ~= 0 then
-                love.graphics.translate(0, gameOverNotePush[1])
-            end
-        
-                for i = 1,#lane1 do
-                    if -(MusicTime - lane1[i])*speed1 < love.graphics.getHeight() then
-                        love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed1)
-                    end
+                if gameOverNotePush[1] ~= 0 then
+                    love.graphics.translate(0, gameOverNotePush[1])
                 end
-        
-                for i = 1,#lane2 do
-                    if -(MusicTime - lane2[i])*speed2 < love.graphics.getHeight() then
-                        love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed2)
-                    end
-                end
-        
-        
-                for i = 1,#lane3 do
-                    if -(MusicTime - lane3[i])*speed3 < love.graphics.getHeight() then
-                        love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed3)
-                    end
-                end
-                for i = 1,#lane4 do
-                    if -(MusicTime - lane4[i])*speed4 < love.graphics.getHeight() then
-                        love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed4)
+
+                for i, lane in ipairs(lanes) do
+                    for j, note in ipairs(lane) do
+                        if -(MusicTime - note)*_G["speed" .. i] < love.graphics.getHeight() then
+                            local noteImg = _G["Note" .. AllDirections[i]]
+                            love.graphics.draw(noteImg, love.graphics.getWidth()/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i])
+                        end
                     end
                 end
             love.graphics.pop()

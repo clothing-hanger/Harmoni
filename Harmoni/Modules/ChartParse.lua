@@ -3,11 +3,10 @@ function quaverParse(file)
     print("quaverParse()")
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part
         chart = tinyyaml.parse(love.filesystem.read(file))
-        lane1 = {}
-        lane2 = {}
-        lane3 = {}
-        lane4 = {}
-
+        lanes = {}
+        for i = 1,4 do
+            table.insert(lanes, {})
+        end
         metaData = {
             name = chart.Title,
             song = chart.AudioFile,
@@ -35,27 +34,14 @@ function quaverParse(file)
         local endTime = hitObject.EndTime or 0
         local lane = hitObject.Lane
 
-        if lane == 1 then
-            table.insert(lane1, startTime)
-        elseif lane == 2 then
-            table.insert(lane2, startTime)
-        elseif lane == 3 then
-            table.insert(lane3, startTime)
-        elseif lane == 4 then
-            table.insert(lane4, startTime)
-        elseif lane == 5 then
-            --table.insert(lane5, startTime)
-        elseif lane == 6 then
-           -- table.insert(lane6, startTime)
-        elseif lane == 7 then
-           -- table.insert(lane7, startTime)
-        end
+        table.insert(lanes[lane], startTime)
+        print(lane, #lanes[lane])
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end
     songLength = song:getDuration()
     print(songLength)
     songLengthToLastNote = lastNoteTime/1000
-    bestScorePerNote = 1000000/(#lane1+#lane2+#lane3+#lane4)
+    bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
 end
 
 
@@ -63,17 +49,11 @@ end
 function harmoniParse(file) -- don't use this
     chart = love.filesystem.load(file)()
     bestScorePerNote = 1000000/#chart
+
     for i = 1,#chart do
-        if chart[i][2] == 1 then
-            table.insert(lane1, chart[i][1])
-        elseif chart[i][2] == 2 then
-            table.insert(lane2, chart[i][1])
-        elseif chart[i][2] == 3 then
-            table.insert(lane3, chart[i][1])
-        elseif chart[i][2] == 4 then
-            table.insert(lane4, chart[i][1])
-        end
+        table.insert(lanes[chart[i][2]], chart[i][1])
     end
+
     song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/audio.mp3", "stream")
     background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/background.jpg")
     songLength = song:getDuration()

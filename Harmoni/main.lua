@@ -1,10 +1,13 @@
-Inits = require("inits")
-love.keyboard.setKeyRepeat(true)
 local utf8 = require("utf8")
+Inits = require("inits")
 require("settings")
+
+love.keyboard.setKeyRepeat(true)
+
 if disablePrint then
     function print() end
 end
+
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
@@ -30,9 +33,11 @@ function love.load()
             GameUp    =  { "key:j" },
             GameRight =  { "key:k" },
             GameConfirm  =  { "key:space", "key:return" },
+
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },
             MenuConfirm = { "key:space", "key:return" },
+
             setFullscreen = { "key:f11" },
             MenuBack = { "key:escape", "key:backspace" },
             SearchToggle = { "key:tab"},
@@ -55,12 +60,10 @@ function love.load()
 
     require("Modules.Debug")
 
-
     volumeOpacity = {0}
     volumeVelocity = 0
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
-
 
     Tips = {
         "Press F11 to Fullscreen.",
@@ -84,7 +87,6 @@ function love.load()
     MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
 
-
     DefaultFont = love.graphics.newFont(12)
     State.switch(States.TitleState)
 end
@@ -92,24 +94,24 @@ end
 function love.update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
+
     Input:update()
     State.update(dt)
     Timer.update(dt)
-    volumeOpacity[1] = volumeOpacity[1] - 1*dt
-    volumeVelocity = math.max(0, volumeVelocity-100*dt)
 
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen, "exclusive")
     end
+
+    volumeOpacity[1] = volumeOpacity[1] - 1*dt
+    volumeVelocity = math.max(0, volumeVelocity-100*dt)
     love.audio.setVolume(volume)
     tweenVolumeDisplay()
 
     if songSelectSearch then
         searchSongs()
     end
-
-
 end
 
 function love.textinput(t)
@@ -119,7 +121,6 @@ function love.textinput(t)
 end
 
 function love.keypressed(key)
-
     if key == "backspace" then
         -- get the byte offset to the last UTF-8 character in the string.
         local byteoffset = utf8.offset(search, -1)
@@ -163,9 +164,6 @@ function love.wheelmoved(x,y)
         scrollTitleButtons(y)
     end
 end
-
-
-
 
 function love.draw()
     love.graphics.push()

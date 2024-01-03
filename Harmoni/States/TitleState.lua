@@ -60,8 +60,6 @@ function TitleState:enter()
 end
 
 function TitleState:update(dt)
-
-
     for i = 1,#bumpNotes do
         if -(MusicTime - bumpNotes[i]) < 10 then
             table.remove(bumpNotes, i)
@@ -116,7 +114,6 @@ function TitleState:update(dt)
     end
 
     printableSpeed = speed *(logoSize+0.7)
-
 end
 
 function scrollTitleButtons(scroll)
@@ -132,8 +129,6 @@ function TitleState:switchMenu()
     Timer.tween(1, logoYPos, {-200}, "out-expo")
     titleState = 2
 end
-
-
 
 function TitleState:logoBump()
     logoSize = math.min(logoSize + 0.01, 1.3)
@@ -193,8 +188,6 @@ function TitleState:draw()
     love.graphics.draw(logo, logo:getWidth()/2, love.graphics.getHeight()/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
     love.graphics.translate(0,logoYPos[1])
 
-
-
     love.graphics.setColor(0,0,0,0.9)
 
     love.graphics.rectangle("fill", -400, 1050, 300, 150)
@@ -207,8 +200,6 @@ function TitleState:draw()
     love.graphics.rectangle("fill", -400,1180,300*tipBoxBarLenght[1],20)
 
     love.graphics.setFont(MenuFontSmall)
-
-
 
     love.graphics.printf(currentTip, -390, 1060, 280,"center")
 
@@ -251,8 +242,6 @@ function TitleState:draw()
         love.graphics.setColor(0,0,0)
     end
     love.graphics.printf("Options", logo:getWidth()/2-120, 850, 240, "center")
-
-
 
     love.graphics.translate(0,-30)
     if curSelection == 1 then

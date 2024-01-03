@@ -1,5 +1,10 @@
 local SongSelectState = State()
-
+local AllDirections = {
+    "Left",
+    "Down",
+    "Up",
+    "Right",
+}
 function SongSelectState:enter()
     curScreen = "songSelect" 
     songList = love.filesystem.getDirectoryItems("Music")
@@ -18,10 +23,10 @@ function SongSelectState:enter()
             table.insert(diffList, file)
         end
     end
-    lane1={}
-    lane2={}
-    lane3={}
-    lane4={}
+    lanes = {}
+    for i = 1,4 do
+        table.insert(lanes, {})
+    end
     search = ""
 
 
@@ -295,7 +300,7 @@ function SongSelectState:draw()
         end
         love.graphics.pop()
 
-    end
+    endA
     love.graphics.pop()
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
@@ -307,31 +312,17 @@ function SongSelectState:draw()
    -- love.graphics.scale(0.5,0.5)
    love.graphics.setColor(1,1,1)
 
-    love.graphics.draw(ReceptorLeft, love.graphics.getWidth()/2-(LaneWidth*2), 0)
-    love.graphics.draw(ReceptorDown, love.graphics.getWidth()/2-(LaneWidth), 0)
-    love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
-    love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
-
-
-
-    for i = 1,#lane1 do
-        if -(MusicTime - lane1[i])*speed1 < love.graphics.getHeight() and -(MusicTime - lane1[i])*speed1 > 0 then
-            if MenuMusic:isPlaying() then love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed1) end
-        end
+    for i = 1,4 do
+        love.graphics.draw(_G["Receptor" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), 0)
     end
-    for i = 1,#lane2 do
-        if -(MusicTime - lane2[i])*speed2 < love.graphics.getHeight()  and -(MusicTime - lane2[i])*speed2 > 0 then
-            if MenuMusic:isPlaying() then love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed2) end
-        end
-    end
-    for i = 1,#lane3 do
-        if -(MusicTime - lane3[i])*speed3 < love.graphics.getHeight() and -(MusicTime - lane3[i])*speed3 > 0 then
-            if MenuMusic:isPlaying() then love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed3) end
-        end
-    end
-    for i = 1,#lane4 do
-        if -(MusicTime - lane4[i])*speed4 < love.graphics.getHeight() and -(MusicTime - lane4[i])*speed4 > 0 then
-            if MenuMusic:isPlaying() then   love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed4) end
+
+    for i, lane in ipairs(lanes) do
+        for k, note in ipairs(lane) do
+            if -(MusicTime - note)*_G["speed" .. i] < love.graphics.getHeight() and -(MusicTime - note)*_G["speed" .. i] > 0 then
+                if MenuMusic:isPlaying() then 
+                    love.graphics.draw(_G["Note" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
+                end
+            end
         end
     end
     love.graphics.pop()
