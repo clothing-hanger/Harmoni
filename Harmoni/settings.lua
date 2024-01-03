@@ -1,4 +1,4 @@
---[[ YOU MUST RESTART HARMONI FOR ANY CHANGED TO TAKE EFFECT ]]
+--[[ YOU MUST RESTART HARMONI FOR ANY CHANGES TO TAKE EFFECT ]]
 
 --[[ WINDOW SETTINGS ]]--
 startFullscreen = false      -- start in fullscreen (press f11 to toggle)

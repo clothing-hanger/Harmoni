@@ -202,7 +202,7 @@ function love.draw()
     end
     love.graphics.setColor(1,1,1,volumeOpacity[1])
 
-    love.graphics.print(math.floor(love.audio.getVolume()*100) .. "%",200-85,300-40)
+    love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",200-85,300-40)
     love.graphics.setColor(1,1,1)
 
 

@@ -69,9 +69,9 @@ function SongSelectState:update(dt)
                 selectedDifficulty = selectedDifficulty+1
                 SongSelectState:loadSong(false)
             end
-            SongSelectState:loadSong()
+          --  SongSelectState:loadSong()
         elseif Input:pressed("MenuUp") then
-            if menuState == 1 then
+            if menuState == 1 then  
                 selectedSong = selectedSong-1
                 SongSelectState:loadSong(true)
             elseif menuState == 2 then
@@ -98,6 +98,7 @@ function SongSelectState:update(dt)
         songSelectSearch = not SongSelectSearch
         end
     end
+
 
     if MenuMusic:isPlaying() then
         discRotation = discRotation + 5*dt
@@ -257,7 +258,6 @@ function SongSelectState:draw()
                 love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50)
                 love.graphics.print(songList[i], SongListXPositions[i]+12, i*60+12)
             else
-                love.graphics.setColor(1,1,1,0.9)
                 love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50)
                 love.graphics.setColor(0,0.8,0.8)
 
