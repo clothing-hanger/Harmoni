@@ -35,32 +35,15 @@ function TitleState:enter()
         buttonWidth = {0,0,0}
         notes = {}
         bumpNotes = {}
-        chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+        quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
         for i = 1,#diffList do
             print(diffList[i])
         end
-        metaData = {
-            name = chart.Title,
-            song = chart.AudioFile,
-            artist = chart.Artist,
-            source = chart.Source, -- not sure what this one even is really
-            tags = chart.Tags, -- not gonna be used in this file but im putting it here for now so i dont forget it
-            diffName = chart.DifficultyName,
-            creator = chart.Creator,
-            background = chart.BackgroundFile,
-            previewTime = chart.PreviewTime or 0, -- also wont be used here
-            noteCount = 0,
-            length = 0,
-            bpm = 0,   -- idk if ill ever use bpm 😭😭 idk how it works
-            inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
-        }
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
             local startTime = hitObject.StartTime
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane
-
-
             table.insert(chartRandomXPositions, love.math.random(0,love.graphics.getWidth()))
             table.insert(noteLanes, lane)
             table.insert(notes, startTime)
@@ -73,6 +56,7 @@ function TitleState:enter()
         MusicTime = 0
     end
     resetMenuMusic()
+    MenuMusicyTip()
 end
 
 function TitleState:update(dt)
@@ -154,6 +138,20 @@ end
 function TitleState:logoBump()
     logoSize = math.min(logoSize + 0.01, 1.3)
 end
+
+function MenuMusicyTip()
+    tipBoxBarLenght = {1}
+    local dontgetthesamefuckingtip = currentTip
+    local tip = Tips[love.math.random(1,#Tips)]
+    currentTip = tip
+    if dontgetthesamefuckingtip == currentTip then
+        MenuMusicyTip()
+    else
+        Timer.tween(5, tipBoxBarLenght, {0},"linear",function() MenuMusicyTip() end)
+    end
+end
+
+
 --there was never anything here
 function TitleState:draw()
     love.graphics.setColor(1,1,1,0.5)
@@ -194,22 +192,90 @@ function TitleState:draw()
 
     love.graphics.draw(logo, logo:getWidth()/2, love.graphics.getHeight()/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
     love.graphics.translate(0,logoYPos[1])
-    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
-    --love.graphics.setFont(MenuFontExtraSmall)
+
+
+
+    love.graphics.setColor(0,0,0,0.9)
+
+    love.graphics.rectangle("fill", -400, 1050, 300, 150)
+    love.graphics.setColor(1,1,1)
+
+    love.graphics.rectangle("line", -400, 1050, 300, 150)
+  --  love.graphics.setColor(0,1,1)
+    --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])
+
+    love.graphics.rectangle("fill", -400,1180,300*tipBoxBarLenght[1],20)
+
     love.graphics.setFont(MenuFontSmall)
 
+
+
+    love.graphics.printf(currentTip, -390, 1060, 280,"center")
+
+    if curSelection == 3 then
+        love.graphics.setColor(0,0,0,0.9)
+    else
+        love.graphics.setColor(1,1,1,0.9)
+    end    
+    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
+    if curSelection == 3 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0.7,0.7)
+    end 
+    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
+    if curSelection == 3 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0,0)
+    end 
     love.graphics.printf("Credits", logo:getWidth()/2-120, 850, 240, "center")
 
 
     love.graphics.translate(0,-30)
+    if curSelection == 2 then
+        love.graphics.setColor(0,0,0,0.9)
+    else
+        love.graphics.setColor(1,1,1,0.9)
+    end
+    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[2], 850, 240+(buttonWidth[2]*2), 25)
+    if curSelection == 2 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0.7,0.7)
+    end 
     love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[2], 850, 240+(buttonWidth[2]*2), 25)
+    if curSelection == 2 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0,0)
+    end
     love.graphics.printf("Options", logo:getWidth()/2-120, 850, 240, "center")
 
 
 
     love.graphics.translate(0,-30)
+    if curSelection == 1 then
+        love.graphics.setColor(0,0,0,0.9)
+    else
+        love.graphics.setColor(1,1,1,0.9)
+    end
+    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[1], 850, 240+(buttonWidth[1]*2), 25)
+    if curSelection == 1 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0.7,0.7)
+    end     
     love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[1], 850, 240+(buttonWidth[1]*2), 25)
+    if curSelection == 1 then
+        love.graphics.setColor(0,1,1)
+    else
+        love.graphics.setColor(0,0,0)
+    end
     love.graphics.printf("Play", logo:getWidth()/2-120, 850, 240, "center")
+
+
+ --   love.graphics.rectangle()
 
 
 end
