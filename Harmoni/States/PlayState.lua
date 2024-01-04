@@ -29,7 +29,8 @@ function PlayState:enter()
         MenuMusic:stop()
     end
 
-    quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+    local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+    if not ok then State.switch(States.SongSelectState) return end
 
     ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
     ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")

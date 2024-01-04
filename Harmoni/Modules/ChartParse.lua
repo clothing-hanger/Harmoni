@@ -25,6 +25,7 @@ function quaverParse(file)
 
         if tostring(metaData.inputMode) == "7" and curScreen ~= "songSelect" then
             love.window.showMessageBox("Unsupported Chart Type", "7 Key charts are not properly supported. Please choose a different chart or difficulty.", "error")
+            return false
         end
         song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
@@ -34,14 +35,19 @@ function quaverParse(file)
         local endTime = hitObject.EndTime or 0
         local lane = hitObject.Lane
 
+        if lane > 4 then
+            return false
+        end
         table.insert(lanes[lane], startTime)
-        print(lane, #lanes[lane])
+        --print(lane, #lanes[lane])
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end
     songLength = song:getDuration()
     print(songLength)
     songLengthToLastNote = lastNoteTime/1000
     bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+
+    return true
 end
 
 
