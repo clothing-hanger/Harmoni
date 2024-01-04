@@ -192,8 +192,8 @@ function SongSelectState:loadSong(doSongRestart)
             selectedDifficulty = 1
         end
         quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
-        print(songList[selectedSong])
-        print(diffList[selectedDifficulty])
+        --[[ print(songList[selectedSong])
+        print(diffList[selectedDifficulty]) ]]
         
         if doSongRestart then
             MusicTime = 0
@@ -230,6 +230,24 @@ function SongSelectState:draw()
     if background then
         love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
     end
+    love.graphics.push()
+    love.graphics.translate(-390,205)
+    for i = 1,4 do
+        love.graphics.draw(_G["Receptor" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385)
+    end
+
+    for i, lane in ipairs(lanes) do
+        for k, note in ipairs(lane) do
+            local topPos = not downScroll and 0 or -385
+            local bottomPos = not downScroll and 485 or 385
+            if -(MusicTime - note)*_G["speed" .. i] < bottomPos and -(MusicTime - note)*_G["speed" .. i] > topPos then
+                if MenuMusic:isPlaying() then 
+                    love.graphics.draw(_G["Note" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
+                end
+            end
+        end
+    end
+    love.graphics.pop()
     love.graphics.setColor(0,0,0,0.9)
     love.graphics.rectangle("fill", 0, 0, 500, 200)
     love.graphics.setColor(0,1,1)
@@ -302,29 +320,15 @@ function SongSelectState:draw()
 
     end
     love.graphics.pop()
+
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
     love.graphics.rectangle("fill", love.graphics.getWidth()-250, 0, 250, 50)
     love.graphics.setColor(0,1,1)
     love.graphics.rectangle("line", love.graphics.getWidth()-250, 0, 250, 50)
     love.graphics.printf(#songList.." Songs Found", love.graphics.getWidth()-240, 10, 240, "left")
-    love.graphics.translate(-390,205)
    -- love.graphics.scale(0.5,0.5)
    love.graphics.setColor(1,1,1)
-
-    for i = 1,4 do
-        love.graphics.draw(_G["Receptor" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), 0)
-    end
-
-    for i, lane in ipairs(lanes) do
-        for k, note in ipairs(lane) do
-            if -(MusicTime - note)*_G["speed" .. i] < love.graphics.getHeight() and -(MusicTime - note)*_G["speed" .. i] > 0 then
-                if MenuMusic:isPlaying() then 
-                    love.graphics.draw(_G["Note" .. AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
-                end
-            end
-        end
-    end
     love.graphics.pop()
 
 end
