@@ -33,12 +33,15 @@ function TitleState:enter()
         logoSize = 1
         curSelection = 1
         buttonWidth = {0,0,0}
-        notes = {}
-        bumpNotes = {}
+
+        if not MenuMusic then
+            notes = {}
+            bumpNotes = {}
         quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
         for i = 1,#diffList do
             print(diffList[i])
         end
+
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
             local startTime = hitObject.StartTime
@@ -50,13 +53,14 @@ function TitleState:enter()
             table.insert(bumpNotes, startTime)
             lastNoteTime = startTime -- this should work because the last time its run will be the last note
         end
-        MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
-        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
-        MenuMusic:play()
-        MusicTime = 0
+            MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+            background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+            MenuMusic:play()
+            MusicTime = 0
+        end
     end
     resetMenuMusic()
-    MenuMusicyTip()
+    MenuMusicTip()
 end
 
 function TitleState:update(dt)
@@ -92,7 +96,8 @@ function TitleState:update(dt)
            if curSelection == 1 then
                 State.switch(States.SongSelectState)
            elseif curSelection == 2 then
-                love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
+                State.switch(States.SettingsState)
+           --     love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
            elseif curSelection == 3 then
             love.window.showMessageBox("Not Implimented Yet :(", "no credits menu yet, but credits are to me (clothing hanger) for like most of it, \nguglioisstupid and Rit for quaver chart parsing code, \nand the charters to all the songs i stole from quaver \n(they are listed at the top right of the screen in the song select menu)")
            end
@@ -139,15 +144,15 @@ function TitleState:logoBump()
     logoSize = math.min(logoSize + 0.01, 1.3)
 end
 
-function MenuMusicyTip()
+function MenuMusicTip()
     tipBoxBarLenght = {1}
     local dontgetthesamefuckingtip = currentTip
     local tip = Tips[love.math.random(1,#Tips)]
     currentTip = tip
     if dontgetthesamefuckingtip == currentTip then
-        MenuMusicyTip()
+        MenuMusicTip()
     else
-        Timer.tween(5, tipBoxBarLenght, {0},"linear",function() MenuMusicyTip() end)
+        Timer.tween(5, tipBoxBarLenght, {0},"linear",function() MenuMusicTip() end)
     end
 end
 
@@ -199,7 +204,7 @@ function TitleState:draw()
 
     love.graphics.rectangle("fill", -400, 1050, 300, 150)
     love.graphics.setColor(1,1,1)
-
+  
     love.graphics.rectangle("line", -400, 1050, 300, 150)
   --  love.graphics.setColor(0,1,1)
     --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])

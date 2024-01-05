@@ -1,7 +1,7 @@
 Inits = require("inits")
 love.keyboard.setKeyRepeat(true)
 local utf8 = require("utf8")
-require("settings")
+
 if disablePrint then
     function print() end
 end
@@ -55,13 +55,13 @@ function love.load()
 
     require("Modules.Debug")
 
-
+    
     volumeOpacity = {0}
     volumeVelocity = 0
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
 
-
+    saveSettings()
     Tips = {
         "Press F11 to Fullscreen.",
         "Please report any bugs you find by opening a Github issue",
@@ -75,6 +75,7 @@ function love.load()
         ""
     }
 
+    volume = 1
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
     ReallyFuckingBigFont = love.graphics.newFont("Fonts/framdit.ttf", 400)
 
