@@ -1,4 +1,10 @@
 local SongSelectState = State()
+local AllDirections = {
+    "Left",
+    "Down",
+    "Up",
+    "Right",
+}
 
 function SongSelectState:enter()
 
@@ -10,12 +16,10 @@ function SongSelectState:enter()
     printableSongList = {selectedSong}
     printableDiffList = {selectedDiff}
     search = ""
-    lane1 = {}
-    lane2 = {}
-    lane3 = {}
-    lane4 = {}
-
-
+    lanes = {}
+    for i = 1,4 do
+        table.insert(lanes, {})
+    end
 
     NoteLeft = love.graphics.newImage("Images/NOTES/NoteLeft.png")
     NoteDown = love.graphics.newImage("Images/NOTES/NoteDown.png")
@@ -131,25 +135,19 @@ function SongSelectState:update(dt)
             end
         end
     end
-    if #lane1+#lane2+#lane3+#lane4 > 0 then
+    if #lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] > 0 then
          SongSelectState:checkBotInput()
     end
     if MenuMusic and MenuMusic:isPlaying() then  --not sure why it only works like this
         discRotation = discRotation + 5*dt
     end
-    --else
-      --  lane1 = {}
-        --lane2 = {}
-        --lane3 = {}
-        --lane4 = {}
-   -- end
 end
 
 function SongSelectState:displayChart()
-    lane1 = {}
-    lane2 = {}
-    lane3 = {}
-    lane4 = {}
+    lanes = {}
+    for i = 1,4 do
+        table.insert(lanes, {})
+    end
     quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDiff])
     MusicTime = 0
 end
@@ -244,32 +242,13 @@ function SongSelectState:PlayMenuMusic()
 end
 
 function SongSelectState:checkBotInput()
-    for i = 1, #lane1 do
-        local NoteTime = lane1[i] - MusicTime
-        if NoteTime < 0 then
-            table.remove(lane1, i)
-            break
-        end
-    end
-    for i = 1, #lane2 do
-        local NoteTime = lane2[i] - MusicTime
-        if NoteTime < 0 then
-            table.remove(lane2, i)
-            break
-        end
-    end
-    for i = 1, #lane3 do
-        local NoteTime = lane3[i] - MusicTime
-        if NoteTime < 0 then
-            table.remove(lane3, i)
-            break
-        end
-    end
-    for i = 1, #lane4 do
-        local NoteTime = lane4[i] - MusicTime
-        if NoteTime < 0 then
-            table.remove(lane4, i)
-            break
+    for i, lane in ipairs(lanes) do
+        for j = 1, #lane do
+            local NoteTime = lane[j] - MusicTime
+            if NoteTime < 0 then
+                table.remove(lane, j)
+                break
+            end
         end
     end
 end
@@ -372,29 +351,16 @@ function SongSelectState:draw()
     love.graphics.draw(ReceptorUp, love.graphics.getWidth()/2, 0)
     love.graphics.draw(ReceptorRight, love.graphics.getWidth()/2+(LaneWidth), 0)
 
-
-
-    for i = 1,#lane1 do
-        if -(MusicTime - lane1[i])*speed1 < love.graphics.getHeight() then
-            love.graphics.draw(NoteLeft, love.graphics.getWidth()/2-(LaneWidth*2), -(MusicTime - lane1[i])*speed1)
-        end
-    end
-
-    for i = 1,#lane2 do
-        if -(MusicTime - lane2[i])*speed2 < love.graphics.getHeight() then
-            love.graphics.draw(NoteDown, love.graphics.getWidth()/2-LaneWidth, -(MusicTime - lane2[i])*speed2)
-        end
-    end
-
-
-    for i = 1,#lane3 do
-        if -(MusicTime - lane3[i])*speed3 < love.graphics.getHeight() then
-            love.graphics.draw(NoteUp, love.graphics.getWidth()/2, -(MusicTime - lane3[i])*speed3)
-        end
-    end
-    for i = 1,#lane4 do
-        if -(MusicTime - lane4[i])*speed4 < love.graphics.getHeight() then
-            love.graphics.draw(NoteRight, love.graphics.getWidth()/2+LaneWidth, -(MusicTime - lane4[i])*speed4)
+    for i, lane in ipairs(lanes) do
+        for j, note in ipairs(lane) do
+            local NoteTime = note - MusicTime
+            if NoteTime < 0 then
+                table.remove(lane, j)
+                break
+            end
+            if -NoteTime*_G["speed"..i] < love.graphics.getHeight() then
+                love.graphics.draw(_G["Note"..AllDirections[i]], love.graphics.getWidth()/2-(LaneWidth*(5-i)), -NoteTime*_G["speed"..i])
+            end
         end
     end
     love.graphics.pop()
