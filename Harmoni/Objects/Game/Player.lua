@@ -10,8 +10,8 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.translate(Inits.WindowWidth/2, Inits.WindowHeight/2)
-    love.graphics.translate(-Inits.WindowWidth/2, -Inits.WindowHeight/2)
+    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
     love.graphics.rectangle("fill", self.x, self.y, 25, 25)
 end
 

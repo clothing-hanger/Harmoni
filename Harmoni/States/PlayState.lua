@@ -73,7 +73,7 @@ function PlayState:enter()
     MusicTime = -10000
 
     health = 1
-    timeRemainingBar = {Inits.WindowWidth}
+    timeRemainingBar = {Inits.GameWidth}
     paused = false
     judgeColors = {0,0,0,0,0,0}
     judgePos = {0}
@@ -90,6 +90,7 @@ function PlayState:enter()
     printableHealth = {health}
     convertedAccuracy = 0
     printableAccuracy = {accuracy}
+    noteScale = 1
 
     dimBackground()
 end
@@ -159,7 +160,7 @@ function PlayState:gameOver()
     if gameOverSongSlowdown[1] == 1 then
         --song:setPitch(-1)
         gameOverNotePush = {0}
-        gameOverTween = Timer.tween(1.5, gameOverNotePush, {Inits.WindowHeight/2}, "out-elastic")
+        gameOverTween = Timer.tween(1.5, gameOverNotePush, {Inits.GameHeight/2}, "out-elastic")
         gameOverSongTween = Timer.tween(1.5, gameOverSongSlowdown, {0.01}, "linear", function()
             song:stop()
             paused = false
@@ -335,18 +336,18 @@ function PlayState:draw()
             grade = "F"
         end
 
-        love.graphics.draw(background, 0, 0, nil, Inits.WindowWidth/background:getWidth(),Inits.WindowHeight/background:getHeight())
+        love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
 
         love.graphics.setColor(0,0,0,backgroundDim[1])
-        love.graphics.rectangle("fill", 0, 0, Inits.WindowWidth, Inits.WindowHeight)
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(1,1,1,1)
     
-        love.graphics.rectangle("fill", 0, Inits.WindowHeight-20, timeRemainingBar[1], 20)
+        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, timeRemainingBar[1], 20)
 
         love.graphics.push()
-        --love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, Inits.WindowWidth, "center")
+        --love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, Inits.GameWidth, "center")
 
-       -- love.graphics.printf("Press Enter to Continue.", 0, 320, Inits.WindowWidth, "center")
+       -- love.graphics.printf("Press Enter to Continue.", 0, 320, Inits.GameWidth, "center")
        if not resultsScreenTranslate then
         resultsScreenTranslate = {0, 0}
        end
@@ -354,7 +355,7 @@ function PlayState:draw()
         if resultsScreenTween then
             Timer.cancel(resultsScreenTween)
         end
-        resultsScreenTween = Timer.tween(0.5, resultsScreenTranslate, {[1] = Inits.WindowWidth/2 - 50, [2] = -50}, "out-expo")
+        resultsScreenTween = Timer.tween(0.5, resultsScreenTranslate, {[1] = Inits.GameWidth/2 - 50, [2] = -50}, "out-expo")
     
         
 
@@ -362,27 +363,27 @@ function PlayState:draw()
 
        love.graphics.setFont(ReallyFuckingBigFont)
 
-        love.graphics.print(grade, -400, Inits.WindowHeight/2-150)
+        love.graphics.print(grade, -400, Inits.GameHeight/2-150)
 
 
        love.graphics.setFont(MediumFont)
 
-            love.graphics.print(marvCount,judgeCounterXPos[1], (Inits.WindowHeight/2)-100)
+            love.graphics.print(marvCount,judgeCounterXPos[1], (Inits.GameHeight/2)-100)
 
-            love.graphics.print(perfCount,judgeCounterXPos[2], (Inits.WindowHeight/2)-50)
+            love.graphics.print(perfCount,judgeCounterXPos[2], (Inits.GameHeight/2)-50)
         love.graphics.setColor(92/255,1, 82/255)
 
-            love.graphics.print(greatCount,judgeCounterXPos[3], (Inits.WindowHeight/2)+0)
-            love.graphics.print(goodCount,judgeCounterXPos[4], (Inits.WindowHeight/2)+50)
+            love.graphics.print(greatCount,judgeCounterXPos[3], (Inits.GameHeight/2)+0)
+            love.graphics.print(goodCount,judgeCounterXPos[4], (Inits.GameHeight/2)+50)
         love.graphics.setColor(1,65/255,65/255)
-            love.graphics.print(okayCount,judgeCounterXPos[5], (Inits.WindowHeight/2)+100)
-        love.graphics.print(missCount,judgeCounterXPos[6], (Inits.WindowHeight/2)+150)
+            love.graphics.print(okayCount,judgeCounterXPos[5], (Inits.GameHeight/2)+100)
+        love.graphics.print(missCount,judgeCounterXPos[6], (Inits.GameHeight/2)+150)
 
         love.graphics.pop()
         love.graphics.push()
 
 
-        love.graphics.translate(Inits.WindowWidth/2,Inits.WindowHeight/2)
+        love.graphics.translate(Inits.GameWidth/2,Inits.GameHeight/2)
         love.graphics.setLineWidth(1)
         love.graphics.scale(1, 0.5)
 
@@ -455,27 +456,28 @@ function PlayState:draw()
         love.graphics.pop()
 
     else
-        love.graphics.draw(background, 0, 0, nil, Inits.WindowWidth/background:getWidth(),Inits.WindowHeight/background:getHeight())
+        love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
 
         love.graphics.setColor(0,0,0,backgroundDim[1])
-        love.graphics.rectangle("fill", 0, 0, Inits.WindowWidth, Inits.WindowHeight)
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(1,1,1,1)
     
-        love.graphics.rectangle("fill", 0, Inits.WindowHeight-20, timeRemainingBar[1], 20)
+        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, timeRemainingBar[1], 20)
         love.graphics.pop()
 
         love.graphics.push()
             if downScroll then
-                love.graphics.translate(0, Inits.WindowHeight-NoteUp:getHeight()-verticalNoteOffset) 
+                love.graphics.translate(0, Inits.GameHeight-NoteUp:getHeight()-verticalNoteOffset) 
             else
                 love.graphics.translate(0, verticalNoteOffset)
             end
+
 
             for i = 1,4 do
                 local inp = allInputs[i]
                 local spr = _G["Receptor" .. AllDirections[i]]
                 if Input:down(inp) then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                love.graphics.draw(spr, Inits.WindowWidth/2-(LaneWidth*(3-i)), 0)
+                love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0, nil,noteScale,noteScale)
             end
         
             love.graphics.push()
@@ -485,9 +487,9 @@ function PlayState:draw()
 
                 for i, lane in ipairs(lanes) do
                     for j, note in ipairs(lane) do
-                        if -(MusicTime - note)*_G["speed" .. i] < Inits.WindowHeight then
+                        if -(MusicTime - note)*_G["speed" .. i] < Inits.GameHeight then
                             local noteImg = _G["Note" .. AllDirections[i]]
-                            love.graphics.draw(noteImg, Inits.WindowWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i])
+                            love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,noteScale,noteScale)
                         end
                     end
                 end
@@ -509,52 +511,52 @@ function PlayState:draw()
     
     
         love.graphics.setColor(1,1,1,judgeColors[1])
-        love.graphics.draw(Marvelous, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,judgeColors[2])
-        love.graphics.draw(Perfect, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])         
+        love.graphics.draw(Perfect, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])         
         love.graphics.setColor(1,1,1,judgeColors[3])
-        love.graphics.draw(Great, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Great, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,judgeColors[4])
-        love.graphics.draw(Good, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Good, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,judgeColors[5])
-        love.graphics.draw(Okay, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Okay, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,judgeColors[6])
-        love.graphics.draw(Miss, (Inits.WindowWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Miss, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(MediumFont)
     
         if marvCount ~= 0 then
-            love.graphics.print(marvCount,judgeCounterXPos[1], (Inits.WindowHeight/2)-100)
+            love.graphics.print(marvCount,judgeCounterXPos[1], (Inits.GameHeight/2)-100)
         else
-            love.graphics.print("Marvelous",0, (Inits.WindowHeight/2)-100)
+            love.graphics.print("Marvelous",0, (Inits.GameHeight/2)-100)
         end
         if perfCount ~= 0 then
-            love.graphics.print(perfCount,judgeCounterXPos[2], (Inits.WindowHeight/2)-50)
+            love.graphics.print(perfCount,judgeCounterXPos[2], (Inits.GameHeight/2)-50)
         else
-            love.graphics.print("Perfect",0, (Inits.WindowHeight/2)-50)
+            love.graphics.print("Perfect",0, (Inits.GameHeight/2)-50)
         end
         love.graphics.setColor(92/255,1, 82/255)
     
         if greatCount ~= 0 then
-            love.graphics.print(greatCount,judgeCounterXPos[3], (Inits.WindowHeight/2)+0)
+            love.graphics.print(greatCount,judgeCounterXPos[3], (Inits.GameHeight/2)+0)
         else
-            love.graphics.print("Great",0, (Inits.WindowHeight/2)+0)
+            love.graphics.print("Great",0, (Inits.GameHeight/2)+0)
         end
         if goodCount ~= 0 then
-            love.graphics.print(goodCount,judgeCounterXPos[4], (Inits.WindowHeight/2)+50)
+            love.graphics.print(goodCount,judgeCounterXPos[4], (Inits.GameHeight/2)+50)
         else
-            love.graphics.print("Good",0, (Inits.WindowHeight/2)+50)
+            love.graphics.print("Good",0, (Inits.GameHeight/2)+50)
         end
         love.graphics.setColor(1,65/255,65/255)
         if okayCount ~= 0 then
-            love.graphics.print(okayCount,judgeCounterXPos[5], (Inits.WindowHeight/2)+100)
+            love.graphics.print(okayCount,judgeCounterXPos[5], (Inits.GameHeight/2)+100)
         else
-            love.graphics.print("Okay",0, (Inits.WindowHeight/2)+100)
+            love.graphics.print("Okay",0, (Inits.GameHeight/2)+100)
         end
         if missCount ~= 0 then
-           love.graphics.print(missCount,judgeCounterXPos[6], (Inits.WindowHeight/2)+150)
+           love.graphics.print(missCount,judgeCounterXPos[6], (Inits.GameHeight/2)+150)
         else
-            love.graphics.print("Miss",0, (Inits.WindowHeight/2)+150)
+            love.graphics.print("Miss",0, (Inits.GameHeight/2)+150)
         end
     
     
@@ -565,10 +567,10 @@ function PlayState:draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(BigFont)
         if combo > 0 then
-            love.graphics.printf(combo, 0, 240+judgePos[1], Inits.WindowWidth, "center")
+            love.graphics.printf(combo, 0, 240+judgePos[1], Inits.GameWidth, "center")
         end
         love.graphics.setColor(0,0.5,1)
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, Inits.WindowWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, Inits.GameWidth, "right")
         love.graphics.setColor(1,1,1)
     
         accuracyColor = printableAccuracy[1]/100
@@ -576,10 +578,12 @@ function PlayState:draw()
         love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
     
     
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, Inits.WindowWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, Inits.GameWidth, "right")
     
         love.graphics.setFont(DefaultFont)
         love.graphics.setColor(0,0,0)
+
+        love.graphics.push()
     
         love.graphics.rectangle("fill", 896, 636, 13, -508)
     
@@ -587,11 +591,12 @@ function PlayState:draw()
     
     
         love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+        love.graphics.pop()
         --love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
     
     
     
-        --love.graphics.line(0, Inits.WindowHeight/2, Inits.WindowWidth, Inits.WindowHeight/2)
+        --love.graphics.line(0, Inits.GameHeight/2, Inits.GameWidth, Inits.GameHeight/2)
     end
 
 

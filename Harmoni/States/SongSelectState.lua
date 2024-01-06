@@ -231,12 +231,12 @@ end
 function SongSelectState:draw()
     
     if background then
-        love.graphics.draw(background, 0, 0, nil, Inits.WindowWidth/background:getWidth(),Inits.WindowHeight/background:getHeight())
+        love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
     end
     love.graphics.push()
     love.graphics.translate(-390,205)
     for i = 1,4 do
-        love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.WindowWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385)
+        love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385)
     end
 
     for i, lane in ipairs(lanes) do
@@ -245,7 +245,7 @@ function SongSelectState:draw()
             local bottomPos = not downScroll and 485 or 385
             if -(MusicTime - note)*_G["speed" .. i] < bottomPos and -(MusicTime - note)*_G["speed" .. i] > topPos then
                 if MenuMusic:isPlaying() then 
-                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.WindowWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
+                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
                 end
             end
         end
@@ -265,15 +265,15 @@ function SongSelectState:draw()
     love.graphics.draw(disc, 450, 150, discRotation, 0.08, 0.08,disc:getWidth()/2,disc:getHeight()/2)
     love.graphics.pop()
     love.graphics.setColor(0,0,0,backgroundFade[1])
-    love.graphics.rectangle("fill", 0,0,Inits.WindowWidth,Inits.WindowHeight)
+    love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
     love.graphics.setColor(1,1,1, backgroundFade[1])
-    love.graphics.draw(loading, Inits.WindowWidth/2, Inits.WindowHeight/2, -discRotation, 0.08, 0.08,loading:getWidth()/2,loading:getHeight()/2)
+    love.graphics.draw(loading, Inits.GameWidth/2, Inits.GameHeight/2, -discRotation, 0.08, 0.08,loading:getWidth()/2,loading:getHeight()/2)
     love.graphics.setColor(1,1,1,1)
     love.graphics.setFont(MenuFontSmall)
     love.graphics.push()
     if menuState == 1 then
         love.graphics.push()
-        love.graphics.translate(0, -(printableSelectedSong[1]*60)+Inits.WindowHeight/2)
+        love.graphics.translate(0, -(printableSelectedSong[1]*60)+Inits.GameHeight/2)
 
         for i = 1,#songList do
 
@@ -300,7 +300,7 @@ function SongSelectState:draw()
 
     elseif menuState == 2 then
         love.graphics.push()
-        love.graphics.translate(0, -(selectedDifficulty*60)+Inits.WindowHeight/2)
+        love.graphics.translate(0, -(selectedDifficulty*60)+Inits.GameHeight/2)
 
         for i = 1,#diffList do
             if i == selectedDifficulty then
@@ -326,10 +326,10 @@ function SongSelectState:draw()
 
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
-    love.graphics.rectangle("fill", Inits.WindowWidth-250, 0, 250, 50)
+    love.graphics.rectangle("fill", Inits.GameWidth-250, 0, 250, 50)
     love.graphics.setColor(0,1,1)
-    love.graphics.rectangle("line", Inits.WindowWidth-250, 0, 250, 50)
-    love.graphics.printf(#songList.." Songs Found", Inits.WindowWidth-240, 10, 240, "left")
+    love.graphics.rectangle("line", Inits.GameWidth-250, 0, 250, 50)
+    love.graphics.printf(#songList.." Songs Found", Inits.GameWidth-240, 10, 240, "left")
    -- love.graphics.scale(0.5,0.5)
    love.graphics.setColor(1,1,1)
     love.graphics.pop()
