@@ -6,7 +6,7 @@ love.keyboard.setKeyRepeat(true)
 
 
 if disablePrint then
-    function print() end
+    --function print() end
 end
 
 function toGameScreen(x, y)
@@ -209,7 +209,7 @@ function love.draw()
     else
         love.graphics.circle("line",200,300,100)
     end
-    love.graphics.setColor(1,1,1,volumeOpacity[1])
+    love.graphics.setColor(0,0.8,0.8,volumeOpacity[1])
     love.graphics.pop()
 
 

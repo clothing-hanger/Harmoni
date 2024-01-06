@@ -60,6 +60,7 @@ function PlayState:enter()
     okayTiming = 236
     missTiming = 286
 
+   -- BotPlay = true
     marvCount = 0
     perfCount = 0
     greatCount = 0

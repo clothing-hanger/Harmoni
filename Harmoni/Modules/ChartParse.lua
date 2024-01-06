@@ -16,7 +16,7 @@ function quaverParse(file)
             diffName = chart.DifficultyName,
             creator = chart.Creator,
             background = chart.BackgroundFile,
-            previewTime = chart.PreviewTime or 0, -- also wont be used here
+            previewTime = chart.SongPreviewTime or 0, -- also wont be used here
             noteCount = 0,
             length = 0,
             bpm = 0,   -- idk if ill ever use bpm 😭😭 idk how it works

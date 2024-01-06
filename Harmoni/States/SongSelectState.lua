@@ -196,9 +196,12 @@ function SongSelectState:loadSong(doSongRestart)
         print(diffList[selectedDifficulty]) ]]
         
         if doSongRestart then
-            MusicTime = 0
+            MusicTime = metaData.previewTime
+            print("idfk what to put here")
             MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             MenuMusic:play()
+            MenuMusic:seek(metaData.previewTime/1000)
+
         end
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
