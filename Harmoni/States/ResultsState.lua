@@ -10,7 +10,7 @@ end
 
 function ResultsState:draw()
     love.graphics.setColor(1,1,1,0.75)
-        love.graphics.draw(background, 0, 0, nil, love.graphics.getWidth()/background:getWidth(),love.graphics.getHeight()/background:getHeight())
+        love.graphics.draw(background, 0, 0, nil, Inits.WindowWidth/background:getWidth(),Inits.WindowHeight/background:getHeight())
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(ResultsScreenImage)

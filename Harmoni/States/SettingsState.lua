@@ -112,7 +112,7 @@ end
 function SettingsState:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.push()
-    love.graphics.translate(0, -printableSetting[1]*50+love.graphics.getHeight()/2)
+    love.graphics.translate(0, -printableSetting[1]*50+Inits.WindowHeight/2)
     love.graphics.setFont(MenuFontSmall)
     for i = 1,#settings do
         love.graphics.rectangle("line", 50, 50*i, 50, 40)

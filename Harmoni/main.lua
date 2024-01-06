@@ -192,11 +192,17 @@ function love.draw()
     love.graphics.setShader()
 
     debug.printInfo()
-    love.graphics.setFont(ExtraBigFont)
+    love.graphics.setFont(MenuFontSmall)
+
+    love.graphics.setLineWidth(5)
+    love.graphics.push()
+    love.graphics.translate(Inits.WindowWidth-200, Inits.WindowHeight-250)
     love.graphics.setColor(1,1,1,volumeOpacity[1])
+
+
+    love.graphics.scale(0.5,0.5)
     love.graphics.setColor(0,0,0,volumeOpacity[1])
     love.graphics.arc("fill",200,300,100,0, printableVolume[1]*math.pi*2)
-    love.graphics.setLineWidth(5)
     love.graphics.setColor(0,1,1,volumeOpacity[1])
     if printableVolume[1] < 0.98 then
         love.graphics.arc("line",200,300,100,0, printableVolume[1]*math.pi*2)
@@ -204,8 +210,11 @@ function love.draw()
         love.graphics.circle("line",200,300,100)
     end
     love.graphics.setColor(1,1,1,volumeOpacity[1])
+    love.graphics.pop()
 
-    love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",200-85,300-40)
+
+
+    love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",Inits.WindowWidth-200+71,Inits.WindowHeight-250+136)
     love.graphics.setColor(1,1,1)
 
 

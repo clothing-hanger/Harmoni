@@ -47,7 +47,7 @@ function TitleState:enter()
             local startTime = hitObject.StartTime
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane
-            table.insert(chartRandomXPositions, love.math.random(0,love.graphics.getWidth()))
+            table.insert(chartRandomXPositions, love.math.random(0,Inits.WindowWidth))
             table.insert(noteLanes, lane)
             table.insert(notes, startTime)
             table.insert(bumpNotes, startTime)
@@ -156,21 +156,21 @@ end
 function TitleState:draw()
     love.graphics.setColor(1,1,1,0.5)
 
-    love.graphics.draw(background, love.graphics.getWidth()/2, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/background:getWidth()+(logoSize-1)/6,love.graphics.getHeight()/background:getHeight()+(logoSize-1)/6, background:getWidth()/2, background:getHeight()/2)
+    love.graphics.draw(background, Inits.WindowWidth/2, Inits.WindowHeight/2, nil, Inits.WindowWidth/background:getWidth()+(logoSize-1)/6,Inits.WindowHeight/background:getHeight()+(logoSize-1)/6, background:getWidth()/2, background:getHeight()/2)
     love.graphics.setColor(1,1,1,(logoSize-1))
-    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),(love.graphics.getHeight()/gradient:getHeight()/2))
-    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),(love.graphics.getHeight()/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, Inits.WindowHeight/2, nil, Inits.WindowWidth/gradient:getWidth(),(Inits.WindowHeight/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, Inits.WindowHeight/2, nil, Inits.WindowWidth/gradient:getWidth(),(Inits.WindowHeight/gradient:getHeight()/2))
 
-    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),-(love.graphics.getHeight()/gradient:getHeight()/2))
-    love.graphics.draw(gradient, 0, love.graphics.getHeight()/2, nil, love.graphics.getWidth()/gradient:getWidth(),-(love.graphics.getHeight()/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, Inits.WindowHeight/2, nil, Inits.WindowWidth/gradient:getWidth(),-(Inits.WindowHeight/gradient:getHeight()/2))
+    love.graphics.draw(gradient, 0, Inits.WindowHeight/2, nil, Inits.WindowWidth/gradient:getWidth(),-(Inits.WindowHeight/gradient:getHeight()/2))
     love.graphics.setColor(1,1,1,1)
 
     love.graphics.setColor(0,0,0,backgroundFade[1])
-    love.graphics.rectangle("fill", 0,0,love.graphics.getWidth(),love.graphics.getHeight())
+    love.graphics.rectangle("fill", 0,0,Inits.WindowWidth,Inits.WindowHeight)
     love.graphics.setColor(1,1,1,1)
     love.graphics.translate(0,-100)
     for i = 1,#notes do
-        if -(MusicTime - notes[i])*speed < love.graphics.getHeight()+100 then
+        if -(MusicTime - notes[i])*speed < Inits.WindowHeight+100 then
             love.graphics.setColor(1,1,1,0.1+(logoSize-1)*25)
 
             
@@ -188,9 +188,9 @@ function TitleState:draw()
             love.graphics.setColor(1,1,1,1)
         end
     end
-    love.graphics.translate(love.graphics.getWidth()/2-logo:getWidth()/2,logoYPos[1])
+    love.graphics.translate(Inits.WindowWidth/2-logo:getWidth()/2,logoYPos[1])
 
-    love.graphics.draw(logo, logo:getWidth()/2, love.graphics.getHeight()/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
+    love.graphics.draw(logo, logo:getWidth()/2, Inits.WindowHeight/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
     love.graphics.translate(0,logoYPos[1])
 
     love.graphics.setColor(0,0,0,0.9)
