@@ -1,10 +1,18 @@
-uhhh idfk how to type a good readme uhh um 
+ # ![](https://raw.githubusercontent.com/clothing-hanger/Harmoni/main/Harmoni/Images/TITLE/logo.png)
 
-keybinds are dfjk (cant be changed yet)
+Open source rhythm game written in Love2D Lua
+
+- Supports Quaver charts
+
+# Known Issues
+
+- Settings menu and Credits menu are not working correctly, Modify settings in `settings.lua`
+- Keybinds are hardcoded into the source, easily changeable in main.lua
 
 to fullscreen pressed f11
 
-to edit settings edit States/SettingsState.lua (this is only a temp solution until the settings menu works correctly) (the part you edit is right at the top, its self explanitory)
+# Importing songs
 
-to import your own songs from Quaver, right click the song in Quaver's song select menu, press export, then extract that file to a folder using 7Zip, and drag that folder into Harmoni's Music folder
-(please note, if the folder has a . in the name, Harmoni will crash when attempting to load it.)
+To Import your own songs into Harmoni from quaver, right click on the song in Quaver's song selection menu, press export, then extract the files to a folder using an archive utility like 7zip or WinRAR (hope none of yalls registered it) drag the folder into Harmoni's music folder.
+
+DO NOTE if a folder has a `.` in the name, Harmoni WILL crash when trying to load it
