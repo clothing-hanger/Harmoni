@@ -4,7 +4,7 @@ settings = {
     {"Default Volume", 100},
     {"Song Select Song Delay", 0.2},
     {"Down Scroll", false},
-    {"Scroll Speed", 1.75},
+    {"Scroll Speed", 1.6},
     {"Note Lane Width", 125},
     {"Backgroud Dim", 0.9},
     {"Bot Play", false},

@@ -59,6 +59,7 @@ function love.load()
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
 
+
     require("Modules.Debug")
 
 
@@ -66,6 +67,7 @@ function love.load()
     volumeVelocity = 0
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
+    MusicTime = 0
 
 
     saveSettings()

@@ -15,6 +15,7 @@ function SongSelectState:enter()
     printableSelectedDifficulty = {selectedDifficulty} -- used for scrolling diff list 
     SongListXPositions = {}
     diffListXPositions = {}
+    DiffNameList = {}
     diffList = {}
     diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
     for i = 1,#diffListAndOtherShitIdfk do 
@@ -60,9 +61,9 @@ function SongSelectState:update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
 
-    if comingFromPlay and not MenuMusic:isPlaying() then
-        comingFromPlay = false
+    if State.last() == States.PlayState and not MenuMusic:isPlaying() and not dontFuckingReloadTheSongEveryFrameDumbass then
        -- MenuMusic:stop()
+       dontFuckingReloadTheSongEveryFrameDumbass = true
         SongSelectState:loadSong(true)
     end
     if not songSelectSearch then
@@ -94,7 +95,10 @@ function SongSelectState:update(dt)
         elseif Input:pressed("MenuBack") then
             if menuState == 2 then
                 menuState = 1
+            elseif menuState == 1 then
+                State.switch(States.TitleState)
             end
+
         end
     end
     if Input:pressed("SearchToggle") then
@@ -214,11 +218,17 @@ function SongSelectState:loadSong(doSongRestart)
             backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
         end)
     end)
+
+  --  for i,diff in ipairs(diffList) do
+  --      quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[i])
+    --    table.insert(DiffNameList, metaData.diffName)
+   -- end
+
 end
 
 function scrollSongs(y)
 
-    if menuState == 1 then
+    if menuState == 1 then  
         selectedSong = selectedSong - y
         MenuMusic:stop()
         SongSelectState:loadSong(true)
@@ -236,7 +246,7 @@ function SongSelectState:draw()
     love.graphics.push()
     love.graphics.translate(-390,205)
     for i = 1,4 do
-        love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385)
+        love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
     end
 
     for i, lane in ipairs(lanes) do
@@ -245,7 +255,7 @@ function SongSelectState:draw()
             local bottomPos = not downScroll and 485 or 385
             if -(MusicTime - note)*_G["speed" .. i] < bottomPos and -(MusicTime - note)*_G["speed" .. i] > topPos then
                 if MenuMusic:isPlaying() then 
-                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i])
+                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
                 end
             end
         end

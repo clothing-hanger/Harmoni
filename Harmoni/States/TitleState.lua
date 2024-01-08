@@ -1,7 +1,23 @@
 local TitleState = State()
 local noteLanes = {}
 function TitleState:enter()
+    logo = love.graphics.newImage("Images/TITLE/logo.png")
+    backgroundFade = {0}
+    onTitle = true
+    logoYPos = {20}
+    curScreen = "title"
+    titleState = 1
+    H = love.graphics.newImage("Images/TITLE/H.png")
+    R = love.graphics.newImage("Images/TITLE/R.png")  -- the notes in the background originally were part of the logo, thats why their file name is letters
+    O = love.graphics.newImage("Images/TITLE/O.png")
+    I = love.graphics.newImage("Images/TITLE/I.png")
+    gradient = love.graphics.newImage("Images/TITLE/gradient.png")
+    logoSize = 1
     resetMenuMusic = function()
+        doingTitleMusicReset = true
+        MenuMusic = nil
+        
+        print("resetMenuMusic")
         songList = love.filesystem.getDirectoryItems("Music")
         randomSong = love.math.random(1,#songList)
         diffList = {}
@@ -17,19 +33,9 @@ function TitleState:enter()
             print(diffListAndOtherShitIdfk[i])
         end
         randomDifficulty = love.math.random(1, #diffList)
-        logo = love.graphics.newImage("Images/TITLE/logo.png")
-        backgroundFade = {0}
-        onTitle = true
-        logoYPos = {20}
-        titleState = 1
-        curScreen = "title"
-        H = love.graphics.newImage("Images/TITLE/H.png")
-        R = love.graphics.newImage("Images/TITLE/R.png")  -- the notes in the background originally were part of the logo, thats why their file name is letters
-        O = love.graphics.newImage("Images/TITLE/O.png")
-        I = love.graphics.newImage("Images/TITLE/I.png")
-        gradient = love.graphics.newImage("Images/TITLE/gradient.png")
+
         chartRandomXPositions = {}
-        speed = 0.6
+        speedTitle = 0.6
         logoSize = 1
         curSelection = 1
         buttonWidth = {0,0,0}
@@ -37,35 +43,50 @@ function TitleState:enter()
         if not MenuMusic then
             notes = {}
             bumpNotes = {}
-        quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
-        for i = 1,#diffList do
-            print(diffList[i])
-        end
+            quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+            for i = 1,#diffList do
+                print(diffList[i])
+            end
 
-        for i = 1,#chart.HitObjects do
-            local hitObject = chart.HitObjects[i]
-            local startTime = hitObject.StartTime
-            local endTime = hitObject.EndTime or 0
-            local lane = hitObject.Lane
-            table.insert(chartRandomXPositions, love.math.random(0,Inits.GameWidth))
-            table.insert(noteLanes, lane)
-            table.insert(notes, startTime)
-            table.insert(bumpNotes, startTime)
-            lastNoteTime = startTime -- this should work because the last time its run will be the last note
-        end
+            for i = 1,#chart.HitObjects do
+                local hitObject = chart.HitObjects[i]
+                local startTime = hitObject.StartTime
+                local endTime = hitObject.EndTime or 0
+                local lane = hitObject.Lane
+                table.insert(chartRandomXPositions, love.math.random(0,Inits.GameWidth))
+                table.insert(noteLanes, lane)
+                table.insert(notes, startTime)
+                table.insert(bumpNotes, startTime)
+                lastNoteTime = startTime -- this should work because the last time its run will be the last note
+            end
             MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
             MenuMusic:play()
             MusicTime = 0
+            doingTitleMusicReset = false
         end
     end
-    resetMenuMusic()
-    MenuMusicTip()
+    titleTip()
+
+    if State.last() ~= States.SongSelectState and State.last() ~= States.SettingsState then
+
+        resetMenuMusic()
+    else
+        logoYPos = {-200}
+        titleState = 2
+    end
+        
+
 end
 
 function TitleState:update(dt)
+
+    if #bumpNotes == 0 then
+        bumpNotes = notes
+    end
+
     for i = 1,#bumpNotes do
-        if -(MusicTime - bumpNotes[i]) < 10 then
+        if -(MusicTime - bumpNotes[i]) < 0 then
             table.remove(bumpNotes, i)
             TitleState:logoBump()
             break
@@ -88,7 +109,6 @@ function TitleState:update(dt)
         elseif titleState == 2 then
            -- MenuMusicLocation = MenuMusic:tell()
            -- MenuMusicNumber = randomSong
-            comingFromTitle = true
             onTitle = false
            -- MenuMusic:stop()
            if curSelection == 1 then
@@ -114,11 +134,11 @@ function TitleState:update(dt)
         end
     end
 
-    if not MenuMusic:isPlaying() and onTitle then
+    if not MenuMusic:isPlaying() and onTitle and not doingTitleMusicReset then
         resetMenuMusic()
     end
 
-    printableSpeed = speed *(logoSize+0.7)
+    printablespeedTitle = speedTitle *(logoSize+0.7)
 end
 
 function scrollTitleButtons(scroll)
@@ -139,15 +159,18 @@ function TitleState:logoBump()
     logoSize = math.min(logoSize + 0.01, 1.3)
 end
 
-function MenuMusicTip()
+function titleTip()
+    if tipTween then
+        Timer.cancel(tipTween)
+    end
     tipBoxBarLenght = {1}
     local dontgetthesamefuckingtip = currentTip
     local tip = Tips[love.math.random(1,#Tips)]
     currentTip = tip
     if dontgetthesamefuckingtip == currentTip then
-        MenuMusicTip()
+        titleTip()
     else
-        Timer.tween(5, tipBoxBarLenght, {0},"linear",function() MenuMusicTip() end)
+        tipTween = Timer.tween(5, tipBoxBarLenght, {0},"linear",function() titleTip() end)
     end
 end
 
@@ -169,23 +192,25 @@ function TitleState:draw()
     love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
     love.graphics.translate(0,-100)
-    for i = 1,#notes do
-        if -(MusicTime - notes[i])*speed < Inits.GameHeight+100 then
-            love.graphics.setColor(1,1,1,0.1+(logoSize-1)*25)
+    if #notes > 0 and #chartRandomXPositions > 0 then
+        for i = 1,#notes do
+            if -(MusicTime - notes[i])*speedTitle < Inits.GameHeight+100 then
+                love.graphics.setColor(1,1,1,0.1+(logoSize-1)*25)
 
-            
-            if noteLanes[i] == 1 then
-                love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printableSpeed)
-            elseif noteLanes[i] == 2 then
-                love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printableSpeed)
-            elseif noteLanes[i] == 3 then
-                love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printableSpeed)
-            elseif noteLanes[i] == 4 then
-                love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printableSpeed)
+                
+                if noteLanes[i] == 1 then
+                    love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                elseif noteLanes[i] == 2 then
+                    love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                elseif noteLanes[i] == 3 then
+                    love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                elseif noteLanes[i] == 4 then
+                    love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                end
+
+                --]]
+                love.graphics.setColor(1,1,1,1)
             end
-
-            --]]
-            love.graphics.setColor(1,1,1,1)
         end
     end
     love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1])

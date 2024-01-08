@@ -91,7 +91,7 @@ function PlayState:enter()
     convertedAccuracy = 0
     printableAccuracy = {accuracy}
     noteScale = 1
-
+    grade = ""
     dimBackground()
 end
 function PlayState:update(dt)
@@ -140,6 +140,29 @@ function PlayState:update(dt)
         song:setPitch(gameOverSongSlowdown[1])
         print(gameOverSongSlowdown[1])
     end
+    PlayState:doGradeShitIdk()
+end
+
+function PlayState:doGradeShitIdk()
+    if convertedAccuracy == 100 then 
+        grade = "S+"
+        gradeColors = {}
+    elseif convertedAccuracy > 95 then
+        grade = "S"
+        gradeColors = {}
+    elseif convertedAccuracy > 90 then
+        grade = "A"
+        gradeColors = {}
+    elseif convertedAccuracy > 80 then
+        grade = "B"
+        gradeColors = {}
+    elseif convertedAccuracy > 70 then
+        grade = "C"
+        gradeColors = {}
+    else 
+        grade = "D"
+        gradeColors = {}
+    end
 end
  
 function pause()
@@ -171,7 +194,6 @@ end
 
 function PlayState:leave(state)
     --song = nil
-    comingFromPlay = true
     background = nil
     State.switch(state)
     resultsScreenTranslate = nil
@@ -303,7 +325,7 @@ end
 function checkBotInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note < -marvTiming/2 then
+            if MusicTime - note > -marvTiming/2 then
                 judge(MusicTime - note)
                 table.remove(lane, j)
                 break
@@ -318,19 +340,7 @@ function PlayState:draw()
     if resultsScreen then
 
 
-        if convertedAccuracy == 100 then
-            grade = "S+"
-        elseif convertedAccuracy > 95 then
-            grade = "S"
-        elseif convertedAccuracy > 90 then
-            grade = "A"
-        elseif convertedAccuracy > 80 then
-            grade = "B"
-        elseif convertedAccuracy > 70 then
-            grade = "C"
-        else 
-            grade = "D"
-        end
+
 
         if gameOver then
             grade = "F"
@@ -477,7 +487,7 @@ function PlayState:draw()
                 local inp = allInputs[i]
                 local spr = _G["Receptor" .. AllDirections[i]]
                 if Input:down(inp) then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0, nil,noteScale,noteScale)
+                love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
             end
         
             love.graphics.push()
@@ -489,7 +499,7 @@ function PlayState:draw()
                     for j, note in ipairs(lane) do
                         if -(MusicTime - note)*_G["speed" .. i] < Inits.GameHeight then
                             local noteImg = _G["Note" .. AllDirections[i]]
-                            love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,noteScale,noteScale)
+                            love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
                         end
                     end
                 end
@@ -571,19 +581,22 @@ function PlayState:draw()
         end
         love.graphics.setColor(0,0.5,1)
         love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, Inits.GameWidth, "right")
-        love.graphics.setColor(1,1,1)
-    
+        love.graphics.printf(grade, 3, 58, Inits.GameWidth, "right")
+
         accuracyColor = printableAccuracy[1]/100
     
         love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
     
     
         love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, Inits.GameWidth, "right")
-    
+        gradeColors = {1,1,1}
+        love.graphics.setColor(gradeColors)
+
+        love.graphics.printf(grade, 0, 55, Inits.GameWidth, "right")
+
         love.graphics.setFont(DefaultFont)
         love.graphics.setColor(0,0,0)
 
-        love.graphics.push()
     
         love.graphics.rectangle("fill", 896, 636, 13, -508)
     
@@ -591,8 +604,11 @@ function PlayState:draw()
     
     
         love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
-        love.graphics.pop()
-        --love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
+        love.graphics.setFont(BigFont)
+        if BotPlay then
+            love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
+        end
+      --  love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
     
     
     
