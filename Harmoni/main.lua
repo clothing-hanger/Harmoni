@@ -59,6 +59,9 @@ function love.load()
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
 
+    Skin = "Skins/Test1/"
+
+
 
     require("Modules.Debug")
 
@@ -96,6 +99,10 @@ function love.load()
 
     DefaultFont = love.graphics.newFont(12)
     State.switch(States.TitleState)
+
+    print(Skin .. "skin.lua")
+    love.filesystem.load(Skin .. "skin.lua")()
+
 end
 
 function love.update(dt)

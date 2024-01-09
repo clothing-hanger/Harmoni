@@ -7,7 +7,7 @@ settings = {
     {"Scroll Speed", 1.6},
     {"Note Lane Width", 125},
     {"Backgroud Dim", 0.9},
-    {"Bot Play", false},
+    {"Bot Play", true},
     {"Note Lane Height", 10},
     {"Disable Print", true},
     {"Debug Overlay", false},

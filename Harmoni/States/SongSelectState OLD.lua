@@ -21,15 +21,15 @@ function SongSelectState:enter()
         table.insert(lanes, {})
     end
 
-    NoteLeft = love.graphics.newImage("Images/NOTES/NoteLeft.png")
-    NoteDown = love.graphics.newImage("Images/NOTES/NoteDown.png")
-    NoteUp = love.graphics.newImage("Images/NOTES/NoteUp.png")
-    NoteRight = love.graphics.newImage("Images/NOTES/NoteRight.png")
+    NoteLeft = NoteLeftImage
+    NoteDown = NoteDownImage
+    NoteUp = NoteUpImage
+    NoteRight = NoteRightImage
 
-    ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
-    ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
-    ReceptorUp = love.graphics.newImage("Images/RECEPTORS/ReceptorUp.png")
-    ReceptorRight = love.graphics.newImage("Images/RECEPTORS/ReceptorRight.png")
+    ReceptorLeft = ReceptorLeftImage
+    ReceptorDown = ReceptorRightImage
+    ReceptorUp = ReceptorUpImage
+    ReceptorRight = ReceptorRightImage
 
 
 

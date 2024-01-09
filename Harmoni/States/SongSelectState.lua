@@ -30,16 +30,18 @@ function SongSelectState:enter()
     end
     search = ""
 
+--[[
+    NoteLeft = NoteLeftImage
+    NoteDown = NoteDownImage
+    NoteUp = NoteUpImage
+    NoteRight = NoteRightImage
 
-    NoteLeft = love.graphics.newImage("Images/NOTES/NoteLeft.png")
-    NoteDown = love.graphics.newImage("Images/NOTES/NoteDown.png")
-    NoteUp = love.graphics.newImage("Images/NOTES/NoteUp.png")
-    NoteRight = love.graphics.newImage("Images/NOTES/NoteRight.png")
+    ReceptorLeft = ReceptorLeftImage
+    ReceptorDown = ReceptorDownImage
+    ReceptorUp = ReceptorUpImage
+    ReceptorRight = ReceptorRightImage
 
-    ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
-    ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
-    ReceptorUp = love.graphics.newImage("Images/RECEPTORS/ReceptorUp.png")
-    ReceptorRight = love.graphics.newImage("Images/RECEPTORS/ReceptorRight.png")
+    --]]
 
     disc = love.graphics.newImage("Images/SONGSELECT/disc.png")
     loading = love.graphics.newImage("Images/SONGSELECT/loading.png")

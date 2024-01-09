@@ -32,26 +32,27 @@ function PlayState:enter()
     local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
     if not ok then State.switch(States.SongSelectState) return end
 
-    ReceptorLeft = love.graphics.newImage("Images/RECEPTORS/ReceptorLeft.png")
-    ReceptorDown = love.graphics.newImage("Images/RECEPTORS/ReceptorDown.png")
-    ReceptorUp = love.graphics.newImage("Images/RECEPTORS/ReceptorUp.png")
-    ReceptorRight = love.graphics.newImage("Images/RECEPTORS/ReceptorRight.png")
-    ReceptorLeftPressed = love.graphics.newImage("Images/RECEPTORS/ReceptorPressedLeft.png")
-    ReceptorDownPressed = love.graphics.newImage("Images/RECEPTORS/ReceptorPressedDown.png")
-    ReceptorUpPressed = love.graphics.newImage("Images/RECEPTORS/ReceptorPressedUp.png")
-    ReceptorRightPressed = love.graphics.newImage("Images/RECEPTORS/ReceptorPressedRight.png")
-    NoteLeft = love.graphics.newImage("Images/NOTES/NoteLeft.png")
-    NoteDown = love.graphics.newImage("Images/NOTES/NoteDown.png")
-    NoteUp = love.graphics.newImage("Images/NOTES/NoteUp.png")
-    NoteRight = love.graphics.newImage("Images/NOTES/NoteRight.png")
-    Marvelous = love.graphics.newImage("Images/JUDGEMENTS/Marvelous.png")
-    Perfect = love.graphics.newImage("Images/JUDGEMENTS/Perfect.png")
-    Great = love.graphics.newImage("Images/JUDGEMENTS/Great.png")
-    Good = love.graphics.newImage("Images/JUDGEMENTS/Good.png")
-    Okay = love.graphics.newImage("Images/JUDGEMENTS/Okay.png")
-    Miss = love.graphics.newImage("Images/JUDGEMENTS/Miss.png")
-    HealthImage = love.graphics.newImage("Images/HUD/health.png")
 
+    --[[
+    ReceptorLeft = ReceptorLeftImage
+    ReceptorDown = ReceptorDownImage
+    ReceptorUp = ReceptorUpImage
+    ReceptorRight = ReceptorRightImage
+    ReceptorLeftPressed = ReceptorPressedLeftImage
+    ReceptorDownPressed = ReceptorPressedDownImage
+    ReceptorUpPressed = ReceptorPressedUpImage
+    ReceptorRightPressed = ReceptorPressedRightImage
+    NoteLeft = NoteLeftImage
+    NoteDown = NoteDownImage
+    NoteUp = NoteUpImage
+    NoteRight = NoteRightImage
+    Marvelous = MarvelousImage
+    Perfect = PerfectImage
+    Great = GreatImage
+    Good = GoodImage
+    Okay = OkayImage
+    Miss = MissImage
+--]]
     
     marvTiming = 36
     perfTiming = 86
