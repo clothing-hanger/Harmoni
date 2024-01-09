@@ -8,7 +8,7 @@ love.keyboard.setKeyRepeat(true)
 if disablePrint then
     function print() end
 end
-
+ 
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
