@@ -1,6 +1,6 @@
 local utf8 = require("utf8")
 Inits = require("inits")
-require("settings")
+--require("settings")
 
 love.keyboard.setKeyRepeat(true)
 
@@ -58,19 +58,15 @@ function love.load()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
-
-
-
+    SkinLoader = require("Modules.SkinLoader")
 
     require("Modules.Debug")
-
 
     volumeOpacity = {0}
     volumeVelocity = 0
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
     MusicTime = 0
-
 
     saveSettings()
     Tips = {

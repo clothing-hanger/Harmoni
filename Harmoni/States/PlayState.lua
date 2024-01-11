@@ -31,28 +31,6 @@ function PlayState:enter()
 
     local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
     if not ok then State.switch(States.SongSelectState) return end
-
-
-    
-    ReceptorLeft = ReceptorLeftImage
-    ReceptorDown = ReceptorDownImage
-    ReceptorUp = ReceptorUpImage
-    ReceptorRight = ReceptorRightImage
-    ReceptorLeftPressed = ReceptorPressedLeftImage
-    ReceptorDownPressed = ReceptorPressedDownImage
-    ReceptorUpPressed = ReceptorPressedUpImage
-    ReceptorRightPressed = ReceptorPressedRightImage
-    NoteLeft = NoteLeftImage
-    NoteDown = NoteDownImage
-    NoteUp = NoteUpImage
-    NoteRight = NoteRightImage
-    Marvelous = MarvelousImage
-    Perfect = PerfectImage
-    Great = GreatImage
-    Good = GoodImage
-    Okay = OkayImage
-    Miss = MissImage
-
     
     marvTiming = 36
     perfTiming = 86
@@ -487,7 +465,9 @@ function PlayState:draw()
             for i = 1,4 do
                 local inp = allInputs[i]
                 local spr = _G["Receptor" .. AllDirections[i]]
-                if Input:down(inp) then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                if Input:down(inp) then 
+                    spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] 
+                end
                 love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
             end
         

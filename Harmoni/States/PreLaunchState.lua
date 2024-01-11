@@ -10,11 +10,9 @@ end
 function PreLaunchState:update(dt)
 
     if Input:pressed("MenuConfirm") then
-        print("curSelection: "..curSelection)
-        Skin = "Skins/"..skinsList[curSelection].."/"
+        Skin = skinsList[curSelection]
         
-        print(Skin .. "skin.lua")
-        love.filesystem.load(Skin .. "skin.lua")()
+        SkinLoader:InitSkin(Skin)
         State.switch(States.TitleState)
 
     elseif Input:pressed("MenuUp") then

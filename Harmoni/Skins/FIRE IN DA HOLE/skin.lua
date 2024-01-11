@@ -1,30 +1,27 @@
-print("Skin Loaded!")
-
-
-
+-- //////////////// METADATA //////////////// --
 skinFolder = "Skins/FIRE IN DA HOLE/"
 
+-- //////////////// RECEPTOR ASSETS //////////////// --
+ReceptorLeftImage  = "RECEPTORS/ReceptorLeft.png"
+ReceptorDownImage  = "RECEPTORS/ReceptorDown.png"
+ReceptorRightImage = "RECEPTORS/ReceptorRight.png"
+ReceptorUpImage    = "RECEPTORS/ReceptorUp.png"
 
-ReceptorLeftImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorLeft.png")
-ReceptorDownImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorDown.png")
-ReceptorRightImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorRight.png")
-ReceptorUpImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorUp.png")
+ReceptorPressedLeftImage  = "RECEPTORS/ReceptorPressedLeft.png"
+ReceptorPressedDownImage  = "RECEPTORS/ReceptorPressedDown.png"
+ReceptorPressedRightImage = "RECEPTORS/ReceptorPressedRight.png"
+ReceptorPressedUpImage    = "RECEPTORS/ReceptorPressedUp.png"
 
-ReceptorPressedLeftImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedLeft.png")
-ReceptorPressedDownImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedDown.png")
-ReceptorPressedRightImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedRight.png")
-ReceptorPressedUpImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedUp.png")
+-- //////////////// NOTE ASSETS //////////////// --
+NoteLeftImage  = "NOTES/NoteLeft.png"
+NoteDownImage  = "NOTES/NoteDown.png"
+NoteRightImage = "NOTES/NoteRight.png"
+NoteUpImage    = "NOTES/NoteUp.png"
 
-NoteLeftImage = love.graphics.newImage(skinFolder .. "NOTES/NoteLeft.png")
-NoteDownImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDown.png")
-NoteRightImage = love.graphics.newImage(skinFolder .. "NOTES/NoteRight.png")
-NoteUpImage = love.graphics.newImage(skinFolder .. "NOTES/NoteUp.png")
-
-MarvelousImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Marvelous.png")
-PerfectImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Perfect.png")
-GreatImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Great.png")
-GoodImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Good.png")
-OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
-MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
-
-
+-- //////////////// JUDGEMENT ASSETS //////////////// --
+MarvelousImage = "JUDGEMENTS/Marvelous.png"
+PerfectImage   = "JUDGEMENTS/Perfect.png"
+GreatImage     = "JUDGEMENTS/Great.png"
+GoodImage      = "JUDGEMENTS/Good.png"
+OkayImage      = "JUDGEMENTS/Okay.png"
+MissImage      = "JUDGEMENTS/Miss.png"
