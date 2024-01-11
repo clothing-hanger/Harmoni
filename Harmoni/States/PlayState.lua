@@ -33,7 +33,7 @@ function PlayState:enter()
     if not ok then State.switch(States.SongSelectState) return end
 
 
-    --[[
+    
     ReceptorLeft = ReceptorLeftImage
     ReceptorDown = ReceptorDownImage
     ReceptorUp = ReceptorUpImage
@@ -52,7 +52,7 @@ function PlayState:enter()
     Good = GoodImage
     Okay = OkayImage
     Miss = MissImage
---]]
+
     
     marvTiming = 36
     perfTiming = 86

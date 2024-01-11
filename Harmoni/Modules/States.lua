@@ -4,5 +4,6 @@ return {
     SongSelectState = require("States.SongSelectState"),
     ResultsState = require("States.ResultsState"),
     TitleState = require("States.TitleState"),
-    SettingsState = require("States.SettingsState")
+    SettingsState = require("States.SettingsState"),
+    PreLaunchState = require("States.PreLaunchState")
 }

@@ -75,6 +75,7 @@ function TitleState:enter()
         logoYPos = {-200}
         titleState = 2
     end
+    printablespeedTitle = speedTitle *(logoSize+0.7)
         
 
 end
@@ -159,21 +160,32 @@ function TitleState:logoBump()
     logoSize = math.min(logoSize + 0.01, 1.3)
 end
 
+
 function titleTip()
     if tipTween then
         Timer.cancel(tipTween)
     end
+    randomRareTip = love.math.random(1, 50)
+    if randomRareTip == 1 then
+        rareTip = true
+    end
     tipBoxBarLenght = {1}
     local dontgetthesamefuckingtip = currentTip
-    local tip = Tips[love.math.random(1,#Tips)]
+    local tip 
+    if rareTip then
+        tip = extremeRareTips[love.math.random(1, #extremeRareTips)]
+        print("Rare Tip" .. tip) -- just so i know it works
+    else
+        tip = Tips[love.math.random(1, #Tips)]
+    end
     currentTip = tip
     if dontgetthesamefuckingtip == currentTip then
         titleTip()
     else
-        tipTween = Timer.tween(5, tipBoxBarLenght, {0},"linear",function() titleTip() end)
+        tipTween = Timer.tween(5, tipBoxBarLenght, {0}, "linear", function() titleTip() end)
     end
+    rareTip = false
 end
-
 
 --there was never anything here
 function TitleState:draw()
@@ -191,7 +203,7 @@ function TitleState:draw()
     love.graphics.setColor(0,0,0,backgroundFade[1])
     love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.translate(0,-100)
+    love.graphics.translate(0,-100) 
     if #notes > 0 and #chartRandomXPositions > 0 then
         for i = 1,#notes do
             if -(MusicTime - notes[i])*speedTitle < Inits.GameHeight+100 then

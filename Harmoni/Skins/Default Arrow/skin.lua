@@ -2,32 +2,29 @@ print("Skin Loaded!")
 
 
 
-
-
-
 skinFolder = "Skins/Default Arrow/"
 
 
-ReceptorLeft = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorLeft.png")
-ReceptorDown = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorDown.png")
-ReceptorRight = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorRight.png")
-ReceptorUp = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorUp.png")
+ReceptorLeftImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorLeft.png")
+ReceptorDownImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorDown.png")
+ReceptorRightImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorRight.png")
+ReceptorUpImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorUp.png")
 
-ReceptorPressedLeft = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedLeft.png")
-ReceptorPressedDown = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedDown.png")
-ReceptorPressedRight = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedRight.png")
-ReceptorPressedUp = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedUp.png")
+ReceptorPressedLeftImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedLeft.png")
+ReceptorPressedDownImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedDown.png")
+ReceptorPressedRightImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedRight.png")
+ReceptorPressedUpImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorPressedUp.png")
 
-NoteLeft = love.graphics.newImage(skinFolder .. "NOTES/NoteLeft.png")
-NoteDown = love.graphics.newImage(skinFolder .. "NOTES/NoteDown.png")
-NoteRight = love.graphics.newImage(skinFolder .. "NOTES/NoteRight.png")
-NoteUp = love.graphics.newImage(skinFolder .. "NOTES/NoteUp.png")
+NoteLeftImage = love.graphics.newImage(skinFolder .. "NOTES/NoteLeft.png")
+NoteDownImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDown.png")
+NoteRightImage = love.graphics.newImage(skinFolder .. "NOTES/NoteRight.png")
+NoteUpImage = love.graphics.newImage(skinFolder .. "NOTES/NoteUp.png")
 
-Marvelous = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Marvelous.png")
-Perfect = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Perfect.png")
-Great = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Great.png")
-Good = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Good.png")
-Okay = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
-Miss = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
+MarvelousImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Marvelous.png")
+PerfectImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Perfect.png")
+GreatImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Great.png")
+GoodImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Good.png")
+OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
+MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
 
 

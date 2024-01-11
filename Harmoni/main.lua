@@ -33,11 +33,11 @@ function love.load()
             GameDown  =  { "key:f" },
             GameUp    =  { "key:j" },
             GameRight =  { "key:k" },
-            GameConfirm  =  { "key:space", "key:return" },
+            GameConfirm  =  { "key:return" },
 
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },
-            MenuConfirm = { "key:space", "key:return" },
+            MenuConfirm = { "key:return" },
 
             setFullscreen = { "key:f11" },
             MenuBack = { "key:escape", "key:backspace" },
@@ -59,7 +59,6 @@ function love.load()
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
 
-    Skin = "Skins/Test1/"
 
 
 
@@ -77,14 +76,18 @@ function love.load()
     Tips = {
         "Press F11 to Fullscreen.",
         "Please report any bugs you find by opening a Github issue",
-        "Press R in the Song Select menu to pick a random song", -- this isnt even added yet lmfao
+        "Press R in the Song Select menu to pick a random song \n(not even added yet lmfao this is just here so i dont forget to add it)", -- this isnt even added yet lmfao
         "Request features by opening a Github issue",
         "Don't miss",
-        "Settings will be added eventually I promise lmao"
+        "Settings will work correctly eventually I promise lmao",
+        "Wishlist Rit on Steam!"
     }
 
     extremeRareTips = {
-        ""
+        "you should just delete the game honestly",
+        "still better than osu",
+        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n- Sapple",
+
     }
 
     volume = 1
@@ -98,10 +101,8 @@ function love.load()
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
 
     DefaultFont = love.graphics.newFont(12)
-    State.switch(States.TitleState)
+    State.switch(States.PreLaunchState)
 
-    print(Skin .. "skin.lua")
-    love.filesystem.load(Skin .. "skin.lua")()
 
 end
 
