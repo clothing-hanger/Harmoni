@@ -1,6 +1,6 @@
 local utf8 = require("utf8")
 Inits = require("inits")
-require("settings")
+--require("settings")
 
 love.keyboard.setKeyRepeat(true)
 
