@@ -66,7 +66,6 @@ function SongSelectState:update(dt)
        dontFuckingReloadTheSongEveryFrameDumbass = true
         SongSelectState:loadSong(true)
     end
-    if not songSelectSearch then
         if Input:pressed("MenuDown") then
             if menuState == 1 then
                 selectedSong = selectedSong+1
@@ -99,14 +98,11 @@ function SongSelectState:update(dt)
                 State.switch(States.TitleState)
             end
 
+        elseif Input:pressed("openSongGoogleDrive") then
+            love.system.openURL("https://drive.google.com/drive/folders/1MpRIkEXY1FmRLVSEzlWHJzWJScREgD37?usp=drive_link")
+        elseif Input:pressed("openSongFolder") then
+            os.execute("start " .. love.filesystem.getWorkingDirectory() .. "/Music")
         end
-    end
-    if Input:pressed("SearchToggle") then
-        if enableSongSearch then
-        search = ""
-        songSelectSearch = not SongSelectSearch
-        end
-    end
 
 
     if MenuMusic:isPlaying() then
@@ -336,10 +332,11 @@ function SongSelectState:draw()
 
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
-    love.graphics.rectangle("fill", Inits.GameWidth-250, 0, 250, 50)
+    love.graphics.rectangle("fill", Inits.GameWidth-300, 0, 300, 80)
     love.graphics.setColor(0,1,1)
-    love.graphics.rectangle("line", Inits.GameWidth-250, 0, 250, 50)
-    love.graphics.printf(#songList.." Songs Found", Inits.GameWidth-240, 10, 240, "left")
+    love.graphics.rectangle("line", Inits.GameWidth-300, 0, 300, 80)
+    love.graphics.setFont(MenuFontExtraSmall)
+    love.graphics.printf(#songList.." Songs Found\nPress F1 to download Song Packs\nPress F2 to open Music Folder", Inits.GameWidth-290, 10, 290, "left")
    -- love.graphics.scale(0.5,0.5)
    love.graphics.setColor(1,1,1)
     love.graphics.pop()

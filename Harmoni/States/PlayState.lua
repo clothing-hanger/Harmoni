@@ -94,6 +94,10 @@ function PlayState:enter()
     noteScale = 1
     grade = ""
     dimBackground()
+
+    if skinLoad then
+        skinLoad()
+    end
 end
 function PlayState:update(dt)
     if paused or gameOver then
@@ -142,6 +146,9 @@ function PlayState:update(dt)
         print(gameOverSongSlowdown[1])
     end
     PlayState:doGradeShitIdk()
+    if skinUpdate then
+        skinUpdate()
+    end
 end
 
 function PlayState:doGradeShitIdk()
@@ -468,6 +475,9 @@ function PlayState:draw()
 
     else
         love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
+        if skinDrawUnderDim then
+            skinDrawUnderDim()
+        end
 
         love.graphics.setColor(0,0,0,backgroundDim[1])
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
@@ -475,6 +485,9 @@ function PlayState:draw()
     
         love.graphics.rectangle("fill", 0, Inits.GameHeight-20, timeRemainingBar[1], 20)
         love.graphics.pop()
+        if skinDrawAboveDimUnderNotes then
+            skinDrawAboveDimUnderNotes()
+        end
 
         love.graphics.push()
             if downScroll then
@@ -614,6 +627,9 @@ function PlayState:draw()
     
     
         --love.graphics.line(0, Inits.GameHeight/2, Inits.GameWidth, Inits.GameHeight/2)
+        if skinDrawAbove then
+            skinDrawAbove()
+        end
     end
 
 

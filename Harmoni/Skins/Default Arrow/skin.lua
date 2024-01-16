@@ -28,3 +28,19 @@ OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
 MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
 
 
+
+
+skinLoad = function()
+end
+
+skinUpdate = function()
+end
+
+skinDrawUnderDim = function()
+end
+
+skinDrawAboveDimUnderNotes = function()
+end
+
+skinDrawAbove = function()
+end

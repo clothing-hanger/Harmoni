@@ -42,6 +42,8 @@ function love.load()
             setFullscreen = { "key:f11" },
             MenuBack = { "key:escape", "key:backspace" },
             SearchToggle = { "key:tab"},
+            openSongGoogleDrive = { "key:f1" },
+            openSongFolder = { "key:f2" }
         }
     })
     Class = require("Libraries.Class")
