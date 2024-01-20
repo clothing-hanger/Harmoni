@@ -53,7 +53,7 @@ function SongSelectState:enter()
         table.insert(diffListXPositions, 900)
     end
 
-    SongSelectState:loadSong(false)
+    SongSelectState:loadSong(true)
     
 end
 
@@ -86,6 +86,7 @@ function SongSelectState:update(dt)
         elseif Input:pressed("MenuConfirm") then
             if menuState == 1 then
                 menuState = 2
+                selectedDifficulty = 1
             elseif menuState == 2 then
                 if MenuMusic:isPlaying() then
                     State.switch(States.PlayState)
@@ -101,7 +102,7 @@ function SongSelectState:update(dt)
         elseif Input:pressed("openSongGoogleDrive") then
             love.system.openURL("https://drive.google.com/drive/folders/1MpRIkEXY1FmRLVSEzlWHJzWJScREgD37?usp=drive_link")
         elseif Input:pressed("openSongFolder") then
-            os.execute("start " .. love.filesystem.getWorkingDirectory() .. "/Music")
+            os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
         end
 
 
@@ -116,13 +117,16 @@ function SongSelectState:update(dt)
             SongListXPositions[i] = math.min(SongListXPositions[i]+500*dt, 900)
         end
     end
-    for i = 1,#diffListXPositions do
-        if i == selectedDifficulty then
-            diffListXPositions[i] = math.max(diffListXPositions[i]-500*dt, 800)
-        else
-            diffListXPositions[i] = math.min(diffListXPositions[i]+500*dt, 900)
+    if doDiffListTween then
+        for i = 1,#diffListXPositions do
+            if i == selectedDifficulty then
+                diffListXPositions[i] = math.max(diffListXPositions[i]-500*dt, 800)
+            else
+                diffListXPositions[i] = math.min(diffListXPositions[i]+500*dt, 900)
+            end
         end
     end
+    
 
     if songListTween then
         Timer.cancel(songListTween)
@@ -155,6 +159,7 @@ end
 
 
 function SongSelectState:loadSong(doSongRestart)
+    doDiffListTween = false
 
     
     if menuSongTimer then
@@ -197,7 +202,6 @@ function SongSelectState:loadSong(doSongRestart)
         
         if doSongRestart then
             MusicTime = metaData.previewTime
-            print("idfk what to put here")
             MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             MenuMusic:play()
             MenuMusic:seek(metaData.previewTime/1000)
@@ -219,6 +223,8 @@ function SongSelectState:loadSong(doSongRestart)
   --      quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[i])
     --    table.insert(DiffNameList, metaData.diffName)
    -- end
+   doDiffListTween = true
+
 
 end
 

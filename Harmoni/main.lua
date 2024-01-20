@@ -1,9 +1,45 @@
 local utf8 = require("utf8")
 Inits = require("inits")
---require("settings")
+
+
 
 love.keyboard.setKeyRepeat(true)
 
+songListLength = love.filesystem.getDirectoryItems("Music")
+if #songListLength == 0 then
+    print("Install Included Songs")
+    includedSongs = love.filesystem.getDirectoryItems("Included Songs")
+    --print(#love.filesystem.getDirectoryItems("Included Songs"))
+    for i,dir in ipairs(includedSongs) do
+        local path = "Music/"..dir
+       -- print(path)
+        love.filesystem.createDirectory(path)
+        local files = love.filesystem.getDirectoryItems("Included Songs/"..dir)
+        print("Included Songs/"..dir)
+        print(#files)
+        for i,file in ipairs(files) do
+            love.filesystem.write(path.."/"..file, love.filesystem.read("Included Songs/"..dir.."/"..file))
+        end
+    end
+end
+
+
+--[[
+
+for _,dir in ipairs(tracks) do
+    -- this is the path you want to use in the save folder, combined with the current track's folder name
+    local path = 'music/' .. dir
+    -- this creates music as well, if it didn't exist before.
+    lfs.createDirectory(path)
+    -- get all files within the current track's folder
+    local stuff = lfs.getDirectoryItems(path)
+    -- iterate over those and copy them out to the correct place
+    for _,file in ipairs(stuff) do
+      love.filesystem.write(path .. '/' .. file, love.filesystem.read('_music/' .. dir .. '/' .. file))
+    end
+  end
+
+  --]]
 
 if disablePrint then
     function print() end
@@ -74,7 +110,6 @@ function love.load()
     MusicTime = 0
 
 
-    saveSettings()
     Tips = {
         "Press F11 to Fullscreen.",
         "Please report any bugs you find by opening a Github issue",
@@ -103,7 +138,7 @@ function love.load()
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
 
     DefaultFont = love.graphics.newFont(12)
-    State.switch(States.PreLaunchState)
+    State.switch(States.TitleState)
 
 
 end
