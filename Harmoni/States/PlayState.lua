@@ -82,6 +82,7 @@ function PlayState:enter()
     gameOver = false
     gameOverSongSlowdown = {1}
     backgroundDim = {0}
+    backgroundBlur = {0}
     comboSize = {1}
     score = 0
     accuracy = 0
@@ -98,8 +99,14 @@ function PlayState:enter()
     if skinLoad then
         skinLoad()
     end
+
+    blurEffect = moonshine(moonshine.effects.boxblur)
+    blurEffect.boxblur.radius = 0
+
 end
 function PlayState:update(dt)
+    blurEffect.boxblur.radius = backgroundBlur[1]
+
     if paused or gameOver then
         MusicTime = PausedMusicTime
     end
@@ -147,7 +154,7 @@ function PlayState:update(dt)
     end
     PlayState:doGradeShitIdk()
     if skinUpdate then
-        skinUpdate()
+        skinUpdate(dt)
     end
 end
 
@@ -310,6 +317,7 @@ function printableScoreTween()
 end
 
 function dimBackground()
+    Timer.tween(1.5, backgroundBlur, {backgroundBlurSetting})
     Timer.tween(1.5, backgroundDim, {backgroundDimSetting}, "linear", function()
         MusicTime = -2000
     end)
@@ -347,15 +355,13 @@ function PlayState:draw()
 
     if resultsScreen then
 
-
-
-
         if gameOver then
             grade = "F"
         end
 
+        blurEffect(function()
         love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
-
+        end)
         love.graphics.setColor(0,0,0,backgroundDim[1])
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(1,1,1,1)
@@ -474,7 +480,9 @@ function PlayState:draw()
         love.graphics.pop()
 
     else
+        blurEffect(function()
         love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
+        end)
         if skinDrawUnderDim then
             skinDrawUnderDim()
         end

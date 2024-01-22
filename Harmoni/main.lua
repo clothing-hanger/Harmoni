@@ -1,9 +1,12 @@
 local utf8 = require("utf8")
+moonshine = require("moonshine")
 Inits = require("inits")
 
 
 
 love.keyboard.setKeyRepeat(true)
+
+love.filesystem.createDirectory("Skins")
 
 songListLength = love.filesystem.getDirectoryItems("Music")
 if #songListLength == 0 then
@@ -92,7 +95,6 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
-    Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
@@ -108,7 +110,7 @@ function love.load()
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
     MusicTime = 0
-
+--[[
 
     Tips = {
         "Press F11 to Fullscreen.",
@@ -117,15 +119,49 @@ function love.load()
         "Request features by opening a Github issue",
         "Don't miss",
         "Settings will work correctly eventually I promise lmao",
-        "Wishlist Rit on Steam!"
+        "Wishlist Rit on Steam!",
+        "Hold ALT and scroll to change the volume",
+        "More Song Packs will be available in the future",
+        "Import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder."
     }
 
     extremeRareTips = {
         "you should just delete the game honestly",
         "still better than osu",
-        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n- Sapple",
-
+        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n-Sapple",
+        "just play quaver lmao",
+        "pickles",
+        "'The best part of fucking Yoshi is that you have a ride home in the morning'\n-President Barack Obama",
+        "Is an interesting game 🎯\nAm just play it\nWow\n-Heng"
     }
+
+    --]]
+
+    Tips = {
+        "Press F11 to Fullscreen.",
+        "Please report any bugs you find by opening a Github issue",
+        "Press R in the Song Select menu to pick a random song \n(not even added yet lmfao this is just here so i dont forget to add it)", -- this isnt even added yet lmfao
+        "Request features by opening a Github issue",
+        "Don't miss",
+        "Settings will work correctly eventually I promise lmao",
+        "Wishlist Rit on Steam!",
+        "Hold ALT and scroll to change the volume",
+        "More Song Packs will be available in the future",
+        "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder."
+    }
+    extremeRareTips = {
+        "you should just delete the game honestly",
+        "still better than osu",
+        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n-Sapple",
+        "just play quaver lmao",
+        "pickles",
+        "'The best part of fucking Yoshi is that you have a ride home in the morning'\n-President Barack Obama",
+        "Is an interesting game\nAm just play it\nWow\n\n-Heng",
+        "Do it jiggle?",
+        "'Is good game, would give it a try'\n\n-Sapple",
+    }
+
+
 
     volume = 1
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
@@ -233,10 +269,8 @@ function love.draw()
     ratio = math.min(Inits.GameWidth/Inits.GameWidth, Inits.GameHeight/Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
-    love.graphics.setShader(Shaders.CurrentShader)
     love.graphics.draw(GameScreen, Inits.GameWidth/2, Inits.GameHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
 
-    love.graphics.setShader()
 
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)

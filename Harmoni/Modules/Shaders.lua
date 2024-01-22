@@ -1,5 +1,5 @@
 return {
-    --Test = love.graphics.newShader("Shaders/Test.glsl"),
+    Blur = love.graphics.newShader("Shaders/Blur.glsl"),
 
     CurrentShader = nil
 }

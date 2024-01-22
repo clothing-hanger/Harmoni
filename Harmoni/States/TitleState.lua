@@ -76,7 +76,6 @@ function TitleState:enter()
         titleState = 2
     end
     printablespeedTitle = speedTitle *(logoSize+0.7)
-        
 
 end
 
@@ -192,6 +191,7 @@ function TitleState:draw()
     love.graphics.setColor(1,1,1,0.5)
 
     love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+(logoSize-1)/6,Inits.GameHeight/background:getHeight()+(logoSize-1)/6, background:getWidth()/2, background:getHeight()/2)
+
     love.graphics.setColor(1,1,1,(logoSize-1))
     love.graphics.draw(gradient, 0, Inits.GameHeight/2, nil, Inits.GameWidth/gradient:getWidth(),(Inits.GameHeight/gradient:getHeight()/2))
     love.graphics.draw(gradient, 0, Inits.GameHeight/2, nil, Inits.GameWidth/gradient:getWidth(),(Inits.GameHeight/gradient:getHeight()/2))
@@ -239,7 +239,7 @@ function TitleState:draw()
   --  love.graphics.setColor(0,1,1)
     --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])
 
-    love.graphics.rectangle("fill", -400,1180,300*tipBoxBarLenght[1],20)
+    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10)
 
     love.graphics.setFont(MenuFontSmall)
 
