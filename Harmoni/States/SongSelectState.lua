@@ -204,7 +204,10 @@ function SongSelectState:loadSong(doSongRestart)
             MusicTime = metaData.previewTime
             MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             MenuMusic:play()
-            MenuMusic:seek(metaData.previewTime/1000)
+            if metaData.previewTime/1000 <= 0 then
+            else
+                MenuMusic:seek(metaData.previewTime/1000)
+            end
 
         end
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end

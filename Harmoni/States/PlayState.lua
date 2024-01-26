@@ -154,18 +154,27 @@ function PlayState:update(dt)
         skinUpdate(dt)
     end
 
-    if Input:down("GameBack") and not paused then
-        if not songLeave then
+    if not instantPause then
+        if Input:down("GameBack") and not paused and MusicTime > 1000 then
+            if not songLeave then
+                songLeave = 0
+            end
+            songLeave = songLeave + dt
+            if songLeave >= 0.8 then
+                pause()
+                pauseSelection = 1
+            end
+        else
             songLeave = 0
         end
-        songLeave = songLeave + dt
-        if songLeave >= 0.8 then
+    else
+        if Input:pressed("GameBack") and MusicTime > 1000 then
             pause()
             pauseSelection = 1
+
         end
-    else
-        songLeave = 0
     end
+
 
 end
 
@@ -197,7 +206,16 @@ function pause()
         PausedMusicTime = MusicTime
         if paused then
             song:pause()
+            if songLengthTimer then
+                Timer.cancel(songLengthTimer)
+            end
+            if healthTween then
+                Timer.cancel(healthTween)
+            end
         else
+            healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
+            songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
+
             song:play()
         end
     end

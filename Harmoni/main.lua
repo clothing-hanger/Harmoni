@@ -147,8 +147,6 @@ function love.load()
     }
 
 
-
-    volume = 1
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
     ReallyFuckingBigFont = love.graphics.newFont("Fonts/framdit.ttf", 400)
 

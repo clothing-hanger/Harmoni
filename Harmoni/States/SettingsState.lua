@@ -11,7 +11,7 @@ function setDefaultSettings()
     print(love.filesystem.getSaveDirectory())
     print("Default Settings Restored.")
     startFullscreen = false
-    volume = 15
+    volume = 0.02
     menuSongDelayTime = 0.2
     downScroll = false
     speed = 1.6
@@ -24,6 +24,7 @@ function setDefaultSettings()
     BotPlay = false
     verticalNoteOffset = 10
     backgroundBlurSetting = 0
+    instantPause = false
     currentSkin = "Skins/Default Arrow/"
 
 end
@@ -46,7 +47,7 @@ love.filesystem.load(Skin .. "skin.lua")()
 currentSkin = Skin .. "skin.lua"
 
 Tabs = {
-    {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur"},
+    {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur, Instant Pause"},
     {"Menu", "Song Select Song Delay"},
     {"System", "Default Volume, Fullscreen"},
     {"Skins", "Skins affect the way the game looks"}
@@ -60,6 +61,7 @@ Gameplay = {
     {"Bot Play", BotPlay, "Watch a perfect playthrough of the song"},
     {"Note Lane Height", verticalNoteOffset, "The space between the receptors and edge of the screen"},
     {"Background Blur", backgroundBlurSetting, "How blurred the background is during gameplay"},
+    {"Instant Pause", instantPause, "Skip the 0.8 second timer before pausing when you press the pause button"},
 }
 
 Menu = {
@@ -299,6 +301,7 @@ function saveSettings()
     BotPlay = Gameplay[5][2]
     verticalNoteOffset = Gameplay[6][2]
     backgroundBlurSetting = Gameplay[7][2]
+    instantPause = Gameplay[8][2]
 
     if downScroll then
         speed = -speed
@@ -327,6 +330,7 @@ function writeSettings()
     "\nBotPlay = " .. tostring(BotPlay)..
     "\nverticalNoteOffset = " .. tostring(verticalNoteOffset)..
     "\nbackgroundBlurSetting = " .. tostring(backgroundBlurSetting)..
+    "\ninstantPause = " .. tostring(instantPause)..
     "\ncurrentSkin = " .."'" .. Skin .. "skin.lua'"
     )
 end
@@ -371,7 +375,13 @@ function SettingsState:draw()
         love.graphics.rectangle("line", 60, Inits.GameHeight-60, Inits.GameWidth-120, 50, 7, 7)
         love.graphics.setColor(0,0,0,1)
         if selectedSetting > 0 and selectedSetting <= #Tabs then
-            love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-50, Inits.GameWidth-120, "center")
+            if selectedSetting == 1 then
+                love.graphics.setFont(MenuFontExtraSmall)
+                love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-47, Inits.GameWidth-120, "center")
+            else
+                love.graphics.setFont(MenuFontSmall)
+                love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-50, Inits.GameWidth-120, "center")
+            end
         end
     elseif CurSettingsMenu == "Gameplay" then
         for i = 1,#Gameplay do
