@@ -480,17 +480,30 @@ function SettingsState:draw()
         for i = 1,4 do
             love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 575,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
         end
-    
-        for i, lane in ipairs(lanes) do
-            for k, note in ipairs(lane) do
+        if downScroll then
+            for i, lane in ipairs(lanes) do
+                for k, note in ipairs(lane) do
 
-                if -(MusicTime - note)*_G["speed" .. i]   -(MusicTime - note)*_G["speed" .. i] > 0 then
-                    if MenuMusic:isPlaying() then 
-                        love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                    if -(MusicTime - note)*_G["speed" .. i]   -(MusicTime - note)*_G["speed" .. i] < Inits.GameHeight+400 then
+                        if MenuMusic:isPlaying() then 
+                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                        end
+                    end
+                end
+            end
+        else
+            for i, lane in ipairs(lanes) do
+                for k, note in ipairs(lane) do
+
+                    if -(MusicTime - note)*_G["speed" .. i]   -(MusicTime - note)*_G["speed" .. i] > 0 then
+                        if MenuMusic:isPlaying() then 
+                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                        end
                     end
                 end
             end
         end
+
     end
 
 end

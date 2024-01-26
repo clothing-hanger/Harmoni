@@ -27,23 +27,6 @@ if #songListLength == 0 then
 end
 
 
---[[
-
-for _,dir in ipairs(tracks) do
-    -- this is the path you want to use in the save folder, combined with the current track's folder name
-    local path = 'music/' .. dir
-    -- this creates music as well, if it didn't exist before.
-    lfs.createDirectory(path)
-    -- get all files within the current track's folder
-    local stuff = lfs.getDirectoryItems(path)
-    -- iterate over those and copy them out to the correct place
-    for _,file in ipairs(stuff) do
-      love.filesystem.write(path .. '/' .. file, love.filesystem.read('_music/' .. dir .. '/' .. file))
-    end
-  end
-
-  --]]
-
 if disablePrint then
     function print() end
 end
@@ -73,6 +56,8 @@ function love.load()
             GameUp    =  { "key:j" },
             GameRight =  { "key:k" },
             GameConfirm  =  { "key:return" },
+            GameBack = { "key:escape", "key:backspace" },
+            GameRestart = { "key:`" },
 
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },

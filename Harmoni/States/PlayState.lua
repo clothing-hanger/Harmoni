@@ -126,9 +126,6 @@ function PlayState:update(dt)
         songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
     end
 
-    if Input:pressed("GameConfirm") then
-        pause()
-    end
 
     if printableHealth[1] < 0 then
         printableHealth[1] = 0
@@ -156,6 +153,20 @@ function PlayState:update(dt)
     if skinUpdate then
         skinUpdate(dt)
     end
+
+    if Input:down("GameBack") and not paused then
+        if not songLeave then
+            songLeave = 0
+        end
+        songLeave = songLeave + dt
+        if songLeave >= 0.8 then
+            pause()
+            pauseSelection = 1
+        end
+    else
+        songLeave = 0
+    end
+
 end
 
 function PlayState:doGradeShitIdk()
@@ -638,6 +649,60 @@ function PlayState:draw()
         if skinDrawAbove then
             skinDrawAbove()
         end
+        if not songLeave then
+            songLeave = 0
+        end
+        if not songRestart then
+            songRestart = 0
+        end
+        love.graphics.setColor(0,0,0,songLeave)
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+        love.graphics.setColor(0,0,0,songRestart)
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+
+        if paused and printableHealth[1] > 0 then
+            love.graphics.setColor(0,0,0,0.8)
+            love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+            love.graphics.setColor(1,1,1,1)
+            love.graphics.setFont(BigFont)
+            love.graphics.print("Paused")
+            local options = {"Resume", "Restart", "Exit"}
+            for i = 1, #options do
+                if i == pauseSelection then
+                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
+                    love.graphics.setColor(0,1,1,1)
+                    love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
+                    love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
+                else
+                    love.graphics.setColor(1,1,1,0.9)
+                    love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
+                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
+                    love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
+                end
+            end
+
+
+
+            if Input:pressed("GameConfirm") then
+                if pauseSelection == 1 then
+                    pause()
+                elseif pauseSelection == 2 then
+                    State.switch(States.PlayState)
+
+                elseif pauseSelection == 3 then
+                    printableHealth = {0}
+                    State.switch(States.SongSelectState)
+                end
+            elseif Input:pressed("MenuUp") then
+                pauseSelection = pauseSelection - 1
+            elseif Input:pressed("MenuDown") then
+                pauseSelection = pauseSelection + 1
+
+            end
+        end
+
     end
 
 

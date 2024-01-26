@@ -5,5 +5,6 @@ return {
     ResultsState = require("States.ResultsState"),
     TitleState = require("States.TitleState"),
     SettingsState = require("States.SettingsState"),
-    PreLaunchState = require("States.PreLaunchState")
+    PreLaunchState = require("States.PreLaunchState"),
+    CreditsState = require("States.CreditsState"),
 }

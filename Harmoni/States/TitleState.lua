@@ -117,7 +117,7 @@ function TitleState:update(dt)
                 State.switch(States.SettingsState)
            --     love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
            elseif curSelection == 3 then
-            love.window.showMessageBox("Not Implimented Yet :(", "no credits menu yet, but credits are to me (clothing hanger) for like most of it, \nguglioisstupid and Rit for quaver chart parsing code, \nand the charters to all the songs i stole from quaver \n(they are listed at the top right of the screen in the song select menu)")
+            State.switch(States.CreditsState)
            end
         end
     elseif Input:pressed("MenuDown") then
