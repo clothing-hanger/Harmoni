@@ -5,20 +5,119 @@ function CreditsState:enter()
     selectedCredit = 1
 
     Credits = {
-        {"c l o t h i n g h a n g e r", "Lead Programmer", "PLACEHOLDER"},
-        {"GuglioIsStupid", "Love2D Project Template, Support", "PLACEHOLDER"},
-        {"Swan", "Quaver Map Format", "PLACEHOLDER"},
-        {"AM7999", "Github README", "PLACEHOLDER"},
+        {"c l o t h i n g h a n g e r", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
+        {"GuglioIsStupid", "Love2D Project Template, Support", "https://ilovefemboys.org/"},  -- this is guglios real website link 💀💀
+        {"Swan/The Quaver Team", "Quaver Map Format", "https://quavergame.com/"},
+        {"AM7999", "Github README", "https://github.com/am7999"},
         {"The Love2D Team", "Love2D", "https://www.love2d.org"},
+        {"Sapple", "fortcock", "https://twitter.com/oldsockslott/status/1577437966288330753"},
     }
 
     Quotes = {
-        "PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER",
-        "PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER",
-        "PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER",
-        "PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER",
-        "PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER PLACEHOLDER",
+        "uhh idk",
+        "\n\n\n\n\n\nWishlist Rit on Steam!\n\n(this is the only one who i had to censor the quote)",
+        "Quaver- The ultimate community-driven, and open-source competitive rhythm game available on Steam.\n\n\nnot related to Harmoni, but I'm crediting Quaver because Harmoni uses Quaver charts",
+        "You know, README writing isn't hard",
+        "Hi there! LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, macOS, Linux, Android and iOS.",
+        ""
     }
+
+
+    guglioQuotes = {
+        "Girlfriend lookin' real ***** with a whole in her head",
+        "finally a mouth big enough",
+        "You can find it on ******* just by searching 'cute goth boy ***** pumpkin on Halloween'",
+        "I gotta get on my knees",
+        "Water is almost as good as piss",
+        "It's just his ***** that are huge, he has a small ****\nHis ***** are fucking massive",
+        "I need some of that Quagmire ****",
+        "Oh what I would do to just get a suckle of that ****",
+        "AINT NO WAY GITHUB COPILOT JUST OPENED GANGNAM STYLE",
+        "im gonna **** a basketball brb",
+        "My **** hang",
+        "I'm trying to find a video file, BUT I JUST KEEP GETTING KEVIN HART",
+        "send me some fnf ***** pls",
+        "17 when an act o iver rights as an source to the sea, T Le Maori people  -Guglio",
+        "Bowser is smashable",
+        "Foreskin gamer.",
+        "I follow people everywhere",
+        "I swear to god, if this window is homophobic Goku",
+        "Day 1 of pissing on my cat until Rit is finished",
+        "I already made out with you, it's too late",
+        "11",
+        "#WorshipTrump #TrumpXObamaFurryArt",
+        "Y'all got any #TrumpXObamaFurryArt",
+    }
+
+    SappleQuotes = {
+        "No >:3\noops\nwrong emote",
+        "This is how my balls talk to each other",
+        "And then it smells like- like a spooky microwave!",
+        "I have like 30 different pictures of Sonic feet\nI'm not lying by the way\nEvery day I've been getting more and more\nand now I have like 30",
+        "It was like 3 meat, but if 3 meat was vegan, so 3 vegan",
+        "You know how in the pistachio commercials there's that elephant that says \"touch my nuts\"? There's Sonic the Hedgehog",
+        "There should be a SpongeBob episode where Mr. Krabs gets mad at SpongeBob and yells 'Mr. Squidward' and then Squidward starts taking off his pants",
+        "A doctor a day gives you a lemon that's gay",
+        "It's so easy, its like giving cocaine to a baby",
+        "I used to fuck microwaves",
+        "more fish more fish more fish more fish more fish more fish more fish more fish more fish more fish",
+        "I know there's actually some good games on here but whenever I search 'furry sex' nothing shows up",
+        "Holy fuck I forgot I favorited the Mario shaking his ass",
+        "I woke up sitting criss-cross apple sauce and one thing led to another and then I was eating my toes",
+        "Jesus after Taco Bell: 'holy shit'",
+        "I'm so tired I could fuck a horse",
+        "i love scat its so hot",
+        "nuh uh",
+    }
+
+    
+
+    curSappleQuote = love.math.random(1,#SappleQuotes)
+
+    SappleQuoteTween = {0}
+    if not guglioQuoteTimer then
+        self:chooseGuglioQuote()
+    end
+    if not SappleQuoteTimer then
+        self:chooseSappleQuote()
+    end
+end
+
+function CreditsState:chooseGuglioQuote()
+    local oldGuglioQuote = curGuglioQuote
+    local newGuglioQuote = love.math.random(1,#guglioQuotes)
+    if newGuglioQuote == oldGuglioQuote then
+        CreditsState:chooseGuglioQuote()
+    else
+        curGuglioQuote = newGuglioQuote
+        guglioQuoteTween = {0}
+        guglioQuoteTimer = Timer.tween(2, guglioQuoteTween, {1}, "linear", function()
+            CreditsState:chooseGuglioQuote()
+        end)
+    end
+
+end
+
+function CreditsState:chooseSappleQuote()
+    local oldSappleQuote = curSappleQuote
+    local newSappleQuote = love.math.random(1,#SappleQuotes)
+
+    local nuhUhOrQuote = love.math.random(1,12)
+
+
+    if newSappleQuote == oldSappleQuote then
+        CreditsState:chooseSappleQuote()
+    else
+        curSappleQuote = newSappleQuote
+        SappleQuoteTween = {0}
+
+        if nuhUhOrQuote ~= 1 then
+            curSappleQuote = #SappleQuotes
+        end
+        SappleQuoteTimer = Timer.tween(1, SappleQuoteTween, {1}, "linear", function()
+            CreditsState:chooseSappleQuote()
+        end)
+    end
 
 end
 
@@ -50,7 +149,7 @@ function CreditsState:draw()
     love.graphics.push()
     love.graphics.translate(-40,0)
         love.graphics.push()
-            love.graphics.translate(-300,0)
+            love.graphics.translate(-300,-20)
             for i = 1, #Credits do
                 if i == selectedCredit then
                     love.graphics.setColor(0,0,0,0.9)
@@ -83,7 +182,14 @@ function CreditsState:draw()
             love.graphics.rectangle("line", 670, 160, 600, 400)
             love.graphics.setColor(0,0,0,1)
 
+            if selectedCredit == 2 then
+                love.graphics.printf(guglioQuotes[curGuglioQuote], 670, 165, 600, "center")
+            elseif selectedCredit == 6 then
+                love.graphics.printf(SappleQuotes[curSappleQuote], 670, 165, 600, "center")
+            end
             love.graphics.printf(Quotes[selectedCredit], 670, 165, 600, "center")
+            
+            
 
         love.graphics.pop()
     love.graphics.pop()

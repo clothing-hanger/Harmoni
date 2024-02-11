@@ -28,7 +28,7 @@ function setDefaultSettings()
     currentSkin = "Skins/Default Arrow/"
 
 end
-if love.filesystem.exists("Settings.lua") then
+if love.filesystem.getInfo("Settings.lua") then
     print("load settings file")
     love.filesystem.load(love.filesystem.getSaveDirectory().."/Settings.lua")
     --loadSettings()
@@ -515,6 +515,8 @@ function SettingsState:draw()
         end
 
     end
+
+    love.graphics.print("PLEASE NOTE: SETTINGS CURRENTLY DO NOT SAVE AFTER YOU CLOSE THE GAME! (im working on this i promise)",  -230, 0)
 
 end
 

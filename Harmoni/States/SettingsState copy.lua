@@ -26,7 +26,7 @@ function setDefaultSettings()
     currentSkin = "Skins/Default Arrow/"
 
 end
-if love.filesystem.exists("Settings.lua") then
+if love.filesystem.getInfo("Settings.lua") then
     print("load settings file")
     love.filesystem.load(love.filesystem.getSaveDirectory().."/Settings.lua")
     --loadSettings()

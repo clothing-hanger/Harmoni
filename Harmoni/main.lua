@@ -1,12 +1,34 @@
+versionNumber = "Harmoni Beta 1.0"
+
 local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
+if love.filesystem.isFused() then
+    discordRPC = require("Modules.discordRPC")
+    usingRPC = true
+    function InitializeDiscord()
+        discordRPC.initialize("1200949844655755304", false, "2781170")
+        presenceUpdate = 0
+        presence = {
+            state = "In the Menus",
+            details = "Title Screen",
+            largeImageKey = "rpc_icon"
+        }
+    end
+    InitializeDiscord()
+end
 
+
+
+function mod(a, b)
+    return a - (math.floor(a/b)*b)
+end
 
 love.keyboard.setKeyRepeat(true)
 
 love.filesystem.createDirectory("Skins")
+love.filesystem.createDirectory("Saves")
 
 songListLength = love.filesystem.getDirectoryItems("Music")
 if #songListLength == 0 then
@@ -48,6 +70,7 @@ function love.directorydropped(file)
 end
 
 function love.load()
+    
     -- Setup Libraries
     Input = (require("Libraries.Baton")).new({
         controls = {
@@ -67,7 +90,8 @@ function love.load()
             MenuBack = { "key:escape", "key:backspace" },
             SearchToggle = { "key:tab"},
             openSongGoogleDrive = { "key:f1" },
-            openSongFolder = { "key:f2" }
+            openSongFolder = { "key:f2" },
+            randomSongKey = { "key:r" },
         }
     })
     Class = require("Libraries.Class")
@@ -88,7 +112,6 @@ function love.load()
 
 
     require("Modules.Debug")
-
 
     volumeOpacity = {0}
     volumeVelocity = 0
@@ -123,16 +146,17 @@ function love.load()
     --]]
 
     Tips = {
-        "Press F11 to Fullscreen.",
+        "Press F11 to Fullscreen",
         "Please report any bugs you find by opening a Github issue",
-        "Press R in the Song Select menu to pick a random song \n(not even added yet lmfao this is just here so i dont forget to add it)", -- this isnt even added yet lmfao
+        "Press R in the Song Select menu to pick a random song", -- this isnt even added yet lmfao
         "Request features by opening a Github issue",
         "Don't miss",
-        "Settings will work correctly eventually I promise lmao",
+        "Settings will save eventually I promise lmao",
         "Wishlist Rit on Steam!",
         "Hold ALT and scroll to change the volume",
         "More Song Packs will be available in the future",
-        "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder."
+        "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
+        "Press F2 in the Song Select menu to visit the song packs Google Drive",
     }
     extremeRareTips = {
         "you should just delete the game honestly",
@@ -144,7 +168,11 @@ function love.load()
         "Is an interesting game\nAm just play it\nWow\n\n-Heng",
         "Do it jiggle?",
         "'Is good game, would give it a try'\n\n-Sapple",
+        "When she doin acrobatics on the peenor, so you gotta lock in",
+        "We harmomize the entire house without a single drop of cheese falling\n\ncry about it guglio",
     }
+
+
 
 
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
@@ -170,6 +198,10 @@ function love.update(dt)
     State.update(dt)
     Timer.update(dt)
 
+
+
+    
+
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen, "exclusive")
@@ -183,6 +215,69 @@ function love.update(dt)
     if songSelectSearch then
         searchSongs()
     end
+    if usingRPC then
+        if State.current() == States.SongSelectState then
+            presence = {
+                state = "In the Menus",
+                details = "Selecting a Song",
+                largeImageKey = "rpc_icon"
+            }
+        elseif State.current() == States.SettingsState then
+            presence = {
+                state = "In the Menus",
+                details = "Editing Settings",
+                largeImageKey = "rpc_icon"
+            }
+        elseif State.current() == States.PlayState then
+            total_seconds = songLength - song:tell()
+        
+            time_minutes  = math.floor(mod(total_seconds, 3600) / 60)
+            time_seconds  = math.floor(mod(total_seconds, 60))
+            if not resultsScreen then
+
+        
+                if (time_minutes < 10) then
+                    time_minutes = "0" .. time_minutes
+                end
+                if (time_seconds < 10) then
+                    time_seconds = "0" .. time_seconds
+                end
+                
+                print(time_minutes .. time_seconds)
+                
+
+                presence = {
+                    state = "Playing: ".. songList[selectedSong].." Difficulty: ".. metaData.diffName,
+                    details = "Time Remaining: " .. time_minutes .. ":" .. time_seconds,
+                    largeImageKey = "rpc_icon"
+                }
+            else
+
+                local rpcGrade = grade
+
+                if health <= 0 then
+                    local rpcGrade = "F"
+                end
+
+                presence = {
+                    state = "Results Screen: ".. songList[selectedSong].." Difficulty: ".. metaData.diffName,
+                    details = "Grade: " .. grade,
+                    largeImageKey = "rpc_icon"
+                }
+            end
+        end
+        --presenceUpdate = presenceUpdate + dt
+      --  if presenceUpdate >= 1 then
+            discordRPC.updatePresence(presence)
+       --     presenceUpdate = 0
+       -- end
+        discordRPC.runCallbacks()
+
+    end
+
+
+
+
 end
 
 function love.textinput(t)
@@ -258,7 +353,7 @@ function love.draw()
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)
 
-    love.graphics.setLineWidth(5)
+    love.graphics.setLineWidth(1)
     love.graphics.push()
     love.graphics.translate(Inits.GameWidth-200, Inits.GameHeight-250)
     love.graphics.setColor(1,1,1,volumeOpacity[1])
@@ -290,5 +385,7 @@ function love.resize(w, h)
 end
 
 function love.quit()
-
+    if usingRPC then
+        discordRPC.shutdown()
+    end
 end

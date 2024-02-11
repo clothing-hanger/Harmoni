@@ -1,5 +1,9 @@
 function quaverParse(file)
     
+    if not love.filesystem.getInfo(file) then
+        love.window.showMessageBox("Chart not loaded", "The chart failed to load. sorry lmao i suck at coding", "error")
+        return 
+    end
     
     print("quaverParse()")
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part

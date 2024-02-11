@@ -52,8 +52,12 @@ function SongSelectState:enter()
     for i = 1,#diffList do
         table.insert(diffListXPositions, 900)
     end
-
-    SongSelectState:loadSong(true)
+    if State.last() ~= States.TitleState then
+        SongSelectState:loadSong(true)
+    else
+        SongSelectState:loadSong(false)
+        backgroundFade[1] = 1
+    end
     
 end
 
@@ -100,9 +104,13 @@ function SongSelectState:update(dt)
             end
 
         elseif Input:pressed("openSongGoogleDrive") then
-            love.system.openURL("https://drive.google.com/drive/folders/1MpRIkEXY1FmRLVSEzlWHJzWJScREgD37?usp=drive_link")
+            love.system.openURL("https://drive.google.com/drive/folders/1MpRIkEXY1FmRLVSEzlWHJzWJScREgD37?usp=drive_link")  --lmao google drive 
         elseif Input:pressed("openSongFolder") then
             os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
+        elseif Input:pressed("randomSongKey") then
+            selectedDifficulty = 1
+            selectedSong = love.math.random(1,#songList)
+            SongSelectState:loadSong(true)
         end
 
 
@@ -214,7 +222,7 @@ function SongSelectState:loadSong(doSongRestart)
 
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
             discRotation = 0
-         --   if love.filesystem.exists("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
+         --   if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
              --   background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
           --  end
             if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end

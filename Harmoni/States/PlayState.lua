@@ -61,7 +61,6 @@ function PlayState:enter()
     okayTiming = 236
     missTiming = 286
 
-   -- BotPlay = true
     marvCount = 0
     perfCount = 0
     greatCount = 0
@@ -104,6 +103,7 @@ function PlayState:enter()
     blurEffect.boxblur.radius = 0
 
 end
+
 function PlayState:update(dt)
     blurEffect.boxblur.radius = backgroundBlur[1]
 
@@ -135,6 +135,9 @@ function PlayState:update(dt)
         resultsScreen = true
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
+            saveList = love.filesystem.getDirectoryItems("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/")
+            local saveData = "local ScoreData = {Score = ".. score .. "Accuracy = " .. accuracy .. "}"
+            love.filesystem.write("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/" .. #saveList .. ".lua", "test")
             PlayState:leave(States.SongSelectState)
         end
     end   
@@ -160,7 +163,7 @@ function PlayState:update(dt)
                 songLeave = 0
             end
             songLeave = songLeave + dt
-            if songLeave >= 0.8 then
+            if songLeave >= 0.3 then
                 pause()
                 pauseSelection = 1
             end
@@ -251,7 +254,7 @@ function checkMiss()
             if MusicTime - note > missTiming then
                 judge(MusicTime - note)
                 table.remove(lane, j)
-                health = health - 0.03
+                health = health - 0.075
                 break
             end
         end
@@ -292,26 +295,27 @@ function judge(noteTime)
         judgeColors = {0,0,1,0,0,0}
         judgeCountTween(3)
         incrementCombo()
-        health = math.min(health + 0.01, 1)
+        health = health - 0.01
     elseif math.abs(noteTime) < goodTiming then  -- good
         score = score + (bestScorePerNote/4)
         judgeColors = {0,0,0,1,0,0}
         judgeCountTween(4)
         incrementCombo()
         goodCount = goodCount + 1
+        health = health - 0.02
     elseif math.abs(noteTime) < okayTiming then  -- okay
         score = score + (bestScorePerNote/5)
         judgeColors = {0,0,0,0,1,0}
         judgeCountTween(5)
         incrementCombo()
         okayCount = okayCount + 1
-        health = health - 0.01
+        health = health - 0.04
     else                        -- miss lmao fuckin loser
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
         combo = 0
-        health = health - 0.03
+        health = health - 0.075
     end
 
     currentBestPossibleScore = currentBestPossibleScore + bestScorePerNote
@@ -504,7 +508,7 @@ function PlayState:draw()
 
         --love.graphics.rectangle("line", )
 
-        love.graphics.setLineWidth(5)
+        love.graphics.setLineWidth(1)
 
         love.graphics.pop()
 
@@ -532,14 +536,17 @@ function PlayState:draw()
             else
                 love.graphics.translate(0, verticalNoteOffset)
             end
+       
+
+                for i = 1,4 do
+                    local inp = allInputs[i]
+                    local spr = _G["Receptor" .. AllDirections[i]]
+                    if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                    love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                end
 
 
-            for i = 1,4 do
-                local inp = allInputs[i]
-                local spr = _G["Receptor" .. AllDirections[i]]
-                if Input:down(inp) then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-            end
+
         
             love.graphics.push()
                 if gameOverNotePush[1] ~= 0 then

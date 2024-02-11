@@ -68,7 +68,7 @@ function TitleState:enter()
     end
     titleTip()
 
-    if State.last() ~= States.SongSelectState and State.last() ~= States.SettingsState then
+    if State.last() ~= States.SongSelectState and State.last() ~= States.SettingsState and State.last() ~= States.CreditsState then  --shut up i know its bad
 
         resetMenuMusic()
     else
@@ -244,6 +244,8 @@ function TitleState:draw()
     love.graphics.setFont(MenuFontSmall)
 
     love.graphics.printf(currentTip, -390, 1060, 280,"center")
+
+    love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
     if curSelection == 3 then
         love.graphics.setColor(0,0,0,0.9)
