@@ -93,6 +93,9 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
+    hitsPerSecond = {0}
+    notesPerSecond = {0}
+    hitErrorTable = {}
     dimBackground()
 
     if skinLoad then
@@ -179,6 +182,10 @@ function PlayState:update(dt)
     end
 
 
+    for i = 1,#hitTimes do
+        hitTimes[i][4][4] = hitTimes[i][4][4]-(1*dt)
+    end
+
 end
 
 function PlayState:doGradeShitIdk()
@@ -234,6 +241,7 @@ function PlayState:gameOver()
         gameOverSongTween = Timer.tween(1.5, gameOverSongSlowdown, {0.01}, "linear", function()
             song:stop()
             paused = false
+            grade = "F"
             gameOver = true
         end)
     end
@@ -271,11 +279,19 @@ function incrementCombo()
 end
 
 function judge(noteTime)
+
+    print(noteTime)
     
     judgePos = {-10}
-    table.insert(hitTimes, {noteTime, MusicTime})
+
+
+
+
+
+    
 
     if math.abs(noteTime) < marvTiming then  -- marvelous
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,1,1}})
         score = score + bestScorePerNote
         judgeColors = {1,0,0,0,0,0}
         marvCount = marvCount + 1
@@ -283,6 +299,7 @@ function judge(noteTime)
         incrementCombo()
         health = math.min(health + 0.025, 1)
     elseif math.abs(noteTime) < perfTiming then  -- perfect
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,78/255,1}})
         score = score + (bestScorePerNote/2)
         judgeColors = {0,1,0,0,0,0}
         judgeCountTween(2)
@@ -290,6 +307,7 @@ function judge(noteTime)
         perfCount = perfCount + 1
         health = math.min(health + 0.02, 1)
     elseif math.abs(noteTime) < greatTiming then  -- great
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {92/255,1,82/255,1}})
         score = score + (bestScorePerNote/3)
         greatCount = greatCount + 1
         judgeColors = {0,0,1,0,0,0}
@@ -297,6 +315,7 @@ function judge(noteTime)
         incrementCombo()
         health = health - 0.01
     elseif math.abs(noteTime) < goodTiming then  -- good
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {0,61/255,1,1}})
         score = score + (bestScorePerNote/4)
         judgeColors = {0,0,0,1,0,0}
         judgeCountTween(4)
@@ -304,6 +323,7 @@ function judge(noteTime)
         goodCount = goodCount + 1
         health = health - 0.02
     elseif math.abs(noteTime) < okayTiming then  -- okay
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {129/255,0,1,1}})
         score = score + (bestScorePerNote/5)
         judgeColors = {0,0,0,0,1,0}
         judgeCountTween(5)
@@ -311,6 +331,7 @@ function judge(noteTime)
         okayCount = okayCount + 1
         health = health - 0.04
     else                        -- miss lmao fuckin loser
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,65/255,65/255,1}})
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
@@ -362,6 +383,7 @@ function checkInput()
             if MusicTime - note < missTiming and MusicTime - note > -missTiming then
                 if Input:pressed(allInputs[i]) then
                     judge(MusicTime - note)
+                    table.insert(notesPerSecond, 1)
                     table.remove(lane, j)
                     break
                 end
@@ -374,7 +396,7 @@ end
 function checkBotInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note > -marvTiming/2 then
+            if MusicTime - note > -1 then
                 judge(MusicTime - note)
                 table.remove(lane, j)
                 break
@@ -591,6 +613,12 @@ function PlayState:draw()
         love.graphics.setColor(1,1,1,judgeColors[6])
         love.graphics.draw(Miss, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
         love.graphics.setColor(1,1,1,1)
+        love.graphics.rectangle("fill",Inits.GameWidth/2-1, Inits.GameHeight/2-3, 2, 26)
+
+        for i = 1,#hitTimes do
+            love.graphics.setColor(hitTimes[i][4])
+            love.graphics.rectangle("fill", hitTimes[i][1]+(Inits.GameWidth/2)-2, Inits.GameHeight/2, 4, 20)
+        end
         love.graphics.setFont(MediumFont)
     
         if marvCount ~= 0 then
