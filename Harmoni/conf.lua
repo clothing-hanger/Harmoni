@@ -4,6 +4,6 @@ function love.conf(t)
     t.window.width = 1280
     t.window.height = 720
     t.window.vsync = false
-    t.window.resizable = false   -- it breaks when you resize :(         (press f11 to toggle fullscreen or windowed )
+    t.window.resizable = true   -- it breaks when you resize :(         (press f11 to toggle fullscreen or windowed )
     t.console = true
 end  

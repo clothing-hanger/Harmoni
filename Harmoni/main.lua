@@ -4,6 +4,7 @@ local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
+function print() return end
 if love.filesystem.isFused() then
     discordRPC = require("Modules.discordRPC")
     usingRPC = true
@@ -243,9 +244,7 @@ function love.update(dt)
                     time_seconds = "0" .. time_seconds
                 end
                 
-                print(time_minutes .. time_seconds)
-                
-
+            
                 presence = {
                     state = "Playing: ".. songList[selectedSong].." Difficulty: ".. metaData.diffName,
                     details = "Time Remaining: " .. time_minutes .. ":" .. time_seconds,
@@ -344,10 +343,10 @@ function love.draw()
 
     -- ratio
     local ratio = 1
-    ratio = math.min(Inits.GameWidth/Inits.GameWidth, Inits.GameHeight/Inits.GameHeight)
+    ratio = math.min(Inits.WindowWidth/Inits.GameWidth, Inits.WindowHeight/Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
-    love.graphics.draw(GameScreen, Inits.GameWidth/2, Inits.GameHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
 
 
     debug.printInfo()
@@ -355,7 +354,7 @@ function love.draw()
 
     love.graphics.setLineWidth(1)
     love.graphics.push()
-    love.graphics.translate(Inits.GameWidth-200, Inits.GameHeight-250)
+    love.graphics.translate(Inits.WindowWidth-200, Inits.WindowHeight-250)
     love.graphics.setColor(1,1,1,volumeOpacity[1])
 
 
@@ -373,15 +372,15 @@ function love.draw()
 
 
 
-    love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",Inits.GameWidth-200+71,Inits.GameHeight-250+136)
+    love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",Inits.WindowWidth-200+71,Inits.WindowHeight-250+136)
     love.graphics.setColor(1,1,1)
 
 
 end
 
 function love.resize(w, h)
-    Inits.GameWidth = w
-    Inits.GameHeight = h
+    Inits.WindowWidth = w
+    Inits.WindowHeight = h
 end
 
 function love.quit()
