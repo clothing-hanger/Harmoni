@@ -4,7 +4,7 @@ local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
-function print() return end
+--function print() return end
 if love.filesystem.isFused() then
     discordRPC = require("Modules.discordRPC")
     usingRPC = true
@@ -93,6 +93,7 @@ function love.load()
             openSongGoogleDrive = { "key:f1" },
             openSongFolder = { "key:f2" },
             randomSongKey = { "key:r" },
+            introSkip = { "key:space" },
         }
     })
     Class = require("Libraries.Class")

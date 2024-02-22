@@ -5,6 +5,7 @@ function quaverParse(file)
         return 
     end
     
+    
     print("quaverParse()")
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part
         chart = tinyyaml.parse(love.filesystem.read(file))
@@ -34,6 +35,9 @@ function quaverParse(file)
         end
         song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+
+        firstNoteTime = nil
+
     for i = 1,#chart.HitObjects do
         local hitObject = chart.HitObjects[i]
         local startTime = hitObject.StartTime
@@ -44,7 +48,12 @@ function quaverParse(file)
             return false
         end
         table.insert(lanes[lane], startTime)
-        --print(lane, #lanes[lane])
+
+        if not firstNoteTime and startTime then
+            firstNoteTime = math.floor(startTime/1000)
+            print("first note time: ".. firstNoteTime)
+        end
+        
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end
     songLength = song:getDuration()
