@@ -28,23 +28,67 @@ function setDefaultSettings()
     currentSkin = "Skins/Default Arrow/"
 
 end
-if love.filesystem.getInfo("Settings.lua") then
-    print("load settings file")
-    love.filesystem.load(love.filesystem.getSaveDirectory().."/Settings.lua")
-    --loadSettings()
-    setDefaultSettings()
 
-else
-    setDefaultSettings()
+function writeSettings()
+    if startFullscreen then
+        love.window.setFullscreen(startFullscreen, "exclusive")
+    else
+        love.window.setFullscreen(false)
+    end
+
+    local luaStr = "return {\n"
+    luaStr = luaStr .. "\tlastNoteTime = " .. tostring(lastNoteTime) .. ",\n"
+    luaStr = luaStr .. "\tmenuSongDelayTime = " .. tostring(menuSongDelayTime) .. ",\n"
+    luaStr = luaStr .. "\tdownScroll = " .. tostring(downScroll) .. ",\n"
+    luaStr = luaStr .. "\tspeed = " .. tostring(speed) .. ",\n"
+    luaStr = luaStr .. "\tLaneWidth = " .. tostring(LaneWidth) .. ",\n"
+    luaStr = luaStr .. "\tbackgroundDimSetting = " .. tostring(backgroundDimSetting) .. ",\n"
+    luaStr = luaStr .. "\tBotPlay = " .. tostring(BotPlay) .. ",\n"
+    luaStr = luaStr .. "\tverticalNoteOffset = " .. tostring(verticalNoteOffset) .. ",\n"
+    luaStr = luaStr .. "\tbackgroundBlurSetting = " .. tostring(backgroundBlurSetting) .. ",\n"
+    luaStr = luaStr .. "\tinstantPause = " .. tostring(instantPause) .. ",\n"
+    luaStr = luaStr .. "\tcurrentSkin = " .."'" .. Skin .. "skin.lua'" .. ",\n"
+    luaStr = luaStr .. "\tvolume = " .. tostring(volume) .. ",\n"
+    luaStr = luaStr .. "}"
+
+    love.filesystem.write("settings", luaStr)
 end
 
+function loadSettings()
+    if love.filesystem.getInfo("settings") then
+        local settings = love.filesystem.load("settings")()
+        for k, v in pairs(settings) do
+            _G[k] = v
+        end
 
-Skin = currentSkin
+        for i = 1, 4 do
+            _G["speed" .. i] = math.abs(speed)
+        end
 
+        if downScroll then
+            speed = -speed
+            speed1 = -speed1
+            speed2 = -speed2
+            speed3 = -speed3
+            speed4 = -speed4
+        end
+
+        Skin = currentSkin
+        print(Skin)
                 
-print(Skin .. "skin.lua")
-love.filesystem.load(Skin .. "skin.lua")()
-currentSkin = Skin .. "skin.lua"
+        love.filesystem.load(Skin:gsub("skin.luaskin.lua", "skin.lua"))()
+        currentSkin = Skin:gsub("skin.lua", "")
+        
+    else
+        setDefaultSettings()
+        Skin = currentSkin
+        love.filesystem.load(Skin .. "skin.lua")()
+        currentSkin = Skin:gsub("skin.lua", "")
+        writeSettings()
+    end
+end
+
+loadSettings()
 
 Tabs = {
     {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur, Instant Pause"},
@@ -310,30 +354,9 @@ function saveSettings()
         speed3 = -speed3
         speed4 = -speed4
     end
-
 end
 
-function writeSettings()
-    if startFullscreen then
-        love.window.setFullscreen(startFullscreen, "exclusive")
-    else
-        love.window.setFullscreen(false)
-    end
 
-    love.filesystem.write("Settings.lua",
-    "\nstartFullscreen = " .. tostring(startFullscreen)..
-    "\nmenuSongDelayTime = " .. tostring(menuSongDelayTime)..
-    "\ndownScroll = " .. tostring(downScroll)..
-    "\nspeed = " .. tostring(speed)..
-    "\nLaneWidth = " .. tostring(LaneWidth)..
-    "\nbackgroundDimSetting = " .. tostring(backgroundDimSetting)..
-    "\nBotPlay = " .. tostring(BotPlay)..
-    "\nverticalNoteOffset = " .. tostring(verticalNoteOffset)..
-    "\nbackgroundBlurSetting = " .. tostring(backgroundBlurSetting)..
-    "\ninstantPause = " .. tostring(instantPause)..
-    "\ncurrentSkin = " .."'" .. Skin .. "skin.lua'"
-    )
-end
 
 function SettingsState:tweenSettingsList()
     if settingsListTween then
