@@ -542,7 +542,6 @@ function SettingsState:draw()
 
     end
 
-    love.graphics.print("PLEASE NOTE: SETTINGS CURRENTLY DO NOT SAVE AFTER YOU CLOSE THE GAME! (im working on this i promise)",  -230, 0)
 
 end
 
