@@ -106,6 +106,7 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
+    loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
