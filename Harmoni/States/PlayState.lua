@@ -143,7 +143,7 @@ function PlayState:update(dt)
     end   
     
     if printableHealth[1] <= 0 and not gameOver then            
-        PlayState:gameOver()
+        --PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
 
@@ -186,6 +186,18 @@ function PlayState:update(dt)
             canBeSkipped = false
         end
     
+
+
+    if health > 0.90 then
+        health = health - 0.3*dt
+    end
+
+    if healthTween then
+        Timer.cancel(healthTween)
+    end
+
+        healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
+
 
 
     for i = 1,#hitTimes do
@@ -366,11 +378,11 @@ function printableScoreTween()
     if scoreTween then
         Timer.cancel(scoreTween)
         Timer.cancel(accuracyTween)
-        Timer.cancel(healthTween)
+      --  Timer.cancel(healthTween)
     end
     scoreTween = Timer.tween(0.5, printableScore, {score}, "out-quad")
     accuracyTween = Timer.tween(0.5, printableAccuracy, {convertedAccuracy}, "out-quad")
-    healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
+  --  healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
 end
 
 function dimBackground()
@@ -581,7 +593,12 @@ function PlayState:draw()
 
                 for i, lane in ipairs(lanes) do
                     for j, note in ipairs(lane) do
-                        if -(MusicTime - note)*_G["speed" .. i] < Inits.GameHeight then
+                        if currentVelocity then
+                            local currentScrollVelocity = currentVelocity
+                        else
+                            currentScrollVelocity = 0
+                        end
+                        if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
                             local noteImg = _G["Note" .. AllDirections[i]]
                             love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
                         end

@@ -1,4 +1,4 @@
-versionNumber = "Harmoni Beta 1.0"
+versionNumber = "Harmoni Beta 1.1.0"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
@@ -207,7 +207,7 @@ function love.update(dt)
 
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
-        love.window.setFullscreen(isFullscreen, "exclusive")
+        love.window.setFullscreen(isFullscreen)
     end
 
     volumeOpacity[1] = volumeOpacity[1] - 1*dt
