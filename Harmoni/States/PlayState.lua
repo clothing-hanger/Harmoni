@@ -73,7 +73,6 @@ function PlayState:enter()
     MusicTime = -10000
 
     health = 1
-    timeRemainingBar = {Inits.GameWidth}
     paused = false
     judgeColors = {0,0,0,0,0,0}
     judgePos = {0}
@@ -125,8 +124,6 @@ function PlayState:update(dt)
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
     
-        -- songLengthTimer = (Timer.tween(songLength, timeRemainingBar, {0}))  -- if it works it works lmfao
-        songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
     end
 
 
@@ -149,9 +146,7 @@ function PlayState:update(dt)
         --PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
-        if songLengthTimer then
-            Timer.cancel(songLengthTimer)
-        end
+
         song:setPitch(gameOverSongSlowdown[1])
         print(gameOverSongSlowdown[1])
     end
@@ -180,6 +175,17 @@ function PlayState:update(dt)
 
         end
     end
+
+        if math.floor(MusicTime/1000) < firstNoteTime - 3 and firstNoteTime > 5 and MusicTime > 1 then
+            canBeSkipped = true
+            if Input:pressed("introSkip") then
+                song:seek(firstNoteTime - 2)
+                MusicTime = (firstNoteTime * 1000) - 2000
+            end
+        else
+            canBeSkipped = false
+        end
+    
 
 
     if health > 0.90 then
@@ -228,15 +234,12 @@ function pause()
         PausedMusicTime = MusicTime
         if paused then
             song:pause()
-            if songLengthTimer then
-                Timer.cancel(songLengthTimer)
-            end
+
             if healthTween then
                 Timer.cancel(healthTween)
             end
         else
             healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
-            songLengthTimer = (Timer.tween(songLengthToLastNote, timeRemainingBar, {0})) 
 
             song:play()
         end
@@ -292,7 +295,7 @@ end
 
 function judge(noteTime)
 
-    print(noteTime)
+  --  print(noteTime)
     
     judgePos = {-10}
 
@@ -433,7 +436,6 @@ function PlayState:draw()
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(1,1,1,1)
     
-        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, timeRemainingBar[1], 20)
 
         love.graphics.push()
         --love.graphics.printf("PLACEHOLDER RESULTS SCREEN", 0, 280, Inits.GameWidth, "center")
@@ -557,8 +559,10 @@ function PlayState:draw()
         love.graphics.setColor(0,0,0,backgroundDim[1])
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(1,1,1,1)
-    
-        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, timeRemainingBar[1], 20)
+        --time bar
+        timeLeftPercent = (song:tell()/songLengthToLastNote)
+        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, Inits.GameWidth*timeLeftPercent, 20)
+        
         love.graphics.pop()
         if skinDrawAboveDimUnderNotes then
             skinDrawAboveDimUnderNotes()
@@ -634,8 +638,9 @@ function PlayState:draw()
 
         for i = 1,#hitTimes do
             love.graphics.setColor(hitTimes[i][4])
-            love.graphics.rectangle("fill", hitTimes[i][1]+(Inits.GameWidth/2)-2, Inits.GameHeight/2, 4, 20)
+            love.graphics.rectangle("fill", (((hitTimes[i][1])/2)+(Inits.GameWidth/2)-2), Inits.GameHeight/2, 4, 20)
         end
+        love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(MediumFont)
     
         if marvCount ~= 0 then
@@ -711,6 +716,14 @@ function PlayState:draw()
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
         end
+
+
+        if canBeSkipped then
+            love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
+        end
+        
+
+
       --  love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
     
     

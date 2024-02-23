@@ -93,6 +93,7 @@ function love.load()
             openSongGoogleDrive = { "key:f1" },
             openSongFolder = { "key:f2" },
             randomSongKey = { "key:r" },
+            introSkip = { "key:space" },
         }
     })
     Class = require("Libraries.Class")
