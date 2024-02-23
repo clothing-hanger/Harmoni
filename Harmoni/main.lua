@@ -4,8 +4,9 @@ local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
---function print() return end
 if love.filesystem.isFused() then
+    function print() return end
+
     discordRPC = require("Modules.discordRPC")
     usingRPC = true
     function InitializeDiscord()
