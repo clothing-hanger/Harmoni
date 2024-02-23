@@ -9,6 +9,7 @@ function quaverParse(file)
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part
         chart = tinyyaml.parse(love.filesystem.read(file))
         lanes = {}
+        scrollVelocities = {}
         for i = 1,4 do
             table.insert(lanes, {})
         end
@@ -47,6 +48,7 @@ function quaverParse(file)
         --print(lane, #lanes[lane])
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end
+
     songLength = song:getDuration()
     print(songLength)
     songLengthToLastNote = lastNoteTime/1000
