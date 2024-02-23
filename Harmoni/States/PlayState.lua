@@ -143,7 +143,7 @@ function PlayState:update(dt)
     end   
     
     if printableHealth[1] <= 0 and not gameOver then            
-        --PlayState:gameOver()
+        PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
 
