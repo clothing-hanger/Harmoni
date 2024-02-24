@@ -195,9 +195,9 @@ function PlayState:update(dt)
     if healthTween then
         Timer.cancel(healthTween)
     end
-
+    if not paused then
         healthTween = Timer.tween(0.5, printableHealth, {health}, "out-quad")
-
+    end
 
 
     for i = 1,#hitTimes do
