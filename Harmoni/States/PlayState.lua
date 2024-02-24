@@ -396,7 +396,7 @@ function checkInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
             if MusicTime - note < missTiming and MusicTime - note > -missTiming then
-                if Input:pressed(allInputs[i]) then
+                if Input:pressed(allInputs[i]) and not paused then
                     judge(MusicTime - note)
                     table.insert(notesPerSecond, 1)
                     table.remove(lane, j)
