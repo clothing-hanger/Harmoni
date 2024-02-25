@@ -208,7 +208,7 @@ end
 
 function PlayState:doGradeShitIdk()
     if convertedAccuracy == 100 then 
-        grade = "S+"
+        grade = "X"
         gradeColors = {}
     elseif convertedAccuracy > 95 then
         grade = "S"

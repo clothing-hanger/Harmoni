@@ -4,9 +4,15 @@ local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
+aLotOfSpacesLmfao = "                                                                               "
+function love.errorhandler(msg) 
+   love.window.showMessageBox("oops lmao".. aLotOfSpacesLmfao, "Harmoni crashed :( just open the game again i guess idk lmao" .. aLotOfSpacesLmfao ..debug.traceback("\n\nError: \n\n" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", ""), "error")
+end
+
+
+
 if love.filesystem.isFused() then
     function print() return end
-
     discordRPC = require("Modules.discordRPC")
     usingRPC = true
     function InitializeDiscord()
@@ -31,6 +37,8 @@ love.keyboard.setKeyRepeat(true)
 
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
+love.filesystem.createDirectory("Screenshots")
+
 
 songListLength = love.filesystem.getDirectoryItems("Music")
 if #songListLength == 0 then
@@ -95,6 +103,7 @@ function love.load()
             openSongFolder = { "key:f2" },
             randomSongKey = { "key:r" },
             introSkip = { "key:space" },
+            takeScreenshot = { "key:f3" },
         }
     })
     Class = require("Libraries.Class")
@@ -161,6 +170,7 @@ function love.load()
         "More Song Packs will be available in the future",
         "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
         "Press F2 in the Song Select menu to visit the song packs Google Drive",
+        "Press F3 to take a screenshot",
     }
     extremeRareTips = {
         "you should just delete the game honestly",
@@ -209,6 +219,10 @@ function love.update(dt)
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen)
+    end
+
+    if Input:pressed("takeScreenshot") then
+        takeScreenshot()
     end
 
     volumeOpacity[1] = volumeOpacity[1] - 1*dt
@@ -282,6 +296,20 @@ function love.update(dt)
 
 end
 
+function takeScreenshot()
+    love.graphics.captureScreenshot(function(q)
+        screenshot = love.graphics.newImage(q)
+        q:encode('png','Screenshots/' .. os.time() .. '.png')
+        screenshotSize = {1}
+        screenshotTranslate = {0}
+        screenshotSizeTween = Timer.tween(0.5, screenshotSize, {0.2}, "out-quad", function()
+            Timer.tween(0.7, screenshotTranslate, {screenshot:getWidth()*(screenshotSize[1]+10)}, "in-expo")
+        end)
+
+    end)
+
+end
+
 function love.textinput(t)
     if songSelectSearch then
         search = search .. t
@@ -337,7 +365,10 @@ function love.draw()
     love.graphics.push()
         love.graphics.setCanvas(GameScreen)
             love.graphics.clear(0,0,0,1)
+ 
             State.draw()
+
+
 
 
 
@@ -350,7 +381,13 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
-
+    if screenshot then
+        love.graphics.push()
+        love.graphics.scale(screenshotSize[1], screenshotSize[1])
+        love.graphics.translate(0 - screenshotTranslate[1], 0)
+        love.graphics.draw(screenshot, ratio, ratio)
+        love.graphics.pop()
+    end
 
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)
