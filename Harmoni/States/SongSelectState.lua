@@ -169,7 +169,9 @@ end
 function SongSelectState:loadSong(doSongRestart)
     doDiffListTween = false
 
-    
+    if doSongRestart then
+        selectedDifficulty = 1
+    end
     if menuSongTimer then
         Timer.cancel(menuSongTimer)
     end

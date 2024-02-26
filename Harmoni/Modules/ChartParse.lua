@@ -11,6 +11,7 @@ function quaverParse(file)
         chart = tinyyaml.parse(love.filesystem.read(file))
         lanes = {}
         scrollVelocities = {}
+        totalNoteCount = 0
         for i = 1,4 do
             table.insert(lanes, {})
         end
@@ -45,6 +46,8 @@ function quaverParse(file)
         local endTime = hitObject.EndTime or 0
         local lane = hitObject.Lane
 
+        totalNoteCount = totalNoteCount + 1
+
         if lane > 4 then
             return false
         end
@@ -57,7 +60,7 @@ function quaverParse(file)
         
         lastNoteTime = startTime -- this should work because the last time its run will be the last note
     end
-
+    print("Total Note Count: ".. totalNoteCount)
     songLength = song:getDuration()
     print(songLength)
     songLengthToLastNote = lastNoteTime/1000

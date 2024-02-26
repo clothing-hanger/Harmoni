@@ -1,4 +1,5 @@
-versionNumber = "Harmoni Beta 1.2.1"
+ 
+versionNumber = "Harmoni Beta 1.3.0"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
@@ -8,6 +9,7 @@ aLotOfSpacesLmfao = "                                                           
 function love.errorhandler(msg) 
    love.window.showMessageBox("oops lmao".. aLotOfSpacesLmfao, "Harmoni crashed :( just open the game again i guess idk lmao" .. aLotOfSpacesLmfao ..debug.traceback("\n\nError: \n\n" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", ""), "error")
 end
+
 
 
 
@@ -131,32 +133,8 @@ function love.load()
     printableVolume = {love.audio.getVolume()}
     maxVolVelocity = 25
     MusicTime = 0
---[[
 
-    Tips = {
-        "Press F11 to Fullscreen.",
-        "Please report any bugs you find by opening a Github issue",
-        "Press R in the Song Select menu to pick a random song \n(not even added yet lmfao this is just here so i dont forget to add it)", -- this isnt even added yet lmfao
-        "Request features by opening a Github issue",
-        "Don't miss",
-        "Settings will work correctly eventually I promise lmao",
-        "Wishlist Rit on Steam!",
-        "Hold ALT and scroll to change the volume",
-        "More Song Packs will be available in the future",
-        "Import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder."
-    }
 
-    extremeRareTips = {
-        "you should just delete the game honestly",
-        "still better than osu",
-        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n-Sapple",
-        "just play quaver lmao",
-        "pickles",
-        "'The best part of fucking Yoshi is that you have a ride home in the morning'\n-President Barack Obama",
-        "Is an interesting game 🎯\nAm just play it\nWow\n-Heng"
-    }
-
-    --]]
 
     Tips = {
         "Press F11 to Fullscreen",
@@ -175,15 +153,16 @@ function love.load()
     extremeRareTips = {
         "you should just delete the game honestly",
         "still better than osu",
-        "'did you know that in heat colors change to another color dont believe me stick your fingers up your ass'\n-Sapple",
+        "\"did you know that in heat colors change to another color dont believe me stick your fingers up your ass\"\n-Sapple",
         "just play quaver lmao",
         "pickles",
-        "'The best part of fucking Yoshi is that you have a ride home in the morning'\n-President Barack Obama",
+        "\"The best part of fucking Yoshi is that you have a ride home in the morning\"\n-President Barack Obama",
         "Is an interesting game\nAm just play it\nWow\n\n-Heng",
         "Do it jiggle?",
-        "'Is good game, would give it a try'\n\n-Sapple",
-        "When she doin acrobatics on the peenor, so you gotta lock in",
+        "\"Is good game, would give it a try\"\n\n-Sapple",
+        "When she doin' acrobatics on the peenor, so you gotta lock in",
         "We harmomize the entire house without a single drop of cheese falling\n\ncry about it guglio",
+        "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
     }
 
 
