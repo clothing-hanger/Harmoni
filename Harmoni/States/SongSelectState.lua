@@ -277,9 +277,9 @@ function SongSelectState:draw()
     end
     love.graphics.pop()
     love.graphics.setColor(0,0,0,0.9)
-    love.graphics.rectangle("fill", 0, 0, 500, 200)
+    love.graphics.rectangle("fill", 0, 0, 500, 200, 7, 7, 50)
     love.graphics.setColor(0,1,1)
-    love.graphics.rectangle("line", 0, 0, 500, 200)
+    love.graphics.rectangle("line", 0, 0, 500, 200, 7, 7, 50)
     love.graphics.setFont(MenuFontBig)
     love.graphics.printf("Now Playing: ", 20, 20, 500)
     love.graphics.setFont(MenuFontSmall)
@@ -304,15 +304,15 @@ function SongSelectState:draw()
 
             if i == selectedSong then
                 love.graphics.setColor(0,0,0,0.9)
-                love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,1,1)
-                love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.print(songList[i], SongListXPositions[i]+12, i*60+12)
             else
-                love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,0.8,0.8)
 
-                love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,0,0,0.8)
 
                 love.graphics.print(songList[i], SongListXPositions[i]+12, i*60+12)
@@ -330,17 +330,17 @@ function SongSelectState:draw()
         for i = 1,#diffList do
             if i == selectedDifficulty then
                 love.graphics.setColor(0,0,0,0.9)
-                love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,1,1)
 
-                love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.print(diffList[i], diffListXPositions[i]+12, i*60+12)
             else
                 love.graphics.setColor(1,1,1,0.9)
-                love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,0.8,0.8)
 
-                love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50)
+                love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.print(diffList[i], diffListXPositions[i]+12, i*60+12)
             end
         end
@@ -351,9 +351,9 @@ function SongSelectState:draw()
 
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
-    love.graphics.rectangle("fill", Inits.GameWidth-300, 0, 300, 80)
+    love.graphics.rectangle("fill", Inits.GameWidth-300, 0, 300, 80, 7, 7, 50)
     love.graphics.setColor(0,1,1)
-    love.graphics.rectangle("line", Inits.GameWidth-300, 0, 300, 80)
+    love.graphics.rectangle("line", Inits.GameWidth-300, 0, 300, 80, 7, 7, 50)
     love.graphics.setFont(MenuFontExtraSmall)
     love.graphics.printf(#songList.." Songs Found\nPress F1 to download Song Packs\nPress F2 to open Music Folder", Inits.GameWidth-290, 10, 290, "left")
    -- love.graphics.scale(0.5,0.5)

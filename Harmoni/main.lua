@@ -142,7 +142,6 @@ function love.load()
         "Press R in the Song Select menu to pick a random song", -- this isnt even added yet lmfao
         "Request features by opening a Github issue",
         "Don't miss",
-        "Settings will save eventually I promise lmao",
         "Wishlist Rit on Steam!",
         "Hold ALT and scroll to change the volume",
         "More Song Packs will be available in the future",
@@ -178,7 +177,7 @@ function love.load()
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
 
     DefaultFont = love.graphics.newFont(12)
-    State.switch(States.TitleState)
+    State.switch(States.PreLaunchState)
 
 
 end

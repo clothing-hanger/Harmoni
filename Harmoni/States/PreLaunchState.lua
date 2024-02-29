@@ -1,55 +1,35 @@
 local PreLaunchState = State()
 
 function PreLaunchState:enter()
+    logo = love.graphics.newImage("Images/TITLE/logo.png")
 
-    skinsList = love.filesystem.getDirectoryItems("Skins/")
-    curSelection = 1
+    preLaunchFade = {0}
+
+    Timer.tween(0.5, preLaunchFade, {1}, "out-quad", function()
+        Timer.after(2.5, function()
+            Timer.tween(0.5, preLaunchFade, {0}, "out-quad", function()
+                State.switch(States.TitleState)
+            end)
+        end)
+    end)
 
 end
 
 function PreLaunchState:update(dt)
 
     if Input:pressed("MenuConfirm") then
-        print("curSelection: "..curSelection)
-        Skin = "Skins/"..skinsList[curSelection].."/"
-        
-        print(Skin .. "skin.lua")
-        love.filesystem.load(Skin .. "skin.lua")()
         State.switch(States.TitleState)
-
-    elseif Input:pressed("MenuUp") then
-        curSelection = curSelection - 1
-    elseif Input:pressed("MenuDown") then
-        curSelection = curSelection + 1
     end
 
-    if curSelection > #skinsList then
-        curSelection = 1
-    elseif curSelection < 1 then
-        curSelection = #skinsList
-    end
 end
 
 function PreLaunchState:draw() 
+    love.graphics.setColor(1,1,1,preLaunchFade[1])
+    love.graphics.translate(0, -(preLaunchFade[1]*50))
 
-
-    love.graphics.print("Select Skin", 65, 20)
-
-        for i = 1,#skinsList do
-            if i == curSelection then
-                love.graphics.setColor(0,0.5,1)
-            else
-                love.graphics.setColor(1,1,1)
-            end
-
-            love.graphics.rectangle("line", 50, 50*i, 300, 40)
-            love.graphics.print(skinsList[i], 65, 50*i)
-        end
-        love.graphics.setColor(1,1,1)
-
-
+    love.graphics.draw(logo, (Inits.GameWidth/2)-(logo:getWidth()/2), (Inits.GameHeight/2-logo:getHeight()/2)-80)
     love.graphics.setFont(MenuFontBig)
-    love.graphics.printf("This is a pre-release build, expect bugs.\n\nThis menu is temporary, just until i get the \nsettings menu right, im gonna make \nsome quick settings here", 150, 125, Inits.GameWidth, "center")
+    love.graphics.printf("Harmoni is still in early beta, please report any bugs you find on the GitHub, and consider donating to help development", Inits.GameWidth/2-500, Inits.GameHeight/2, 1000, "center")
 
     
 end

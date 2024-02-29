@@ -119,8 +119,6 @@ function PlayState:update(dt)
         checkInput()
     end
 
-
-
     checkMiss()
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
@@ -794,7 +792,7 @@ function PlayState:draw()
         if not songRestart then
             songRestart = 0
         end
-        love.graphics.setColor(0,0,0,songLeave)
+        love.graphics.setColor(0,0,0,songLeave*2)
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
         love.graphics.setColor(0,0,0,songRestart)
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)

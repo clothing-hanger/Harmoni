@@ -38,7 +38,8 @@ function TitleState:enter()
         speedTitle = 0.6
         logoSize = 1
         curSelection = 1
-        buttonWidth = {0,0,0}
+        buttonWidth = {0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
+        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub"}
 
         if not MenuMusic then
             notes = {}
@@ -92,7 +93,7 @@ function TitleState:update(dt)
             break
         end
     end
-    for i = 1,3 do
+    for i = 1,#ButtonLabels do
         if i == curSelection then
             buttonWidth[i] = math.min(15, buttonWidth[i] + 250*dt)
         else
@@ -115,23 +116,26 @@ function TitleState:update(dt)
                 State.switch(States.SongSelectState)
            elseif curSelection == 2 then
                 State.switch(States.SettingsState)
-           --     love.window.showMessageBox("Not Implimented Yet :(", "as a temporary way to edit settings, open the file 'settings.lua' (located in the Harmoni folder) in a text editor")
            elseif curSelection == 3 then
-            State.switch(States.CreditsState)
+                State.switch(States.CreditsState)
+           elseif curSelection == 4 then
+                love.window.showMessageBox("DONATE PLACEHOLDER", "DONATE PLACEHOLDER", "info")
+           elseif curSelection == 5 then
+                love.window.showMessageBox("GITHUB PLACEHOLDER", "GITHUB PLACEHOLDER", "info")
            end
+
         end
     elseif Input:pressed("MenuDown") then
-        if curSelection < 3 then
             curSelection = curSelection + 1
-        else
-            curSelection = 1
-        end
+        
     elseif Input:pressed("MenuUp") then
-        if curSelection == 1 then
-            curSelection = 3
-        else
             curSelection = curSelection - 1
-        end
+    end
+
+    if curSelection > #ButtonLabels then
+        curSelection = 1
+    elseif curSelection < 1 then
+        curSelection = #ButtonLabels
     end
 
     if not MenuMusic:isPlaying() and onTitle and not doingTitleMusicReset then
@@ -232,14 +236,14 @@ function TitleState:draw()
 
     love.graphics.setColor(0,0,0,0.9)
 
-    love.graphics.rectangle("fill", -400, 1050, 300, 150)
+    love.graphics.rectangle("fill", -400, 1050, 300, 150, 7, 7, 50)
     love.graphics.setColor(1,1,1)
   
-    love.graphics.rectangle("line", -400, 1050, 300, 150)
+    love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
   --  love.graphics.setColor(0,1,1)
     --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])
 
-    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10)
+    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
 
     love.graphics.setFont(MenuFontSmall)
 
@@ -247,65 +251,26 @@ function TitleState:draw()
 
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
-    if curSelection == 3 then
-        love.graphics.setColor(0,0,0,0.9)
-    else
-        love.graphics.setColor(1,1,1,0.9)
-    end    
-    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
-    if curSelection == 3 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0.7,0.7)
-    end 
-    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[3], 850, 240+(buttonWidth[3]*2), 25)
-    if curSelection == 3 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0,0)
-    end 
-    love.graphics.printf("Credits", logo:getWidth()/2-120, 850, 240, "center")
 
 
-    love.graphics.translate(0,-30)
-    if curSelection == 2 then
-        love.graphics.setColor(0,0,0,0.9)
-    else
-        love.graphics.setColor(1,1,1,0.9)
+    for i = 1,#ButtonLabels do
+        if i == curSelection then
+            love.graphics.setColor(0,0,0,0.9)
+        else
+            love.graphics.setColor(1,1,1,0.9)
+        end
+        love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[i], 850+(30*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        if i == curSelection then
+            love.graphics.setColor(0,1,1)
+        else
+            love.graphics.setColor(0,0.7,0.7)
+        end 
+        love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], 850+(30*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, 850+(30*i), 240, "center")
     end
-    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[2], 850, 240+(buttonWidth[2]*2), 25)
-    if curSelection == 2 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0.7,0.7)
-    end 
-    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[2], 850, 240+(buttonWidth[2]*2), 25)
-    if curSelection == 2 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0,0)
-    end
-    love.graphics.printf("Options", logo:getWidth()/2-120, 850, 240, "center")
 
-    love.graphics.translate(0,-30)
-    if curSelection == 1 then
-        love.graphics.setColor(0,0,0,0.9)
-    else
-        love.graphics.setColor(1,1,1,0.9)
-    end
-    love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[1], 850, 240+(buttonWidth[1]*2), 25)
-    if curSelection == 1 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0.7,0.7)
-    end     
-    love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[1], 850, 240+(buttonWidth[1]*2), 25)
-    if curSelection == 1 then
-        love.graphics.setColor(0,1,1)
-    else
-        love.graphics.setColor(0,0,0)
-    end
-    love.graphics.printf("Play", logo:getWidth()/2-120, 850, 240, "center")
+
+
 
 
  --   love.graphics.rectangle()
