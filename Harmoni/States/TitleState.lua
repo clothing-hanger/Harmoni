@@ -119,10 +119,11 @@ function TitleState:update(dt)
            elseif curSelection == 3 then
                 State.switch(States.CreditsState)
            elseif curSelection == 4 then
-                love.window.showMessageBox("DONATE PLACEHOLDER", "DONATE PLACEHOLDER", "info")
+                love.system.openURL("https://ko-fi.com/harmoni69655")
+
            elseif curSelection == 5 then
-                love.window.showMessageBox("GITHUB PLACEHOLDER", "GITHUB PLACEHOLDER", "info")
-           end
+                love.system.openURL("https://github.com/clothing-hanger/Harmoni")
+        end
 
         end
     elseif Input:pressed("MenuDown") then
@@ -165,6 +166,7 @@ end
 
 
 function titleTip()
+    imageTip = false
     if tipTween then
         Timer.cancel(tipTween)
     end
@@ -179,7 +181,11 @@ function titleTip()
         tip = extremeRareTips[love.math.random(1, #extremeRareTips)]
         print("Rare Tip" .. tip) -- just so i know it works
     else
-        tip = Tips[love.math.random(1, #Tips)]
+        randomTip = love.math.random(1, #Tips)
+        tip = Tips[randomTip]
+        if Tips[randomTip][2] then
+            imageTip = true
+        end
     end
     currentTip = tip
     if dontgetthesamefuckingtip == currentTip then
@@ -247,8 +253,12 @@ function TitleState:draw()
 
     love.graphics.setFont(MenuFontSmall)
 
-    love.graphics.printf(currentTip, -390, 1060, 280,"center")
-
+    if imageTip then
+        love.graphics.printf(currentTip[1], -390, 1060, 280,"center")
+        love.graphics.draw(currentTip[2], -390, 1060)
+    else
+        love.graphics.printf(currentTip, -390, 1060, 280,"center")
+    end
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
 

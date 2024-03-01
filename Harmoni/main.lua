@@ -1,5 +1,5 @@
  
-versionNumber = "Harmoni Beta 1.3.0"
+versionNumber = "Harmoni Beta 1.4.0"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
@@ -135,11 +135,14 @@ function love.load()
     MusicTime = 0
 
 
+    testTipImage = love.graphics.newImage("Images/unused/Note.png")
 
-    Tips = {
-        "Press F11 to Fullscreen",
+
+
+    --[[
+                "Press F11 to Fullscreen",
         "Please report any bugs you find by opening a Github issue",
-        "Press R in the Song Select menu to pick a random song", -- this isnt even added yet lmfao
+        "Press R in the Song Select menu to pick a random song", 
         "Request features by opening a Github issue",
         "Don't miss",
         "Wishlist Rit on Steam!",
@@ -148,6 +151,12 @@ function love.load()
         "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
         "Press F2 in the Song Select menu to visit the song packs Google Drive",
         "Press F3 to take a screenshot",
+                "Please consider donating to help development",
+
+    ]]
+    Tips = {
+        "TEST",
+        {"IMAGE TEST", testTipImage}
     }
     extremeRareTips = {
         "you should just delete the game honestly",
