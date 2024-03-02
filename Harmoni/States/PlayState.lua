@@ -274,8 +274,8 @@ end
 function checkMiss()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note > missTiming then
-                judge(MusicTime - note)
+            if MusicTime - note.noteTime > missTiming then
+                judge(MusicTime - note.noteTime)
                 table.remove(lane, j)
                 health = health - 0.075
                 break
@@ -395,9 +395,9 @@ end
 function checkInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note < missTiming and MusicTime - note > -missTiming then
+            if MusicTime - note.noteTime < missTiming and MusicTime - note.noteTime > -missTiming then
                 if Input:pressed(allInputs[i]) and not paused then
-                    judge(MusicTime - note)
+                    judge(MusicTime - note.noteTime)
                     table.insert(notesPerSecond, 1)
                     table.remove(lane, j)
                     break
@@ -647,17 +647,10 @@ function PlayState:draw()
 
                 for i, lane in ipairs(lanes) do
                     for j, note in ipairs(lane) do
-                        if currentVelocity then
-                            local currentScrollVelocity = currentVelocity
-                        else
-                            currentScrollVelocity = 0
-                        end
-                        if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
-                            local noteImg = _G["Note" .. AllDirections[i]]
-                            love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
-                        end
+                        note:draw()
                     end
                 end
+
             love.graphics.pop()
 
         love.graphics.pop()

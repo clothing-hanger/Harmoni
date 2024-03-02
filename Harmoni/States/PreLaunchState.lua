@@ -8,7 +8,9 @@ function PreLaunchState:enter()
     Timer.tween(0.5, preLaunchFade, {1}, "out-quad", function()
         Timer.after(2.5, function()
             Timer.tween(0.5, preLaunchFade, {0}, "out-quad", function()
-                State.switch(States.TitleState)
+                if not skippedSplash then
+                    State.switch(States.TitleState)
+                end
             end)
         end)
     end)
@@ -18,6 +20,7 @@ end
 function PreLaunchState:update(dt)
 
     if Input:pressed("MenuConfirm") then
+        skippedSplash = true        
         State.switch(States.TitleState)
     end
 
