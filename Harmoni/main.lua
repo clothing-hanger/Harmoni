@@ -135,12 +135,18 @@ function love.load()
     MusicTime = 0
 
 
-    testTipImage = love.graphics.newImage("Images/unused/Note.png")
-
+    testTipImage = love.graphics.newImage("Images/unused/testImage.png")
+    kofiImage = love.graphics.newImage("Images/TITLE/kofi.png")
+    discordImage = love.graphics.newImage("Images/TITLE/discord.png")
+    hengImage = love.graphics.newImage("Images/TITLE/heng.png")
 
 
     --[[
-                "Press F11 to Fullscreen",
+
+
+    ]]
+    Tips = {
+        "Press F11 to Fullscreen",
         "Please report any bugs you find by opening a Github issue",
         "Press R in the Song Select menu to pick a random song", 
         "Request features by opening a Github issue",
@@ -151,13 +157,11 @@ function love.load()
         "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
         "Press F2 in the Song Select menu to visit the song packs Google Drive",
         "Press F3 to take a screenshot",
-                "Please consider donating to help development",
+        {"Please consider donating to help development", kofiImage},
+        {"Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4", discordImage},
 
-    ]]
-    Tips = {
-        "TEST",
-        {"IMAGE TEST", testTipImage}
     }
+    
     extremeRareTips = {
         "you should just delete the game honestly",
         "still better than osu",
@@ -165,13 +169,14 @@ function love.load()
         "just play quaver lmao",
         "pickles",
         "\"The best part of fucking Yoshi is that you have a ride home in the morning\"\n-President Barack Obama",
-        "Is an interesting game\nAm just play it\nWow\n\n-Heng",
+        {"Is an interesting game  ◦ \nAm just play it\nWow\n\n-Heng", hengImage},
         "Do it jiggle?",
         "\"Is good game, would give it a try\"\n\n-Sapple",
         "When she doin' acrobatics on the peenor, so you gotta lock in",
         "We harmomize the entire house without a single drop of cheese falling\n\ncry about it guglio",
         "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
     }
+
 
 
 

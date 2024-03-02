@@ -38,8 +38,8 @@ function TitleState:enter()
         speedTitle = 0.6
         logoSize = 1
         curSelection = 1
-        buttonWidth = {0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
-        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub"}
+        buttonWidth = {0,0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
+        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub", "Discord"}
 
         if not MenuMusic then
             notes = {}
@@ -120,9 +120,10 @@ function TitleState:update(dt)
                 State.switch(States.CreditsState)
            elseif curSelection == 4 then
                 love.system.openURL("https://ko-fi.com/harmoni69655")
-
            elseif curSelection == 5 then
                 love.system.openURL("https://github.com/clothing-hanger/Harmoni")
+           elseif curSelection == 6 then
+            love.system.openURL("https://discord.gg/bBcjrRAeh4")
         end
 
         end
@@ -148,10 +149,10 @@ end
 
 function scrollTitleButtons(scroll)
     curSelection = curSelection-scroll
-    if curSelection > 3 then
+    if curSelection > #ButtonLabels then
         curSelection = 1
     elseif curSelection < 1 then 
-        curSelection = 3 
+        curSelection = #ButtonLabels 
     end
 end
 
@@ -178,8 +179,11 @@ function titleTip()
     local dontgetthesamefuckingtip = currentTip
     local tip 
     if rareTip then
-        tip = extremeRareTips[love.math.random(1, #extremeRareTips)]
-        print("Rare Tip" .. tip) -- just so i know it works
+        randomTip = love.math.random(1, #extremeRareTips)
+        tip = extremeRareTips[randomTip]
+        if extremeRareTips[randomTip][2] then
+            imageTip = true
+        end
     else
         randomTip = love.math.random(1, #Tips)
         tip = Tips[randomTip]
@@ -245,22 +249,23 @@ function TitleState:draw()
     love.graphics.rectangle("fill", -400, 1050, 300, 150, 7, 7, 50)
     love.graphics.setColor(1,1,1)
   
-    love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
   --  love.graphics.setColor(0,1,1)
     --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])
 
-    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
 
     love.graphics.setFont(MenuFontSmall)
 
     if imageTip then
+        love.graphics.draw(currentTip[2], -400, 1050, nil, 300/currentTip[2]:getWidth(), 150/currentTip[2]:getHeight())
         love.graphics.printf(currentTip[1], -390, 1060, 280,"center")
-        love.graphics.draw(currentTip[2], -390, 1060)
     else
         love.graphics.printf(currentTip, -390, 1060, 280,"center")
     end
+    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
+
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
+    love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
 
 
     for i = 1,#ButtonLabels do
