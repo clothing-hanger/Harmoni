@@ -1,5 +1,5 @@
  
-versionNumber = "Harmoni Beta 1.4.0"
+versionNumber = "Harmoni Beta 1.4.1"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
