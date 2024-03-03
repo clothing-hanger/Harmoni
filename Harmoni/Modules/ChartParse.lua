@@ -10,6 +10,7 @@ function quaverParse(file)
     -- huge credits to https://github.com/AGORI-Studios/Rit for this part
         chart = tinyyaml.parse(love.filesystem.read(file))
         lanes = {}
+        timingPointsTable = {}
         scrollVelocities = {}
         totalNoteCount = 0
         for i = 1,4 do
@@ -40,32 +41,53 @@ function quaverParse(file)
 
         firstNoteTime = nil
 
-    for i = 1,#chart.HitObjects do
-        local hitObject = chart.HitObjects[i]
-        local startTime = hitObject.StartTime
-        local endTime = hitObject.EndTime or 0
-        local lane = hitObject.Lane
 
-        totalNoteCount = totalNoteCount + 1
+        for i = 1,#chart.TimingPoints do    -- ?????? why does this not work 😭😭😭😭
+            local timingPoint = chart.TimingPoints[i]
+            local startTime = timingPoint.StartTime
+            local bpm = timingPoint.Bpm
+            table.insert(timingPointsTable, {startTime, bpm})
+            if bpm and startTime then
+                print(" TimingPoint " ..bpm .. "    " .. startTime)
+            end
 
-        if lane > 4 then
-            return false
+            if i == 1 then
+                metaData.bpm = timingPoint.Bpm
+                print(timingPoint.Bpm)
+            end
         end
-        table.insert(lanes[lane], startTime)
+    
 
-        if not firstNoteTime and startTime then
-            firstNoteTime = math.floor(startTime/1000)
-            print("first note time: ".. firstNoteTime)
+        for i = 1,#chart.HitObjects do
+            local hitObject = chart.HitObjects[i]
+            local startTime = hitObject.StartTime
+            local endTime = hitObject.EndTime or 0
+            local lane = hitObject.Lane
+
+            totalNoteCount = totalNoteCount + 1
+
+            if lane > 4 then
+                return false
+            end
+            table.insert(lanes[lane], startTime)
+
+            if not firstNoteTime and startTime then
+                firstNoteTime = math.floor(startTime/1000)
+                print("first note time: ".. firstNoteTime)
+            end
+            
+            lastNoteTime = startTime -- this should work because the last time its run will be the last note
         end
-        
-        lastNoteTime = startTime -- this should work because the last time its run will be the last note
-    end
-    print("Total Note Count: ".. totalNoteCount)
-    songLength = song:getDuration()
-    print(songLength)
-    songLengthToLastNote = lastNoteTime/1000
-    bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        print("Total Note Count: ".. totalNoteCount)
+        songLength = song:getDuration()
+        print(songLength)
+        songLengthToLastNote = lastNoteTime/1000
+        bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
 
+        currentBpm = metaData.bpm
+        if currentBpm then
+        print("BPM: "..currentBpm)
+        end
     return true
 end
 

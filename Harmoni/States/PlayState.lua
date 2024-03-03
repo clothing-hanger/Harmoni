@@ -32,6 +32,7 @@ function PlayState:enter()
     local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
     if not ok then State.switch(States.SongSelectState) return end
 
+    bpmIsInit = false
 
     
     ReceptorLeft = ReceptorLeftImage
@@ -72,6 +73,7 @@ function PlayState:enter()
     --set variables
     MusicTime = -10000
 
+    beatBump = {0}
     health = 1
     paused = false
     judgeColors = {0,0,0,0,0,0}
@@ -204,7 +206,59 @@ function PlayState:update(dt)
         hitTimes[i][4][4] = hitTimes[i][4][4]-(1*dt)
     end
 
+    PlayState:doBPMshit()
+
 end
+
+function PlayState:doBPMshit()
+    if not bpmIsInit then
+        bpmIsInit = true
+        BpmTimerStartTime = nil
+        nextBeat = nil
+    end
+    for i = 1, #timingPointsTable do
+        if timingPointsTable[i][1] then
+            if MusicTime >= timingPointsTable[i][1] then
+                currentBpm = timingPointsTable[i][2]
+                print("BPM change: " .. currentBpm)
+                table.remove(timingPointsTable, i)
+                break
+            end
+        else
+            currentBpm = metaData.bpm
+            print("BPM error idk")
+        end
+    end
+    if not BpmTimerStartTime and MusicTime > 0 then
+        BpmTimerStartTime = MusicTime
+        nextBeat = BpmTimerStartTime + (60000/currentBpm)
+        print("First BpmTimerStartTime: " .. BpmTimerStartTime)
+    end
+    if nextBeat and MusicTime >= nextBeat then
+        PlayState:beat()
+        BpmTimerStartTime = MusicTime
+        nextBeat = BpmTimerStartTime + (60000/currentBpm)
+    end
+end
+
+function PlayState:beat()
+    if combo < 25 then
+        beatBump = {0}
+    else
+        beatBump = {combo/7500}
+    end
+
+    if combo > 200 then
+        beatBump = {0.02666666}
+    end
+
+    if beatBumpTimer then
+        Timer.cancel(beatBumpTimer)
+    end
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "in-bounce") -- lmfao why does in out bounce look genuinely better
+end
+
+
 
 function PlayState:doGradeShitIdk()
     if convertedAccuracy == 100 then 
@@ -604,60 +658,64 @@ function PlayState:draw()
 
     else
         blurEffect(function()
-        love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
+        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
         end)
-        if skinDrawUnderDim then
-            skinDrawUnderDim()
-        end
 
-        love.graphics.setColor(0,0,0,backgroundDim[1])
-        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
-        love.graphics.setColor(1,1,1,1)
-        --time bar
-        timeLeftPercent = (song:tell()/songLengthToLastNote)
-        love.graphics.rectangle("fill", 0, Inits.GameHeight-20, Inits.GameWidth*timeLeftPercent, 20)
-        
-        love.graphics.pop()
-        if skinDrawAboveDimUnderNotes then
-            skinDrawAboveDimUnderNotes()
-        end
 
         love.graphics.push()
-            if downScroll then
-                love.graphics.translate(0, Inits.GameHeight-NoteUp:getHeight()-verticalNoteOffset) 
-            else
-                love.graphics.translate(0, verticalNoteOffset)
+            if skinDrawUnderDim then
+                skinDrawUnderDim()
             end
-       
 
-                for i = 1,4 do
-                    local inp = allInputs[i]
-                    local spr = _G["Receptor" .. AllDirections[i]]
-                    if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                    love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-                end
+            love.graphics.setColor(0,0,0,backgroundDim[1])
+            love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+            love.graphics.setColor(1,1,1,1)
+            --time bar
+            timeLeftPercent = (song:tell()/songLengthToLastNote)
+            love.graphics.rectangle("fill", 0, Inits.GameHeight-20, Inits.GameWidth*timeLeftPercent, 20)
+            
+            love.graphics.pop()
+            if skinDrawAboveDimUnderNotes then
+                skinDrawAboveDimUnderNotes()
+            end
 
-
-
-        
             love.graphics.push()
-                if gameOverNotePush[1] ~= 0 then
-                    love.graphics.translate(0, gameOverNotePush[1])
+                if downScroll then
+                    love.graphics.translate(0, Inits.GameHeight-NoteUp:getHeight()-verticalNoteOffset) 
+                else
+                    love.graphics.translate(0, verticalNoteOffset)
                 end
+        
 
-                for i, lane in ipairs(lanes) do
-                    for j, note in ipairs(lane) do
-                        if currentVelocity then
-                            local currentScrollVelocity = currentVelocity
-                        else
-                            currentScrollVelocity = 0
-                        end
-                        if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
-                            local noteImg = _G["Note" .. AllDirections[i]]
-                            love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                    for i = 1,4 do
+                        local inp = allInputs[i]
+                        local spr = _G["Receptor" .. AllDirections[i]]
+                        if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                        love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                    end
+
+
+
+            
+                love.graphics.push()
+                    if gameOverNotePush[1] ~= 0 then
+                        love.graphics.translate(0, gameOverNotePush[1])
+                    end
+
+                    for i, lane in ipairs(lanes) do
+                        for j, note in ipairs(lane) do
+                            if currentVelocity then
+                                local currentScrollVelocity = currentVelocity
+                            else
+                                currentScrollVelocity = 0
+                            end
+                            if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
+                                local noteImg = _G["Note" .. AllDirections[i]]
+                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                            end
                         end
                     end
-                end
+                love.graphics.pop()
             love.graphics.pop()
 
         love.graphics.pop()
@@ -665,10 +723,10 @@ function PlayState:draw()
     
             love.graphics.setFont(BigFont)
             love.graphics.setColor(0,0.5,1)
-            love.graphics.print(math.floor(printableScore[1]),3,3)
+            love.graphics.print(math.floor(printableScore[1]),3,3-(beatBump[1]*100))
             love.graphics.setColor(1,1,1)
     
-            love.graphics.print(math.floor(printableScore[1]))
+            love.graphics.print(math.floor(printableScore[1]),0,0-(beatBump[1]*50))
     
             love.graphics.setFont(DefaultFont)
     
@@ -742,19 +800,19 @@ function PlayState:draw()
             love.graphics.printf(combo, 0, 240+judgePos[1], Inits.GameWidth, "center")
         end
         love.graphics.setColor(0,0.5,1)
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3, Inits.GameWidth, "right")
-        love.graphics.printf(grade, 3, 58, Inits.GameWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
+        love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
 
         accuracyColor = printableAccuracy[1]/100
     
         love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
     
     
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0, Inits.GameWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0-(beatBump[1]*50), Inits.GameWidth, "right")
         gradeColors = {1,1,1}
         love.graphics.setColor(gradeColors)
 
-        love.graphics.printf(grade, 0, 55, Inits.GameWidth, "right")
+        love.graphics.printf(grade, 0, 55-(beatBump[1]*50), Inits.GameWidth, "right")
 
         love.graphics.setFont(DefaultFont)
         love.graphics.setColor(0,0,0)

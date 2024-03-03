@@ -147,9 +147,9 @@ function love.load()
     ]]
     Tips = {
         "Press F11 to Fullscreen",
-        "Please report any bugs you find by opening a Github issue",
+        "Please report any bugs you find by opening a Github issue or reporting it in the Harmoni Discord server",
         "Press R in the Song Select menu to pick a random song", 
-        "Request features by opening a Github issue",
+        "Request features by opening a Github issue or asking about it in the Harmoni Discord server",
         "Don't miss",
         "Wishlist Rit on Steam!",
         "Hold ALT and scroll to change the volume",
