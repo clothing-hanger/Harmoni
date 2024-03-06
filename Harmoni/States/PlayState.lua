@@ -209,7 +209,7 @@ function PlayState:update(dt)
     PlayState:doBPMshit()
 
 end
-m
+
 function PlayState:doBPMshit()
     if not bpmIsInit then
         bpmIsInit = true
