@@ -108,7 +108,7 @@ Gameplay = {
     {"Bot Play", BotPlay, "Watch a perfect playthrough of the song"},
     {"Note Lane Height", verticalNoteOffset, "The space between the receptors and edge of the screen"},
     {"Background Blur", backgroundBlurSetting, "How blurred the background is during gameplay"},
-    {"Instant Pause", instantPause, "Skip the 0.3 second timer before pausing when you press the pause button"},
+    {"Instant Pause", instantPause, "Skip the 0.8 second timer before pausing when you press the pause button"},
 }
 
 Menu = {
@@ -257,7 +257,11 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
-
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                else
+                    settingEditAmount = 1
+                end
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]-settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1
@@ -272,6 +276,11 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                else
+                    settingEditAmount = 1
+                end
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]+settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1
