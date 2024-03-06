@@ -75,6 +75,7 @@ function PlayState:enter()
 
     beatBump = {0}
     health = 1
+    comboAlertPosition = {Inits.GameWidth,Inits.GameHeight/2,1}
     paused = false
     judgeColors = {0,0,0,0,0,0}
     judgePos = {0}
@@ -341,11 +342,25 @@ end
 
 function incrementCombo()
     combo = combo + 1
+    if combo % 100 == 0 then
+        comboAlertFunction(combo)
+    end
     if comboTween then
         Timer.cancel(comboTween)
     end
     comboSize = {1.5}
     comboTween = Timer.tween(0.5, comboSize, {1}, "out-quad")
+end
+
+function comboAlertFunction(comboAlertNum)
+    comboAlert = tostring(comboAlertNum) .. " Combo!"
+    if comboAlertNum > 500 then
+        comboAlert = tostring(comboAlertNum) .. " Combo!!"
+    end
+    comboAlertPosition = {Inits.GameWidth,Inits.GameHeight/2,1}
+    Timer.tween(0.5, comboAlertPosition, {[1] = comboAlertPosition[1]-400}, "out-quad", function()
+        Timer.tween(0.2, comboAlertPosition, {[2] = comboAlertPosition[2]+35, [3] = 0}, "out-expo")
+    end)
 end
 
 function judge(noteTime)
@@ -840,7 +855,13 @@ function PlayState:draw()
             love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
         end
         
+        if combo < 500 then
+            love.graphics.setColor(1,1,1,comboAlertPosition[3])
+        else
+            love.graphics.setColor(1,0.5,0,comboAlertPosition[3])
 
+        end
+        love.graphics.print((comboAlert or ""), comboAlertPosition[1], comboAlertPosition[2])
 
       --  love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
     

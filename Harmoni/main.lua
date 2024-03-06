@@ -7,11 +7,11 @@ Inits = require("inits")
 
 aLotOfSpacesLmfao = " "
 function love.errorhandler(msg)
-    notification(msg, notifErrorIcon)
    love.window.showMessageBox("oops lmao".. aLotOfSpacesLmfao, "Harmoni crashed :( just open the game again i guess idk lmao" .. aLotOfSpacesLmfao ..debug.traceback("\n\nError: \n\n" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", ""), "error")
 end
 
 
+function print() return end
 
 
 if love.filesystem.isFused() then
@@ -432,7 +432,7 @@ function love.draw()
     love.graphics.setColor(0,0,0,volumeOpacity[1])
     love.graphics.arc("fill",200,300,100,0, printableVolume[1]*math.pi*2)
     love.graphics.setColor(0,1,1,volumeOpacity[1])
-    if printableVolume[1] < 0.98 then
+    if printableVolume[1] < 0.99 then
         love.graphics.arc("line",200,300,100,0, printableVolume[1]*math.pi*2)
     else
         love.graphics.circle("line",200,300,100)
@@ -458,6 +458,8 @@ function love.draw()
 
         love.graphics.rectangle("line", Inits.WindowWidth-405, i*55, 400, 50)
     end
+    love.graphics.setColor(1,1,1,1)
+
     love.graphics.pop()
 
 
