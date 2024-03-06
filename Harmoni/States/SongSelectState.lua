@@ -277,8 +277,14 @@ function SongSelectState:draw()
     end
     love.graphics.pop()
     love.graphics.setColor(0,0,0,0.9)
+
     love.graphics.rectangle("fill", 0, 0, 500, 200, 7, 7, 50)
+    love.graphics.setColor(0.5,0.5,0.5)
+    if banner then
+        love.graphics.draw(banner, 0, 0, nil, 500/banner:getWidth(), 97/banner:getHeight())
+    end
     love.graphics.setColor(0,1,1)
+
     love.graphics.rectangle("line", 0, 0, 500, 200, 7, 7, 50)
     love.graphics.setFont(MenuFontBig)
     love.graphics.printf("Now Playing: ", 20, 20, 500)

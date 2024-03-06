@@ -14,7 +14,7 @@ local AllDirections = {
 }
 
 function PlayState:enter()
-    --load assets
+    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading
     hitTimes = {}
     curScreen = "play"
 
@@ -209,7 +209,7 @@ function PlayState:update(dt)
     PlayState:doBPMshit()
 
 end
-
+m
 function PlayState:doBPMshit()
     if not bpmIsInit then
         bpmIsInit = true
@@ -225,8 +225,10 @@ function PlayState:doBPMshit()
                 break
             end
         else
-            currentBpm = metaData.bpm
-            print("BPM error idk")
+            if currentBpm ~= metaData.bpm then
+                currentBpm = metaData.bpm
+                notification("BPM Not Found", notifErrorIcon)
+            end
         end
     end
     if not BpmTimerStartTime and MusicTime > 0 then
@@ -242,20 +244,19 @@ function PlayState:doBPMshit()
 end
 
 function PlayState:beat()
-    if combo < 25 then
-        beatBump = {0}
+
+    if combo < 500 then
+        beatBump = {(combo/7500)/2}
     else
-        beatBump = {combo/7500}
+        beatBump = {(500/7500)/2} --   
     end
 
-    if combo > 200 then
-        beatBump = {0.02666666}
-    end
+
 
     if beatBumpTimer then
         Timer.cancel(beatBumpTimer)
     end
-    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "in-bounce") -- lmfao why does in out bounce look genuinely better
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "out-quad") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
 end
 
 
@@ -796,6 +797,11 @@ function PlayState:draw()
     
         love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(BigFont)
+        if combo < 500 then
+            love.graphics.setColor(1,1,1)
+        else
+            love.graphics.setColor(1,0.5,0)
+        end
         if combo > 0 then
             love.graphics.printf(combo, 0, 240+judgePos[1], Inits.GameWidth, "center")
         end

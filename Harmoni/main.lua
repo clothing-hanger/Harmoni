@@ -1,12 +1,13 @@
  
-versionNumber = "Harmoni Beta 1.4.1"
+versionNumber = "Harmoni Beta 1.5.0"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
 
-aLotOfSpacesLmfao = "                                                                               "
-function love.errorhandler(msg) 
+aLotOfSpacesLmfao = " "
+function love.errorhandler(msg)
+    notification(msg, notifErrorIcon)
    love.window.showMessageBox("oops lmao".. aLotOfSpacesLmfao, "Harmoni crashed :( just open the game again i guess idk lmao" .. aLotOfSpacesLmfao ..debug.traceback("\n\nError: \n\n" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", ""), "error")
 end
 
@@ -123,7 +124,8 @@ function love.load()
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
 
-
+    notificationsTable = {}
+ 
 
 
     require("Modules.Debug")
@@ -139,6 +141,16 @@ function love.load()
     kofiImage = love.graphics.newImage("Images/TITLE/kofi.png")
     discordImage = love.graphics.newImage("Images/TITLE/discord.png")
     hengImage = love.graphics.newImage("Images/TITLE/heng.png")
+
+
+
+
+
+    --notificationImages 
+    notifErrorIcon = love.graphics.newImage("Images/SHARED/Error Icon.png")
+    notifInfoIcon = love.graphics.newImage("Images/SHARED/Info Icon.png")
+    notifGeneralIcon = love.graphics.newImage("Images/unused/Note.png")
+
 
 
     --[[
@@ -178,9 +190,6 @@ function love.load()
     }
 
 
-
-
-
     ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
     ReallyFuckingBigFont = love.graphics.newFont("Fonts/framdit.ttf", 400)
 
@@ -189,24 +198,26 @@ function love.load()
     MenuFontBig = love.graphics.newFont("Fonts/verdana.ttf", 30)
     MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
+    NotificationFont = love.graphics.newFont("Fonts/verdana.ttf", 14)
+
 
     DefaultFont = love.graphics.newFont(12)
     State.switch(States.PreLaunchState)
 
 
+    clearNotifs()
+
 end
 
 function love.update(dt)
+
+    deltaTime = dt
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
 
     Input:update()
     State.update(dt)
     Timer.update(dt)
-
-
-
-    
 
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
@@ -283,9 +294,6 @@ function love.update(dt)
 
     end
 
-
-
-
 end
 
 function takeScreenshot()
@@ -295,7 +303,9 @@ function takeScreenshot()
         screenshotSize = {1}
         screenshotTranslate = {0}
         screenshotSizeTween = Timer.tween(0.5, screenshotSize, {0.2}, "out-quad", function()
-            Timer.tween(0.7, screenshotTranslate, {screenshot:getWidth()*(screenshotSize[1]+10)}, "in-expo")
+            Timer.tween(0.7, screenshotTranslate, {screenshot:getWidth()*(screenshotSize[1]+10)}, "in-expo", function()
+                notification("Screenshot Saved", notifInfoIcon)
+            end)
         end)
 
     end)
@@ -310,6 +320,9 @@ end
 
 function love.keypressed(key)
     if key == "backspace" then
+
+        --notification(tostring(Tips[love.math.random(1,#Tips)]), notifGeneralIcon)
+        --[[
         -- get the byte offset to the last UTF-8 character in the string.
         local byteoffset = utf8.offset(search, -1)
 
@@ -318,6 +331,9 @@ function love.keypressed(key)
             -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
             search = string.sub(search, 1, byteoffset - 1)
         end
+
+        --]]
+
     end
 end
 
@@ -326,6 +342,28 @@ function tweenVolumeDisplay()
         Timer.cancel(volumeTween)
     end
     volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-back")  --using out-back makes it feel snappier
+end
+
+
+function notification(contents, icon)
+    notifContents = (contents or "Error- No Notification Text")
+    notifIcon = (icon or notifGeneralIcon)
+    table.insert(notificationsTable, 1, {notifContents, notifIcon, 1})
+    if #notificationsTable == 1 then
+        clearNotifs(true)
+    end
+end
+
+function clearNotifs(restart)
+    if restart then
+        if notifTimer then
+            Timer.cancel(notifTimer)
+        end
+    end
+    notifTimer = Timer.after(1, function()
+        table.remove(notificationsTable, #notificationsTable)
+        clearNotifs()
+    end)
 end
 
 function love.wheelmoved(x,y)
@@ -406,6 +444,21 @@ function love.draw()
 
     love.graphics.print(math.ceil(love.audio.getVolume()*100) .. "%",Inits.WindowWidth-200+71,Inits.WindowHeight-250+136)
     love.graphics.setColor(1,1,1)
+    love.graphics.push()
+    love.graphics.translate(0, -50)
+    love.graphics.setFont(NotificationFont)
+
+    for i = 1,#notificationsTable do
+        love.graphics.setColor(0,0,0,0.6)
+        love.graphics.rectangle("fill", Inits.WindowWidth-405, i*55, 400, 50)
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(notificationsTable[i][2], Inits.WindowWidth-(notificationsTable[i][2]:getWidth()-70), i*55, nil, 50/notificationsTable[i][2]:getWidth(), 50/notificationsTable[i][2]:getHeight())
+        love.graphics.print(notificationsTable[i][1], Inits.WindowWidth-405+25/2, (i*55+28/2))
+        love.graphics.setColor(0,1,1,1)
+
+        love.graphics.rectangle("line", Inits.WindowWidth-405, i*55, 400, 50)
+    end
+    love.graphics.pop()
 
 
 end
