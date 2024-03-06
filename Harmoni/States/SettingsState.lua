@@ -26,6 +26,7 @@ function setDefaultSettings()
     backgroundBlurSetting = 0
     instantPause = false
     currentSkin = "Skins/Default Arrow/"
+    notification("Default Settings Loaded", notifInfoIcon)
 
 end
 
@@ -52,6 +53,7 @@ function writeSettings()
     luaStr = luaStr .. "}"
 
     love.filesystem.write("settings", luaStr)
+    notification("Settings Saved", notifInfoIcon)
 end
 
 function loadSettings()
@@ -234,6 +236,8 @@ function SettingsState:update(dt)
                 love.filesystem.load(Skin .. "skin.lua")()
                 currentSkin = Skin .. "skin.lua"
                 loadSkinPreview()
+                notification("Skin Loaded", notifInfoIcon)
+
 
         end
     elseif Input:pressed("MenuBack") then

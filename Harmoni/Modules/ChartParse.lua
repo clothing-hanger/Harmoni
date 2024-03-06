@@ -1,8 +1,8 @@
 function quaverParse(file)
     
     if not love.filesystem.getInfo(file) then
-        love.window.showMessageBox("Chart not loaded", "The chart failed to load. sorry lmao i suck at coding", "error")
-        return 
+        notification("Chart File Not Found!", notifErrorIcon)
+        return false
     end
     
     
@@ -16,6 +16,7 @@ function quaverParse(file)
         for i = 1,4 do
             table.insert(lanes, {})
         end
+        banner = nil
         metaData = {
             name = chart.Title,
             song = chart.AudioFile,
@@ -25,24 +26,31 @@ function quaverParse(file)
             diffName = chart.DifficultyName,
             creator = chart.Creator,
             background = chart.BackgroundFile,
+            banner = chart.BannerFile or nil,
             previewTime = chart.SongPreviewTime or 0, -- also wont be used here
             noteCount = 0,
             length = 0,
-            bpm = 0,   -- idk if ill ever use bpm 😭😭 idk how it works
+            bpm = 0,
             inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
         }
 
+        
+
         if tostring(metaData.inputMode) == "7" and curScreen ~= "songSelect" then
-            love.window.showMessageBox("Unsupported Chart Type", "7 Key charts are not properly supported. Please choose a different chart or difficulty.", "error")
+            notification("7 Key Not Supported!", notifErrorIcon)
             return false
         end
         song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
 
+       -- if metaData.banner and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.banner) then           this works but it looks ugly so i just commented out this
+       --     banner = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.banner)
+       --     print("Banner")
+       -- end
         firstNoteTime = nil
 
 
-        for i = 1,#chart.TimingPoints do    -- ?????? why does this not work 😭😭😭😭
+        for i = 1,#chart.TimingPoints do    -- ?????? why does this not work 😭😭😭😭          why did i type this it literally does work??
             local timingPoint = chart.TimingPoints[i]
             local startTime = timingPoint.StartTime
             local bpm = timingPoint.Bpm
