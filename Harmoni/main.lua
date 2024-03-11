@@ -1,5 +1,5 @@
  
-versionNumber = "Harmoni Beta 1.5.0"
+versionNumber = "Harmoni Beta 2.0"
 
 local utf8 = require("utf8")
 moonshine = require("moonshine")
@@ -360,7 +360,7 @@ function clearNotifs(restart)
             Timer.cancel(notifTimer)
         end
     end
-    notifTimer = Timer.after(1, function()
+    notifTimer = Timer.after(3, function()
         table.remove(notificationsTable, #notificationsTable)
         clearNotifs()
     end)

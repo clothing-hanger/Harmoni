@@ -28,6 +28,9 @@ OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
 MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
 
 
+judgementSize = 150
+
+
 
 
 skinLoad = function()

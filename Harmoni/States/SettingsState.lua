@@ -262,6 +262,10 @@ function SettingsState:update(dt)
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
 
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                end
+
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]-settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1
@@ -276,6 +280,10 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
+                
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                end
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]+settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1

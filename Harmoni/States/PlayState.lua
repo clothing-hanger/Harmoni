@@ -55,12 +55,12 @@ function PlayState:enter()
     Miss = MissImage
 
     
-    marvTiming = 36
-    perfTiming = 86
-    greatTiming = 136
-    goodTiming = 186
-    okayTiming = 236
-    missTiming = 286
+    marvTiming = 26
+    perfTiming = 56
+    greatTiming = 86
+    goodTiming = 106
+    okayTiming = 126
+    missTiming = 146
 
     marvCount = 0
     perfCount = 0
@@ -146,7 +146,7 @@ function PlayState:update(dt)
     end   
     
     if printableHealth[1] <= 0 and not gameOver then            
-        PlayState:gameOver()
+        --PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
 
@@ -364,20 +364,10 @@ function comboAlertFunction(comboAlertNum)
 end
 
 function judge(noteTime)
-
-  --  print(noteTime)
     
-    judgePos = {-10}
-
-
-
-
-
-    
-
     if math.abs(noteTime) < marvTiming then  -- marvelous
         table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,1,1}})
-        score = score + bestScorePerNote
+        score = score + (bestScorePerNote*(6/6))
         judgeColors = {1,0,0,0,0,0}
         marvCount = marvCount + 1
         judgeCountTween(1)
@@ -385,7 +375,7 @@ function judge(noteTime)
         health = math.min(health + 0.025, 1)
     elseif math.abs(noteTime) < perfTiming then  -- perfect
         table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,78/255,1}})
-        score = score + (bestScorePerNote/2)
+        score = score + (bestScorePerNote*(5/6))
         judgeColors = {0,1,0,0,0,0}
         judgeCountTween(2)
         incrementCombo()
@@ -393,7 +383,7 @@ function judge(noteTime)
         health = math.min(health + 0.02, 1)
     elseif math.abs(noteTime) < greatTiming then  -- great
         table.insert(hitTimes, {noteTime, MusicTime, 1, {92/255,1,82/255,1}})
-        score = score + (bestScorePerNote/3)
+        score = score + (bestScorePerNote*(4/6))
         greatCount = greatCount + 1
         judgeColors = {0,0,1,0,0,0}
         judgeCountTween(3)
@@ -401,7 +391,7 @@ function judge(noteTime)
         health = health - 0.01
     elseif math.abs(noteTime) < goodTiming then  -- good
         table.insert(hitTimes, {noteTime, MusicTime, 1, {0,61/255,1,1}})
-        score = score + (bestScorePerNote/4)
+        score = score + (bestScorePerNote*(3/6))
         judgeColors = {0,0,0,1,0,0}
         judgeCountTween(4)
         incrementCombo()
@@ -409,7 +399,7 @@ function judge(noteTime)
         health = health - 0.02
     elseif math.abs(noteTime) < okayTiming then  -- okay
         table.insert(hitTimes, {noteTime, MusicTime, 1, {129/255,0,1,1}})
-        score = score + (bestScorePerNote/5)
+        score = score + (bestScorePerNote*(2/6))
         judgeColors = {0,0,0,0,1,0}
         judgeCountTween(5)
         incrementCombo()
@@ -420,6 +410,7 @@ function judge(noteTime)
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
+        randomMissAngle = love.math.random(-25,25)
         combo = 0
         health = health - 0.075
     end
@@ -433,7 +424,19 @@ function judge(noteTime)
     if judgeTween then
         Timer.cancel(judgeTween)
     end
-    judgeTween = Timer.tween(0.1, judgePos, {0}, "out-quad")
+    judgePos = {0.5,0.5,0, 0}
+    curBPMJudgeBump = ((60000/currentBpm)/1000)/2
+
+    judgeTween = Timer.after(0, function() 
+
+        Timer.tween(curBPMJudgeBump, judgePos, {[1] = 1}, "out-quad")
+        Timer.tween(curBPMJudgeBump, judgePos, {[2] = 1}, "out-back")
+        Timer.tween(0.05, judgePos, {[4] = 0}, "out-quad", function()
+            Timer.tween(0.05, judgePos, {[4] = 0}, "out-quad")
+        end)
+
+    end)
+
 
 end
 
@@ -748,20 +751,24 @@ function PlayState:draw()
     
     
     
+            love.graphics.push()
+            love.graphics.translate(0,(judgePos[4] or 0))
     
         love.graphics.setColor(1,1,1,judgeColors[1])
-        love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2), 200, nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[2])
-        love.graphics.draw(Perfect, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])         
+        love.graphics.draw(Perfect, (Inits.GameWidth/2)-(judgementWidth/Perfect:getWidth()/2), 200, nil, judgementWidth/Perfect:getWidth() * (judgePos[2] or 0), judgementHeight/Perfect:getHeight() * (judgePos[1] or 0), Perfect:getWidth()/2, Perfect:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[3])
-        love.graphics.draw(Great, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Great, (Inits.GameWidth/2)-(judgementWidth/Great:getWidth()/2), 200, nil, judgementWidth/Great:getWidth() * (judgePos[2] or 0), judgementHeight/Great:getHeight() * (judgePos[1] or 0), Great:getWidth()/2, Great:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[4])
-        love.graphics.draw(Good, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Good, (Inits.GameWidth/2)-(judgementWidth/Good:getWidth()/2), 200, nil, judgementWidth/Good:getWidth() * (judgePos[2] or 0), judgementHeight/Good:getHeight() * (judgePos[1] or 0), Good:getWidth()/2, Good:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[5])
-        love.graphics.draw(Okay, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+
+        love.graphics.draw(Okay, (Inits.GameWidth/2)-(judgementWidth/Okay:getWidth()/2), 200, nil, judgementWidth/Okay:getWidth() * (judgePos[2] or 0), judgementHeight/Okay:getHeight() * (judgePos[1] or 0), Okay:getWidth()/2, Okay:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[6])
-        love.graphics.draw(Miss, (Inits.GameWidth/2)-(Marvelous:getWidth()/2), 200 + judgePos[1])
+        love.graphics.draw(Miss, (Inits.GameWidth/2)-(judgementWidth/Miss:getWidth()/2), 200, math.rad((randomMissAngle or 0)), judgementWidth/Miss:getWidth() * (judgePos[2] or 0), judgementHeight/Miss:getHeight() * (judgePos[1] or 0), Miss:getWidth()/2, Miss:getHeight()/2)
         love.graphics.setColor(1,1,1,1)
+        love.graphics.pop()
         love.graphics.rectangle("fill",Inits.GameWidth/2-1, Inits.GameHeight/2-3, 2, 26)
 
         for i = 1,#hitTimes do
@@ -839,12 +846,12 @@ function PlayState:draw()
         love.graphics.setColor(0,0,0)
 
     
-        love.graphics.rectangle("fill", 896, 636, 13, -508)
+    --    love.graphics.rectangle("fill", 896, 636, 13, -508)
     
         love.graphics.setColor(0,0.5,1)
     
     
-        love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+       -- love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
         love.graphics.setFont(BigFont)
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
