@@ -119,15 +119,9 @@ function PlayState:enter()
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
 
-    speedModifier = 1
+    
+    song:setPitch(Modifiers[2])
 
-    song:setPitch(speedModifier)
-
-    for i = 1,#lanes do
-        for q = 1,#lanes[i] do
-            lanes[i][q][1] = lanes[i][q][1] / speedModifier
-        end
-    end
 
 end
 

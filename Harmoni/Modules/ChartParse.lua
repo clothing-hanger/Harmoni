@@ -27,7 +27,7 @@ function quaverParse(file)
             creator = chart.Creator,
             background = chart.BackgroundFile,
             banner = chart.BannerFile or nil,
-            previewTime = chart.SongPreviewTime or 0, -- also wont be used here
+            previewTime = (chart.SongPreviewTime or 0) / Modifiers[2], -- also wont be used here
             noteCount = 0,
             length = 0,
             bpm = 0,
@@ -36,7 +36,7 @@ function quaverParse(file)
 
         
 
-        if tostring(metaData.inputMode) == "7" and curScreen ~= "songSelect" then
+        if tostring(metaData.inputMode) == "7" then
             notification("7 Key Not Supported!", notifErrorIcon)
             return false
         end
@@ -55,14 +55,14 @@ function quaverParse(file)
         for i = 1,#chart.TimingPoints do    -- ?????? why does this not work 😭😭😭😭          why did i type this it literally does work??
             local timingPoint = chart.TimingPoints[i]
             local startTime = timingPoint.StartTime
-            local bpm = timingPoint.Bpm
+            local bpm = (timingPoint.Bpm or 0) / Modifiers[2]
             table.insert(timingPointsTable, {startTime, bpm})
             if bpm and startTime then
                 --print(" TimingPoint " ..bpm .. "    " .. startTime)
             end
 
             if i == 1 then
-                metaData.bpm = timingPoint.Bpm
+                metaData.bpm = timingPoint.Bpm / Modifiers[2]
                 --print(timingPoint.Bpm)
             end
         end
@@ -70,7 +70,7 @@ function quaverParse(file)
 
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
-            local startTime = hitObject.StartTime
+            local startTime = (hitObject.StartTime or 0) / Modifiers[2]
             if not startTime then goto continue end
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane
@@ -90,11 +90,14 @@ function quaverParse(file)
             lastNoteTime = startTime -- this should work because the last time its run will be the last note
             ::continue::
         end
+        
 
         for i = 1, #chart.SliderVelocities do
             local velocity = chart.SliderVelocities[i]
-            local startTime = velocity.StartTime
+            local startTime = velocity.StartTime / Modifiers[2]
             local velocityChange = velocity.Multiplier
+
+            
 
             table.insert(scrollVelocities, {startTime = startTime, multiplier = velocityChange})
         end
