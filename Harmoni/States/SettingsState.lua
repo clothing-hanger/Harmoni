@@ -48,20 +48,17 @@ function writeSettings()
     luaStr = luaStr .. "\tverticalNoteOffset = " .. tostring(verticalNoteOffset) .. ",\n"
     luaStr = luaStr .. "\tbackgroundBlurSetting = " .. tostring(backgroundBlurSetting) .. ",\n"
     luaStr = luaStr .. "\tinstantPause = " .. tostring(instantPause) .. ",\n"
-<<<<<<< HEAD
     luaStr = luaStr .. "\tcurrentSkin = " .."'" .. Skin .. "',\n"
     luaStr = luaStr .. "\tdefaultVolume = " .. tostring(defaultVolume) .. ",\n"
     luaStr = luaStr .. "}"
 
     love.filesystem.write("settings", luaStr)
     notification("Settings Saved", notifInfoIcon)
-=======
     luaStr = luaStr .. "\tcurrentSkin = " .."'" .. Skin .. "skin.lua'" .. ",\n"
     luaStr = luaStr .. "\tvolume = " .. tostring(volume) .. ",\n"
     luaStr = luaStr .. "}"
 
     love.filesystem.write("settings", luaStr)
->>>>>>> 64e0f9e92dfe61f1143a14bfda9601520192ef6c
 end
 
 function loadSettings()
