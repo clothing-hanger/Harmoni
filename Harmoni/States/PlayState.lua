@@ -22,6 +22,12 @@ function PlayState:enter()
     for i = 1, 4 do
         table.insert(lanes, {})
     end
+    scrollVelocities = {}
+    trackRounding = 100
+    velocityPositionMakers = {}
+    currentTrackPosition = 0
+    currentSvIndex = 1
+    initialScrollVelocity = 1
 
     MusicTime = -2000
 
@@ -31,6 +37,11 @@ function PlayState:enter()
 
     local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
     if not ok then State.switch(States.SongSelectState) return end
+
+    self:initializePositionMarkers()
+    self:updateCurrentTrackPosition()
+    self:initPositions()
+    self:updateNotePosition(currentTrackPosition, MusicTime)
 
     bpmIsInit = false
 
@@ -114,10 +125,78 @@ function PlayState:enter()
 
     for i = 1,#lanes do
         for q = 1,#lanes[i] do
-            lanes[i][q] = lanes[i][q] / speedModifier
+            lanes[i][q][1] = lanes[i][q][1] / speedModifier
         end
     end
 
+end
+
+function PlayState:initializePositionMarkers()
+    if #scrollVelocities == 0 then return end
+
+    local position = scrollVelocities[1].startTime * initialScrollVelocity * trackRounding
+
+    table.insert(velocityPositionMakers, position)
+
+    for i = 2, #scrollVelocities do
+        local vel = scrollVelocities[i]
+        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 1) * trackRounding
+        table.insert(velocityPositionMakers, position)
+    end
+
+    print("AMOUNT OF POSITION MARKERS: " .. #velocityPositionMakers)
+end
+
+function PlayState:updateCurrentTrackPosition()
+    while currentSvIndex < #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
+        currentSvIndex = currentSvIndex + 1
+    end
+
+    currentTrackPosition = self:GetPositionFromTime(MusicTime, currentSvIndex)
+end
+
+function PlayState:GetPositionFromTime(time, index)
+    if index == 1 then return time * initialScrollVelocity * trackRounding end
+    local index = index - 1
+    local curPos = velocityPositionMakers[index]
+    curPos = curPos + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 1) * trackRounding)
+
+    return curPos
+end
+
+function PlayState:getPositionFromTime(time)
+    local _i = 1
+    for i = 1, #scrollVelocities do
+        if time < scrollVelocities[i].startTime then
+            _i = i
+            break
+        end
+    end
+
+    return self:GetPositionFromTime(time, _i)
+end
+
+function PlayState:initPositions()
+    for i = 1, #lanes do
+        for q = 1, #lanes[i] do
+            lanes[i][q][2] = self:getPositionFromTime(lanes[i][q][1])
+        end
+    end
+end
+
+function PlayState:getNotePositions(offset, initialPos, lane)
+    return 0 + (((initialPos or 0) - offset) * _G["speed" .. lane] / trackRounding)
+end
+
+function PlayState:updateNotePosition(offset, curTime)
+    local spritePosition = 0
+
+    for i, lane in ipairs(lanes) do
+        for k, note in ipairs(lane) do
+            spritePosition = self:getNotePositions(offset, note[2], i)
+            note[3] = spritePosition
+        end
+    end
 end
 
 function PlayState:update(dt)
@@ -134,12 +213,14 @@ function PlayState:update(dt)
     end
 
     checkMiss()
-    doSVshit()
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
     
     end
+
+    self:updateCurrentTrackPosition()
+    self:updateNotePosition(currentTrackPosition, MusicTime)
 
 
     if printableHealth[1] < 0 then
@@ -233,21 +314,21 @@ function PlayState:doBPMshit()
         if timingPointsTable[i][1] then
             if MusicTime >= timingPointsTable[i][1] then
                 currentBpm = timingPointsTable[i][2]
-                print("BPM change: " .. currentBpm)
+                --print("BPM change: " .. currentBpm)
                 table.remove(timingPointsTable, i)
                 break
             end
         else
             if currentBpm ~= metaData.bpm then
                 currentBpm = metaData.bpm
-                notification("BPM Not Found", notifErrorIcon)
+                --notification("BPM Not Found", notifErrorIcon)
             end
         end
     end
     if not BpmTimerStartTime and MusicTime > 0 then
         BpmTimerStartTime = MusicTime
         nextBeat = BpmTimerStartTime + (60000/currentBpm)
-        print("First BpmTimerStartTime: " .. BpmTimerStartTime)
+        --print("First BpmTimerStartTime: " .. BpmTimerStartTime)
     end
     if nextBeat and MusicTime >= nextBeat then
         PlayState:beat()
@@ -342,8 +423,8 @@ end
 function checkMiss()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note > missTiming then
-                judge(MusicTime - note)
+            if MusicTime - note[1] > missTiming then
+                judge(MusicTime - note[1])
                 table.remove(lane, j)
                 health = health - 0.075
                 break
@@ -480,9 +561,9 @@ end
 function checkInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note < missTiming and MusicTime - note > -missTiming then
+            if MusicTime - note[1] < missTiming and MusicTime - note[1] > -missTiming then
                 if Input:pressed(allInputs[i]) and not paused then
-                    judge(MusicTime - note)
+                    judge(MusicTime - note[1])
                     table.insert(notesPerSecond, 1)
                     table.remove(lane, j)
                     break
@@ -496,8 +577,8 @@ end
 function checkBotInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note > -1 then
-                judge(MusicTime - note)
+            if MusicTime - note[1] > -1 then
+                judge(MusicTime - note[1])
                 table.remove(lane, j)
                 break
             end
@@ -505,22 +586,9 @@ function checkBotInput()
     end
 end
 
-function doSVshit()
-
-    for i = 1,#scrollVelocities do
-        if MusicTime >= scrollVelocities[i][1] then
-            currentScrollVelocity = scrollVelocities[i][2]
-            table.remove(scrollVelocities, i)
-            break
-        end
-    end
-    
-end
-
 function PlayState:draw()
 --love.graphics.setCanvas(GameScreen)
 
-print(currentScrollVelocity)
     if resultsScreen then
         love.graphics.push()
 
@@ -750,14 +818,9 @@ print(currentScrollVelocity)
 
                     for i, lane in ipairs(lanes) do
                         for j, note in ipairs(lane) do
-                            if currentVelocity then
-                                local currentScrollVelocity = currentVelocity
-                            else
-                                currentScrollVelocity = 0
-                            end
-                            if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
+                            if note[3] < Inits.GameHeight then
                                 local noteImg = _G["Note" .. AllDirections[i]]
-                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*(_G["speed" .. i]*currentScrollVelocity),nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
                             end
                         end
                     end

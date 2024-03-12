@@ -49,6 +49,8 @@ function quaverParse(file)
        -- end
         firstNoteTime = nil
 
+        initialScrollVelocity = chart.initialScrollVelocity or 1
+
 
         for i = 1,#chart.TimingPoints do    -- ?????? why does this not work 😭😭😭😭          why did i type this it literally does work??
             local timingPoint = chart.TimingPoints[i]
@@ -56,12 +58,12 @@ function quaverParse(file)
             local bpm = timingPoint.Bpm
             table.insert(timingPointsTable, {startTime, bpm})
             if bpm and startTime then
-                print(" TimingPoint " ..bpm .. "    " .. startTime)
+                --print(" TimingPoint " ..bpm .. "    " .. startTime)
             end
 
             if i == 1 then
                 metaData.bpm = timingPoint.Bpm
-                print(timingPoint.Bpm)
+                --print(timingPoint.Bpm)
             end
         end
     
@@ -69,6 +71,7 @@ function quaverParse(file)
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
             local startTime = hitObject.StartTime
+            if not startTime then goto continue end
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane
 
@@ -77,7 +80,7 @@ function quaverParse(file)
             if lane > 4 then
                 return false
             end
-            table.insert(lanes[lane], startTime)
+            table.insert(lanes[lane], {startTime})
 
             if not firstNoteTime and startTime then
                 firstNoteTime = math.floor(startTime/1000)
@@ -85,15 +88,15 @@ function quaverParse(file)
             end
             
             lastNoteTime = startTime -- this should work because the last time its run will be the last note
+            ::continue::
         end
 
-
-        for i = 1,#chart.SliderVelocities do
+        for i = 1, #chart.SliderVelocities do
             local velocity = chart.SliderVelocities[i]
             local startTime = velocity.StartTime
             local velocityChange = velocity.Multiplier
 
-            table.insert(scrollVelocities, {startTime, velocityChange})
+            table.insert(scrollVelocities, {startTime = startTime, multiplier = velocityChange})
         end
 
         print("Total Note Count: ".. totalNoteCount)

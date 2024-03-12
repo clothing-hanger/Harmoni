@@ -5,6 +5,11 @@ print("Skin Loaded!")
 skinFolder = "Skins/Default Arrow/"
 
 
+
+--IMPORTANT
+--Remember to change the skinFolder string, or the skin will point to a different skin's folder
+
+
 ReceptorLeftImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorLeft.png")
 ReceptorDownImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorDown.png")
 ReceptorRightImage = love.graphics.newImage(skinFolder .. "RECEPTORS/ReceptorRight.png")
@@ -28,7 +33,10 @@ OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
 MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
 
 
-
+judgementHeight = 100
+judgementWidth = 325
+JudgementPosition = 250
+ComboPosition = 125
 
 skinLoad = function()
 end
