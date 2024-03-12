@@ -750,14 +750,10 @@ print(currentScrollVelocity)
 
                     for i, lane in ipairs(lanes) do
                         for j, note in ipairs(lane) do
-                            if currentVelocity then
-                                local currentScrollVelocity = currentVelocity
-                            else
-                                currentScrollVelocity = 0
-                            end
-                            if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
+
+                            if -(MusicTime - note)*_G["speed" .. i]*(currentScrollVelocity or 1) < Inits.GameHeight then
                                 local noteImg = _G["Note" .. AllDirections[i]]
-                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*(_G["speed" .. i]*currentScrollVelocity),nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*(_G["speed" .. i]*(currentScrollVelocity or 1)),nil,125/noteImg:getWidth(),125/noteImg:getHeight())
                             end
                         end
                     end
