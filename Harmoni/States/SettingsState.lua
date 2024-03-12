@@ -54,11 +54,6 @@ function writeSettings()
 
     love.filesystem.write("settings", luaStr)
     notification("Settings Saved", notifInfoIcon)
-    luaStr = luaStr .. "\tcurrentSkin = " .."'" .. Skin .. "skin.lua'" .. ",\n"
-    luaStr = luaStr .. "\tvolume = " .. tostring(volume) .. ",\n"
-    luaStr = luaStr .. "}"
-
-    love.filesystem.write("settings", luaStr)
 end
 
 function loadSettings()
@@ -87,8 +82,6 @@ function loadSettings()
         volume = defaultVolume
                 
         love.filesystem.load(Skin .. "/skin.lua")()
-                
-        love.filesystem.load(Skin:gsub("skin.luaskin.lua", "skin.lua"))()
         currentSkin = Skin:gsub("skin.lua", "")
         
     else
