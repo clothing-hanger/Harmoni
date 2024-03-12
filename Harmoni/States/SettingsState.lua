@@ -9,7 +9,7 @@ local AllDirections = {
 
 function setDefaultSettings()
     print(love.filesystem.getSaveDirectory())
-    print("Default Settings Restored.")
+    notification("Default Settings Restored", notifInfoIcon)
     startFullscreen = false
     defaultVolume = 0.02
     menuSongDelayTime = 0.2
@@ -25,6 +25,7 @@ function setDefaultSettings()
     verticalNoteOffset = 10
     backgroundBlurSetting = 0
     instantPause = false
+    bgBumpSetting = true
     currentSkin = "Skins/Default Arrow/"
     notification("Default Settings Loaded", notifInfoIcon)
 
@@ -48,6 +49,7 @@ function writeSettings()
     luaStr = luaStr .. "\tverticalNoteOffset = " .. tostring(verticalNoteOffset) .. ",\n"
     luaStr = luaStr .. "\tbackgroundBlurSetting = " .. tostring(backgroundBlurSetting) .. ",\n"
     luaStr = luaStr .. "\tinstantPause = " .. tostring(instantPause) .. ",\n"
+    luaStr = luaStr .. "\tbgBumpSetting = " .. tostring(bgBumpSetting) .. ",\n"
     luaStr = luaStr .. "\tcurrentSkin = " .."'" .. Skin .. "',\n"
     luaStr = luaStr .. "\tdefaultVolume = " .. tostring(defaultVolume) .. ",\n"
     luaStr = luaStr .. "}"
@@ -59,9 +61,14 @@ end
 function loadSettings()
     if love.filesystem.getInfo("settings") then
         local settings = love.filesystem.load("settings")()
+        print("settings loaded idfk")
+
         for k, v in pairs(settings) do
             _G[k] = v
+
         end
+
+
 
         for i = 1, 4 do
             _G["speed" .. i] = math.abs(speed)
@@ -96,10 +103,11 @@ end
 loadSettings()
 
 Tabs = {
-    {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur, Instant Pause"},
+    {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur, ...."},
     {"Menu", "Song Select Song Delay"},
     {"System", "Default Volume, Fullscreen"},
-    {"Skins", "Skins affect the way the game looks"}
+    {"Skins", "Skins affect the way the game looks"},
+    {"Open Game Folder", "Open the folder Harmoni saves data to (Screenshots, Music, and Save Date are here)"},
 }
 
 Gameplay = {
@@ -111,6 +119,7 @@ Gameplay = {
     {"Note Lane Height", verticalNoteOffset, "The space between the receptors and edge of the screen"},
     {"Background Blur", backgroundBlurSetting, "How blurred the background is during gameplay"},
     {"Instant Pause", instantPause, "Skip the 0.3 second timer before pausing when you press the pause button"},
+    {"Background Bumping", bgBumpSetting, "Background bumps depending on how high the combo is"},
 }
 
 Menu = {
@@ -158,27 +167,40 @@ function SettingsState:update(dt)
         System[2][2] = false
     end
 
-    if selectedSetting < 1 then
-        selectedSetting = 1
-    end
+
     if CurSettingsMenu == "Tabs" then
         if selectedSetting > #Tabs then
+            selectedSetting = 1
+        end
+        if selectedSetting < 1 then
             selectedSetting = #Tabs
         end
     elseif CurSettingsMenu == "Gameplay" then
         if selectedSetting > #Gameplay then
+            selectedSetting = 1
+        end
+        if selectedSetting < 1 then
             selectedSetting = #Gameplay
         end
     elseif CurSettingsMenu == "Menu" then
         if selectedSetting > #Menu then
+            selectedSetting = 1
+        end
+        if selectedSetting < 1 then
             selectedSetting = #Menu
         end
     elseif CurSettingsMenu == "System" then
         if selectedSetting > #System then
+            selectedSetting = 1
+        end
+        if selectedSetting < 1 then
             selectedSetting = #System
         end
     elseif CurSettingsMenu == "Skins" then
         if selectedSetting > #Skins then
+            selectedSetting = 1
+        end
+        if selectedSetting < 1 then
             selectedSetting = #Skins
         end
     end
@@ -261,6 +283,9 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                end
 
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]-settingEditAmount
             elseif CurSettingsMenu == "Menu" then
@@ -276,6 +301,9 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                end
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]+settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1
@@ -344,6 +372,7 @@ function saveSettings()
     verticalNoteOffset = Gameplay[6][2]
     backgroundBlurSetting = Gameplay[7][2]
     instantPause = Gameplay[8][2]
+    bgBumpSetting = Gameplay[9][2]
 
     if downScroll then
         speed = -speed
@@ -396,13 +425,8 @@ function SettingsState:draw()
         love.graphics.rectangle("line", 60, Inits.GameHeight-60, Inits.GameWidth-120, 50, 7, 7)
         love.graphics.setColor(0,0,0,1)
         if selectedSetting > 0 and selectedSetting <= #Tabs then
-            if selectedSetting == 1 then
-                love.graphics.setFont(MenuFontExtraSmall)
-                love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-47, Inits.GameWidth-120, "center")
-            else
-                love.graphics.setFont(MenuFontSmall)
-                love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-50, Inits.GameWidth-120, "center")
-            end
+            love.graphics.setFont(MenuFontSmall)
+            love.graphics.printf(Tabs[selectedSetting][2], 60, Inits.GameHeight-50, Inits.GameWidth-120, "center")
         end
     elseif CurSettingsMenu == "Gameplay" then
         for i = 1,#Gameplay do

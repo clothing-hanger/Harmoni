@@ -92,6 +92,7 @@ function PlayState:enter()
     printableScore = {score}
     printableHealth = {health}
     convertedAccuracy = 0
+    songInfoAlpha = 1
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
@@ -114,6 +115,10 @@ function PlayState:update(dt)
 
     if paused or gameOver then
         MusicTime = PausedMusicTime
+    end
+
+    if MusicTime > -1000 then
+        songInfoAlpha = songInfoAlpha - (1*dt)
     end
 
     if BotPlay then
@@ -850,6 +855,12 @@ function PlayState:draw()
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
         end
 
+        love.graphics.setColor(0,1,1,songInfoAlpha)
+        love.graphics.setFont(MediumFont)
+
+        love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 0, Inits.GameHeight/2-150, Inits.GameWidth, "center")
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.setFont(BigFont)
 
         if canBeSkipped then
             love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
@@ -921,10 +932,13 @@ function PlayState:draw()
                 pauseSelection = pauseSelection - 1
             elseif Input:pressed("MenuDown") then
                 pauseSelection = pauseSelection + 1
-
+            end
+            if pauseSelection > #options then
+                pauseSelection = 1
+            elseif pauseSelection < 1 then
+                pauseSelection = #options
             end
         end
-
     end
 
 

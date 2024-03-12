@@ -11,8 +11,6 @@ function love.errorhandler(msg)
 end
 
 
-function print() return end
-
 
 if love.filesystem.isFused() then
     function print() return end
@@ -119,7 +117,7 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
-    loadSettings()
+    --loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
