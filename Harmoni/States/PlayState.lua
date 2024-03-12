@@ -116,6 +116,13 @@ function PlayState:enter()
         skinLoad()
     end
 
+
+        BotPlay = Modifiers[7]
+    
+
+    if Gameplay[5][2] then
+        BotPlay = true
+    end
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
 
@@ -232,8 +239,11 @@ function PlayState:update(dt)
         end
     end   
     
-    if printableHealth[1] <= 0 and not gameOver then            
-        --PlayState:gameOver()
+    if printableHealth[1] <= 0 and not gameOver and not Modifiers[6] then            
+        PlayState:gameOver()
+    end
+    if Modifiers[3] and missCount > 1 and not gameOver and not Modifiers[6] then
+        PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
 

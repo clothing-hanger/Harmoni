@@ -24,13 +24,13 @@ ModifiersLabels = {
     {"Song Speed", "How fast the song plays"},
     {"Sudden Death", "You die if you miss a single note"},
     {"Lane Swap", "Left becomes right, up becomes down"},
-    {"No Scroll Velocities", "Disables Scroll Velocities"},
+    {"No Scroll Velocities", "Disables Scroll Velocities - NOT ADDED YET"},
     {"No Fail", "Don't die when you run out of health"},
     {"Bot Play", "Watch a perfect playthourgh of the song"},
-    {"Randomize", "Randomize the lanes"},
+    {"Randomize", "Randomize the lanes - NOT ADDED YET"},
 }
 
-
+disablePrint = true
 function love.errorhandler(msg)
 	msg = tostring(msg)
 

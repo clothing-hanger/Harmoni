@@ -80,6 +80,19 @@ function quaverParse(file)
             if lane > 4 then
                 return false
             end
+            if Modifiers[4] then
+                if lane == 1 then
+                    lane = 4
+                elseif lane == 2 then
+                    lane = 3
+                elseif lane == 3 then
+                    lane = 2
+                else
+                    lane = 1
+                end
+            end
+
+        
             table.insert(lanes[lane], {startTime})
 
             if not firstNoteTime and startTime then
@@ -94,14 +107,14 @@ function quaverParse(file)
 
         for i = 1, #chart.SliderVelocities do
             local velocity = chart.SliderVelocities[i]
-            local startTime = velocity.StartTime / Modifiers[2]
+            local startTime = (velocity.StartTime or 0) / Modifiers[2]
             local velocityChange = velocity.Multiplier
 
             
 
             table.insert(scrollVelocities, {startTime = startTime, multiplier = velocityChange})
         end
-
+ 
         print("Total Note Count: ".. totalNoteCount)
         songLength = song:getDuration()
         print(songLength)
