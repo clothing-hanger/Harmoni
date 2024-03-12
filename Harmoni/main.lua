@@ -11,8 +11,6 @@ function love.errorhandler(msg)
 end
 
 
-function print() return end
-
 
 if love.filesystem.isFused() then
     function print() return end
