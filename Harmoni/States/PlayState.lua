@@ -185,12 +185,7 @@ function PlayState:initPositions()
 end
 
 function PlayState:getNotePositions(offset, initialPos, lane)
-    -- downscroll y is 385, upscroll y is 0
-    if downScroll then
-        return 385 - (((initialPos or 0) - offset) * _G["speed" .. lane] / trackRounding)
-    else
-        return 0 + (((initialPos or 0) - offset) * _G["speed" .. lane] / trackRounding)
-    end
+    return 0 + (((initialPos or 0) - offset) * _G["speed" .. lane] / trackRounding)
 end
 
 function PlayState:updateNotePosition(offset, curTime)
