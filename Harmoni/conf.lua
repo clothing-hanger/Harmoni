@@ -1,9 +1,9 @@
 function love.conf(t)
     t.window.title = "Harmoni"
     t.identity = "harmoni"
-    t.window.width = 1280
-    t.window.height = 720
+    t.window.width = 1664
+    t.window.height = 936
     t.window.vsync = false
-    t.window.resizable = true   -- it breaks when you resize :(         (press f11 to toggle fullscreen or windowed )
+    t.window.resizable = true
     t.console = true
 end  

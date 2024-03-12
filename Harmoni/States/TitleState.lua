@@ -5,12 +5,24 @@ function TitleState:enter()
     backgroundFade = {0}
     onTitle = true
     logoYPos = {20}
+    lettersPositions = {0,0,0,0,0,0,0}
     curScreen = "title"
     titleState = 1
+
+    beatBump = {1}
+
+
+
     H = love.graphics.newImage("Images/TITLE/H.png")
-    R = love.graphics.newImage("Images/TITLE/R.png")  -- the notes in the background originally were part of the logo, thats why their file name is letters
+    A = love.graphics.newImage("Images/TITLE/A.png")
+    R = love.graphics.newImage("Images/TITLE/R.png")
+    M = love.graphics.newImage("Images/TITLE/M.png")
     O = love.graphics.newImage("Images/TITLE/O.png")
+    N = love.graphics.newImage("Images/TITLE/N.png")
     I = love.graphics.newImage("Images/TITLE/I.png")
+
+
+
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
     resetMenuMusic = function()
@@ -66,6 +78,7 @@ function TitleState:enter()
             MusicTime = 0
             doingTitleMusicReset = false
         end
+    
     end
     titleTip()
 
@@ -81,6 +94,9 @@ function TitleState:enter()
 end
 
 function TitleState:update(dt)
+
+    ButtonLabels[1] = (tostring(logoSize))
+    
 
     if #bumpNotes == 0 then
         bumpNotes = notes
@@ -101,7 +117,7 @@ function TitleState:update(dt)
         end
     end
 
-    logoSize = math.max(logoSize - 0.15*dt, 1)
+    logoSize = math.max(logoSize - 20*dt, 1)
 
     if Input:pressed("MenuConfirm") then
         if titleState == 1 then
@@ -145,7 +161,55 @@ function TitleState:update(dt)
     end
 
     printablespeedTitle = speedTitle *(logoSize+0.7)
+
+    TitleState:doBPMshit()
 end
+
+
+function TitleState:doBPMshit()
+    if not bpmIsInit then
+        bpmIsInit = true
+        BpmTimerStartTime = nil
+        nextBeat = nil
+    end
+    for i = 1, #timingPointsTable do
+        if timingPointsTable[i][1] then
+            if MusicTime >= timingPointsTable[i][1] then
+                currentBpm = timingPointsTable[i][2]
+                print("BPM change: " .. currentBpm)
+                table.remove(timingPointsTable, i)
+                break
+            end
+        else
+            if currentBpm ~= metaData.bpm then
+                currentBpm = metaData.bpm
+                notification("BPM Not Found", notifErrorIcon)
+            end
+        end
+    end
+    if not BpmTimerStartTime and MusicTime > 0 then
+        BpmTimerStartTime = MusicTime
+        nextBeat = BpmTimerStartTime + (60000/(currentBpm or 0))
+        print("First BpmTimerStartTime: " .. BpmTimerStartTime)
+    end
+    if nextBeat and MusicTime >= nextBeat then
+        TitleState:beat()
+        BpmTimerStartTime = MusicTime
+        nextBeat = BpmTimerStartTime + (60000/(currentBpm or 0))
+    end
+end
+
+function TitleState:beat()
+
+
+    beatBump = {1.015 + logoSize/230, 100/225, 100/255, 0}
+
+    if beatBumpTimer then
+        Timer.cancel(beatBumpTimer)
+    end
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {[1] = 1, [2] = 1, [3] = 1, [4] = 1}, "out-quad") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
+end
+
 
 function scrollTitleButtons(scroll)
     curSelection = curSelection-scroll
@@ -162,8 +226,9 @@ function TitleState:switchMenu()
 end
 
 function TitleState:logoBump()
-    logoSize = math.min(logoSize + 0.01, 1.3)
+    logoSize = math.min(logoSize + 1.5, 35)
 end
+
 
 
 function titleTip()
@@ -171,7 +236,7 @@ function titleTip()
     if tipTween then
         Timer.cancel(tipTween)
     end
-    randomRareTip = love.math.random(1, 50)
+    randomRareTip = love.math.random(0.8, 100)
     if randomRareTip == 1 then
         rareTip = true
     end
@@ -204,9 +269,9 @@ end
 function TitleState:draw()
     love.graphics.setColor(1,1,1,0.5)
     if background then
-        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+(logoSize-1)/6,Inits.GameHeight/background:getHeight()+(logoSize-1)/6, background:getWidth()/2, background:getHeight()/2)
+        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+((logoSize/230))/6,Inits.GameHeight/background:getHeight()+((logoSize/230))/6, background:getWidth()/2, background:getHeight()/2)
     end
-    love.graphics.setColor(1,1,1,(logoSize-1))
+    love.graphics.setColor(1,1,1,((logoSize-1)/80))
     love.graphics.draw(gradient, 0, Inits.GameHeight/2, nil, Inits.GameWidth/gradient:getWidth(),(Inits.GameHeight/gradient:getHeight()/2))
     love.graphics.draw(gradient, 0, Inits.GameHeight/2, nil, Inits.GameWidth/gradient:getWidth(),(Inits.GameHeight/gradient:getHeight()/2))
 
@@ -217,7 +282,7 @@ function TitleState:draw()
     love.graphics.setColor(0,0,0,backgroundFade[1])
     love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
-    love.graphics.translate(0,-100) 
+   -- love.graphics.translate(0,-100) 
     if #notes > 0 and #chartRandomXPositions > 0 then
         for i = 1,#notes do
             if -(MusicTime - notes[i])*speedTitle < Inits.GameHeight+100 then
@@ -225,13 +290,13 @@ function TitleState:draw()
 
                 
                 if noteLanes[i] == 1 then
-                    love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                  --  love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
                 elseif noteLanes[i] == 2 then
-                    love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                  --  love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
                 elseif noteLanes[i] == 3 then
-                    love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                  --  love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
                 elseif noteLanes[i] == 4 then
-                    love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
+                  --  love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
                 end
 
                 --]]
@@ -239,10 +304,36 @@ function TitleState:draw()
             end
         end
     end
+
+  
+  -- love.graphics.draw(logo, logo:getWidth()/2, Inits.GameHeight/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
+    love.graphics.push()
+    love.graphics.translate(30,0)
+    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.translate(0,logoYPos[1]/1.1)
+
+    love.graphics.scale(beatBump[1], beatBump[1])
+
+    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
+
+    love.graphics.setColor((beatBump[4] or 1), (beatBump[2] or 1), (beatBump[3] or 1))
+
+    love.graphics.draw(H, Inits.GameWidth/2-H:getWidth()/2-425-(logoSize*3), Inits.GameHeight/2-H:getHeight()/2-28)
+    love.graphics.draw(A, Inits.GameWidth/2-A:getWidth()/2-285-(logoSize*2), Inits.GameHeight/2-A:getHeight()/2)
+    love.graphics.draw(R, Inits.GameWidth/2-R:getWidth()/2-160-(logoSize), Inits.GameHeight/2-R:getHeight()/2)
+    love.graphics.draw(M, Inits.GameWidth/2-M:getWidth()/2, Inits.GameHeight/2-M:getHeight()/2)
+    love.graphics.draw(O, Inits.GameWidth/2-O:getWidth()/2+170+(logoSize), Inits.GameHeight/2-O:getHeight()/2)
+    love.graphics.draw(N, Inits.GameWidth/2-N:getWidth()/2+300+(logoSize*2), Inits.GameHeight/2-N:getHeight()/2)
+    love.graphics.draw(I, Inits.GameWidth/2-I:getWidth()/2+395+(logoSize*3), Inits.GameHeight/2-I:getHeight()/2-25)
+
+
+    love.graphics.pop()
     love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1])
 
-    love.graphics.draw(logo, logo:getWidth()/2, Inits.GameHeight/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
-    love.graphics.translate(0,logoYPos[1])
+   love.graphics.translate(0,logoYPos[1])
+
+   love.graphics.push()
+   love.graphics.translate(0,(-(beatBump[1]*50 or 0))+180)
 
     love.graphics.setColor(0,0,0,0.9)
 
@@ -267,21 +358,21 @@ function TitleState:draw()
 
     love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
 
-
+    love.graphics.pop()
     for i = 1,#ButtonLabels do
         if i == curSelection then
             love.graphics.setColor(0,0,0,0.9)
         else
             love.graphics.setColor(1,1,1,0.9)
         end
-        love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[i], 850+(30*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[i], (850+((30+logoSize/2)*i)), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
         if i == curSelection then
             love.graphics.setColor(0,1,1)
         else
             love.graphics.setColor(0,0.7,0.7)
         end 
-        love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], 850+(30*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
-        love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, 850+(30*i), 240, "center")
+        love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], 850+((30+logoSize/2)*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, 850+((30+logoSize/2)*i), 240, "center")
     end
 
 

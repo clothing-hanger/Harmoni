@@ -287,6 +287,10 @@ function SettingsState:update(dt)
                     settingEditAmount = 0.1
                 end
 
+                if selectedSetting == 2 or selectedSetting == 4 then
+                    settingEditAmount = 0.1
+                end
+
                 Gameplay[selectedSetting][2] = Gameplay[selectedSetting][2]-settingEditAmount
             elseif CurSettingsMenu == "Menu" then
                 settingEditAmount = 0.1
@@ -301,6 +305,7 @@ function SettingsState:update(dt)
         if editingNumberSetting then
             if CurSettingsMenu == "Gameplay" then
                 settingEditAmount = 1
+                
                 if selectedSetting == 2 or selectedSetting == 4 then
                     settingEditAmount = 0.1
                 end
@@ -539,9 +544,9 @@ function SettingsState:draw()
             for i, lane in ipairs(lanes) do
                 for k, note in ipairs(lane) do
 
-                    if -(MusicTime - note)*_G["speed" .. i]   -(MusicTime - note)*_G["speed" .. i] < Inits.GameHeight+400 then
+                    if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] < Inits.GameHeight+400 then
                         if MenuMusic:isPlaying() then 
-                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
                         end
                     end
                 end
@@ -550,9 +555,9 @@ function SettingsState:draw()
             for i, lane in ipairs(lanes) do
                 for k, note in ipairs(lane) do
 
-                    if -(MusicTime - note)*_G["speed" .. i]   -(MusicTime - note)*_G["speed" .. i] > 0 then
+                    if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] > 0 then
                         if MenuMusic:isPlaying() then 
-                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
                         end
                     end
                 end

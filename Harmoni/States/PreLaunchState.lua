@@ -23,7 +23,7 @@ function PreLaunchState:update(dt)
         skippedSplash = true        
         State.switch(States.TitleState)
     end
-
+  -- im considering it again
 end
 
 function PreLaunchState:draw() 
