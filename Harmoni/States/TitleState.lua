@@ -332,6 +332,9 @@ function TitleState:draw()
 
    love.graphics.translate(0,logoYPos[1])
 
+   love.graphics.push()
+   love.graphics.translate(0,(-(beatBump[1]*50 or 0))+180)
+
     love.graphics.setColor(0,0,0,0.9)
 
     love.graphics.rectangle("fill", -400, 1050, 300, 150, 7, 7, 50)
@@ -355,7 +358,7 @@ function TitleState:draw()
 
     love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
 
-
+    love.graphics.pop()
     for i = 1,#ButtonLabels do
         if i == curSelection then
             love.graphics.setColor(0,0,0,0.9)

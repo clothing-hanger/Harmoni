@@ -86,6 +86,16 @@ function quaverParse(file)
             
             lastNoteTime = startTime -- this should work because the last time its run will be the last note
         end
+
+
+        for i = 1,#chart.SliderVelocities do
+            local velocity = chart.SliderVelocities[i]
+            local startTime = velocity.StartTime
+            local velocityChange = velocity.Multiplier
+
+            table.insert(scrollVelocities, {startTime, velocityChange})
+        end
+
         print("Total Note Count: ".. totalNoteCount)
         songLength = song:getDuration()
         print(songLength)

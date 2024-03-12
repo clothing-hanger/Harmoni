@@ -87,6 +87,7 @@ function PlayState:enter()
     comboSize = {1}
     score = 0
     accuracy = 0
+    currentScrollVelocity = 1
     currentBestPossibleScore = 0
     combo = 0
     printableScore = {score}
@@ -107,6 +108,16 @@ function PlayState:enter()
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
 
+    speedModifier = 1
+
+    song:setPitch(speedModifier)
+
+    for i = 1,#lanes do
+        for q = 1,#lanes[i] do
+            lanes[i][q] = lanes[i][q] / speedModifier
+        end
+    end
+
 end
 
 function PlayState:update(dt)
@@ -123,6 +134,7 @@ function PlayState:update(dt)
     end
 
     checkMiss()
+    doSVshit()
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
@@ -431,8 +443,8 @@ function judge(noteTime)
 
         Timer.tween(curBPMJudgeBump, judgePos, {[1] = 1}, "out-quad")
         Timer.tween(curBPMJudgeBump, judgePos, {[2] = 1}, "out-back")
-        Timer.tween(0.05, judgePos, {[4] = 0}, "out-quad", function()
-            Timer.tween(0.05, judgePos, {[4] = 0}, "out-quad")
+        Timer.tween(0.05, judgePos, {[4] = -15}, "out-quad", function()
+            Timer.tween(0.05, judgePos, {[4] = 0}, "in-quad")
         end)
 
     end)
@@ -492,10 +504,23 @@ function checkBotInput()
         end
     end
 end
+
+function doSVshit()
+
+    for i = 1,#scrollVelocities do
+        if MusicTime >= scrollVelocities[i][1] then
+            currentScrollVelocity = scrollVelocities[i][2]
+            table.remove(scrollVelocities, i)
+            break
+        end
+    end
+    
+end
+
 function PlayState:draw()
 --love.graphics.setCanvas(GameScreen)
 
-
+print(currentScrollVelocity)
     if resultsScreen then
         love.graphics.push()
 
@@ -700,8 +725,10 @@ function PlayState:draw()
 
             love.graphics.push()
                 if downScroll then
-                    love.graphics.translate(0, Inits.GameHeight-NoteUp:getHeight()-verticalNoteOffset) 
+                    love.graphics.translate(0, Inits.GameHeight-NoteUp:getHeight()-verticalNoteOffset)
+                    downscrollOffset = -1
                 else
+                    downscrollOffset = 1
                     love.graphics.translate(0, verticalNoteOffset)
                 end
         
@@ -730,7 +757,7 @@ function PlayState:draw()
                             end
                             if -(MusicTime - note)*_G["speed" .. i] + currentScrollVelocity < Inits.GameHeight then
                                 local noteImg = _G["Note" .. AllDirections[i]]
-                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*_G["speed" .. i],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), -(MusicTime - note)*(_G["speed" .. i]*currentScrollVelocity),nil,125/noteImg:getWidth(),125/noteImg:getHeight())
                             end
                         end
                     end
@@ -742,7 +769,6 @@ function PlayState:draw()
     
             love.graphics.setFont(BigFont)
             love.graphics.setColor(0,0.5,1)
-            love.graphics.print(math.floor(printableScore[1]),3,3-(beatBump[1]*100))
             love.graphics.setColor(1,1,1)
     
             love.graphics.print(math.floor(printableScore[1]),0,0-(beatBump[1]*50))
@@ -755,18 +781,18 @@ function PlayState:draw()
             love.graphics.translate(0,(judgePos[4] or 0))
     
         love.graphics.setColor(1,1,1,judgeColors[1])
-        love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2), 200, nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
+        love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2),  Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[2])
-        love.graphics.draw(Perfect, (Inits.GameWidth/2)-(judgementWidth/Perfect:getWidth()/2), 200, nil, judgementWidth/Perfect:getWidth() * (judgePos[2] or 0), judgementHeight/Perfect:getHeight() * (judgePos[1] or 0), Perfect:getWidth()/2, Perfect:getHeight()/2)
+        love.graphics.draw(Perfect, (Inits.GameWidth/2)-(judgementWidth/Perfect:getWidth()/2), Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Perfect:getWidth() * (judgePos[2] or 0), judgementHeight/Perfect:getHeight() * (judgePos[1] or 0), Perfect:getWidth()/2, Perfect:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[3])
-        love.graphics.draw(Great, (Inits.GameWidth/2)-(judgementWidth/Great:getWidth()/2), 200, nil, judgementWidth/Great:getWidth() * (judgePos[2] or 0), judgementHeight/Great:getHeight() * (judgePos[1] or 0), Great:getWidth()/2, Great:getHeight()/2)
+        love.graphics.draw(Great, (Inits.GameWidth/2)-(judgementWidth/Great:getWidth()/2), Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Great:getWidth() * (judgePos[2] or 0), judgementHeight/Great:getHeight() * (judgePos[1] or 0), Great:getWidth()/2, Great:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[4])
-        love.graphics.draw(Good, (Inits.GameWidth/2)-(judgementWidth/Good:getWidth()/2), 200, nil, judgementWidth/Good:getWidth() * (judgePos[2] or 0), judgementHeight/Good:getHeight() * (judgePos[1] or 0), Good:getWidth()/2, Good:getHeight()/2)
+        love.graphics.draw(Good, (Inits.GameWidth/2)-(judgementWidth/Good:getWidth()/2), Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Good:getWidth() * (judgePos[2] or 0), judgementHeight/Good:getHeight() * (judgePos[1] or 0), Good:getWidth()/2, Good:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[5])
 
-        love.graphics.draw(Okay, (Inits.GameWidth/2)-(judgementWidth/Okay:getWidth()/2), 200, nil, judgementWidth/Okay:getWidth() * (judgePos[2] or 0), judgementHeight/Okay:getHeight() * (judgePos[1] or 0), Okay:getWidth()/2, Okay:getHeight()/2)
+        love.graphics.draw(Okay, (Inits.GameWidth/2)-(judgementWidth/Okay:getWidth()/2), Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Okay:getWidth() * (judgePos[2] or 0), judgementHeight/Okay:getHeight() * (judgePos[1] or 0), Okay:getWidth()/2, Okay:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[6])
-        love.graphics.draw(Miss, (Inits.GameWidth/2)-(judgementWidth/Miss:getWidth()/2), 200, math.rad((randomMissAngle or 0)), judgementWidth/Miss:getWidth() * (judgePos[2] or 0), judgementHeight/Miss:getHeight() * (judgePos[1] or 0), Miss:getWidth()/2, Miss:getHeight()/2)
+        love.graphics.draw(Miss, (Inits.GameWidth/2)-(judgementWidth/Miss:getWidth()/2), Inits.GameHeight/2-(JudgementPosition*downscrollOffset), math.rad((randomMissAngle or 0)), judgementWidth/Miss:getWidth() * (judgePos[2] or 0), judgementHeight/Miss:getHeight() * (judgePos[1] or 0), Miss:getWidth()/2, Miss:getHeight()/2)
         love.graphics.setColor(1,1,1,1)
         love.graphics.pop()
         love.graphics.rectangle("fill",Inits.GameWidth/2-1, Inits.GameHeight/2-3, 2, 26)
@@ -776,7 +802,7 @@ function PlayState:draw()
             love.graphics.rectangle("fill", (((hitTimes[i][1])/2)+(Inits.GameWidth/2)-2), Inits.GameHeight/2, 4, 20)
         end
         love.graphics.setColor(1,1,1,1)
-        love.graphics.setFont(MediumFont)
+        love.graphics.setFont(MediumFontSolid)
     
         if marvCount ~= 0 then
             love.graphics.print(marvCount,judgeCounterXPos[1], (Inits.GameHeight/2)-100)
@@ -824,12 +850,14 @@ function PlayState:draw()
         else
             love.graphics.setColor(1,0.5,0)
         end
+
+
         if combo > 0 then
-            love.graphics.printf(combo, 0, 240+judgePos[1], Inits.GameWidth, "center")
+            love.graphics.printf(combo, 0, Inits.GameHeight/2-(ComboPosition * downscrollOffset) +judgePos[1]*2, Inits.GameWidth, "center", nil, 1, judgePos[2])
         end
         love.graphics.setColor(0,0.5,1)
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
-        love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
+      --  love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
+       -- love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
 
         accuracyColor = printableAccuracy[1]/100
     
@@ -852,7 +880,7 @@ function PlayState:draw()
     
     
        -- love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
-        love.graphics.setFont(BigFont)
+        love.graphics.setFont(MediumFontSolid)
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
         end
