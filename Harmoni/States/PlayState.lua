@@ -140,7 +140,7 @@ function PlayState:initializePositionMarkers()
 
     for i = 2, #scrollVelocities do
         local vel = scrollVelocities[i]
-        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 1) * trackRounding
+        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 0) * trackRounding
         table.insert(velocityPositionMakers, position)
     end
 
@@ -159,7 +159,7 @@ function PlayState:GetPositionFromTime(time, index)
     if index == 1 then return time * initialScrollVelocity * trackRounding end
     local index = index - 1
     local curPos = velocityPositionMakers[index]
-    curPos = curPos + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 1) * trackRounding)
+    curPos = curPos + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 0) * trackRounding)
 
     return curPos
 end
