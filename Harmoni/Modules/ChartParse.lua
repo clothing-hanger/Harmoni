@@ -80,6 +80,7 @@ function quaverParse(file)
             if lane > 4 then
                 return false
             end
+
             if Modifiers[4] then
                 if lane == 1 then
                     lane = 4
@@ -92,9 +93,9 @@ function quaverParse(file)
                 end
             end
 
-        
-            table.insert(lanes[lane], {startTime})
-
+            local note = Objects.Game.Note(startTime, lane, endTime)
+            table.insert(lanes[lane], note)
+            
             if not firstNoteTime and startTime then
                 firstNoteTime = math.floor(startTime/1000)
                 print("first note time: ".. firstNoteTime)

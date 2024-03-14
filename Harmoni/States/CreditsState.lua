@@ -47,6 +47,7 @@ function CreditsState:enter()
         "11",
         "#WorshipTrump #TrumpXObamaFurryArt",
         "Y'all got any #TrumpXObamaFurryArt",
+        "haiii!! :33 haii!! :3c"
     }
 
     SappleQuotes = {

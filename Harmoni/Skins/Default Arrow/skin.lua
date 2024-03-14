@@ -25,6 +25,11 @@ NoteDownImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDown.png")
 NoteRightImage = love.graphics.newImage(skinFolder .. "NOTES/NoteRight.png")
 NoteUpImage = love.graphics.newImage(skinFolder .. "NOTES/NoteUp.png")
 
+NoteLeftTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteLeftTrail.png")
+NoteDownTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail.png")
+NoteRightTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteRightTrail.png")
+NoteUpTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteUpTrail.png")
+
 MarvelousImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Marvelous.png")
 PerfectImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Perfect.png")
 GreatImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Great.png")

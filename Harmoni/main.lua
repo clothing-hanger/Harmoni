@@ -30,7 +30,7 @@ ModifiersLabels = {
     {"Randomize", "Randomize the lanes - NOT ADDED YET"},
 }
 
-disablePrint = true
+disablePrint = false
 function love.errorhandler(msg)
 	msg = tostring(msg)
 
@@ -269,6 +269,7 @@ function love.load()
     --loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
+    Table = require("Modules.Table")
     ChartParse = require("Modules.ChartParse")
 
     notificationsTable = {}

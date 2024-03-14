@@ -89,7 +89,7 @@ function SongSelectState:initializePositionMarkers()
 
     for i = 2, #scrollVelocities do
         local vel = scrollVelocities[i]
-        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 1) * trackRounding
+        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 0) * trackRounding
         table.insert(velocityPositionMakers, position)
     end
 
@@ -97,7 +97,7 @@ function SongSelectState:initializePositionMarkers()
 end
 
 function SongSelectState:updateCurrentTrackPosition()
-    while currentSvIndex < #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
+    while currentSvIndex <= #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
         currentSvIndex = currentSvIndex + 1
     end
 
@@ -105,10 +105,15 @@ function SongSelectState:updateCurrentTrackPosition()
 end
 
 function SongSelectState:GetPositionFromTime(time, index)
+    if Modifiers[5] then return time * trackRounding end
     if index == 1 then return time * initialScrollVelocity * trackRounding end
     local index = index - 1
     local curPos = velocityPositionMakers[index]
-    curPos = (curPos or 0) + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 1) * trackRounding)
+    if scrollVelocities[index] then
+        curPos = (curPos or 0) + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 0) * trackRounding)
+    else
+        curPos = (curPos or 0) + (time * initialScrollVelocity * trackRounding)
+    end
 
     return curPos
 end
@@ -128,7 +133,7 @@ end
 function SongSelectState:initPositions()
     for i = 1, #lanes do
         for q = 1, #lanes[i] do
-            lanes[i][q][2] = self:getPositionFromTime(lanes[i][q][1])
+            lanes[i][q].initialPosition = self:getPositionFromTime(lanes[i][q].time)
         end
     end
 end
@@ -142,8 +147,8 @@ function SongSelectState:updateNotePosition(offset, curTime)
 
     for i, lane in ipairs(lanes) do
         for k, note in ipairs(lane) do
-            spritePosition = self:getNotePositions(offset, note[2], i)
-            note[3] = spritePosition
+            spritePosition = self:getNotePositions(offset, note.initialPosition, i)
+            note.y = spritePosition
         end
     end
 end
@@ -342,6 +347,13 @@ function bumpHanger(direction)
 end
 
 function SongSelectState:loadSong(doSongRestart)
+    trackRounding = 100
+    velocityPositionMakers = {}
+    currentTrackPosition = 0
+    currentSvIndex = 1
+    initialScrollVelocity = 1
+    currentScrollVelocity = 1
+
     doDiffListTween = false
 
     if doSongRestart then
@@ -350,17 +362,6 @@ function SongSelectState:loadSong(doSongRestart)
     if menuSongTimer then
         Timer.cancel(menuSongTimer)
     end
-    scrollVelocities = {}
-    trackRounding = 100
-    velocityPositionMakers = {}
-    currentTrackPosition = 0
-    currentSvIndex = 1
-    initialScrollVelocity = 1
-    self:initializePositionMarkers()
-    self:updateCurrentTrackPosition()
-    self:initPositions()
-    self:updateNotePosition(currentTrackPosition, MusicTime)
-    currentScrollVelocity = 1
 
     menuSongTimer = Timer.after(menuSongDelayTime, function()       -- make a setting
         if doSongRestart then
@@ -393,6 +394,7 @@ function SongSelectState:loadSong(doSongRestart)
         elseif selectedDifficulty > #diffList then
             selectedDifficulty = 1
         end
+        scrollVelocities = {}
         quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
         --[[ print(songList[selectedSong])
         print(diffList[selectedDifficulty]) ]]
@@ -402,11 +404,20 @@ function SongSelectState:loadSong(doSongRestart)
             MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             MenuMusic:setPitch(Modifiers[2])
             MenuMusic:play()
-            if metaData.previewTime/1000 <= 0 then
-            else
+            if metaData.previewTime/1000 > 0 then
                 MenuMusic:seek((metaData.previewTime/1000))
             end
 
+            trackRounding = 100
+            velocityPositionMakers = {}
+            currentTrackPosition = 0
+            currentSvIndex = 1
+            initialScrollVelocity = 1
+            currentScrollVelocity = 1
+            self:initializePositionMarkers()
+            self:updateCurrentTrackPosition()
+            self:initPositions()
+            self:updateNotePosition(currentTrackPosition, MusicTime)
         end
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
@@ -460,10 +471,10 @@ function SongSelectState:draw()
 
     
     for i, lane in ipairs(lanes) do
-        for j, note in ipairs(lane) do
-            if (note[3] or 0) < Inits.GameHeight then
-                local noteImg = _G["Note" .. AllDirections[i]]
-                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), (note[3] or 0),nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+        for k, note in ipairs(lane) do
+            -- not past 385 or 0
+            if (not downscroll and note.y < 385) or (downscroll and note.y > 0) then
+                note:draw()
             end
         end
     end

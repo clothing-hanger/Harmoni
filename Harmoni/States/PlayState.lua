@@ -58,6 +58,10 @@ function PlayState:enter()
     NoteDown = NoteDownImage
     NoteUp = NoteUpImage
     NoteRight = NoteRightImage
+    NoteLeftTrail = NoteLeftTrailImage
+    NoteDownTrail = NoteDownTrailImage
+    NoteUpTrail = NoteUpTrailImage
+    NoteRightTrail = NoteRightTrailImage
     Marvelous = MarvelousImage
     Perfect = PerfectImage
     Great = GreatImage
@@ -130,6 +134,11 @@ function PlayState:enter()
     
     song:setPitch(Modifiers[2])
 
+    for i = 1,#lanes do
+        for q = 1,#lanes[i] do
+            lanes[i][q].time = lanes[i][q].time / Modifiers[2]
+        end
+    end
 
 end
 
@@ -137,20 +146,16 @@ function PlayState:initializePositionMarkers()
     if #scrollVelocities == 0 then return end
 
     local position = scrollVelocities[1].startTime * initialScrollVelocity * trackRounding
-
     table.insert(velocityPositionMakers, position)
 
     for i = 2, #scrollVelocities do
-        local vel = scrollVelocities[i]
-        position = position + (vel.startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1] and scrollVelocities[i - 1].multiplier or 1) * trackRounding
+        position = position + ((scrollVelocities[i].startTime - scrollVelocities[i - 1].startTime) * (scrollVelocities[i - 1].multiplier or 0) * trackRounding)
         table.insert(velocityPositionMakers, position)
     end
-
-    print("AMOUNT OF POSITION MARKERS: " .. #velocityPositionMakers)
 end
 
 function PlayState:updateCurrentTrackPosition()
-    while currentSvIndex < #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
+    while currentSvIndex <= #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
         currentSvIndex = currentSvIndex + 1
     end
 
@@ -158,10 +163,11 @@ function PlayState:updateCurrentTrackPosition()
 end
 
 function PlayState:GetPositionFromTime(time, index)
+    if Modifiers[5] then return time * trackRounding end
     if index == 1 then return time * initialScrollVelocity * trackRounding end
     local index = index - 1
     local curPos = velocityPositionMakers[index]
-    curPos = curPos + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 1) * trackRounding)
+    curPos = curPos + ((time - scrollVelocities[index].startTime) * (scrollVelocities[index].multiplier or 0) * trackRounding)
 
     return curPos
 end
@@ -181,7 +187,10 @@ end
 function PlayState:initPositions()
     for i = 1, #lanes do
         for q = 1, #lanes[i] do
-            lanes[i][q][2] = self:getPositionFromTime(lanes[i][q][1])
+            lanes[i][q].initialPosition = self:getPositionFromTime(lanes[i][q].time)
+            if lanes[i][q].endTime then
+                lanes[i][q].endTrackPosition = self:getPositionFromTime(lanes[i][q].endTime)
+            end
         end
     end
 end
@@ -195,8 +204,71 @@ function PlayState:updateNotePosition(offset, curTime)
 
     for i, lane in ipairs(lanes) do
         for k, note in ipairs(lane) do
-            spritePosition = self:getNotePositions(offset, note[2], i)
-            note[3] = spritePosition
+            spritePosition = self:getNotePositions(offset, note.initialPosition, i)
+            if not note.moveWithScroll then spritePosition = 0 end
+            note.y = spritePosition
+
+            if #note.children > 0 then
+                note.children[1].y = spritePosition
+                note.endY = self:getNotePositions(offset, note.endTrackPosition, i)
+                local pixelDistance = note.endY - note.y
+                note.children[1].scaleY = pixelDistance
+                if note.children[2] then
+                    note.children[2].y = spritePosition
+                end
+            end
+        end
+    end
+end
+
+function PlayState:doNoteHit(note)
+    if not note.wasGoodHit then
+        note.wasGoodHit = true
+        judge(MusicTime - note.time)
+        table.insert(notesPerSecond, 1)
+        if #note.children > 0 then
+            note.moveWithScroll = false
+        else
+            note.visible = false
+            table.remove(lanes[note.lane], 1)
+        end
+    end
+end
+
+function PlayState:keyPressed(key) -- key is the lane
+    if paused then return end
+
+    local lane = lanes[key]
+
+    for i, note in ipairs(lane) do
+        if MusicTime - note.time < missTiming and MusicTime - note.time > -missTiming and not note.wasGoodHit then
+            self:doNoteHit(note)
+            break
+        end
+    end
+end
+
+function PlayState:keyDown(key) 
+    if paused then return end
+
+    local lane = lanes[key]
+
+    for i, note in ipairs(lane) do
+        if note.endTime - MusicTime <= -15 and not note.moveWithScroll then -- hold note that is currently being pressed
+            table.remove(lane, i)
+            break
+        end
+    end
+end
+
+function PlayState:keyReleased(key) 
+    if paused then return end
+
+    local lane = lanes[key]
+
+    for i, note in ipairs(lane) do
+        if not note.moveWithScroll then -- hold was unpressed
+            table.remove(lane, i)
         end
     end
 end
@@ -214,8 +286,18 @@ function PlayState:update(dt)
 
     if BotPlay then
         checkBotInput()
-    else
-        checkInput()
+    end
+
+    for i = 1, #allInputs do
+        if Input:pressed(allInputs[i]) then
+            self:keyPressed(i)
+        end
+        if Input:down(allInputs[i]) then
+            self:keyDown(i)
+        end
+        if Input:released(allInputs[i]) then
+            self:keyReleased(i)
+        end
     end
 
     checkMiss()
@@ -432,8 +514,8 @@ end
 function checkMiss()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note[1] > missTiming then
-                judge(MusicTime - note[1])
+            if MusicTime - note.time > missTiming and not note.wasGoodHit then
+                judge(MusicTime - note.time)
                 table.remove(lane, j)
                 health = health - 0.075
                 break
@@ -567,12 +649,12 @@ function dimBackground()
     end)
 end
 
-function checkInput()
+--[[ function checkInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note[1] < missTiming and MusicTime - note[1] > -missTiming then
+            if MusicTime - note.time < missTiming and MusicTime - note.time > -missTiming then
                 if Input:pressed(allInputs[i]) and not paused then
-                    judge(MusicTime - note[1])
+                    judge(MusicTime - note.time)
                     table.insert(notesPerSecond, 1)
                     table.remove(lane, j)
                     break
@@ -580,14 +662,14 @@ function checkInput()
             end
         end
     end
-end
+end ]]
 
 
 function checkBotInput()
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note[1] > -1 then
-                judge(MusicTime - note[1])
+            if MusicTime - note.time > -1 then
+                judge(MusicTime - note.time)
                 table.remove(lane, j)
                 break
             end
@@ -827,9 +909,10 @@ function PlayState:draw()
 
                     for i, lane in ipairs(lanes) do
                         for j, note in ipairs(lane) do
-                            if note[3] < Inits.GameHeight then
-                                local noteImg = _G["Note" .. AllDirections[i]]
-                                love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight())
+                            if note.y < Inits.GameHeight then
+                                --[[ local noteImg = _G["Note" .. AllDirections[i]]
+                                --love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight()) ]]
+                                note:draw()
                             end
                         end
                     end
@@ -927,6 +1010,7 @@ function PlayState:draw()
         if combo > 0 then
             love.graphics.printf(combo, 0, Inits.GameHeight/2-(ComboPosition * downscrollOffset) +judgePos[1]*2, Inits.GameWidth, "center", nil, 1, judgePos[2])
         end
+        love.graphics.print("MusicTime: " .. math.floor(MusicTime))
         love.graphics.setColor(0,0.5,1)
       --  love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
        -- love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
@@ -1042,7 +1126,6 @@ function PlayState:draw()
             end
         end
     end
-
 
 end
 
