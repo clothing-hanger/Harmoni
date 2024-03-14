@@ -58,6 +58,10 @@ function PlayState:enter()
     NoteDown = NoteDownImage
     NoteUp = NoteUpImage
     NoteRight = NoteRightImage
+    NoteLeftTrail = NoteLeftTrailImage
+    NoteDownTrail = NoteDownTrailImage
+    NoteUpTrail = NoteUpTrailImage
+    NoteRightTrail = NoteRightTrailImage
     Marvelous = MarvelousImage
     Perfect = PerfectImage
     Great = GreatImage
@@ -159,6 +163,7 @@ function PlayState:updateCurrentTrackPosition()
 end
 
 function PlayState:GetPositionFromTime(time, index)
+    if Modifiers[5] then return time * trackRounding end
     if index == 1 then return time * initialScrollVelocity * trackRounding end
     local index = index - 1
     local curPos = velocityPositionMakers[index]
@@ -206,7 +211,8 @@ function PlayState:updateNotePosition(offset, curTime)
             if #note.children > 0 then
                 note.children[1].y = spritePosition
                 note.endY = self:getNotePositions(offset, note.endTrackPosition, i)
-                note.scaledHeight = note.endY - note.y
+                local pixelDistance = note.endY - note.y
+                note.children[1].scaleY = pixelDistance
                 if note.children[2] then
                     note.children[2].y = spritePosition
                 end

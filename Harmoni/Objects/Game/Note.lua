@@ -9,11 +9,13 @@ local BaseNoteImages = {
 
 -- If nil, will just default to a rectangle
 local HoldNoteImages = {
-    HoldNoteLeftImage,
-    HoldNoteDownImage,
-    HoldNoteUpImage,
-    HoldNoteRightImage
+    NoteLeftTrailImage,
+    NoteDownTrailImage,
+    NoteUpTrailImage,
+    NoteRightTrailImage
 }
+
+print(NoteLeftTrail)
 
 -- if nil, will not draw an end hold
 local HoldNoteEndImages = {
@@ -113,10 +115,10 @@ function Note:draw()
     
     love.graphics.setColor(1, 1, 1, self.alpha*0.6)
     if self.children[1] then
-        if self.children[1].image then
-            love.graphics.draw(self.children[1].image, self.x, self.children[1].y, 0, 125/self.children[1].image:getWidth(), 125/self.children[1].image:getHeight())
-        else
+        if not self.children[1].image then
             love.graphics.rectangle("fill", self.x, self.y+(125/2), 125, ((self.endY - self.y)))
+        else
+            love.graphics.draw(self.children[1].image, self.x, self.y+(125/2), 0, 125/self.children[1].image:getWidth(), self.children[1].scaleY/self.children[1].image:getHeight())
         end
     end
     love.graphics.setColor(1, 1, 1, self.alpha)
