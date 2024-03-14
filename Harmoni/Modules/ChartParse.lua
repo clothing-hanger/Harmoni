@@ -80,7 +80,8 @@ function quaverParse(file)
             if lane > 4 then
                 return false
             end
-            table.insert(lanes[lane], {startTime})
+            local note = Objects.Game.Note(startTime, lane, endTime)
+            table.insert(lanes[lane], note)
 
             if not firstNoteTime and startTime then
                 firstNoteTime = math.floor(startTime/1000)

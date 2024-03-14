@@ -268,9 +268,9 @@ function SongSelectState:draw()
         for k, note in ipairs(lane) do
             local topPos = not downScroll and 0 or -385
             local bottomPos = not downScroll and 485 or 385
-            if -(MusicTime - note[1])*_G["speed" .. i] < bottomPos and -(MusicTime - note[1])*_G["speed" .. i] > topPos then
+            if -(MusicTime - note.time)*_G["speed" .. i] < bottomPos and -(MusicTime - note.time)*_G["speed" .. i] > topPos then
                 if MenuMusic:isPlaying() then 
-                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+                    love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note.time)*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
                 end
             end
         end

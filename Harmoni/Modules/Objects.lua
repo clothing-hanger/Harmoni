@@ -1,5 +1,5 @@
 return {
     Game = {
-        Player = require("Objects.Game.Player")
+        Note = require("Objects.Game.Note")
     }
 }
