@@ -7,4 +7,5 @@ return {
     SettingsState = require("States.SettingsState"),
     PreLaunchState = require("States.PreLaunchState"),
     CreditsState = require("States.CreditsState"),
+    QuaverImportScreen = require("States.QuaverImportScreen"),
 }

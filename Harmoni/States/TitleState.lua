@@ -13,7 +13,7 @@ function TitleState:enter()
 
 
 
-    H = love.graphics.newImage("Images/TITLE/H.png")
+    H = love.graphics.newImage("Images/TITLE/H.png")   -- look it spells friday night funkin
     A = love.graphics.newImage("Images/TITLE/A.png")
     R = love.graphics.newImage("Images/TITLE/R.png")
     M = love.graphics.newImage("Images/TITLE/M.png")
@@ -56,7 +56,18 @@ function TitleState:enter()
         if not MenuMusic then
             notes = {}
             bumpNotes = {}
-            quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+            loadTitleSongEnter = function()
+                if songList[selectedSong] and diffList[randomDifficulty] and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty], "file") then
+                    quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+                else
+                    notification("Title Screen Failed to Load Chart", notifErrorIcon)
+                    selectedSong = love.math.random(1,#songList)
+                    randomDifficulty = 1
+
+                    loadTitleSongEnter()
+                end
+            end
+            loadTitleSongEnter()
             for i = 1,#diffList do
                 print(diffList[i])
             end
@@ -133,7 +144,7 @@ function TitleState:update(dt)
            elseif curSelection == 2 then
                 State.switch(States.SettingsState)
            elseif curSelection == 3 then
-                State.switch(States.CreditsState)
+                State.switch(States.QuaverImportScreen)
            elseif curSelection == 4 then
                 love.system.openURL("https://ko-fi.com/harmoni69655")
            elseif curSelection == 5 then
@@ -318,7 +329,7 @@ function TitleState:draw()
 
     love.graphics.setColor((beatBump[4] or 1), (beatBump[2] or 1), (beatBump[3] or 1))
 
-    love.graphics.draw(H, Inits.GameWidth/2-H:getWidth()/2-425-(logoSize*3), Inits.GameHeight/2-H:getHeight()/2-28)
+    love.graphics.draw(H, Inits.GameWidth/2-H:getWidth()/2-425-(logoSize*3), Inits.GameHeight/2-H:getHeight()/2-28)   -- holy shit no way it spells quaver
     love.graphics.draw(A, Inits.GameWidth/2-A:getWidth()/2-285-(logoSize*2), Inits.GameHeight/2-A:getHeight()/2)
     love.graphics.draw(R, Inits.GameWidth/2-R:getWidth()/2-160-(logoSize), Inits.GameHeight/2-R:getHeight()/2)
     love.graphics.draw(M, Inits.GameWidth/2-M:getWidth()/2, Inits.GameHeight/2-M:getHeight()/2)

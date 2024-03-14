@@ -139,6 +139,7 @@ Skins = love.filesystem.getDirectoryItems("Skins/")
 
 
 function SettingsState:enter()
+    loadSkinPreview()
 
     CurSettingsMenu = "Tabs"
     
@@ -148,7 +149,6 @@ function SettingsState:enter()
     selectedSetting = 1
     printableSetting = {selectedSetting}
 
-    loadSkinPreview()
 
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
@@ -348,11 +348,13 @@ function loadSkinPreview()
         selectedDifficulty = randomDifficulty
     end
 
-    
-    local ok = quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty]))
-    if not ok then
+    if songList[selectedSong] and diffList[selectedDifficulty] and love.filesystem.getInfo(("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty]), "file") then
+        quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty]))
+    else
+        notification("Chart Failed to Load! Returning to Title Screen.", notifErrorIcon)
         State.switch(States.TitleState)
     end
+
 
         MusicTime = 0
         MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")

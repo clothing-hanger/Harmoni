@@ -6,7 +6,7 @@ function CreditsState:enter()
 
     Credits = {
         {"c l o t h i n g h a n g e r", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
-        {"GuglioIsStupid", "Love2D Project Template, Support", "https://ilovefemboys.org/"},  -- this is guglios real website link 💀💀
+        {"GuglioIsStupid", "Rewrote Notes / added SV support", "https://ilovefemboys.org/"},  -- this is guglios real website link 💀💀
         {"Swan/The Quaver Team", "Quaver Map Format", "https://quavergame.com/"},
         {"AM7999", "Github README", "https://github.com/am7999"},
         {"The Love2D Team", "Love2D", "https://www.love2d.org"},

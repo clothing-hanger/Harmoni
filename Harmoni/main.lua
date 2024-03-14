@@ -2,8 +2,11 @@
 versionNumber = "Harmoni Beta 2.0"
 
 local utf8 = require("utf8")
-moonshine = require("moonshine")
+moonshine = require("Libraries.moonshine")
 Inits = require("inits")
+require("Libraries.lovefs.lovefs")
+
+
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
@@ -249,7 +252,7 @@ function love.load()
             MenuBack = { "key:escape", "key:backspace" },
             menuToggle = { "key:tab"},
             subMenuToggle = { "key:rshift", "key:lshift", },
-            openSongGoogleDrive = { "key:f1" },
+            importSongs = { "key:f1" },
             openSongFolder = { "key:f2" },
             randomSongKey = { "key:r" },
             introSkip = { "key:space" },

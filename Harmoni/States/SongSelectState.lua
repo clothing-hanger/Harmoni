@@ -204,8 +204,8 @@ function SongSelectState:update(dt)
                         State.switch(States.TitleState)
                     end
 
-                elseif Input:pressed("openSongGoogleDrive") then
-                    love.system.openURL("https://drive.google.com/drive/folders/1MpRIkEXY1FmRLVSEzlWHJzWJScREgD37?usp=drive_link")  --lmao google drive 
+                elseif Input:pressed("importSongs") then
+                    State.switch(States.QuaverImportScreen)
                 elseif Input:pressed("openSongFolder") then
                     os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
                 elseif Input:pressed("randomSongKey") then
@@ -395,8 +395,14 @@ function SongSelectState:loadSong(doSongRestart)
             selectedDifficulty = 1
         end
         scrollVelocities = {}
-        quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
-        --[[ print(songList[selectedSong])
+        --print("SONG SELECT : " .."Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+
+        if songList[selectedSong] and diffList[selectedDifficulty] and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty], "file") then
+            quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+        else
+            notification("Chart File Not Found!", notifErrorIcon)
+        end
+            --[[ print(songList[selectedSong])
         print(diffList[selectedDifficulty]) ]]
         
         if doSongRestart then
@@ -623,11 +629,11 @@ function SongSelectState:draw()
 
     love.graphics.push()
     love.graphics.setColor(0,0,0,0.9)
-    love.graphics.rectangle("fill", Inits.GameWidth-300, Inits.GameHeight-80, 300, 80, 7, 7, 50)
+    love.graphics.rectangle("fill", 0, Inits.GameHeight-140, 320, 140, 7, 7, 50)
     love.graphics.setColor(0,1,1)
-    love.graphics.rectangle("line", Inits.GameWidth-300, Inits.GameHeight-80, 300, 80, 7, 7, 50)
+    love.graphics.rectangle("line", 0, Inits.GameHeight-140, 320, 140, 7, 7, 50)
     love.graphics.setFont(MenuFontExtraSmall)
-    love.graphics.printf(#songList.." Songs Found\nPress F1 to download Song Packs\nPress F2 to open Music Folder", Inits.GameWidth-290, Inits.GameHeight-70, 290, "left")
+    love.graphics.printf(#songList.." Songs Found\n\nPress F1 to import songs from Quaver\n\nPress F2 to open Music Folder", 10, Inits.GameHeight-130, 310, "left")
    -- love.graphics.scale(0.5,0.5)
    love.graphics.setColor(1,1,1)
     love.graphics.pop()

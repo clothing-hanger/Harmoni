@@ -1,9 +1,11 @@
 function quaverParse(file)
     
-    if not love.filesystem.getInfo(file) then
+    if not love.filesystem.getInfo(file, "file") then
         notification("Chart File Not Found!", notifErrorIcon)
         return false
     end
+
+
     
     
     print("quaverParse()")
@@ -33,16 +35,29 @@ function quaverParse(file)
             bpm = 0,
             inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
         }
+        
 
         
+
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "file") then
+            song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+        else
+            notification("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
+            return
+        end
+
+
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background, "file") then
+            background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+        else
+            notification("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
+        end
+
 
         if tostring(metaData.inputMode) == "7" then
             notification("7 Key Not Supported!", notifErrorIcon)
             return false
         end
-        song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
-        background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
-
        -- if metaData.banner and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.banner) then           this works but it looks ugly so i just commented out this
        --     banner = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.banner)
        --     print("Banner")
