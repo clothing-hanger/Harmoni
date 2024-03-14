@@ -104,6 +104,7 @@ function PlayState:enter()
     printableScore = {score}
     printableHealth = {health}
     convertedAccuracy = 0
+    songInfoAlpha = 1
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
@@ -116,18 +117,19 @@ function PlayState:enter()
         skinLoad()
     end
 
+
+        BotPlay = Modifiers[7]
+    
+
+    if Gameplay[5][2] then
+        BotPlay = true
+    end
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
 
-    speedModifier = 1
+    
+    song:setPitch(Modifiers[2])
 
-    song:setPitch(speedModifier)
-
-    for i = 1,#lanes do
-        for q = 1,#lanes[i] do
-            lanes[i][q][1] = lanes[i][q][1] / speedModifier
-        end
-    end
 
 end
 
@@ -206,6 +208,10 @@ function PlayState:update(dt)
         MusicTime = PausedMusicTime
     end
 
+    if MusicTime > -1000 then
+        songInfoAlpha = songInfoAlpha - (1*dt)
+    end
+
     if BotPlay then
         checkBotInput()
     else
@@ -238,8 +244,11 @@ function PlayState:update(dt)
         end
     end   
     
-    if printableHealth[1] <= 0 and not gameOver then            
-        --PlayState:gameOver()
+    if printableHealth[1] <= 0 and not gameOver and not Modifiers[6] then            
+        PlayState:gameOver()
+    end
+    if Modifiers[3] and missCount > 1 and not gameOver and not Modifiers[6] then
+        PlayState:gameOver()
     end
     if gameOverSongSlowdown[1] ~= 1 then
 
@@ -948,6 +957,12 @@ function PlayState:draw()
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
         end
 
+        love.graphics.setColor(0,1,1,songInfoAlpha)
+        love.graphics.setFont(MediumFont)
+
+        love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 0, Inits.GameHeight/2-150, Inits.GameWidth, "center")
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.setFont(BigFont)
 
         if canBeSkipped then
             love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
@@ -1019,10 +1034,13 @@ function PlayState:draw()
                 pauseSelection = pauseSelection - 1
             elseif Input:pressed("MenuDown") then
                 pauseSelection = pauseSelection + 1
-
+            end
+            if pauseSelection > #options then
+                pauseSelection = 1
+            elseif pauseSelection < 1 then
+                pauseSelection = #options
             end
         end
-
     end
 
 

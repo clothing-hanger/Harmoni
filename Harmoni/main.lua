@@ -4,10 +4,156 @@ versionNumber = "Harmoni Beta 2.0"
 local utf8 = require("utf8")
 moonshine = require("moonshine")
 Inits = require("inits")
+local function error_printer(msg, layer)
+	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
+end
+    Modifiers = {
+        false,
+        1, -- speed
+        false,  -- sudden death
+        false, -- lane swap
+        false, -- no scroll velocities
+        false, -- no fail
+        false, -- botplay
+        false, -- randomize
+    }
 
-aLotOfSpacesLmfao = " "
+
+ModifiersLabels = {
+    {"Modifiers Menu", "Modifiers Menu"},
+    {"Song Speed", "How fast the song plays"},
+    {"Sudden Death", "You die if you miss a single note"},
+    {"Lane Swap", "Left becomes right, up becomes down"},
+    {"No Scroll Velocities", "Disables Scroll Velocities - NOT ADDED YET"},
+    {"No Fail", "Don't die when you run out of health"},
+    {"Bot Play", "Watch a perfect playthourgh of the song"},
+    {"Randomize", "Randomize the lanes - NOT ADDED YET"},
+}
+
+disablePrint = true
 function love.errorhandler(msg)
-   love.window.showMessageBox("oops lmao".. aLotOfSpacesLmfao, "Harmoni crashed :( just open the game again i guess idk lmao" .. aLotOfSpacesLmfao ..debug.traceback("\n\nError: \n\n" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", ""), "error")
+	msg = tostring(msg)
+
+	error_printer(msg, 2)
+
+	if not love.window or not love.graphics or not love.event then
+		return
+	end
+
+	if not love.graphics.isCreated() or not love.window.isOpen() then
+		local success, status = pcall(love.window.setMode, 800, 600)
+		if not success or not status then
+			return
+		end
+	end
+
+	-- Reset state.
+	if love.mouse then
+		love.mouse.setVisible(true)
+		love.mouse.setGrabbed(false)
+		love.mouse.setRelativeMode(false)
+		if love.mouse.isCursorSupported() then
+			love.mouse.setCursor()
+		end
+	end
+	if love.joystick then
+		-- Stop all joystick vibrations.
+		for i,v in ipairs(love.joystick.getJoysticks()) do
+			v:setVibration()
+		end
+	end
+	if love.audio then love.audio.stop() end
+
+	love.graphics.reset()
+	local font = love.graphics.setNewFont(14)
+
+	love.graphics.setColor(1, 1, 1)
+
+	local trace = debug.traceback()
+
+	love.graphics.origin()
+
+	local sanitizedmsg = {}
+	for char in msg:gmatch(utf8.charpattern) do
+		table.insert(sanitizedmsg, char)
+	end
+	sanitizedmsg = table.concat(sanitizedmsg)
+
+	local err = {}
+
+	table.insert(err, "Looks like Harmoni crashed \n\n(not very surprising)\n\nPlease send a screenshot of this in the Harmoni Discord Server\n\ndiscord.gg/bBcjrRAeh4\n\n\n\n\n\n\n\n\n\n")
+	table.insert(err, sanitizedmsg)
+
+	if #sanitizedmsg ~= #msg then
+		table.insert(err, "\nInvalid UTF-8 string in error message.")
+	end
+
+	table.insert(err, "\n")
+
+	for l in trace:gmatch("(.-)\n") do
+		if not l:match("boot.lua") then
+			l = l:gsub("stack traceback:", "Traceback\n")
+			table.insert(err, l)
+		end
+	end
+
+	local p = table.concat(err, "\n")
+
+	p = p:gsub("\t", "")
+	p = p:gsub("%[string \"(.-)\"%]", "%1")
+
+	local function draw()
+		if not love.graphics.isActive() then return end
+		local pos = 70
+		love.graphics.clear(89/255, 157/255, 220/255)
+		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)
+		love.graphics.present()
+	end
+
+	local fullErrorText = p
+	local function copyToClipboard()
+		if not love.system then return end
+		love.system.setClipboardText(fullErrorText)
+		p = p .. "\nCopied to clipboard!"
+	end
+
+	if love.system then
+		p = p .. "\n\nPress Ctrl+C or tap to copy this error"
+	end
+
+	return function()
+		love.event.pump()
+
+		for e, a, b, c in love.event.poll() do
+			if e == "quit" then
+				return 1
+			elseif e == "keypressed" and a == "escape" then
+				return 1
+			elseif e == "keypressed" and a == "c" and love.keyboard.isDown("lctrl", "rctrl") then
+				copyToClipboard()
+			elseif e == "touchpressed" then
+				local name = love.window.getTitle()
+				if #name == 0 or name == "Untitled" then name = "Game" end
+				local buttons = {"OK", "Cancel"}
+				if love.system then
+					buttons[3] = "Copy to clipboard"
+				end
+				local pressed = love.window.showMessageBox("Quit "..name.."?", "", buttons)
+				if pressed == 1 then
+					return 1
+				elseif pressed == 3 then
+					copyToClipboard()
+				end
+			end
+		end
+
+		draw()
+
+		if love.timer then
+			love.timer.sleep(0.1)
+		end
+	end
+
 end
 
 
@@ -95,11 +241,14 @@ function love.load()
 
             MenuUp = { "key:up" },
             MenuDown = { "key:down" },
+            MenuLeft = { "key:left", },
+            MenuRight = { "key:right", },
             MenuConfirm = { "key:return" },
 
             setFullscreen = { "key:f11" },
             MenuBack = { "key:escape", "key:backspace" },
-            SearchToggle = { "key:tab"},
+            menuToggle = { "key:tab"},
+            subMenuToggle = { "key:rshift", "key:lshift", },
             openSongGoogleDrive = { "key:f1" },
             openSongFolder = { "key:f2" },
             randomSongKey = { "key:r" },
@@ -117,7 +266,7 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
-    loadSettings()
+    --loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     ChartParse = require("Modules.ChartParse")
@@ -199,6 +348,7 @@ function love.load()
     MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
     MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
     NotificationFont = love.graphics.newFont("Fonts/verdana.ttf", 14)
+    MenuFontExtraBig = love.graphics.newFont("Fonts/verdana.ttf", 50)
 
 
 
