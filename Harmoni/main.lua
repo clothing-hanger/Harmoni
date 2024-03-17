@@ -6,7 +6,6 @@ moonshine = require("Libraries.moonshine")
 Inits = require("inits")
 require("Libraries.lovefs.lovefs")
 
-
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
@@ -33,7 +32,11 @@ ModifiersLabels = {
     {"Randomize", "Randomize the lanes - NOT ADDED YET"},
 }
 
-disablePrint = false
+disablePrint = true
+
+function whatNumberIsThis(num)
+    return "This Number is " .. num
+end
 function love.errorhandler(msg)
 	msg = tostring(msg)
 
@@ -65,7 +68,6 @@ function love.errorhandler(msg)
 			v:setVibration()
 		end
 	end
-	if love.audio then love.audio.stop() end
 
 	love.graphics.reset()
 	local font = love.graphics.setNewFont(14)

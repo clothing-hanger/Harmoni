@@ -268,6 +268,12 @@ function PlayState:keyReleased(key)
 
     for i, note in ipairs(lane) do
         if not note.moveWithScroll then -- hold was unpressed
+            if note.endTime - MusicTime > greatTiming then
+                missCount = missCount + 1
+                combo = 0
+                print("Trail released")
+                judge(note.endTime - MusicTime)
+            end
             table.remove(lane, i)
         end
     end

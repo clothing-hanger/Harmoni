@@ -55,7 +55,7 @@ function quaverParse(file)
 
 
         if tostring(metaData.inputMode) == "7" then
-            notification("7 Key Not Supported!", notifErrorIcon)
+            notification("7 Key Not Supported! (yet)", notifErrorIcon)
             return false
         end
        -- if metaData.banner and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.banner) then           this works but it looks ugly so i just commented out this

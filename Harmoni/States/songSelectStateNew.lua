@@ -29,7 +29,7 @@ function SongSelectState:enter()
             print(songList[i])
             print(diffListQ[1])
             print("Music/" .. songList[i] .. "/" .. diffList[1])
-            if songList[i] and diffListQ[1] and love.filesystem.getInfo("Music/" .. songList[i] .. "/" .. diffListQ[1], "file") then
+            if songList[i] and diffListQ[1] and love.filesystem.getInfo("Music/" .. songList[i] .. "/" .. diffListQ[1], "file") and PENISBALLS then
                 print("found")
                 chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[i] .. "/" .. diffListQ[1]))
                 table.insert(songNamesTable, i, chart.Title)
@@ -47,9 +47,11 @@ function SongSelectState:enter()
 
 
     printableSelectedSong = {selectedSong} -- used for scrolling song list
+    CurPlayingSong = selectedSong
     selectedDifficulty = 1
     printableSelectedDifficulty = {selectedDifficulty} -- used for scrolling diff list 
     SongListXPositions = {}
+    SongListXPositions2 = {} -- used for the selectedSong to be slightly further out from the list
     diffListXPositions = {}
     DiffNameList = {}
     subMenuState = "mods"
@@ -89,6 +91,7 @@ function SongSelectState:enter()
 
     for i = 1,#songList do
         table.insert(SongListXPositions, 900)
+        table.insert(SongListXPositions2, 0)
     end
 
     for i = 1,#diffList do
@@ -185,6 +188,14 @@ function SongSelectState:update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
 
+    for i = 1, #SongListXPositions2 do
+        if i == selectedSong or i == CurPlayingSong then
+            SongListXPositions2[i] = math.min(SongListXPositions2[i] + 1000*dt, 200)
+        else
+            SongListXPositions2[i] = math.max(SongListXPositions2[i] - 1000*dt, 0)
+        end
+    end
+
     if State.last() == States.PlayState and not MenuMusic:isPlaying() and not dontFuckingReloadTheSongEveryFrameDumbass then
        -- MenuMusic:stop()
        dontFuckingReloadTheSongEveryFrameDumbass = true
@@ -216,13 +227,17 @@ function SongSelectState:update(dt)
                         SongSelectState:loadSong(false)
                     end
                 elseif Input:pressed("MenuConfirm") then
-                    if menuState == 1 then
-                        menuState = 2
-                        selectedDifficulty = 1
-                    elseif menuState == 2 then
-                        if MenuMusic:isPlaying() then
-                            State.switch(States.PlayState)
+                    if CurPlayingSong == selectedSong then
+                        if menuState == 1 then
+                            menuState = 2
+                            selectedDifficulty = 1
+                        elseif menuState == 2 then
+                            if MenuMusic:isPlaying() then
+                                State.switch(States.PlayState)
+                            end
                         end
+                    else
+                        SongSelectState:loadSong(true)
                     end
                 elseif Input:pressed("MenuBack") then
                     if menuState == 2 then
@@ -440,10 +455,8 @@ function SongSelectState:loadSong(doSongRestart)
                 notification("Audio Not Loaded!", notifErrorIcon)
             end
             MenuMusic:setPitch(Modifiers[2])
-            MenuMusic:play()
-            if metaData.previewTime/1000 > 0 then
-                MenuMusic:seek((metaData.previewTime/1000))
-            end
+            CurPlayingSong = selectedSong
+
 
             trackRounding = 100
             velocityPositionMakers = {}
@@ -455,6 +468,13 @@ function SongSelectState:loadSong(doSongRestart)
             self:updateCurrentTrackPosition()
             self:initPositions()
             self:updateNotePosition(currentTrackPosition, MusicTime)
+            MusicTime = metaData.previewTime
+
+            MenuMusic:play()
+            if metaData.previewTime/1000 > 0 then
+                MenuMusic:seek((metaData.previewTime/1000))
+            end
+
         end
         if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
 
@@ -487,8 +507,8 @@ function scrollSongs(y)
         else
             bumpHanger(false)
         end
-        MenuMusic:stop()
-        SongSelectState:loadSong(true)
+       -- MenuMusic:stop()
+       -- SongSelectState:loadSong(true)
     elseif menuState == 2 then
         selectedDifficulty = selectedDifficulty - y
         SongSelectState:loadSong(false)
@@ -538,34 +558,47 @@ function SongSelectState:draw()
     love.graphics.push()
     if menuState == 1 then
         love.graphics.push()
-        love.graphics.translate(-(printableSelectedSong[1]*40)+Inits.GameWidth/2, -(printableSelectedSong[1]*60)+120)
+        love.graphics.translate(-(printableSelectedSong[1]*40)+Inits.GameWidth/2, -(printableSelectedSong[1]*60)+180)
 
         for i = 1,#songList do
-            if i > selectedSong then
-
-                    love.graphics.rectangle("fill", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
-                    love.graphics.setColor(0,0.8,0.8)
-
-                    love.graphics.rectangle("line", SongListXPositions[i], i*60, 1000, 50, 7, 7, 50)
-                    love.graphics.setColor(0,0,0,0.8)
-
-                    if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
-                        love.graphics.setColor(1,0,0)
-                    else
-                        love.graphics.setColor(0,0,0)
-                    end
-                    love.graphics.print(songNamesTable[i], SongListXPositions[i]+12, i*60+12)
-
-                    if i == #songList then
-                        love.graphics.setColor(1,1,1,1)
-                        love.graphics.draw(hanger, SongListXPositions[i]+10, i*60+50, hangerTilt[1], 1, 1, 109, 44)
-                        love.graphics.setColor(0,0.2,0.2)
-                        love.graphics.circle("fill",SongListXPositions[i]+10, i*60+50,5)
-                    end
-                
+            if i == selectedSong then
+                love.graphics.setColor(0,0,0,0.9)
+            elseif i ~= selectedSong then
+                love.graphics.setColor(1,1,1,0.9)
+            end
+            if i == CurPlayingSong then
+                love.graphics.setColor(1,0,0)
             end
 
+                love.graphics.rectangle("fill", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
+                love.graphics.setColor(0,0,0,0.9)
 
+                if i == selectedSong then
+                    love.graphics.setColor(0,1,1)
+                elseif i ~= selectedSong then
+                    love.graphics.setColor(0,0.7,0.7)
+                end
+                if i == CurPlayingSong then
+                    love.graphics.setColor(0,1,0)
+                end
+
+                love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
+                love.graphics.setColor(0,1,1)
+
+                if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
+                    love.graphics.setColor(1,0,0)
+                else
+                    love.graphics.setColor(0,1,1)
+                end
+                love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
+
+                if i == #songList then
+                    love.graphics.setColor(1,1,1,1)
+                    love.graphics.draw(hanger, SongListXPositions[i]+10-SongListXPositions2[i], i*60+50, hangerTilt[1], 1, 1, 109, 44)
+                    love.graphics.setColor(0,0.2,0.2)
+                    love.graphics.circle("fill",SongListXPositions[i]+10-SongListXPositions2[i], i*60+50,5)
+                end
+        
             love.graphics.setColor(1,1,1)
 
         end
@@ -578,7 +611,7 @@ function SongSelectState:draw()
         love.graphics.rectangle("fill", Inits.GameWidth/2-300, 0, 1500, 170, 7, 7, 50)
         love.graphics.setColor(0,1,1)
         love.graphics.rectangle("line", Inits.GameWidth/2-300, 0, 1500, 170, 7, 7, 50)
-        love.graphics.print(songList[selectedSong], Inits.GameWidth/2-300+20, 15)
+        love.graphics.print((songNamesTable[CurPlayingSong] or "ERROR- NO SONG PLAYING"), Inits.GameWidth/2-300+20, 15)
         love.graphics.setFont(MenuFontSmall)
         love.graphics.printf("Song: " .. metaData.name.."  Difficulty: " ..metaData.diffName .. "  Artist: " .. metaData.artist .. "   Charter: " .. metaData.creator, Inits.GameWidth/2-300+20, 100, 2000)
 

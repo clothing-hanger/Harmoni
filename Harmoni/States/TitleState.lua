@@ -83,8 +83,17 @@ function TitleState:enter()
                 table.insert(bumpNotes, startTime)
                 lastNoteTime = startTime -- this should work because the last time its run will be the last note
             end
-            MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
-            background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+            if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "file") then
+                MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+            else
+                notification("Audio Not Found!", notifErrorIcon)
+            end
+            if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background, "file") then
+
+                background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+            else
+                notification("Background Not Found!", notifErrorIcon)
+            end
             MenuMusic:play()
             MusicTime = 0
             doingTitleMusicReset = false
