@@ -7,39 +7,12 @@ local AllDirections = {
 }
 function SongSelectState:enter()
     curScreen = "songSelect" 
-    songList = love.filesystem.getDirectoryItems("Music")
     --selectedSong = randomSong
     menuState = 1
     hangerTilt = {0}
     subMenuYPos = {512}
     subMenuActive = false
-    songNamesTable = {}
-    if #songNamesTable ~= #songList then
 
-        for i = 1,#songList do
-            diffListQ = {}
-        
-            diffListAndOtherShitIdfkQ = love.filesystem.getDirectoryItems("Music/" .. songList[i] .. "/")
-            for q = 1,#diffListAndOtherShitIdfkQ do 
-                local file = diffListAndOtherShitIdfkQ[q]
-                if file:endsWith("qua") then
-                    table.insert(diffListQ, file)
-                end
-            end
-            print(songList[i])
-            print(diffListQ[1])
-            print("Music/" .. songList[i] .. "/" .. diffList[1])
-            if songList[i] and diffListQ[1] and love.filesystem.getInfo("Music/" .. songList[i] .. "/" .. diffListQ[1], "file") and PENISBALLS then
-                print("found")
-                chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[i] .. "/" .. diffListQ[1]))
-                table.insert(songNamesTable, i, chart.Title)
-            else
-                print("not found")
-                table.insert(songNamesTable, i, "This song's data is corrupt! Open at your own risk.")
-            end
-        end
-
-    end
 
     PressToggleString = "Press Tab to Open Mods Menu"
 
@@ -447,6 +420,17 @@ function SongSelectState:loadSong(doSongRestart)
             --[[ print(songList[selectedSong])
         print(diffList[selectedDifficulty]) ]]
         
+        trackRounding = 100
+        velocityPositionMakers = {}
+        currentTrackPosition = 0
+        currentSvIndex = 1
+        initialScrollVelocity = 1
+        currentScrollVelocity = 1
+        self:initializePositionMarkers()
+        self:updateCurrentTrackPosition()
+        self:initPositions()
+        self:updateNotePosition(currentTrackPosition, MusicTime)
+        
         if doSongRestart then
             MusicTime = metaData.previewTime
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "file") then
@@ -458,16 +442,7 @@ function SongSelectState:loadSong(doSongRestart)
             CurPlayingSong = selectedSong
 
 
-            trackRounding = 100
-            velocityPositionMakers = {}
-            currentTrackPosition = 0
-            currentSvIndex = 1
-            initialScrollVelocity = 1
-            currentScrollVelocity = 1
-            self:initializePositionMarkers()
-            self:updateCurrentTrackPosition()
-            self:initPositions()
-            self:updateNotePosition(currentTrackPosition, MusicTime)
+
             MusicTime = metaData.previewTime
 
             MenuMusic:play()
@@ -516,7 +491,7 @@ function scrollSongs(y)
 end
 
 function SongSelectState:draw()
-    
+
     if background then
         love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
     end

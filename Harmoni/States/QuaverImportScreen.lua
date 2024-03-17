@@ -65,7 +65,33 @@ function QuaverImportScreen:update(dt)
                 end
             end
         end
+        
+    preLaunchFade = {0}
+    songList = love.filesystem.getDirectoryItems("Music")
+    songNamesTable = {}
 
+        for i = 1,#songList do
+            diffListQ = {}
+        
+            diffListAndOtherShitIdfkQ = love.filesystem.getDirectoryItems("Music/" .. songList[i] .. "/")
+            for q = 1,#diffListAndOtherShitIdfkQ do 
+                local file = diffListAndOtherShitIdfkQ[q]
+                if file:endsWith("qua") then
+                    table.insert(diffListQ, file)
+                end
+            end
+            print(songList[i])
+            print(diffListQ[1])
+           -- print("Music/" .. songList[i] .. "/" .. diffListQ[1])
+            if songList[i] and diffListQ[1] and love.filesystem.getInfo("Music/" .. songList[i] .. "/" .. diffListQ[1], "file") then
+                print("found")
+                chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[i] .. "/" .. diffListQ[1]))
+                table.insert(songNamesTable, i, chart.Title)
+            else
+                print("not found")
+                table.insert(songNamesTable, i, "This song's data is corrupt! Open at your own risk.")
+            end
+        end
         State.switch(States.TitleState)
     end
 end
