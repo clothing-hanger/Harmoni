@@ -46,7 +46,17 @@ end
 
 
 
-
+function recursivelyDelete( item )
+    if love.filesystem.getInfo( item , "directory" ) then
+        for _, child in ipairs( love.filesystem.getDirectoryItems( item )) do
+            recursivelyDelete( item .. '/' .. child )
+            love.filesystem.remove( item .. '/' .. child )
+        end
+    elseif love.filesystem.getInfo( item ) then
+        love.filesystem.remove( item )
+    end
+    love.filesystem.remove( item )
+end
 
 function love.errorhandler(msg)
 	msg = tostring(msg)

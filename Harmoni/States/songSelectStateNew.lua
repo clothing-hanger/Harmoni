@@ -16,7 +16,11 @@ function SongSelectState:enter()
 
     PressToggleString = "Press Tab to Open Mods Menu"
 
-    selectedMod = 2
+    subMenuTitles = {"me when", "Song Data Menu", "Scores Menu"}
+
+    songOptionsButtons = {"lmao this string is unused", "Open Song Folder", "Open Music Folder", "Delete Song"}
+
+    selectedSubMenuOption = 2
 
 
     printableSelectedSong = {selectedSong} -- used for scrolling song list
@@ -27,7 +31,7 @@ function SongSelectState:enter()
     SongListXPositions2 = {} -- used for the selectedSong to be slightly further out from the list
     diffListXPositions = {}
     DiffNameList = {}
-    subMenuState = "mods"
+    subMenuState = 1
     subMenuActive = false
     diffList = {}
     diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
@@ -232,25 +236,50 @@ function SongSelectState:update(dt)
         else
 
 
-            if subMenuState == "mods" then
+            if subMenuState == 1 then
                 if Input:pressed("MenuUp") then
-                    selectedMod = selectedMod - 1
+                    selectedSubMenuOption = selectedSubMenuOption - 1
                 elseif Input:pressed("MenuDown") then
-                    selectedMod = selectedMod + 1
+                    selectedSubMenuOption = selectedSubMenuOption + 1
                 elseif Input:pressed("MenuLeft") then
-                    if selectedMod == 2 then
-                        Modifiers[selectedMod] = Modifiers[selectedMod] - 0.05
+                    if selectedSubMenuOption == 2 then
+                        Modifiers[selectedSubMenuOption] = Modifiers[selectedSubMenuOption] - 0.05
                     end
                 elseif Input:pressed("MenuRight") then
-                    if selectedMod == 2 then
-                        Modifiers[selectedMod] = Modifiers[selectedMod] + 0.05
+                    if selectedSubMenuOption == 2 then
+                        Modifiers[selectedSubMenuOption] = Modifiers[selectedSubMenuOption] + 0.05
                     end
                 elseif Input:pressed("MenuConfirm") then
-                    if type(Modifiers[selectedMod]) == "boolean" then
-                        Modifiers[selectedMod] = not Modifiers[selectedMod]
-                    elseif type(Modifiers[selectedMod]) == "number" then
+                    if type(Modifiers[selectedSubMenuOption]) == "boolean" then
+                        Modifiers[selectedSubMenuOption] = not Modifiers[selectedSubMenuOption]
+                    elseif type(Modifiers[selectedSubMenuOption]) == "number" then
                     
                 
+                    end
+                end
+            elseif subMenuState == 2 then
+                if Input:pressed("MenuUp") then
+                    selectedSubMenuOption = selectedSubMenuOption - 1
+                elseif Input:pressed("MenuDown") then
+                    selectedSubMenuOption = selectedSubMenuOption + 1
+                elseif Input:pressed("MenuConfirm") then
+                    if selectedSubMenuOption == 2 then
+                        os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music/" .. songList[selectedSong] "/")
+                    elseif selectedSubMenuOption == 3 then
+                        os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
+                    elseif selectedSubMenuOption == 4 then
+                        if not areYouSureDelete then
+                            areYouSureDelete = true
+                        else
+                            songToDelete = selectedSong
+                            selectedSong = selectedSong + 1
+                            SongSelectState:loadSong(true)
+
+                            table.remove(songNamesTable, songToDelete)
+                            table.remove(songList, songToDelete)
+                            recursivelyDelete("Music/" .. songList[songToDelete])
+                            areYouSureDelete = false
+                        end
                     end
                 end
             end
@@ -294,11 +323,23 @@ function SongSelectState:update(dt)
         selectedDifficulty = 1
     end
 
-    if selectedMod < 2 then
-        selectedMod = #Modifiers
-    elseif selectedMod > #Modifiers then
-        selectedMod = 2
+    if subMenuState == 1 then
+        if selectedSubMenuOption < 2 then
+            selectedSubMenuOption = #Modifiers
+        elseif selectedSubMenuOption > #Modifiers then
+            selectedSubMenuOption = 2
+        end
+    elseif subMenuState == 2 then
+        if selectedSubMenuOption < 2 then
+            selectedSubMenuOption = #songOptionsButtons
+        elseif selectedSubMenuOption > #songOptionsButtons then
+            selectedSubMenuOption = 2
+        end
+    elseif subMenuState == 3 then
+        
     end
+
+
 
     
 
@@ -321,8 +362,15 @@ function switchSubMenu()
         Timer.cancel(SubMenuTween)
     end
     SubMenuTween = Timer.tween(0.2, subMenuYPos, {1000}, "out-quad", function()
-        if subMenuState == "mods" then
+
+        subMenuState = subMenuState + 1
+
+
+        if subMenuState > #subMenuTitles then
+            subMenuState = 1
         end
+
+
         SubMenuTween = Timer.tween(0.2, subMenuYPos, {0}, "out-quad")
     end)
 end
@@ -361,6 +409,8 @@ function bumpHanger(direction)
     end
 end
 
+
+
 function SongSelectState:loadSong(doSongRestart)
     trackRounding = 100
     velocityPositionMakers = {}
@@ -390,11 +440,14 @@ function SongSelectState:loadSong(doSongRestart)
         end
         diffList = {}
         diffListXPositions = {}
+        DiffNameList = {}
     
         diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
         for i = 1,#diffListAndOtherShitIdfk do 
             local file = diffListAndOtherShitIdfk[i]
             if file:endsWith("qua") then
+                local chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffListAndOtherShitIdfk[i]))
+                table.insert(DiffNameList, chart.DifficultyName)
                 table.insert(diffList, file)
             end
         end
@@ -542,7 +595,7 @@ function SongSelectState:draw()
                 love.graphics.setColor(1,1,1,0.9)
             end
             if i == CurPlayingSong then
-                love.graphics.setColor(1,0,0)
+                love.graphics.setColor(0.5,0.5,0.5)
             end
 
                 love.graphics.rectangle("fill", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
@@ -554,7 +607,7 @@ function SongSelectState:draw()
                     love.graphics.setColor(0,0.7,0.7)
                 end
                 if i == CurPlayingSong then
-                    love.graphics.setColor(0,1,0)
+                    love.graphics.setColor(0,0,1)
                 end
 
                 love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
@@ -563,7 +616,7 @@ function SongSelectState:draw()
                 if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
                     love.graphics.setColor(1,0,0)
                 else
-                    love.graphics.setColor(0,1,1)
+                    love.graphics.setColor(0,0,0)
                 end
                 love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
 
@@ -602,13 +655,13 @@ function SongSelectState:draw()
         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,739, 430, 120, 7, 7, 50)
         love.graphics.setColor(0,1,1)
         love.graphics.rectangle("line", Inits.GameWidth/2-290 , 739, 430, 120, 7, 7, 50)
-        love.graphics.printf(ModifiersLabels[selectedMod][2], Inits.GameWidth/2-280, 749, 410, "center")
+        love.graphics.printf(ModifiersLabels[selectedSubMenuOption][2], Inits.GameWidth/2-280, 749, 410, "center")
         love.graphics.printf(PressToggleString, Inits.GameWidth/2-280, 820, 410, "center")
 
 
-            if subMenuState == "mods" then
+            if subMenuState == 1 then
                 for i = 1,#Modifiers do
-                    if i == selectedMod then
+                    if i == selectedSubMenuOption then
                         love.graphics.setColor(0,0,0,0.9)
                         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
                         love.graphics.setColor(0,1,1)
@@ -627,7 +680,7 @@ function SongSelectState:draw()
                         if i ~= 1 then
                             love.graphics.print(ModifiersLabels[i][1] .. ": " .. tostring(Modifiers[i]), Inits.GameWidth/2-280, 440+40*i-95)
                         else
-                            love.graphics.print("Modifiers Menu", Inits.GameWidth/2-280, 440+40*i-95)
+                            love.graphics.print(subMenuTitles[1], Inits.GameWidth/2-280, 440+40*i-95)
 
                             love.graphics.setColor(1,1,1)
                             if not subMenuActive then
@@ -639,7 +692,52 @@ function SongSelectState:draw()
                     end
 
                 end
+            elseif subMenuState == 2 then
+                for i = 1,#songOptionsButtons do
+                    if i == selectedSubMenuOption then
+                        love.graphics.setColor(0,0,0,0.9)
+                        love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                        love.graphics.setColor(0,1,1)
+                        love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                        love.graphics.setColor(1,1,1,1)
+                        love.graphics.print(songOptionsButtons[i], Inits.GameWidth/2-280, 440+40*i-95)
+                    else
+
+
+
+                        love.graphics.setColor(1,1,1,0.9)
+                        love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                        love.graphics.setColor(0,0.8,0.8)
+                        love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                        love.graphics.setColor(0,0,0,1)
+                        if i ~= 1 then
+                            if i == 3 then
+                                if areYouSureDelete then
+                                    love.graphics.print("Press Enter again to Delete", Inits.GameWidth/2-280, 440+40*i-95)
+                                else
+                                    love.graphics.print(songOptionsButtons[i], Inits.GameWidth/2-280, 440+40*i-95)
+                                end
+                            else
+                                love.graphics.print(songOptionsButtons[i], Inits.GameWidth/2-280, 440+40*i-95)
+                            end
+                        else
+                            love.graphics.print(subMenuTitles[2], Inits.GameWidth/2-280, 440+40*i-95)
+
+                            love.graphics.setColor(1,1,1)
+                            if not subMenuActive then
+                                love.graphics.draw(tab, Inits.GameWidth/2+80, 440+40*i-95)
+                            else
+                                love.graphics.draw(shift, Inits.GameWidth/2+80, 440+40*i-95)
+                            end
+                        end
+                    end
+                end
+                    
+
+            elseif subMenuState == 3 then
+
             end
+        
         love.graphics.pop()
 
 
@@ -656,14 +754,14 @@ function SongSelectState:draw()
                 love.graphics.setColor(0,1,1)
 
                 love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
-                love.graphics.print(diffList[i], diffListXPositions[i]+12, i*60+12)
+                love.graphics.print(DiffNameList[i], diffListXPositions[i]+12, i*60+12)
             else
                 love.graphics.setColor(1,1,1,0.9)
                 love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,0.8,0.8)
 
                 love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
-                love.graphics.print(diffList[i], diffListXPositions[i]+12, i*60+12)
+                love.graphics.print(DiffNameList[i], diffListXPositions[i]+12, i*60+12)
             end
         end
         love.graphics.pop()
