@@ -22,6 +22,10 @@ function TitleState:enter()
     I = love.graphics.newImage("Images/TITLE/I.png")
 
 
+    buttonPositions = {850+30, 850+60, 850+90, 850+120, 850+150, 850+180}
+    buttonStartPositions = {1500,1500,1500,1500,1500,1500}
+
+
 
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
@@ -115,7 +119,6 @@ end
 
 function TitleState:update(dt)
 
-    ButtonLabels[1] = (tostring(logoSize))
     
 
     if #bumpNotes == 0 then
@@ -227,7 +230,7 @@ function TitleState:beat()
     if beatBumpTimer then
         Timer.cancel(beatBumpTimer)
     end
-    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {[1] = 1, [2] = 1, [3] = 1, [4] = 1}, "out-quad") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {[1] = 1, [2] = 1, [3] = 1, [4] = 1}, "out-expo") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
 end
 
 
@@ -241,7 +244,28 @@ function scrollTitleButtons(scroll)
 end
 
 function TitleState:switchMenu()
-    Timer.tween(1, logoYPos, {-200}, "out-expo")
+    Timer.tween(1, logoYPos, {-200}, "out-expo", function()
+
+    end)
+
+    Timer.tween(0.3, buttonStartPositions, {[1] = buttonPositions[1]}, "out-expo", function()
+
+    end)
+    Timer.tween(0.4, buttonStartPositions, {[2] = buttonPositions[2]}, "out-expo", function() 
+
+    end)
+    Timer.tween(0.5, buttonStartPositions, {[3] = buttonPositions[3]}, "out-expo", function() 
+
+    end)
+    Timer.tween(0.6, buttonStartPositions, {[4] = buttonPositions[4]}, "out-expo", function() 
+
+    end)
+    Timer.tween(0.7, buttonStartPositions, {[5] = buttonPositions[5]}, "out-expo", function() 
+
+    end)
+    Timer.tween(0.8, buttonStartPositions, {[6] = buttonPositions[6]}, "out-expo", function() 
+    end)
+    
     titleState = 2
 end
 
@@ -330,7 +354,7 @@ function TitleState:draw()
     love.graphics.push()
     love.graphics.translate(30,0)
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
-    love.graphics.translate(0,logoYPos[1]/1.1)
+    love.graphics.translate(0,logoYPos[1])
 
     love.graphics.scale(beatBump[1], beatBump[1])
 
@@ -348,9 +372,9 @@ function TitleState:draw()
 
 
     love.graphics.pop()
-    love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1])
+    love.graphics.push()
+    love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1]*2.5)
 
-   love.graphics.translate(0,logoYPos[1])
 
    love.graphics.push()
    love.graphics.translate(0,(-(beatBump[1]*50 or 0))+180)
@@ -377,22 +401,24 @@ function TitleState:draw()
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
     love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
-
     love.graphics.pop()
+    love.graphics.pop()
+    love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1]*2)
+
     for i = 1,#ButtonLabels do
         if i == curSelection then
             love.graphics.setColor(0,0,0,0.9)
         else
             love.graphics.setColor(1,1,1,0.9)
         end
-        love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[i], (850+((30+logoSize/2)*i)), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        love.graphics.rectangle("fill", logo:getWidth()/2-120-buttonWidth[i], buttonStartPositions[i], 240+(buttonWidth[i]*2), 25, 7, 7, 50)
         if i == curSelection then
             love.graphics.setColor(0,1,1)
         else
             love.graphics.setColor(0,0.7,0.7)
         end 
-        love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], 850+((30+logoSize/2)*i), 240+(buttonWidth[i]*2), 25, 7, 7, 50)
-        love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, 850+((30+logoSize/2)*i), 240, "center")
+        love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], buttonStartPositions[i], 240+(buttonWidth[i]*2), 25, 7, 7, 50)
+        love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, buttonStartPositions[i], 240, "center")
     end
 
 

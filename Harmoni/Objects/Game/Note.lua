@@ -52,7 +52,12 @@ function Note:new(time, lane, endTime)
 
     self.time = time
     self.lane = lane
-    self.endTime = endTime
+
+    if Modifiers[9] then
+        self.endTime = time
+    else
+        self.endTime = endTime
+    end
 
     self.image = BaseNoteImages[lane]
     self.children = {}

@@ -567,7 +567,7 @@ function SongSelectState:draw()
                 end
                 love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
 
-                if i == #songList then
+                if i == #songList and #songList > 10 then
                     love.graphics.setColor(1,1,1,1)
                     love.graphics.draw(hanger, SongListXPositions[i]+10-SongListXPositions2[i], i*60+50, hangerTilt[1], 1, 1, 109, 44)
                     love.graphics.setColor(0,0.2,0.2)

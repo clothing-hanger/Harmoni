@@ -354,18 +354,18 @@ function love.load()
     }
 
 
-    ExtraBigFont = love.graphics.newFont("Fonts/verdana.ttf", 60)
+    ExtraBigFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 60)
     ReallyFuckingBigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 400)
 
     BigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
     MediumFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
     MediumFontSolid = love.graphics.newFont("Fonts/PolandCanIntoBigWritings-18wL.otf", 25)
     MediumFontBacking = love.graphics.newFont("Fonts/PolandCanIntoBigWritingsItalic-ReVM.otf", 50)
-    MenuFontBig = love.graphics.newFont("Fonts/verdana.ttf", 30)
-    MenuFontSmall = love.graphics.newFont("Fonts/verdana.ttf", 20)
-    MenuFontExtraSmall = love.graphics.newFont("Fonts/verdana.ttf", 16)
-    NotificationFont = love.graphics.newFont("Fonts/verdana.ttf", 14)
-    MenuFontExtraBig = love.graphics.newFont("Fonts/verdana.ttf", 50)
+    MenuFontBig = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 30)
+    MenuFontSmall = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 20)
+    MenuFontExtraSmall = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 16)
+    NotificationFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 14)
+    MenuFontExtraBig = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 50)
 
 
 
