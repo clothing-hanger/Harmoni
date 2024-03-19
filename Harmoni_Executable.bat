@@ -1,1 +1,0 @@
-start Harmoni/LOVE/love.exe Harmoni/
