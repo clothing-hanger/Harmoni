@@ -21,6 +21,8 @@ end
         false, -- no hold notes
     }
 
+    notificationsTable = {}
+
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
@@ -284,7 +286,8 @@ function love.load()
     })
     Class = require("Libraries.Class")
     State = require("Libraries.State")
-    Ini = require("Libraries.ini")
+    Ini = require("Libraries.Ini")
+    Json = require("Libraries.Json")
     tinyyaml = require("Libraries.tinyyaml")
 
     Timer = require("Libraries.Timer")
@@ -301,7 +304,6 @@ function love.load()
     Settings = require("Modules.Settings")
     Settings.loadSettings()
 
-    notificationsTable = {}
  
 
 
