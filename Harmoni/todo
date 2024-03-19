@@ -1,0 +1,47 @@
+settings - 
+    general - 
+        language
+        start fullscreen 
+
+    Input - 
+        keybinds
+
+    Menu - 
+        song load delay
+        seasonal effects
+        
+
+    Gameplay -
+        down scroll
+        scroll speed
+        note lane Width
+        note lane height
+        background Dim
+        background blur
+        instant pause
+        instant restart
+        background bumping
+        note splash
+        break alerts 
+
+    audio - 
+        Master volume
+        windows Inactive volume percent
+        effect volume
+        music Volume
+        audio offset 
+
+    advanced -
+        show fps
+        show debug overlay
+        open game folder
+        delete all songs 
+        delete all Skins
+        delete all scores
+        factory reset Harmoni
+
+    metadata - 
+        settings version
+
+
+        
