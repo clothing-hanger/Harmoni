@@ -5,7 +5,7 @@ local AllDirections = {
     "Up",
     "Right",
 }
---[[
+
 
 function setDefaultSettings()
     print(love.filesystem.getSaveDirectory())
@@ -57,7 +57,7 @@ function writeSettings()
    -- love.filesystem.write("settings", luaStr)
    -- notification("Settings Saved", notifInfoIcon)
 end
---]]
+
 function loadSettings()
     --[[
     if love.filesystem.getInfo("settings") then
@@ -120,7 +120,6 @@ function loadSettings()
 end
 
 loadSettings()
---[[
 
 Tabs = {
     {"Gameplay", "Down Scroll, Scroll Speed, Note Lane Width, Background Dim, Bot Play, Note Lane Height, Background Blur, ...."},
@@ -151,9 +150,9 @@ System = {
     {"Fullscreen", startFullscreen, "Fullscreen or Window"}
 }
 
---]]
 
 Skins = love.filesystem.getDirectoryItems("Skins/")
+
 
 
 

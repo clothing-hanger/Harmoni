@@ -2,7 +2,7 @@ local Settings = {}          --ty guglio i am basing this very heavily on rit
 --[[
 Settings.SettingTable = {
     ["General"] = {
-        description = "Adjust basic Harmoni settings",
+        description = "These settings affect basic features of Harmoni",
         language = "English",
         displayMode = "Windowed",
     },
@@ -26,6 +26,7 @@ Settings.SettingTable = {
         breakAlerts = true,
     },
     ["Audio"] = {
+        description = "These settings affect the way Audio is played",
         masterVolume = {"Master Volume", 100},
         windowInactiveVolumePercent = {"Window Inactive Volume", 25},
         effectVolume = {"Sound Effect Volume", 100},
@@ -33,17 +34,18 @@ Settings.SettingTable = {
         audioOffset = {"Audio Offset", 0},
     },
     ["Advanced"] = {
+        description = "These settings affect advanced features of Harmoni",
         showFps = {"Show FPS", false},
         showDebugOverlay = {"Show Debug Overlay", false},
         openGameFolder = "Open Game Folder"
-    },
+    }
     ["metadata"] = {
-        settingsVersion = 2
+        settingsVersion = 2,
     }
 }
 
 function Settings.saveSettings()
-    ini.save(Settings.options, "settings")
+    Json.encode(Settings.options, "settings")
 end
 
 function Settings.loadSettings()
@@ -52,7 +54,7 @@ function Settings.loadSettings()
     end
 
     --Settings.options = ini.parse("settings")
-    local savedSettings = ini.parse("settings")
+    local savedSettings = Json.decode("settings")
     for i, type in pairs(savedSettings) do
         for j, setting in pairs(type) do
             Settings.SettingTable[i][j] = savedSettings[i][j]

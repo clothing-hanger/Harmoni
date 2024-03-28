@@ -21,6 +21,8 @@ end
         false, -- no hold notes
     }
 
+    notificationsTable = {}
+
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
@@ -298,7 +300,6 @@ function love.load()
     Table = require("Modules.Table")
     ChartParse = require("Modules.ChartParse")
 
-    notificationsTable = {}
  
 
 
