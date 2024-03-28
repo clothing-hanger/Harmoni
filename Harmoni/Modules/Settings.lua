@@ -1,5 +1,5 @@
 local Settings = {}          --ty guglio i am basing this very heavily on rit
-
+--[[
 Settings.SettingTable = {
     ["General"] = {
         description = "Adjust basic Harmoni settings",
@@ -18,8 +18,8 @@ Settings.SettingTable = {
         scrollDirection = "Down",
         noteLaneHeight = 25,
         noteLaneWidth = 5,
-        backgroundDimSetting = 0.7
-        backgroundBlurSetting = 20
+        backgroundDimSetting = 0.7,
+        backgroundBlurSetting = 20,
         instantPause = false,
         backgroundBumping = false,
         noteSplash = true,
@@ -36,7 +36,7 @@ Settings.SettingTable = {
         showFps = {"Show FPS", false},
         showDebugOverlay = {"Show Debug Overlay", false},
         openGameFolder = "Open Game Folder"
-    }
+    },
     ["metadata"] = {
         settingsVersion = 2
     }
@@ -59,5 +59,7 @@ function Settings.loadSettings()
         end
     end
 end
+
+--]]
 
 return Settings

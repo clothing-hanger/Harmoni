@@ -284,7 +284,6 @@ function love.load()
     })
     Class = require("Libraries.Class")
     State = require("Libraries.State")
-    Ini = require("Libraries.ini")
     tinyyaml = require("Libraries.tinyyaml")
 
     Timer = require("Libraries.Timer")
@@ -298,8 +297,6 @@ function love.load()
     String = require("Modules.String")
     Table = require("Modules.Table")
     ChartParse = require("Modules.ChartParse")
-    Settings = require("Modules.Settings")
-    Settings.loadSettings()
 
     notificationsTable = {}
  
@@ -321,6 +318,9 @@ function love.load()
 
 
 
+
+    --particle effects
+    require("Particles.splash")
 
 
     --notificationImages 

@@ -225,6 +225,10 @@ function PlayState:doNoteHit(note)
     if not note.wasGoodHit then
         note.wasGoodHit = true
         judge(MusicTime - note.time)
+        if MusicTime - note.time <= marvTiming then
+            splash:start()
+            splash:emit(3)
+        end
         table.insert(notesPerSecond, 1)
         if #note.children > 0 then
             note.moveWithScroll = false
@@ -903,6 +907,7 @@ function PlayState:draw()
                         local spr = _G["Receptor" .. AllDirections[i]]
                         if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
                         love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                        love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
 
