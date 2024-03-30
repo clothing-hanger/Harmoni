@@ -405,24 +405,7 @@ function love.load()
 
 
 
-    ExtraBigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 60)
-    ReallyFuckingBigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 400)
-
-    BigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
-    MediumFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
-    MediumFontSolid = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 25)
-    MediumFontBacking = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
-    MenuFontBig = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 30)
-    MenuFontSmall = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 20)
-    MenuFontExtraSmall = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 16)
-    NotificationFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 14)
-    MenuFontExtraBig = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
-
-
-
-    DefaultFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 12)
-
-
+   
 
 
 
