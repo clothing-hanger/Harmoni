@@ -113,7 +113,7 @@ function PlayState:enter()
     noteScale = 1
     grade = ""
     hitsPerSecond = {0}
-    notesPerSecond = {0}
+    notesPerSecond = {}
     hitErrorTable = {}
     dimBackground()
 
@@ -229,7 +229,7 @@ function PlayState:doNoteHit(note)
             splash:start()
             splash:emit(3)
         end
-        table.insert(notesPerSecond, 1)
+        table.insert(notesPerSecond, 1000)
         if #note.children > 0 then
             note.moveWithScroll = false
         else
@@ -311,6 +311,16 @@ function PlayState:update(dt)
     end
 
     checkMiss()
+
+    for i = 1,#notesPerSecond do
+        notesPerSecond[i] = notesPerSecond[i] - 1000*dt
+        if notesPerSecond[i] <= 0 then
+            table.remove(notesPerSecond, i)
+            break
+        end
+    end
+
+    print(#notesPerSecond)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
@@ -445,6 +455,8 @@ function PlayState:beat()
     else
         beatBump = {(500/7500)/2} --   
     end
+
+    beatBump = {(#notesPerSecond/400 or 0)}
 
 
 
@@ -681,6 +693,8 @@ function checkBotInput()
             if MusicTime - note.time > -1 then
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
+                table.insert(notesPerSecond, 1000)
+
                 break
             end
         end
@@ -1021,7 +1035,6 @@ function PlayState:draw()
         if combo > 0 then
             love.graphics.printf(combo, 0, Inits.GameHeight/2-(ComboPosition * downscrollOffset) +judgePos[1]*2, Inits.GameWidth, "center", nil, 1, judgePos[2])
         end
-        love.graphics.print("MusicTime: " .. math.floor(MusicTime))
         love.graphics.setColor(0,0.5,1)
       --  love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
        -- love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
@@ -1099,15 +1112,15 @@ function PlayState:draw()
             local options = {"Resume", "Restart", "Exit"}
             for i = 1, #options do
                 if i == pauseSelection then
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
                     love.graphics.setColor(0,1,1,1)
                     love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
                 else
-                    love.graphics.setColor(1,1,1,0.9)
+                    love.graphics.setColor(nonSelectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
                 end

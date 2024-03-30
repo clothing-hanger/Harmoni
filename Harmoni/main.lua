@@ -1,10 +1,27 @@
  
 versionNumber = "Harmoni Beta 2.0"
 
+love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
+
 local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
 Inits = require("inits")
 require("Libraries.lovefs.lovefs")
+
+
+
+
+
+--colors
+
+
+accentColor = {251/255,111/255,146/255}
+selectedButtonFillColor = {255/255,179/255,198/255,0.9}
+nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
+playingSongFillColor = {255/255,71/255,126/255}
+nonSelectedSongAccentColor = {255/255,229/255,236/255}
+playingSongAccentColor = {255/255,10/255,84/255}
+
 
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
@@ -33,6 +50,8 @@ ModifiersLabels = {
     {"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
     {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
 }
+
+
 
 disablePrint = false
 
@@ -131,7 +150,7 @@ function love.errorhandler(msg)
 	local function draw()
 		if not love.graphics.isActive() then return end
 		local pos = 70
-		love.graphics.clear(89/255, 157/255, 220/255)
+		love.graphics.clear(0,0,0)
 		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)
 		love.graphics.present()
 	end
@@ -292,7 +311,7 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
-    --loadSettings()
+    loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     Table = require("Modules.Table")
@@ -383,6 +402,30 @@ function love.load()
 
 
     DefaultFont = love.graphics.newFont(12)
+
+
+
+    ExtraBigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 60)
+    ReallyFuckingBigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 400)
+
+    BigFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
+    MediumFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
+    MediumFontSolid = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 25)
+    MediumFontBacking = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
+    MenuFontBig = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 30)
+    MenuFontSmall = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 20)
+    MenuFontExtraSmall = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 16)
+    NotificationFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 14)
+    MenuFontExtraBig = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 50)
+
+
+
+    DefaultFont = love.graphics.newFont("Fonts/Egyptsilhous-3lYZ.ttf", 12)
+
+
+
+
+
     State.switch(States.PreLaunchState)
 
 
@@ -525,7 +568,7 @@ function tweenVolumeDisplay()
     volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-back")  --using out-back makes it feel snappier
 end
 
-
+notificationsTable={}
 function notification(contents, icon)
     notifContents = (contents or "Error- No Notification Text")
     notifIcon = (icon or notifGeneralIcon)

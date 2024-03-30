@@ -58,9 +58,10 @@ function SongSelectState:enter()
     ReceptorUp = ReceptorUpImage
     ReceptorRight = ReceptorRightImage
 
-    disc = love.graphics.newImage("Images/SONGSELECT/disc.png")
-    loading = love.graphics.newImage("Images/SONGSELECT/loading.png")
-    hanger = love.graphics.newImage("Images/SONGSELECT/clothing hanger.png")
+    disc = discImage
+    loading = loadingImage
+    hanger = decorationImage
+    frame = SongSelectFrameImage
     shift = love.graphics.newImage("Images/SONGSELECT/shift.png")
     tab = love.graphics.newImage("Images/SONGSELECT/tab.png")
 
@@ -278,6 +279,8 @@ function SongSelectState:update(dt)
                             table.remove(songNamesTable, songToDelete)
                             table.remove(songList, songToDelete)
                             recursivelyDelete("Music/" .. songList[songToDelete])
+
+
                             areYouSureDelete = false
                         end
                     end
@@ -566,7 +569,7 @@ function SongSelectState:draw()
 
     love.graphics.pop()
 
-    love.graphics.setColor(0.5,0.5,0.5)
+    love.graphics.setColor(playingSongFillColor)
     if banner then
         love.graphics.draw(banner, 0, 0, nil, 500/banner:getWidth(), 97/banner:getHeight())
     end
@@ -590,28 +593,30 @@ function SongSelectState:draw()
 
         for i = 1,#songList do
             if i == selectedSong then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
             elseif i ~= selectedSong then
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
             end
             if i == CurPlayingSong then
-                love.graphics.setColor(0.5,0.5,0.5)
+                love.graphics.setColor(playingSongFillColor)
             end
+            love.graphics.draw(frame,  SongListXPositions[i]-SongListXPositions2[i],i*60)
 
-                love.graphics.rectangle("fill", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
-                love.graphics.setColor(0,0,0,0.9)
+              --  love.graphics.rectangle("fill", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
+                love.graphics.setColor(selectedButtonFillColor)
 
                 if i == selectedSong then
-                    love.graphics.setColor(0,1,1)
+                    love.graphics.setColor(accentColor)
                 elseif i ~= selectedSong then
-                    love.graphics.setColor(0,0.7,0.7)
+                    love.graphics.setColor(nonSelectedSongAccentColor)
                 end
                 if i == CurPlayingSong then
-                    love.graphics.setColor(0,0,1)
+                    love.graphics.setColor(playingSongAccentColor)
                 end
+                love.graphics.draw(frame,  SongListXPositions[i]-SongListXPositions2[i],i*60)
 
-                love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
-                love.graphics.setColor(0,1,1)
+                --love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
+                love.graphics.setColor(accentColor)
 
                 if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
                     love.graphics.setColor(1,0,0)
@@ -634,10 +639,10 @@ function SongSelectState:draw()
 
 
         love.graphics.pop()
-        love.graphics.setColor(0,0,0,0.9)
+        love.graphics.setColor(selectedButtonFillColor)
         love.graphics.setFont(MenuFontExtraBig)
         love.graphics.rectangle("fill", Inits.GameWidth/2-300, 0, 1500, 170, 7, 7, 50)
-        love.graphics.setColor(0,1,1)
+        love.graphics.setColor(0,0,0)
         love.graphics.rectangle("line", Inits.GameWidth/2-300, 0, 1500, 170, 7, 7, 50)
         love.graphics.print((songNamesTable[CurPlayingSong] or "ERROR- NO SONG PLAYING"), Inits.GameWidth/2-300+20, 15)
         love.graphics.setFont(MenuFontSmall)
@@ -646,14 +651,14 @@ function SongSelectState:draw()
 
     love.graphics.push()
         love.graphics.translate(0, 0+subMenuYPos[1])
-        love.graphics.setColor(0,0,0,0.9)
+        love.graphics.setColor(selectedButtonFillColor)
         love.graphics.rectangle("fill",Inits.GameWidth/2-300,370,450,500, 7, 7, 50)
-        love.graphics.setColor(0,1,1)
+        love.graphics.setColor(accentColor)
         love.graphics.rectangle("line",Inits.GameWidth/2-300,370,450,500, 7, 7, 50)
-        love.graphics.setColor(0,0,0,0.9)
+        love.graphics.setColor(selectedButtonFillColor)
 
         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,739, 430, 120, 7, 7, 50)
-        love.graphics.setColor(0,1,1)
+        love.graphics.setColor(accentColor)
         love.graphics.rectangle("line", Inits.GameWidth/2-290 , 739, 430, 120, 7, 7, 50)
         love.graphics.printf(ModifiersLabels[selectedSubMenuOption][2], Inits.GameWidth/2-280, 749, 410, "center")
         love.graphics.printf(PressToggleString, Inits.GameWidth/2-280, 820, 410, "center")
@@ -662,9 +667,9 @@ function SongSelectState:draw()
             if subMenuState == 1 then
                 for i = 1,#Modifiers do
                     if i == selectedSubMenuOption then
-                        love.graphics.setColor(0,0,0,0.9)
+                        love.graphics.setColor(selectedButtonFillColor)
                         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
-                        love.graphics.setColor(0,1,1)
+                        love.graphics.setColor(accentColor)
                         love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
                         love.graphics.setColor(1,1,1,1)
                         love.graphics.print(ModifiersLabels[i][1] .. ": " .. tostring(Modifiers[i]), Inits.GameWidth/2-280, 440+40*i-95)
@@ -672,7 +677,7 @@ function SongSelectState:draw()
 
 
 
-                        love.graphics.setColor(1,1,1,0.9)
+                        love.graphics.setColor(nonSelectedButtonFillColor)
                         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
                         love.graphics.setColor(0,0.8,0.8)
                         love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
@@ -695,9 +700,9 @@ function SongSelectState:draw()
             elseif subMenuState == 2 then
                 for i = 1,#songOptionsButtons do
                     if i == selectedSubMenuOption then
-                        love.graphics.setColor(0,0,0,0.9)
+                        love.graphics.setColor(selectedButtonFillColor)
                         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
-                        love.graphics.setColor(0,1,1)
+                        love.graphics.setColor(accentColor)
                         love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
                         love.graphics.setColor(1,1,1,1)
                         love.graphics.print(songOptionsButtons[i], Inits.GameWidth/2-280, 440+40*i-95)
@@ -705,7 +710,7 @@ function SongSelectState:draw()
 
 
 
-                        love.graphics.setColor(1,1,1,0.9)
+                        love.graphics.setColor(nonSelectedButtonFillColor)
                         love.graphics.rectangle("fill", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
                         love.graphics.setColor(0,0.8,0.8)
                         love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
@@ -749,14 +754,14 @@ function SongSelectState:draw()
 
         for i = 1,#diffList do
             if i == selectedDifficulty then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
-                love.graphics.setColor(0,1,1)
+                love.graphics.setColor(accentColor)
 
                 love.graphics.rectangle("line", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.print(DiffNameList[i], diffListXPositions[i]+12, i*60+12)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", diffListXPositions[i], i*60, 1000, 50, 7, 7, 50)
                 love.graphics.setColor(0,0.8,0.8)
 
@@ -770,9 +775,9 @@ function SongSelectState:draw()
     love.graphics.pop()
 
     love.graphics.push()
-    love.graphics.setColor(0,0,0,0.9)
+    love.graphics.setColor(selectedButtonFillColor)
     love.graphics.rectangle("fill", 0, Inits.GameHeight-140, 320, 140, 7, 7, 50)
-    love.graphics.setColor(0,1,1)
+    love.graphics.setColor(0,0,0)
     love.graphics.rectangle("line", 0, Inits.GameHeight-140, 320, 140, 7, 7, 50)
     love.graphics.setFont(MenuFontExtraSmall)
     love.graphics.printf(#songList.." Songs Found\n\nPress F1 to import songs from Quaver\n\nPress F2 to open Music Folder", 10, Inits.GameHeight-130, 310, "left")

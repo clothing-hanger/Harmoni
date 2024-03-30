@@ -412,15 +412,15 @@ function SettingsState:draw()
     if CurSettingsMenu == "Tabs" then
         for i = 1,#Tabs do
             if selectedSetting == i then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.setColor(0,1,1,1)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Tabs[i][1], 55, 60*i+10)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Tabs[i][1], 55, 60*i+10)        
             end
@@ -438,15 +438,15 @@ function SettingsState:draw()
     elseif CurSettingsMenu == "Gameplay" then
         for i = 1,#Gameplay do
             if selectedSetting == i then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.setColor(0,1,1,1)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Gameplay[i][1] .. ": " .. tostring(Gameplay[i][2]), 55, 60*i+10)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Gameplay[i][1] .. ": " .. tostring(Gameplay[i][2]), 55, 60*i+10)
             end
@@ -464,15 +464,15 @@ function SettingsState:draw()
 
         for i = 1,#Menu do
             if selectedSetting == i then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.setColor(0,1,1,1)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Menu[i][1] .. ": " .. tostring(Menu[i][2]), 55, 60*i+10)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Menu[i][1] .. ": " .. tostring(Menu[i][2]), 55, 60*i+10)
             end
@@ -490,15 +490,15 @@ function SettingsState:draw()
 
         for i = 1,#System do
             if selectedSetting == i then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.setColor(0,1,1,1)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(System[i][1] .. ": " .. tostring(System[i][2]), 55, 60*i+10)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(System[i][1] .. ": " .. tostring(System[i][2]), 55, 60*i+10)
             end
@@ -516,15 +516,15 @@ function SettingsState:draw()
     elseif CurSettingsMenu == "Skins" then
         for i = 1,#Skins do
             if selectedSetting == i then
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.setColor(0,1,1,1)
                 love.graphics.print(Skins[i], 55, 60*i+10)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
             else
-                love.graphics.setColor(1,1,1,0.9)
+                love.graphics.setColor(nonSelectedButtonFillColor)
                 love.graphics.rectangle("fill", 50, 60*i, 500, 50, 7, 7)
-                love.graphics.setColor(0,0,0,0.9)
+                love.graphics.setColor(selectedButtonFillColor)
                 love.graphics.rectangle("line", 50, 60*i, 500, 50, 7, 7)
                 love.graphics.print(Skins[i], 55, 60*i+10)
             end
