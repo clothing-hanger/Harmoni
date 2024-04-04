@@ -112,7 +112,7 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
-    hitsPerSecond = {0}
+    hitsPerSecond = {}
     notesPerSecond = {}
     hitErrorTable = {}
     dimBackground()
@@ -241,6 +241,7 @@ end
 
 function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
+    table.insert(hitsPerSecond, 1000)
 
     local lane = lanes[key]
 
@@ -316,6 +317,13 @@ function PlayState:update(dt)
         notesPerSecond[i] = notesPerSecond[i] - 1000*dt
         if notesPerSecond[i] <= 0 then
             table.remove(notesPerSecond, i)
+            break
+        end
+    end
+    for i = 1,#hitsPerSecond do
+        hitsPerSecond[i] = hitsPerSecond[i] - 1000*dt
+        if hitsPerSecond[i] <= 0 then
+            table.remove(hitsPerSecond, i)
             break
         end
     end
@@ -450,11 +458,6 @@ end
 
 function PlayState:beat()
 
-    if combo < 500 then
-        beatBump = {(combo/7500)/2}
-    else
-        beatBump = {(500/7500)/2} --   
-    end
 
     beatBump = {(#notesPerSecond/400 or 0)}
 
@@ -694,6 +697,8 @@ function checkBotInput()
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
                 table.insert(notesPerSecond, 1000)
+                table.insert(hitsPerSecond, 1000)
+
 
                 break
             end
@@ -919,9 +924,9 @@ function PlayState:draw()
                     for i = 1,4 do
                         local inp = allInputs[i]
                         local spr = _G["Receptor" .. AllDirections[i]]
-                        if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                        love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-                        love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
+                            if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                            love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                            love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
 
@@ -951,7 +956,7 @@ function PlayState:draw()
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
     
-            love.graphics.print(math.floor(printableScore[1]),0,0-(beatBump[1]*50))
+            love.graphics.print(math.floor(printableScore[1]).."\n"..#notesPerSecond.."/"..#hitsPerSecond,0,0-(beatBump[1]*50))
     
             love.graphics.setFont(DefaultFont)
     

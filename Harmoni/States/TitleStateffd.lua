@@ -65,7 +65,10 @@ function TitleState:enter()
                     quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
                 else
                     notification("Title Screen Failed to Load Chart", notifErrorIcon)
-                    selectedSong = love.math.random(1,#songList)
+                    selectedSong = selectedSong+1
+                    if selectedSong > #songList then
+                        selectedSong = 1
+                    end
                     randomDifficulty = 1
 
                     loadTitleSongEnter()

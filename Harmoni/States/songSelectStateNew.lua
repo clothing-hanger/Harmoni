@@ -276,9 +276,10 @@ function SongSelectState:update(dt)
                             selectedSong = selectedSong + 1
                             SongSelectState:loadSong(true)
 
+                            recursivelyDelete("Music/" .. songList[songToDelete])
+
                             table.remove(songNamesTable, songToDelete)
                             table.remove(songList, songToDelete)
-                            recursivelyDelete("Music/" .. songList[songToDelete])
 
 
                             areYouSureDelete = false

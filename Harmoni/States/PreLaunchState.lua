@@ -89,6 +89,7 @@ function PreLaunchState:update(dt)
       --  end
 
     if #songNamesTable == #songList then
+        pastPreLaunch = true
         State.switch(States.TitleState)
 
     end
