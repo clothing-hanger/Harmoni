@@ -118,7 +118,7 @@ function love.run()
 			love.graphics.present()
 		end
 
-		if love.timer then love.timer.sleep(0.001*0.99) end
+		if love.timer then love.timer.sleep(0.001) end
 	end
 end
 
