@@ -153,15 +153,15 @@ function CreditsState:draw()
             love.graphics.translate(-300,-20)
             for i = 1, #Credits do
                 if i == selectedCredit then
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-200, 100*i, 400, 50, 7, 7, 50)
                     love.graphics.setColor(0,1,1,1)
                     love.graphics.printf(Credits[i][1], Inits.GameWidth/2-200, (100*i)+3 , 400, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-200, 100*i, 400, 50, 7, 7, 50)
                 else
-                    love.graphics.setColor(1,1,1,0.9)
+                    love.graphics.setColor(nonSelectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-200, 100*i, 400, 50, 7, 7, 50)
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.printf(Credits[i][1], Inits.GameWidth/2-200, (100*i)+3 , 400, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-200, 100*i, 400, 50, 7, 7, 50)
                 end
@@ -169,7 +169,7 @@ function CreditsState:draw()
         love.graphics.pop()
         love.graphics.push()
         love.graphics.translate(-50,0)
-            love.graphics.setColor(0,0,0,0.9)
+            love.graphics.setColor(selectedButtonFillColor)
 
             love.graphics.rectangle("fill", 670, 100, 600, 50, 7, 7, 50)
             love.graphics.setColor(0,1,1,1)
@@ -177,7 +177,7 @@ function CreditsState:draw()
 
             love.graphics.printf(Credits[selectedCredit][2], 670, 105, 600, "center")
 
-            love.graphics.setColor(1,1,1,0.9)
+            love.graphics.setColor(nonSelectedButtonFillColor)
             love.graphics.rectangle("fill", 670, 160, 600, 400, 7, 7, 50)
             love.graphics.setColor(0,1,1,1)
             love.graphics.rectangle("line", 670, 160, 600, 400, 7, 7, 50)

@@ -112,8 +112,8 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
-    hitsPerSecond = {0}
-    notesPerSecond = {0}
+    hitsPerSecond = {}
+    notesPerSecond = {}
     hitErrorTable = {}
     dimBackground()
 
@@ -225,7 +225,11 @@ function PlayState:doNoteHit(note)
     if not note.wasGoodHit then
         note.wasGoodHit = true
         judge(MusicTime - note.time)
-        table.insert(notesPerSecond, 1)
+        if MusicTime - note.time <= marvTiming then
+            splash:start()
+            splash:emit(3)
+        end
+        table.insert(notesPerSecond, 1000)
         if #note.children > 0 then
             note.moveWithScroll = false
         else
@@ -237,6 +241,7 @@ end
 
 function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
+    table.insert(hitsPerSecond, 1000)
 
     local lane = lanes[key]
 
@@ -307,6 +312,23 @@ function PlayState:update(dt)
     end
 
     checkMiss()
+
+    for i = 1,#notesPerSecond do
+        notesPerSecond[i] = notesPerSecond[i] - 1000*dt
+        if notesPerSecond[i] <= 0 then
+            table.remove(notesPerSecond, i)
+            break
+        end
+    end
+    for i = 1,#hitsPerSecond do
+        hitsPerSecond[i] = hitsPerSecond[i] - 1000*dt
+        if hitsPerSecond[i] <= 0 then
+            table.remove(hitsPerSecond, i)
+            break
+        end
+    end
+
+    print(#notesPerSecond)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
@@ -436,11 +458,8 @@ end
 
 function PlayState:beat()
 
-    if combo < 500 then
-        beatBump = {(combo/7500)/2}
-    else
-        beatBump = {(500/7500)/2} --   
-    end
+
+    beatBump = {(#notesPerSecond/400 or 0)}
 
 
 
@@ -677,6 +696,10 @@ function checkBotInput()
             if MusicTime - note.time > -1 then
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
+                table.insert(notesPerSecond, 1000)
+                table.insert(hitsPerSecond, 1000)
+
+
                 break
             end
         end
@@ -901,8 +924,9 @@ function PlayState:draw()
                     for i = 1,4 do
                         local inp = allInputs[i]
                         local spr = _G["Receptor" .. AllDirections[i]]
-                        if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                        love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                            if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
+                            love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                            love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
 
@@ -932,7 +956,7 @@ function PlayState:draw()
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
     
-            love.graphics.print(math.floor(printableScore[1]),0,0-(beatBump[1]*50))
+            love.graphics.print(math.floor(printableScore[1]).."\n"..#notesPerSecond.."/"..#hitsPerSecond,0,0-(beatBump[1]*50))
     
             love.graphics.setFont(DefaultFont)
     
@@ -1016,7 +1040,6 @@ function PlayState:draw()
         if combo > 0 then
             love.graphics.printf(combo, 0, Inits.GameHeight/2-(ComboPosition * downscrollOffset) +judgePos[1]*2, Inits.GameWidth, "center", nil, 1, judgePos[2])
         end
-        love.graphics.print("MusicTime: " .. math.floor(MusicTime))
         love.graphics.setColor(0,0.5,1)
       --  love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 3, 3-(beatBump[1]*100), Inits.GameWidth, "right")
        -- love.graphics.printf(grade, 3, 58-(beatBump[1]*100), Inits.GameWidth, "right")
@@ -1094,15 +1117,15 @@ function PlayState:draw()
             local options = {"Resume", "Restart", "Exit"}
             for i = 1, #options do
                 if i == pauseSelection then
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
                     love.graphics.setColor(0,1,1,1)
                     love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
                 else
-                    love.graphics.setColor(1,1,1,0.9)
+                    love.graphics.setColor(nonSelectedButtonFillColor)
                     love.graphics.rectangle("fill", Inits.GameWidth/2-100, 100*i, 200, 50)
-                    love.graphics.setColor(0,0,0,0.9)
+                    love.graphics.setColor(selectedButtonFillColor)
                     love.graphics.printf(options[i], Inits.GameWidth/2-100, (100*i)-5 , 200, "center")
                     love.graphics.rectangle("line", Inits.GameWidth/2-100, 100*i, 200, 50)
                 end

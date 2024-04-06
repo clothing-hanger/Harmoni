@@ -11,6 +11,7 @@ function TitleState:enter()
 
     beatBump = {1}
     logoBumpTable = {}
+    printableLogoBump = {0}
 
 
     H = love.graphics.newImage("Images/TITLE/H.png")   -- look it spells friday night funkin
@@ -29,18 +30,13 @@ function TitleState:enter()
 
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
-    resetMenuMusic = function(changeSong)
+    resetMenuMusic = function()
         doingTitleMusicReset = true
-        if MenuMusic and MenuMusic:isPlaying() then
-            MenuMusic:stop()
-        end
         MenuMusic = nil
         
         print("resetMenuMusic")
         songList = love.filesystem.getDirectoryItems("Music")
-        if changeSong then
-            randomSong = love.math.random(1,#songList)
-        end
+        randomSong = love.math.random(1,#songList)
         diffList = {}
         selectedSong = love.math.random(1,#songList)
         diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
@@ -53,12 +49,9 @@ function TitleState:enter()
         for i = 1,#diffListAndOtherShitIdfk do
             print(diffListAndOtherShitIdfk[i])
         end
-        if changeSong then
+        randomDifficulty = love.math.random(1, #diffList)
 
-            randomDifficulty = love.math.random(1, #diffList)
-        end
         chartRandomXPositions = {}
-        speedTitle = 0.6
         logoSize = 1
         curSelection = 1
         buttonWidth = {0,0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
@@ -72,7 +65,10 @@ function TitleState:enter()
                     quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
                 else
                     notification("Title Screen Failed to Load Chart", notifErrorIcon)
-                    selectedSong = love.math.random(1,#songList)
+                    selectedSong = selectedSong+1
+                    if selectedSong > #songList then
+                        selectedSong = 1
+                    end
                     randomDifficulty = 1
 
                     loadTitleSongEnter()
@@ -96,6 +92,8 @@ function TitleState:enter()
             end
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "file") then
                 MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
+                MenuMusic:play()
+
             else
                 notification("Audio Not Found!", notifErrorIcon)
             end
@@ -105,7 +103,6 @@ function TitleState:enter()
             else
                 notification("Background Not Found!", notifErrorIcon)
             end
-            MenuMusic:play()
             MusicTime = 0
             doingTitleMusicReset = false
         end
@@ -115,14 +112,11 @@ function TitleState:enter()
 
     if State.last() ~= States.SongSelectState and State.last() ~= States.SettingsState and State.last() ~= States.CreditsState then  --shut up i know its bad
 
-        resetMenuMusic(true)
+        resetMenuMusic()
     else
-        resetMenuMusic(true)
-
         logoYPos = {-200}
         titleState = 2
     end
-    printablespeedTitle = speedTitle *(logoSize+0.7)
 
 end
 
@@ -142,6 +136,10 @@ function TitleState:update(dt)
         end
     end
 
+    Timer.tween(0.1, printableLogoBump, {#logoBumpTable}, "out-expo")
+    logoSize = math.max(logoSize - 20*dt, 1)
+
+
     for i = 1,#bumpNotes do
         if -(MusicTime - bumpNotes[i]) < 0 then
             table.remove(bumpNotes, i)
@@ -157,7 +155,6 @@ function TitleState:update(dt)
         end
     end
 
-    logoSize = math.max(logoSize - 20*dt, 1)
 
     if Input:pressed("MenuConfirm") then
         if titleState == 1 then
@@ -197,10 +194,9 @@ function TitleState:update(dt)
     end
 
     if not MenuMusic:isPlaying() and onTitle and not doingTitleMusicReset then
-        resetMenuMusic(true)
+        resetMenuMusic()
     end
 
-    printablespeedTitle = speedTitle *(logoSize+0.7)
 
     TitleState:doBPMshit()
 end
@@ -242,12 +238,16 @@ end
 function TitleState:beat()
 
 
-    beatBump = {1.015 + #logoBumpTable/100, 100/225, 100/255, 0}
+    beatBump = {1.015 + logoSize/230, 71/255,18/255,107/255}
+ --   nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
+--    accentColor = {251/255,111/255,146/255}
+
+
 
     if beatBumpTimer then
         Timer.cancel(beatBumpTimer)
     end
-    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {[1] = 1, [2] = 1, [3] = 1, [4] = 1}, "out-expo") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {[1] = 1, [2] = 1, [3] = 1, [4] = 1}, "out-expo")
 end
 
 
@@ -265,31 +265,15 @@ function TitleState:switchMenu()
 
     end)
 
-    Timer.tween(0.3, buttonStartPositions, {[1] = buttonPositions[1]}, "out-expo", function()
-
-    end)
-    Timer.tween(0.4, buttonStartPositions, {[2] = buttonPositions[2]}, "out-expo", function() 
-
-    end)
-    Timer.tween(0.5, buttonStartPositions, {[3] = buttonPositions[3]}, "out-expo", function() 
-
-    end)
-    Timer.tween(0.6, buttonStartPositions, {[4] = buttonPositions[4]}, "out-expo", function() 
-
-    end)
-    Timer.tween(0.7, buttonStartPositions, {[5] = buttonPositions[5]}, "out-expo", function() 
-
-    end)
-    Timer.tween(0.8, buttonStartPositions, {[6] = buttonPositions[6]}, "out-expo", function() 
-    end)
-    
+    for i = 1, 6 do
+        Timer.tween(0.2 + (i/10), buttonStartPositions, {[i] = buttonPositions[i]}, "out-expo")
+      end
     titleState = 2
 end
 
 function TitleState:logoBump()
     logoSize = math.min(logoSize + 1.5, 35)
     table.insert(logoBumpTable,1000)
-
 end
 
 
@@ -348,19 +332,9 @@ function TitleState:draw()
    -- love.graphics.translate(0,-100) 
     if #notes > 0 and #chartRandomXPositions > 0 then
         for i = 1,#notes do
-            if -(MusicTime - notes[i])*speedTitle < Inits.GameHeight+100 then
+            if -(MusicTime - notes[i])*speed < Inits.GameHeight+100 then
                 love.graphics.setColor(1,1,1,0.1+(logoSize-1)*25)
-
                 
-                if noteLanes[i] == 1 then
-                  --  love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 2 then
-                  --  love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 3 then
-                  --  love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 4 then
-                  --  love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                end
 
                 --]]
                 love.graphics.setColor(1,1,1,1)
@@ -370,24 +344,25 @@ function TitleState:draw()
 
   
   -- love.graphics.draw(logo, logo:getWidth()/2, Inits.GameHeight/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
-  love.graphics.push()
-  love.graphics.translate(30,0)
-  love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
-  love.graphics.translate(0,logoYPos[1])
+    love.graphics.push()
+    love.graphics.translate(30,0)
+    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.translate(0,logoYPos[1])
 
-  love.graphics.scale(beatBump[1], beatBump[1])
+    love.graphics.scale(beatBump[1], beatBump[1])
 
-  love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
+    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
 
-  love.graphics.setColor((beatBump[2] or 1), (beatBump[3] or 1), (beatBump[4] or 1))
+    love.graphics.setColor((beatBump[2] or 1), (beatBump[3] or 1), (beatBump[4] or 1))
 
-  love.graphics.draw(H, Inits.GameWidth/2-H:getWidth()/2-425-(logoSize*3), Inits.GameHeight/2-H:getHeight()/2-28)   -- holy shit no way it spells quaver
-  love.graphics.draw(A, Inits.GameWidth/2-A:getWidth()/2-285-(logoSize*2), Inits.GameHeight/2-A:getHeight()/2)
-  love.graphics.draw(R, Inits.GameWidth/2-R:getWidth()/2-160-(logoSize), Inits.GameHeight/2-R:getHeight()/2)
-  love.graphics.draw(M, Inits.GameWidth/2-M:getWidth()/2, Inits.GameHeight/2-M:getHeight()/2)
-  love.graphics.draw(O, Inits.GameWidth/2-O:getWidth()/2+170+(logoSize), Inits.GameHeight/2-O:getHeight()/2)
-  love.graphics.draw(N, Inits.GameWidth/2-N:getWidth()/2+300+(logoSize*2), Inits.GameHeight/2-N:getHeight()/2)
-  love.graphics.draw(I, Inits.GameWidth/2-I:getWidth()/2+395+(logoSize*3), Inits.GameHeight/2-I:getHeight()/2-25)
+    love.graphics.draw(H, Inits.GameWidth/2-H:getWidth()/2-425-(logoSize*3), Inits.GameHeight/2-H:getHeight()/2-28)   -- holy shit no way it spells quaver
+    love.graphics.draw(A, Inits.GameWidth/2-A:getWidth()/2-285-(logoSize*2), Inits.GameHeight/2-A:getHeight()/2)
+    love.graphics.draw(R, Inits.GameWidth/2-R:getWidth()/2-160-(logoSize), Inits.GameHeight/2-R:getHeight()/2)
+    love.graphics.draw(M, Inits.GameWidth/2-M:getWidth()/2, Inits.GameHeight/2-M:getHeight()/2)
+    love.graphics.draw(O, Inits.GameWidth/2-O:getWidth()/2+170+(logoSize), Inits.GameHeight/2-O:getHeight()/2)
+    love.graphics.draw(N, Inits.GameWidth/2-N:getWidth()/2+300+(logoSize*2), Inits.GameHeight/2-N:getHeight()/2)
+    love.graphics.draw(I, Inits.GameWidth/2-I:getWidth()/2+395+(logoSize*3), Inits.GameHeight/2-I:getHeight()/2-25)
+
 
     love.graphics.pop()
     love.graphics.push()
@@ -404,6 +379,7 @@ function TitleState:draw()
   
   --  love.graphics.setColor(accentColor)
     --love.graphics.line(-400,1200,-100,1200*tipBoxBarLenght[1])
+
 
     love.graphics.setFont(MenuFontSmall)
 
@@ -422,7 +398,6 @@ function TitleState:draw()
     love.graphics.pop()
     love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1]*2)
 
-
     for i = 1,#ButtonLabels do
         if i == curSelection then
             love.graphics.setColor(selectedButtonFillColor)
@@ -438,6 +413,7 @@ function TitleState:draw()
         love.graphics.rectangle("line", logo:getWidth()/2-120-buttonWidth[i], buttonStartPositions[i], 240+(buttonWidth[i]*2), 25, 7, 7, 50)
         love.graphics.printf(ButtonLabels[i], logo:getWidth()/2-120, buttonStartPositions[i], 240, "center")
     end
+
 
 
 

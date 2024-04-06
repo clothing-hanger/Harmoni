@@ -1,10 +1,31 @@
  
 versionNumber = "Harmoni Beta 2.0"
 
+love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
+
 local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
 Inits = require("inits")
 require("Libraries.lovefs.lovefs")
+
+
+forceLag = true
+minFakeLag = 50
+maxFakeLag = 50
+
+
+
+
+--colors
+
+
+accentColor = {251/255,111/255,146/255}
+selectedButtonFillColor = {255/255,179/255,198/255,0.9}
+nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
+playingSongFillColor = {255/255,71/255,126/255}
+nonSelectedSongAccentColor = {255/255,229/255,236/255}
+playingSongAccentColor = {255/255,10/255,84/255}
+
 
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
@@ -21,8 +42,6 @@ end
         false, -- no hold notes
     }
 
-    notificationsTable = {}
-
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
@@ -35,6 +54,8 @@ ModifiersLabels = {
     {"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
     {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
 }
+
+
 
 disablePrint = false
 
@@ -58,6 +79,47 @@ function recursivelyDelete( item )
         love.filesystem.remove( item )
     end
     love.filesystem.remove( item )
+end
+
+function love.run()
+	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+
+	-- We don't want the first frame's dt to include time taken by love.load.
+	if love.timer then love.timer.step() end
+
+	local dt = 0
+
+	-- Main loop time.
+	return function()
+		-- Process events.
+		if love.event then
+			love.event.pump()
+			for name, a,b,c,d,e,f in love.event.poll() do
+				if name == "quit" then
+					if not love.quit or not love.quit() then
+						return a or 0
+					end
+				end
+				love.handlers[name](a,b,c,d,e,f)
+			end
+		end
+
+		-- Update dt, as we'll be passing it to update
+		if love.timer then dt = love.timer.step() end
+
+		-- Call update and draw
+		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
+		if love.graphics and love.graphics.isActive() then
+			love.graphics.origin()
+			love.graphics.clear(love.graphics.getBackgroundColor())
+
+			if love.draw then love.draw() end
+
+			love.graphics.present()
+		end
+
+		if love.timer then love.timer.sleep(0.001) end
+	end
 end
 
 function love.errorhandler(msg)
@@ -133,7 +195,7 @@ function love.errorhandler(msg)
 	local function draw()
 		if not love.graphics.isActive() then return end
 		local pos = 70
-		love.graphics.clear(89/255, 157/255, 220/255)
+		love.graphics.clear(0,0,0)
 		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)
 		love.graphics.present()
 	end
@@ -286,8 +348,6 @@ function love.load()
     })
     Class = require("Libraries.Class")
     State = require("Libraries.State")
-    Ini = require("Libraries.Ini")
-    Json = require("Libraries.Json")
     tinyyaml = require("Libraries.tinyyaml")
 
     Timer = require("Libraries.Timer")
@@ -296,14 +356,13 @@ function love.load()
 
     -- Initialize Game
     States = require("Modules.States")
-    --loadSettings()
+    loadSettings()
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     Table = require("Modules.Table")
     ChartParse = require("Modules.ChartParse")
-    Settings = require("Modules.Settings")
-    Settings.loadSettings()
 
+    notificationsTable = {}
  
 
 
@@ -323,6 +382,9 @@ function love.load()
 
 
 
+
+    --particle effects
+    require("Particles.splash")
 
 
     --notificationImages 
@@ -352,6 +414,7 @@ function love.load()
         {"Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4", discordImage},
 
     }
+
     
     extremeRareTips = {
         "you should just delete the game honestly",
@@ -385,6 +448,13 @@ function love.load()
 
 
     DefaultFont = love.graphics.newFont(12)
+
+
+
+   
+
+
+
     State.switch(States.PreLaunchState)
 
 
@@ -393,6 +463,17 @@ function love.load()
 end
 
 function love.update(dt)
+
+    if not love.window.hasFocus() and pastPreLaunch and not (BotPlay and State.current() == States.PlayState) then
+        forceLag = true
+        love.audio.setVolume(volume*0.1)
+    else
+        forceLag = false
+        love.audio.setVolume(volume)
+    end
+    if pastPreLaunch and forceLag then
+        love.timer.sleep(love.math.random(minFakeLag, maxFakeLag)/1000)
+    end
 
     deltaTime = dt
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
@@ -413,7 +494,6 @@ function love.update(dt)
 
     volumeOpacity[1] = volumeOpacity[1] - 1*dt
     volumeVelocity = math.max(0, volumeVelocity-100*dt)
-    love.audio.setVolume(volume)
     tweenVolumeDisplay()
 
     if songSelectSearch then
@@ -527,7 +607,7 @@ function tweenVolumeDisplay()
     volumeTween = Timer.tween(0.2, printableVolume, {love.audio.getVolume()}, "out-back")  --using out-back makes it feel snappier
 end
 
-
+notificationsTable={}
 function notification(contents, icon)
     notifContents = (contents or "Error- No Notification Text")
     notifIcon = (icon or notifGeneralIcon)
