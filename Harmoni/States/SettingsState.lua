@@ -87,8 +87,12 @@ function loadSettings()
 
         love.audio.setVolume(defaultVolume)
         volume = defaultVolume
-                
-        love.filesystem.load(Skin .. "/skin.lua")()
+        if love.filesystem.getInfo(Skin .. "/skin.lua", file) then
+            love.filesystem.load(Skin .. "/skin.lua")()
+        else
+            Skin = "Default Arrow"
+            love.filesystem.load(Skin .. "/skin.lua")()
+        end
         currentSkin = Skin:gsub("skin.lua", "")
         
     else
