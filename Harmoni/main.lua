@@ -1,11 +1,14 @@
  
 versionNumber = "Harmoni Beta 2.0"
 
+debugMode = true
+
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
 
 local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
 Inits = require("inits")
+vudu = require("Libraries.vudu")
 require("Libraries.lovefs.lovefs")
 
 
@@ -56,9 +59,11 @@ ModifiersLabels = {
 }
 
 
-
-disablePrint = false
-
+if debugMode then
+    disablePrint = false
+else
+    disablePrint = true
+end
 idfkIFThiswillwork = false
 
 
@@ -354,6 +359,9 @@ function love.load()
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     tinyyaml = require("Libraries.tinyyaml")
+    if debugMode then
+        vudu.initialize()
+    end
 
     Timer = require("Libraries.Timer")
 
