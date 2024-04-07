@@ -90,7 +90,7 @@ function loadSettings()
         if love.filesystem.getInfo(Skin .. "/skin.lua", file) then
             love.filesystem.load(Skin .. "/skin.lua")()
         else
-            Skin = "Default Arrow"
+            Skin = "Skins/Default Arrow/"
             love.filesystem.load(Skin .. "/skin.lua")()
         end
         currentSkin = Skin:gsub("skin.lua", "")
