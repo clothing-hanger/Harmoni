@@ -73,7 +73,8 @@ function QuaverImportScreen:update(dt)
 end
 
 function QuaverImportScreen:draw()
-    love.graphics.printf("Importing Quaver songs...", 0, Inits.GameHeight/2-100, Inits.GameWidth/2, "center", 0, 2, 2)
+    love.graphics.setFont(MenuFontBig)
+    love.graphics.printf("Hang tight, Harmoni is importing your songs.\n The game might appear to be frozen, but it's not, it's trying its best just give it time lmao\n" .. loadingEasterEgg, Inits.GameWidth/2-600, Inits.GameHeight/2, 1200, "center")
 end
 
 return QuaverImportScreen

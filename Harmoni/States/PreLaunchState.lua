@@ -5,9 +5,9 @@ function PreLaunchState:enter()
     loading = love.graphics.newImage("Images/SHARED/loading.png")
     preLaunchFade = {1}
     loadingAngle = {0}
+    pastPreLaunch = false
     songList = love.filesystem.getDirectoryItems("Music")
     loadingString = "Loading...   0/" .. #songList
-
     loadingEasterEggs = {
         "Harmoni runs on hamsters running in little wheels, this might take a while.",
         "Harmoni is actually held together with duct tape and prayer so don't expect much out of it.",
@@ -70,10 +70,8 @@ function PreLaunchState:update(dt)
             --    print("found")
                 if metaFileFound then
                     songName = love.filesystem.load("Music/" .. songList[frame] .. "/" .."meta.lua")()
-                    print("Meta Data Found" .."Music/" .. songList[frame] .. "/" .."meta.lua")
                     table.insert(songNamesTable, frame, songName)
                 else
-                    print("First Time processing " .. "Music/" .. songList[frame] .. "/" .. diffListQ[1])
                     chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[frame] .. "/" .. diffListQ[1]))
                     love.filesystem.write("Music/" .. songList[frame] .. "/" .."meta.lua", "return " .. "\"" .. chart.Title .."\"")
                     table.insert(songNamesTable, frame, chart.Title)

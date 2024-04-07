@@ -28,6 +28,7 @@ function PlayState:enter()
     currentTrackPosition = 0
     currentSvIndex = 1
     initialScrollVelocity = 1
+    breakFade = {0}
 
     MusicTime = -2000
 
@@ -54,14 +55,7 @@ function PlayState:enter()
     ReceptorDownPressed = ReceptorPressedDownImage
     ReceptorUpPressed = ReceptorPressedUpImage
     ReceptorRightPressed = ReceptorPressedRightImage
-    NoteLeft = NoteLeftImage
-    NoteDown = NoteDownImage
-    NoteUp = NoteUpImage
-    NoteRight = NoteRightImage
-    NoteLeftTrail = NoteLeftTrailImage
-    NoteDownTrail = NoteDownTrailImage
-    NoteUpTrail = NoteUpTrailImage
-    NoteRightTrail = NoteRightTrailImage
+
     Marvelous = MarvelousImage
     Perfect = PerfectImage
     Great = GreatImage
@@ -235,9 +229,12 @@ function PlayState:doNoteHit(note)
         else
             note.visible = false
             table.remove(lanes[note.lane], 1)
+            PlayState:checkTimeToNextNote()
+
         end
     end
 end
+
 
 function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
@@ -261,9 +258,41 @@ function PlayState:keyDown(key)
     for i, note in ipairs(lane) do
         if note.endTime - MusicTime <= -15 and not note.moveWithScroll then -- hold note that is currently being pressed
             table.remove(lane, i)
+            PlayState:checkTimeToNextNote()
             break
         end
     end
+end
+
+function PlayState:checkTimeToNextNote()
+    local testNextNoteTime = 0
+    for i = 1,4 do
+        local note = lanes[i][1]
+        if testNextNoteTime == 0 then
+            testNextNoteTime = note.time
+            NextNoteTime = testNextNoteTime
+        else
+            if testNextNoteTime < NextNoteTime then
+                NextNoteTime = testNextNoteTime
+            end
+        end
+        timeToNextNote = (NextNoteTime - MusicTime)/1000
+        if timeToNextNote > 5 and not doingBreak then
+            PlayState:doBreak()
+        end
+    end
+end
+
+function PlayState:doBreak()
+    doingBreak = true
+    breakFade = {0}
+    Timer.tween(0.4, breakFade, {1}, "linear", function()
+        Timer.after(3.4, function() 
+            Timer.tween(0.4, breakFade, {0}, "linear", function()
+                doingBreak = false
+            end)
+        end)
+    end)
 end
 
 function PlayState:keyReleased(key) 
@@ -276,10 +305,11 @@ function PlayState:keyReleased(key)
             if note.endTime - MusicTime > greatTiming then
                 missCount = missCount + 1
                 combo = 0
-                print("Trail released")
                 judge(note.endTime - MusicTime)
             end
             table.remove(lane, i)
+            PlayState:checkTimeToNextNote()
+
         end
     end
 end
@@ -328,7 +358,6 @@ function PlayState:update(dt)
         end
     end
 
-    print(#notesPerSecond)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
@@ -363,7 +392,6 @@ function PlayState:update(dt)
     if gameOverSongSlowdown[1] ~= 1 then
 
         song:setPitch(gameOverSongSlowdown[1])
-        print(gameOverSongSlowdown[1])
     end
     PlayState:doGradeShitIdk()
     if skinUpdate then
@@ -542,6 +570,8 @@ function checkMiss()
             if MusicTime - note.time > missTiming and not note.wasGoodHit then
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
+                PlayState:checkTimeToNextNote()
+
                 health = health - 0.075
                 break
             end
@@ -696,6 +726,8 @@ function checkBotInput()
             if MusicTime - note.time > -1 then
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
+                PlayState:checkTimeToNextNote()
+
                 table.insert(notesPerSecond, 1000)
                 table.insert(hitsPerSecond, 1000)
 
@@ -1069,10 +1101,18 @@ function PlayState:draw()
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
         end
-
-        love.graphics.setColor(0,1,1,songInfoAlpha)
         love.graphics.setFont(MediumFont)
 
+        love.graphics.setColor(0,0,0,math.min(0.7, breakFade[1]))
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+        love.graphics.setColor(1,1,1, breakFade[1])
+
+        love.graphics.printf("Current Stats".."\n\n" .."Accuracy: " .. accuracy .. "\nScore: " .. score .. "\nHealth: " .. health*100 .. "%", 0, Inits.GameHeight/2-250, Inits.GameWidth, "center")
+
+        love.graphics.setColor(0,1,1,songInfoAlpha)
+        love.graphics.setFont(MediumFontSolid)
+
+        
         love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 0, Inits.GameHeight/2-150, Inits.GameWidth, "center")
         love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(BigFont)

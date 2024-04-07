@@ -59,6 +59,8 @@ ModifiersLabels = {
 
 disablePrint = false
 
+idfkIFThiswillwork = false
+
 
 --[[
 function ❓(num)
@@ -117,13 +119,16 @@ function love.run()
 
 			love.graphics.present()
 		end
-
-		if love.timer then love.timer.sleep(0.001) end
+        idfkIFThiswillwork = not idfkIFThiswillwork
+        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
+		    if love.timer then love.timer.sleep(0.001) end
+        end
 	end
 end
 
 function love.errorhandler(msg)
 	msg = tostring(msg)
+    love.window.setMode(1000,700)
 
 	error_printer(msg, 2)
 
@@ -406,9 +411,7 @@ function love.load()
         "Don't miss",
         "Wishlist Rit on Steam!",
         "Hold ALT and scroll to change the volume",
-        "More Song Packs will be available in the future",
         "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
-        "Press F2 in the Song Select menu to visit the song packs Google Drive",
         "Press F3 to take a screenshot",
         {"Please consider donating to help development", kofiImage},
         {"Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4", discordImage},
@@ -418,7 +421,7 @@ function love.load()
     
     extremeRareTips = {
         "you should just delete the game honestly",
-        "still better than osu",
+        "still better than osu\n this is a FUCKINMG JOKE osu people dont get mad",
         "\"did you know that in heat colors change to another color dont believe me stick your fingers up your ass\"\n-Sapple",
         "just play quaver lmao",
         "pickles",
@@ -450,6 +453,7 @@ function love.load()
     DefaultFont = love.graphics.newFont(12)
 
 
+    firstTimeOnTitle = true
 
    
 
@@ -472,7 +476,8 @@ function love.update(dt)
         love.audio.setVolume(volume)
     end
     if pastPreLaunch and forceLag then
-        love.timer.sleep(love.math.random(minFakeLag, maxFakeLag)/1000)
+        --love.timer.sleep(love.math.random(minFakeLag, maxFakeLag)/1000)
+        love.timer.sleep(0.1)
     end
 
     deltaTime = dt

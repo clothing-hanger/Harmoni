@@ -15,7 +15,7 @@ function quaverParse(file)
         timingPointsTable = {}
         scrollVelocities = {}
         totalNoteCount = 0
-        for i = 1,4 do
+        for i = 1,7 do
             table.insert(lanes, {})
         end
         banner = nil
@@ -55,6 +55,11 @@ function quaverParse(file)
 
 
         if tostring(metaData.inputMode) == "7" then
+            sevenKey = true
+        else
+            fourKey = true
+        end
+        if tostring(metaData.inputMode) == "7" then
             notification("7 Key Not Supported! (yet)", notifErrorIcon)
             return false
         end
@@ -92,9 +97,6 @@ function quaverParse(file)
 
             totalNoteCount = totalNoteCount + 1
 
-            if lane > 4 then
-                return false
-            end
 
             if Modifiers[4] then
                 if lane == 1 then
@@ -116,7 +118,7 @@ function quaverParse(file)
                 print("first note time: ".. firstNoteTime)
             end
             
-            lastNoteTime = startTime -- this should work because the last time its run will be the last note
+            lastNoteTime = startTime -- this should work because the last time its run will be the last note      
             ::continue::
         end
         

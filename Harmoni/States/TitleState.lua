@@ -20,29 +20,38 @@ function TitleState:enter()
     O = love.graphics.newImage("Images/TITLE/O.png")
     N = love.graphics.newImage("Images/TITLE/N.png")
     I = love.graphics.newImage("Images/TITLE/I.png")
+    
 
 
-    buttonPositions = {850+30, 850+60, 850+90, 850+120, 850+150, 850+180}
-    buttonStartPositions = {1500,1500,1500,1500,1500,1500}
+    if firstTimeOnTitle then
+        buttonPositions = {850+30, 850+60, 850+90, 850+120, 850+150, 850+180}
+        buttonStartPositions = {1500,1500,1500,1500,1500,1500}
+        randomSong = love.math.random(1,#songList)
+    else
+        buttonPositions = {850+30, 850+60, 850+90, 850+120, 850+150, 850+180}
+        buttonStartPositions = {850+30, 850+60, 850+90, 850+120, 850+150, 850+180}
+        randomSong = selectedSong
+    end
 
 
+        firstTimeOnTitle = false
 
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
     resetMenuMusic = function(changeSong)
+        print("resetMenuMusic(" .. tostring(changeSong)..")")
         doingTitleMusicReset = true
         if MenuMusic and MenuMusic:isPlaying() then
             MenuMusic:stop()
         end
         MenuMusic = nil
         
-        print("resetMenuMusic")
         songList = love.filesystem.getDirectoryItems("Music")
         if changeSong then
             randomSong = love.math.random(1,#songList)
         end
         diffList = {}
-        selectedSong = love.math.random(1,#songList)
+        selectedSong = randomSong
         diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
         for i = 1,#diffListAndOtherShitIdfk do 
             local file = diffListAndOtherShitIdfk[i]
@@ -116,9 +125,11 @@ function TitleState:enter()
     if State.last() ~= States.SongSelectState and State.last() ~= States.SettingsState and State.last() ~= States.CreditsState then  --shut up i know its bad
 
         resetMenuMusic(true)
-    else
-        resetMenuMusic(true)
+        print("Not from menu")
 
+    else
+        resetMenuMusic(false)
+        print("From menu")
         logoYPos = {-200}
         titleState = 2
     end
@@ -345,28 +356,7 @@ function TitleState:draw()
     love.graphics.setColor(0,0,0,backgroundFade[1])
     love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
-   -- love.graphics.translate(0,-100) 
-    if #notes > 0 and #chartRandomXPositions > 0 then
-        for i = 1,#notes do
-            if -(MusicTime - notes[i])*speedTitle < Inits.GameHeight+100 then
-                love.graphics.setColor(1,1,1,0.1+(logoSize-1)*25)
 
-                
-                if noteLanes[i] == 1 then
-                  --  love.graphics.draw(H, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 2 then
-                  --  love.graphics.draw(R, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 3 then
-                  --  love.graphics.draw(O, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                elseif noteLanes[i] == 4 then
-                  --  love.graphics.draw(I, chartRandomXPositions[i], -(MusicTime - notes[i])*printablespeedTitle)
-                end
-
-                --]]
-                love.graphics.setColor(1,1,1,1)
-            end
-        end
-    end
 
   
   -- love.graphics.draw(logo, logo:getWidth()/2, Inits.GameHeight/2-logo:getHeight()/2+100, nil, logoSize, math.min(logoSize+((logoSize-1)*3), 1.5), logo:getWidth()/2, logo:getHeight()/2)
@@ -399,6 +389,7 @@ function TitleState:draw()
 
     love.graphics.setColor(selectedButtonFillColor)
 
+
     love.graphics.rectangle("fill", -400, 1050, 300, 150, 7, 7, 50)
     love.graphics.setColor(1,1,1)
   
@@ -414,6 +405,7 @@ function TitleState:draw()
         love.graphics.printf(currentTip, -390, 1060, 280,"center")
     end
     love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
+
 
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 

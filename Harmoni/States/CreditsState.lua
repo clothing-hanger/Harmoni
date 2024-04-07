@@ -1,5 +1,5 @@
 local CreditsState = State()
-
+--i like how in this whole game there are absolutely no useful comments at all
 function CreditsState:enter()
 
     selectedCredit = 1

@@ -147,7 +147,7 @@ function SongSelectState:initPositions()
 end
 
 function SongSelectState:getNotePositions(offset, initialPos, lane)
-    return 0 + (((initialPos or 0) - offset) * _G["speed" .. lane] / trackRounding)
+    return 0 + (((initialPos or 0) - offset) * speed / trackRounding)
 end
 
 function SongSelectState:updateNotePosition(offset, curTime)
@@ -398,7 +398,6 @@ end
 
 
 function bumpHanger(direction)
-    print(direction)
     if hangerTiltTween then
         Timer.cancel(hangerTiltTween)
     end
@@ -533,7 +532,6 @@ function scrollSongs(y)
 
     if menuState == 1 then  
         selectedSong = selectedSong - y
-        print(y)
         if y < 0 then
             bumpHanger(true)
         else
