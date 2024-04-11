@@ -268,6 +268,7 @@ function PlayState:checkTimeToNextNote()
     local testNextNoteTime = 0
     for i = 1,4 do
         local note = lanes[i][1]
+        if not note goto continue end
         if testNextNoteTime == 0 then
             testNextNoteTime = note.time
             NextNoteTime = testNextNoteTime
@@ -280,6 +281,7 @@ function PlayState:checkTimeToNextNote()
         if timeToNextNote > 5 and not doingBreak then
             PlayState:doBreak()
         end
+        ::continue::
     end
 end
 
