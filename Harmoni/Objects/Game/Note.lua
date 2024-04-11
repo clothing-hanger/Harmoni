@@ -50,13 +50,13 @@ function Note:new(time, lane, endTime)
     self.x = Inits.GameWidth/2-(LaneWidth*(3-lane))
     self.y = -2000
 
-    self.time = time
+    self.time = time / Modifiers[2]
     self.lane = lane
 
     if Modifiers[9] then
-        self.endTime = time
+        self.endTime = time / Modifiers[2]
     else
-        self.endTime = endTime
+        self.endTime = endTime / Modifiers[2]
     end
 
     self.image = BaseNoteImages[lane]

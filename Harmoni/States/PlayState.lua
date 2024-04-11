@@ -124,16 +124,8 @@ function PlayState:enter()
     end
     blurEffect = moonshine(moonshine.effects.boxblur)
     blurEffect.boxblur.radius = 0
-
     
     song:setPitch(Modifiers[2])
-
-    for i = 1,#lanes do
-        for q = 1,#lanes[i] do
-            lanes[i][q].time = lanes[i][q].time / Modifiers[2]
-        end
-    end
-
 end
 
 function PlayState:initializePositionMarkers()
