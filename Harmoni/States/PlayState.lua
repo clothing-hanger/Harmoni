@@ -16,6 +16,7 @@ local AllDirections = {
 function PlayState:enter()
     --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading
     hitTimes = {}
+    accuracyAndHealthData = {}
     curScreen = "play"
 
     lanes = {}
@@ -320,7 +321,7 @@ function PlayState:update(dt)
     end
 
     if BotPlay then
-        checkBotInput()
+        PlayState:checkBotInput()
     end
 
     for i = 1, #allInputs do
@@ -368,6 +369,7 @@ function PlayState:update(dt)
 
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
+        State.switch(States.ResultsState)
         if Input:pressed("MenuConfirm") then
             resultsScreen = false
             saveList = love.filesystem.getDirectoryItems("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/")
@@ -599,7 +601,7 @@ end
 function judge(noteTime)
     
     if math.abs(noteTime) < marvTiming then  -- marvelous
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,1,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,1,1}, accuracy, health})
         score = score + (bestScorePerNote*(6/6))
         judgeColors = {1,0,0,0,0,0}
         marvCount = marvCount + 1
@@ -607,7 +609,7 @@ function judge(noteTime)
         incrementCombo()
         health = math.min(health + 0.025, 1)
     elseif math.abs(noteTime) < perfTiming then  -- perfect
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,78/255,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,1,78/255,1}, accuracy, health})
         score = score + (bestScorePerNote*(5/6))
         judgeColors = {0,1,0,0,0,0}
         judgeCountTween(2)
@@ -615,7 +617,7 @@ function judge(noteTime)
         perfCount = perfCount + 1
         health = math.min(health + 0.02, 1)
     elseif math.abs(noteTime) < greatTiming then  -- great
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {92/255,1,82/255,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {92/255,1,82/255,1}, accuracy, health})
         score = score + (bestScorePerNote*(4/6))
         greatCount = greatCount + 1
         judgeColors = {0,0,1,0,0,0}
@@ -623,7 +625,7 @@ function judge(noteTime)
         incrementCombo()
         health = health - 0.01
     elseif math.abs(noteTime) < goodTiming then  -- good
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {0,61/255,1,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {0,61/255,1,1}, accuracy, health})
         score = score + (bestScorePerNote*(3/6))
         judgeColors = {0,0,0,1,0,0}
         judgeCountTween(4)
@@ -631,7 +633,7 @@ function judge(noteTime)
         goodCount = goodCount + 1
         health = health - 0.02
     elseif math.abs(noteTime) < okayTiming then  -- okay
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {129/255,0,1,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {129/255,0,1,1}, accuracy, health})
         score = score + (bestScorePerNote*(2/6))
         judgeColors = {0,0,0,0,1,0}
         judgeCountTween(5)
@@ -639,7 +641,7 @@ function judge(noteTime)
         okayCount = okayCount + 1
         health = health - 0.04
     else                        -- miss lmao fuckin loser
-        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,65/255,65/255,1}})
+        table.insert(hitTimes, {noteTime, MusicTime, 1, {1,65/255,65/255,1}, accuracy, health})
         judgeColors = {0,0,0,0,0,1}
         judgeCountTween(6)
         missCount = missCount + 1
@@ -647,6 +649,7 @@ function judge(noteTime)
         combo = 0
         health = health - 0.075
     end
+
 
     currentBestPossibleScore = currentBestPossibleScore + bestScorePerNote
     accuracy = score/currentBestPossibleScore
@@ -714,10 +717,21 @@ end
 end ]]
 
 
-function checkBotInput()
+function PlayState:checkBotInput()
+    botAccuracy = -1
+    botAccuracy = love.math.random(-perfTiming, perfTiming)
+    if botAccuracy > 0 then
+        if love.math.random(1,7) == 1 then
+            botAccuracy = botAccuracy + love.math.random(0, 100)
+        end
+    elseif botAccuracy < 0 then
+        if love.math.random(1,7) == 1 then
+            botAccuracy = botAccuracy + love.math.random(0, 100)
+        end
+    end
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
-            if MusicTime - note.time > -1 then
+            if MusicTime - note.time > botAccuracy then
                 judge(MusicTime - note.time)
                 table.remove(lane, j)
                 PlayState:checkTimeToNextNote()
@@ -733,192 +747,12 @@ function checkBotInput()
 end
 
 function PlayState:draw()
---love.graphics.setCanvas(GameScreen)
 
-    if resultsScreen then
-        love.graphics.push()
-
-
-
-
-        
-        if gameOver then
-            grade = "F"
-        end
-
-        blurEffect(function()
-        love.graphics.draw(background, 0, 0, nil, Inits.GameWidth/background:getWidth(),Inits.GameHeight/background:getHeight())
-        end)
-        
-        love.graphics.setColor(0,0,0,backgroundDim[1])
-        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
-        if not resultsScreenTranslate then
-            resultsScreenTranslate = {-500}
-            Timer.tween(0.3, resultsScreenTranslate, {0}, "out-expo")
-        end
-        love.graphics.translate(0,resultsScreenTranslate[1])
-        love.graphics.setColor(1,1,1,1)
-
-        love.graphics.setFont(BigFont)
-
-        love.graphics.printf(metaData.name, 10, 10, 5000)
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 50, 500, 200, "right")
-        love.graphics.setFont(MediumFont)
-
-        love.graphics.printf(metaData.diffName, 10, 80, 5000)
-
-
-    
-
-
-       love.graphics.setFont(ReallyFuckingBigFont)
-
-        love.graphics.print(grade, 45, Inits.GameHeight/2-235)
-
-
-
-
-       -- love.graphics.pop()
-       -- love.graphics.push()
-
-
-        love.graphics.translate(Inits.GameWidth/2-250,Inits.GameHeight/2)
-        love.graphics.setLineWidth(1)
-        love.graphics.scale(1, 0.5)
-        graphWidth = 500
-        love.graphics.setFont(MenuFontExtraSmall)
-
-        love.graphics.setColor(1,1,1)
-        love.graphics.line(0, marvTiming, graphWidth, marvTiming)
-        love.graphics.printf(marvTiming, -22, marvTiming, 100, "left", 0, 0.5, 1)
-        love.graphics.setColor(1,1,78/255)
-        love.graphics.line(0, perfTiming, graphWidth, perfTiming)
-        love.graphics.printf(perfTiming, -22, perfTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(92/255, 1, 82/255)
-        love.graphics.line(0, greatTiming, graphWidth,greatTiming)
-        love.graphics.printf(greatTiming, -22, greatTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(0,61/255,1)
-        love.graphics.line(0, goodTiming, graphWidth, goodTiming)
-        love.graphics.printf(goodTiming, -22, goodTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(129/255,0,1)
-        love.graphics.line(0, okayTiming, graphWidth, okayTiming)
-        love.graphics.printf(okayTiming, -22, okayTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(1,65/255,65/255)
-        love.graphics.line(0, missTiming, graphWidth, missTiming)
-        love.graphics.printf(missTiming, -22, missTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(1,1,1)
-        love.graphics.line(0, 0, graphWidth, 0)
-        love.graphics.printf(-0, -22, 0, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(1,1,1)
-        love.graphics.line(0, -marvTiming, graphWidth, -marvTiming)
-        love.graphics.printf(-marvTiming, -22, -marvTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(1,1,78/255)
-        love.graphics.line(0, -perfTiming, graphWidth, -perfTiming)
-        love.graphics.printf(-perfTiming, -22, -perfTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(92/255, 1, 82/255)
-        love.graphics.line(0, -greatTiming, graphWidth, -greatTiming)
-        love.graphics.printf(-greatTiming, -22, -greatTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(0,61/255,1)
-        love.graphics.line(0, -goodTiming, graphWidth, -goodTiming)
-        love.graphics.printf(-goodTiming, -22, -goodTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(129/255,0,1)
-        love.graphics.line(0, -okayTiming, graphWidth, -okayTiming)
-        love.graphics.printf(-okayTiming, -22, -okayTiming, 100, "left", 0, 0.5, 1)
-
-        love.graphics.setColor(1,65/255,65/255)
-        love.graphics.line(0, -missTiming, graphWidth, -missTiming)
-        love.graphics.printf(-missTiming, -22, -missTiming, 100, "left", 0, 0.5, 1)
-
-
-
-
-
-
-
-        for i = 1,#hitTimes do
-            miss = false
-
-            if hitTimes[i][1] > missTiming then
-                miss = true
-            end
-            local noteHitTime = math.abs(hitTimes[i][1])
-        
-            if noteHitTime < marvTiming then
-                love.graphics.setColor(1,1,1)
-            elseif noteHitTime < perfTiming then
-                love.graphics.setColor(1,1,78/255)
-            elseif noteHitTime < greatTiming then
-                love.graphics.setColor(92/255, 1, 82/255)
-            elseif noteHitTime < goodTiming then
-                love.graphics.setColor(0,61/255,1)
-            elseif noteHitTime < okayTiming then
-                love.graphics.setColor(129/255,0,1)
-            elseif noteHitTime < missTiming then
-                love.graphics.setColor(1,65/255,65/255)
-                miss = true
-            end
-            if miss then
-                love.graphics.setColor(1,65/255,65/255)
-                love.graphics.line(((hitTimes[i][2])/(songLength*1000)*graphWidth), -missTiming, ((hitTimes[i][2])/(songLength*1000)*graphWidth), missTiming)
-            else
-                love.graphics.rectangle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 3, 6, 1.5, 3)
-            end
-        end
-        love.graphics.setLineWidth(25)
-        love.graphics.push()
-        love.graphics.scale(1,1.8)
-        love.graphics.translate(860, -700)
-
-        love.graphics.rotate(math.rad(90))
-
-        love.graphics.setColor(1,1,1)
-
-        love.graphics.line(600, 286, 600, (-((marvCount/totalNoteCount)*300))+286)
-        love.graphics.line(640, 286, 640, -((perfCount/totalNoteCount)*300)+286)
-        love.graphics.setColor(92/255,1, 82/255)
-
-        love.graphics.line(680, 286, 680, -((greatCount/totalNoteCount)*300)+286)
-        love.graphics.line(720, 286, 720, -((goodCount/totalNoteCount)*300)+286)
-        love.graphics.setColor(1,65/255,65/255)
-
-        love.graphics.line(760, 286, 760, -((okayCount/totalNoteCount)*300)+286)
-        love.graphics.line(800, 286, 800, -((missCount/totalNoteCount)*300)+286)
-        love.graphics.setColor(1,1,1)
-
-        love.graphics.pop()
-        love.graphics.setLineWidth(1)
-
-
-        love.graphics.setFont(MediumFont)
-        love.graphics.scale(1,2)
-        love.graphics.printf(marvCount,465,-103, 100, "right")
-        love.graphics.printf(perfCount,465, -67, 100, "right")
-        love.graphics.setColor(92/255,1, 82/255)
-        love.graphics.printf(greatCount,465, -32, 100, "right")
-        love.graphics.printf(goodCount,465,  3, 100, "right")
-        love.graphics.setColor(1,65/255,65/255)
-        love.graphics.printf(okayCount,465, 39, 100 ,"right")
-        love.graphics.printf(missCount,465, 75, 100, "right")
-
-        love.graphics.setLineWidth(1)
-
-        love.graphics.pop()
-
-    else
         blurEffect(function()
         love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
         end)
 
+        
 
         love.graphics.push()
             if skinDrawUnderDim then
@@ -1062,7 +896,6 @@ function PlayState:draw()
             love.graphics.setColor(1,0.5,0)
         end
 
-
         if combo > 0 then
             love.graphics.printf(combo, 0, Inits.GameHeight/2-(ComboPosition * downscrollOffset) +judgePos[1]*2, Inits.GameWidth, "center", nil, 1, judgePos[2])
         end
@@ -1085,12 +918,12 @@ function PlayState:draw()
         love.graphics.setColor(0,0,0)
 
     
-    --    love.graphics.rectangle("fill", 896, 636, 13, -508)
+        love.graphics.rectangle("fill", 896, 636, 13, -508)
     
         love.graphics.setColor(0,0.5,1)
     
     
-       -- love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+        love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
         love.graphics.setFont(MediumFontSolid)
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
@@ -1123,11 +956,9 @@ function PlayState:draw()
         end
         love.graphics.print((comboAlert or ""), comboAlertPosition[1], comboAlertPosition[2])
 
-      --  love.graphics.draw(HealthImage, 880, 650-HealthImage:getHeight())
     
     
     
-        --love.graphics.line(0, Inits.GameHeight/2, Inits.GameWidth, Inits.GameHeight/2)
         if skinDrawAbove then
             skinDrawAbove()
         end
@@ -1188,7 +1019,6 @@ function PlayState:draw()
                 pauseSelection = #options
             end
         end
-    end
 
 end
 

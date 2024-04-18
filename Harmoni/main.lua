@@ -1,7 +1,7 @@
  
 versionNumber = "Harmoni Beta 2.0"
 
-debugMode = true
+debugMode = false
 
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
 
@@ -12,7 +12,7 @@ vudu = require("Libraries.vudu")
 require("Libraries.lovefs.lovefs")
 
 
-forceLag = true
+forceLag = true  --true?? why did i init this to true lmao
 minFakeLag = 50
 maxFakeLag = 50
 
@@ -48,7 +48,7 @@ end
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed", "How fast the song plays", "SS"},
+    {"Song Speed [TEMPORARILY DISABLED]", "How fast the song plays", "SS"},
     {"Sudden Death", "You die if you miss a single note", "SD"},
     {"Lane Swap", "Left becomes right, up becomes down", "LS"},
     {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
@@ -57,6 +57,7 @@ ModifiersLabels = {
     {"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
     {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
 }
+
 
 
 if debugMode then
@@ -72,7 +73,6 @@ function ❓(num)
     return "This Number is " .. num
 end
 --]]
-
 
 
 
@@ -130,7 +130,7 @@ function love.run()
         end
 	end
 end
-
+if not debugMode then
 function love.errorhandler(msg)
 	msg = tostring(msg)
     love.window.setMode(1000,700)
@@ -201,7 +201,7 @@ function love.errorhandler(msg)
 
 	p = p:gsub("\t", "")
 	p = p:gsub("%[string \"(.-)\"%]", "%1")
-
+    --p = "George Washington"
 	local function draw()
 		if not love.graphics.isActive() then return end
 		local pos = 70
@@ -254,6 +254,7 @@ function love.errorhandler(msg)
 		end
 	end
 
+end
 end
 
 
@@ -356,6 +357,8 @@ function love.load()
             takeScreenshot = { "key:f3" },
         }
     })
+    require("Initialize")
+    InitializeGame()
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     tinyyaml = require("Libraries.tinyyaml")
@@ -471,6 +474,8 @@ function love.load()
 
 
     clearNotifs()
+
+
 
 end
 
@@ -707,13 +712,13 @@ function love.draw()
     love.graphics.scale(0.5,0.5)
     love.graphics.setColor(0,0,0,volumeOpacity[1])
     love.graphics.arc("fill",200,300,100,0, printableVolume[1]*math.pi*2)
-    love.graphics.setColor(0,1,1,volumeOpacity[1])
+    love.graphics.setColor(accentColor[1],accentColor[2],accentColor[3],volumeOpacity[1])
     if printableVolume[1] < 0.99 then
         love.graphics.arc("line",200,300,100,0, printableVolume[1]*math.pi*2)
     else
         love.graphics.circle("line",200,300,100)
     end
-    love.graphics.setColor(0,0.8,0.8,volumeOpacity[1])
+    love.graphics.setColor(selectedButtonFillColor[1],selectedButtonFillColor[2],selectedButtonFillColor[3],volumeOpacity[1])
     love.graphics.pop()
 
 
