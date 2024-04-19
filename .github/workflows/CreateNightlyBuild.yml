@@ -24,7 +24,7 @@ jobs:
         - uses: andelf/nightly-release@main
           with:
             tag_name: nightly_release
-            name: "Rit Nightly Release $$"
+            name: "Harmoni Nightly Release $$"
             prerelease: true
             body: "This is a nightly release. May or may not work."
             files: build/dist/*
