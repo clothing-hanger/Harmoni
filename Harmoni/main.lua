@@ -48,7 +48,7 @@ end
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed [TEMPORARILY DISABLED]", "How fast the song plays", "SS"},
+    {"Song Speed", "How fast the song plays", "SS"},
     {"Sudden Death", "You die if you miss a single note", "SD"},
     {"Lane Swap", "Left becomes right, up becomes down", "LS"},
     {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
