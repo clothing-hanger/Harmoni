@@ -1,7 +1,7 @@
  
 versionNumber = "Harmoni Beta 2.0"
 
-debugMode = false
+debugMode = false 
 
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
 
@@ -189,7 +189,7 @@ function love.errorhandler(msg)
 	end
 
 	table.insert(err, "\n")
-
+ 
 	for l in trace:gmatch("(.-)\n") do
 		if not l:match("boot.lua") then
 			l = l:gsub("stack traceback:", "Traceback\n")
@@ -445,9 +445,9 @@ function love.load()
         "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
     }
 
-
+    EvenBiggerLmaoFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 65)
     ExtraBigFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 60)
-    ReallyFuckingBigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 400)
+    ReallyFuckingBigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 150)
 
     BigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
     MediumFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)

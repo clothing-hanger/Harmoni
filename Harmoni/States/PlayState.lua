@@ -492,7 +492,7 @@ function PlayState:beat()
     if beatBumpTimer then
         Timer.cancel(beatBumpTimer)
     end
-    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "out-quad") -- lmfao why does bounce look genuinely better   yeah lmao i changed my mind about using a bounce tween
+    beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "out-quad")
 end
 
 

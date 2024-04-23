@@ -301,11 +301,13 @@ function SongSelectState:update(dt)
 
     if doDiffListTween then
         for i = 1,#diffListXPositions do
+            if not diffListXPositions[i] then goto continue end
             if i == selectedDifficulty then
                 diffListXPositions[i] = math.max(diffListXPositions[i]-500*dt, 800)
             else
                 diffListXPositions[i] = math.min(diffListXPositions[i]+500*dt, 900)
             end
+            ::continue::
         end
     end
 
