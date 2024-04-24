@@ -16,9 +16,6 @@ forceLag = true
 minFakeLag = 50
 maxFakeLag = 50
 
-
-
-
 --colors
 
 
