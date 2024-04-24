@@ -16,7 +16,7 @@ function SongSelectState:enter()
 
     PressToggleString = "Press Tab to Open Mods Menu"
 
-    subMenuTitles = {"me when", "Song Data Menu", "Scores Menu"}
+    subMenuTitles = {"Modifiers Menu", "Song Data Menu", "Scores Menu"}
 
     songOptionsButtons = {"lmao this string is unused", "Open Song Folder", "Open Music Folder", "Delete Song"}
 
@@ -166,6 +166,11 @@ function SongSelectState:update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
 
+
+
+    if MenuMusic:tell() >= MenuMusic:getDuration("seconds") then
+        SongSelectMenu:loadSong(false)
+    end
     for i = 1, #SongListXPositions2 do
         if i == selectedSong or i == CurPlayingSong then
             SongListXPositions2[i] = math.min(SongListXPositions2[i] + 1000*dt, 200)
@@ -173,6 +178,7 @@ function SongSelectState:update(dt)
             SongListXPositions2[i] = math.max(SongListXPositions2[i] - 1000*dt, 0)
         end
     end
+    SongSelectState:checkBotInput()
 
     if State.last() == States.PlayState and not MenuMusic:isPlaying() and not dontFuckingReloadTheSongEveryFrameDumbass then
        -- MenuMusic:stop()
@@ -265,9 +271,9 @@ function SongSelectState:update(dt)
                     selectedSubMenuOption = selectedSubMenuOption + 1
                 elseif Input:pressed("MenuConfirm") then
                     if selectedSubMenuOption == 2 then
-                        os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music/" .. songList[selectedSong] "/")
+                     --   os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music/" .. songList[selectedSong] "/")
                     elseif selectedSubMenuOption == 3 then
-                        os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
+                      --  os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
                     elseif selectedSubMenuOption == 4 then
                         if not areYouSureDelete then
                             areYouSureDelete = true
@@ -295,11 +301,13 @@ function SongSelectState:update(dt)
 
     if doDiffListTween then
         for i = 1,#diffListXPositions do
+            if not diffListXPositions[i] then goto continue end
             if i == selectedDifficulty then
                 diffListXPositions[i] = math.max(diffListXPositions[i]-500*dt, 800)
             else
                 diffListXPositions[i] = math.min(diffListXPositions[i]+500*dt, 900)
             end
+            ::continue::
         end
     end
 
@@ -528,6 +536,24 @@ function SongSelectState:loadSong(doSongRestart)
 
 end
 
+function SongSelectState:checkBotInput()
+    for i, lane in ipairs(lanes) do
+        for j, note in ipairs(lane) do
+            if MusicTime - note.time > -1 then
+               -- judge(MusicTime - note.time)
+                table.remove(lane, j)
+               -- PlayState:checkTimeToNextNote()
+
+              --  table.insert(notesPerSecond, 1000)
+              --  table.insert(hitsPerSecond, 1000)
+
+
+                break
+            end
+        end
+    end
+end
+
 function scrollSongs(y)
 
     if menuState == 1 then  
@@ -556,11 +582,12 @@ function SongSelectState:draw()
         love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
     end
 
-    
+
     for i, lane in ipairs(lanes) do
-        for k, note in ipairs(lane) do
-            -- not past 385 or 0
-            if (not downscroll and note.y > 0) or (downscroll and note.y < Inits.GameHeight) then
+        for j, note in ipairs(lane) do
+            if note.y < Inits.GameHeight then
+                --[[ local noteImg = _G["Note" .. AllDirections[i]]
+                --love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight()) ]]
                 note:draw()
             end
         end
