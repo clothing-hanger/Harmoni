@@ -9,15 +9,25 @@ function ResultsState:enter()
 
     healthGraphTable = {}
     accuracyGraphTable = {}
+    printableHealthGraphTable = {}
 
+    resultBackgroundOffset = {0}
+    Timer.tween(0.1, resultBackgroundOffset, {200}, "out-expo")
+
+    songLengthInMs = hitTimes[#hitTimes][2]
+    resultSongMsThingyIdk = {0}
+    Timer.tween(1, resultSongMsThingyIdk, {songLengthInMs}, "out-quad")
 
     
     for i = 1,#hitTimes do
-        table.insert(healthGraphTable, (hitTimes[i][2])/(songLength*1000)*graphWidth) -- hitTimes[i][6]*healthGraphHeight)
-        table.insert(healthGraphTable, -(hitTimes[i][6]*healthGraphHeight))
-        table.insert(accuracyGraphTable, (hitTimes[i][2])/(songLength*1000)*graphWidth) -- hitTimes[i][6]*healthGraphHeight)
-        table.insert(accuracyGraphTable, -(hitTimes[i][5]*healthGraphHeight))
+        table.insert(healthGraphTable, {(hitTimes[i][2])/(songLength*1000)*graphWidth, -(hitTimes[i][6]*healthGraphHeight)}) -- hitTimes[i][6]*healthGraphHeight)
+      --  table.insert(healthGraphTable, -(hitTimes[i][6]*healthGraphHeight))
+        table.insert(accuracyGraphTable, {(hitTimes[i][2])/(songLength*1000)*graphWidth, -(hitTimes[i][5]*healthGraphHeight)}) -- hitTimes[i][6]*healthGraphHeight)
+       -- table.insert(accuracyGraphTable, -(hitTimes[i][5]*healthGraphHeight))
+       print(#healthGraphTable)
     end
+
+
 
 end
 
@@ -25,7 +35,50 @@ function ResultsState:update(dt)
 
     if Input:pressed("GameConfirm") then
         State.switch(States.SongSelectState)
+    elseif Input:pressed("GameLeft") then
+        for i = 1,#printableHealthGraphTable do
+            print(printableHealthGraphTable[i])
+        end
     end
+
+--[[
+    for i = 1,#healthGraphTable do
+        if i > #printableHealthGraphTable then
+
+           -- if hitTimes[i][2] <= resultSongMsThingyIdk[1] then
+           -- table.insert(printableHealthGraphTable, healthGraphTable[i])
+            --print(healthGraphTable[i])
+           -- end
+           print(hitTimes[i][2])
+
+        end
+    end
+--]
+    for i = 1,#healthGraphTable do
+        if i%2 == 0 then
+            if (resultSongMsThingyIdk[1] or 0) >= hitTimes[i][2] then
+                table.insert(printableHealthGraphTable, healthGraphTable[1])
+                table.insert(printableHealthGraphTable, healthGraphTable[2])
+                table.remove(healthGraphTable, 1)
+                table.remove(healthGraphTable, 2)
+                print("funny")
+                break
+            end
+        end
+    end
+--]]
+    for i = 1,#healthGraphTable do
+        print(healthGraphTable[i][1] <= resultSongMsThingyIdk[1])
+        if healthGraphTable[i][1] <= resultSongMsThingyIdk[1] then
+            table.insert(printableHealthGraphTable, healthGraphTable[i][1])
+            table.insert(printableHealthGraphTable, healthGraphTable[i][2])
+            table.remove(healthGraphTable, i)
+            print(#healthGraphTable)
+
+            break
+        end
+    end
+
 
 
 
@@ -41,7 +94,7 @@ function ResultsState:update(dt)
 end
 
 function ResultsState:draw()
-    love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
+    love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2-resultBackgroundOffset[1], nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
     love.graphics.setColor(0,0,0,0.7)
     love.graphics.rectangle("fill",0,(936/3),Inits.GameWidth,936-(936/3))
     love.graphics.setColor(1,0,0)
@@ -51,10 +104,18 @@ function ResultsState:draw()
 
     love.graphics.line(0,(936/3)*2,Inits.GameWidth,(936/3)*2)
     love.graphics.line(Inits.GameWidth/2,(936/3), Inits.GameWidth/2, 936)
+    love.graphics.setFont(EvenBiggerLmaoFont)
+    love.graphics.print(metaData.name, 40, 40)
+
+    love.graphics.setFont(ReallyFuckingBigFont)
+    love.graphics.print(grade, Inits.GameWidth-40, 40)
 
 
 
 
+    
+
+    
     -- note hit plot graph
 
     love.graphics.setFont(MenuFontExtraSmall)
@@ -134,11 +195,13 @@ function ResultsState:draw()
             love.graphics.setColor(1,65/255,65/255)
             miss = true
         end
-        if miss then
-            love.graphics.setColor(1,65/255,65/255)
-            love.graphics.line(((hitTimes[i][2])/(songLength*1000)*graphWidth), -missTiming, ((hitTimes[i][2])/(songLength*1000)*graphWidth), missTiming)
-        else
-            love.graphics.circle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 1.5)
+        if hitTimes[i][2] <= resultSongMsThingyIdk[1] then
+            if miss then
+                love.graphics.setColor(1,65/255,65/255)
+                love.graphics.line(((hitTimes[i][2])/(songLength*1000)*graphWidth), -missTiming, ((hitTimes[i][2])/(songLength*1000)*graphWidth), missTiming)
+            else
+                love.graphics.circle("fill", (hitTimes[i][2])/(songLength*1000)*graphWidth, hitTimes[i][1], 1.5)
+            end
         end
     end
     love.graphics.pop()
@@ -204,8 +267,9 @@ function ResultsState:draw()
     love.graphics.line(0, -healthGraphHeight, graphWidth, -healthGraphHeight)
     love.graphics.setColor(1,1,0)
     love.graphics.setLineWidth(1)
-
-    love.graphics.line(healthGraphTable)
+    if #printableHealthGraphTable >= 4 then
+        love.graphics.line(printableHealthGraphTable)
+    end
     love.graphics.setLineWidth(2)
 
 
@@ -213,6 +277,8 @@ function ResultsState:draw()
     love.graphics.print("100%", -40, -healthGraphHeight)
     love.graphics.pop()
 
+
+    
 
     
 
@@ -242,7 +308,7 @@ function ResultsState:draw()
     love.graphics.setColor(1,1,1)
     love.graphics.setLineWidth(1)
 
-    love.graphics.line(accuracyGraphTable)
+   -- love.graphics.line(accuracyGraphTable)
     love.graphics.setLineWidth(2)
 
 
