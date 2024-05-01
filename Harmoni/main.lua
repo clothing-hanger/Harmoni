@@ -11,6 +11,8 @@ Inits = require("inits")
 vudu = require("Libraries.vudu")
 require("Libraries.lovefs.lovefs")
 
+blurShader = love.graphics.newShader("shaders/blur.glsl")
+
 
 forceLag = true  --true?? why did i init this to true lmao
 minFakeLag = 50

@@ -85,6 +85,8 @@ function loadSettings()
         Skin = currentSkin
         print(Skin)
 
+        defaultVolume = settings.volume
+
         love.audio.setVolume(defaultVolume)
         volume = defaultVolume
         if love.filesystem.getInfo(Skin .. "/skin.lua", file) then

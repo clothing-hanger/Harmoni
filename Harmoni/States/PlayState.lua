@@ -124,7 +124,8 @@ function PlayState:enter()
         BotPlay = true
     end
     blurEffect = moonshine(moonshine.effects.boxblur)
-    blurEffect.boxblur.radius = 0
+    blurShader:send("radius", 10)
+    blurShader:send("direction", {1 / love.graphics.getWidth(), 1 / love.graphics.getHeight()})
     
     song:setPitch(Modifiers[2])
 end
@@ -310,8 +311,6 @@ function PlayState:keyReleased(key)
 end
 
 function PlayState:update(dt)
-    blurEffect.boxblur.radius = backgroundBlur[1]
-
     if paused or gameOver then
         MusicTime = PausedMusicTime
     end
@@ -748,9 +747,12 @@ end
 
 function PlayState:draw()
 
-        blurEffect(function()
+        --[[ blurEffect(function()
         love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
-        end)
+        end) ]]
+        love.graphics.setShader(blurShader)
+        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
+        love.graphics.setShader()
 
         
 
@@ -759,9 +761,9 @@ function PlayState:draw()
                 skinDrawUnderDim()
             end
 
-            love.graphics.setColor(0,0,0,backgroundDim[1])
+            --[[ love.graphics.setColor(0,0,0,backgroundDim[1])
             love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
-            love.graphics.setColor(1,1,1,1)
+            love.graphics.setColor(1,1,1,1) ]]
             --time bar
             timeLeftPercent = (song:tell()/songLengthToLastNote)
             love.graphics.rectangle("fill", 0, Inits.GameHeight-20, Inits.GameWidth*timeLeftPercent, 20)
