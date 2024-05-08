@@ -16,6 +16,14 @@ forceLag = true  --true?? why did i init this to true lmao
 minFakeLag = 50
 maxFakeLag = 50
 
+love.filesystem.createDirectory("Skins")
+love.filesystem.createDirectory("Saves")
+love.filesystem.createDirectory("Screenshots")
+love.filesystem.createDirectory("Logs/Crash Logs")
+love.filesystem.createDirectory("Logs/Runtime Logs")
+
+logString = ""
+
 --colors
 
 
@@ -45,7 +53,7 @@ end
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed [TEMPORARILY DISABLED]", "How fast the song plays", "SS"},
+    {"Song Speed [TEMPORARILY DISABLED]", "How fast the song plays", "SS x" .. Modifiers[2]},
     {"Sudden Death", "You die if you miss a single note", "SD"},
     {"Lane Swap", "Left becomes right, up becomes down", "LS"},
     {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
@@ -83,6 +91,10 @@ function recursivelyDelete( item )
         love.filesystem.remove( item )
     end
     love.filesystem.remove( item )
+end
+
+function log(text)
+    logString = logString .. text .. "\n"
 end
 
 function love.run()
@@ -128,18 +140,21 @@ function love.run()
 	end
 end
 if not debugMode then
+
 function love.errorhandler(msg)
 	msg = tostring(msg)
-    love.window.setMode(1000,700)
+   -- love.window.setMode(1000,700)  this makes it die for some reason so its commented out
 
 	error_printer(msg, 2)
 
+
+    love.filesystem.write("Logs/Crash Logs/" .. os.time(), logString)
 	if not love.window or not love.graphics or not love.event then
 		return
 	end
 
 	if not love.graphics.isCreated() or not love.window.isOpen() then
-		local success, status = pcall(love.window.setMode, 800, 600)
+		local success, status = pcall(love.window.setMode, 1000, 700)
 		if not success or not status then
 			return
 		end
@@ -160,6 +175,7 @@ function love.errorhandler(msg)
 			v:setVibration()
 		end
 	end
+
 
 	love.graphics.reset()
 	local font = love.graphics.setNewFont(14)
@@ -255,7 +271,6 @@ end
 end
 
 
-
 if love.filesystem.isFused() then
     function print() return end
     discordRPC = require("Modules.discordRPC")
@@ -280,9 +295,7 @@ end
 
 love.keyboard.setKeyRepeat(true)
 
-love.filesystem.createDirectory("Skins")
-love.filesystem.createDirectory("Saves")
-love.filesystem.createDirectory("Screenshots")
+
 
 
 songListLength = love.filesystem.getDirectoryItems("Music")
@@ -307,6 +320,11 @@ end
 if disablePrint then
     function print() end
 end
+
+
+function print(text)
+    --notification(tostring(text), notifGeneralIcon)
+end
  
 function toGameScreen(x, y)
     -- converts a position to the game screen
@@ -321,7 +339,7 @@ function toGameScreen(x, y)
 end
 
 function love.directorydropped(file)
-    love.filesystem.mount(file, "Music")
+   -- love.filesystem.mount(file, "Music")
 end
 
 function love.load()
@@ -434,7 +452,7 @@ function love.load()
         "just play quaver lmao",
         "pickles",
         "\"The best part of fucking Yoshi is that you have a ride home in the morning\"\n-President Barack Obama",
-        {"Is an interesting game  ◦ \nAm just play it\nWow\n\n-Heng", hengImage},
+    --    {"Is an interesting game  ◦ \nAm just play it\nWow\n\n-Heng", hengImage},
         "Do it jiggle?",
         "\"Is good game, would give it a try\"\n\n-Sapple",
         "When she doin' acrobatics on the peenor, so you gotta lock in",
@@ -442,11 +460,13 @@ function love.load()
         "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
     }
 
-    EvenBiggerLmaoFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 65)
-    ExtraBigFont = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 60)
-    ReallyFuckingBigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 150)
+    fontDosis65 = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 65)
+    fontDosis60 = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 60)
+    fontDosis45 = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 45)
 
-    BigFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
+    fontPoland150 = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 150)
+
+    fontPoland50 = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
     MediumFont = love.graphics.newFont("Fonts/PolandCanIntoGlassMakingsItalic-Mmae.otf", 50)
     MediumFontSolid = love.graphics.newFont("Fonts/PolandCanIntoBigWritings-18wL.otf", 25)
     MediumFontBacking = love.graphics.newFont("Fonts/PolandCanIntoBigWritingsItalic-ReVM.otf", 50)
@@ -478,6 +498,8 @@ end
 
 function love.update(dt)
 
+
+    clearNotifs() 
     if not love.window.hasFocus() and pastPreLaunch and not (BotPlay and State.current() == States.PlayState) then
         forceLag = true
         love.audio.setVolume(volume*0.1)
@@ -626,22 +648,18 @@ notificationsTable={}
 function notification(contents, icon)
     notifContents = (contents or "Error- No Notification Text")
     notifIcon = (icon or notifGeneralIcon)
-    table.insert(notificationsTable, 1, {notifContents, notifIcon, 1})
-    if #notificationsTable == 1 then
-        clearNotifs(true)
-    end
+    table.insert(notificationsTable, 1, {notifContents, notifIcon, 2500})
 end
 
-function clearNotifs(restart)
-    if restart then
-        if notifTimer then
-            Timer.cancel(notifTimer)
+function clearNotifs()
+    for i = 1,#notificationsTable do
+        notificationsTable[i][3] = notificationsTable[i][3] - 1000*love.timer.getDelta()
+        if notificationsTable[i][3] <= 0 then
+            table.remove(notificationsTable, i)
+            break
         end
     end
-    notifTimer = Timer.after(3, function()
-        table.remove(notificationsTable, #notificationsTable)
-        clearNotifs()
-    end)
+
 end
 
 function love.wheelmoved(x,y)
@@ -749,6 +767,7 @@ function love.resize(w, h)
 end
 
 function love.quit()
+    love.filesystem.write("Logs/Runtime Logs/" .. os.time(), logString)
     if usingRPC then
         discordRPC.shutdown()
     end

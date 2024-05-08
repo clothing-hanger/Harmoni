@@ -42,7 +42,7 @@ function CreditsState:enter()
         "Foreskin gamer.",
         "I follow people everywhere",
         "I swear to god, if this window is homophobic Goku",
-        "Day 1 of pissing on my cat until Rit is finished",
+        "Day 1 of pissing on my cat until Rit is finished", -- how many days has this been 
         "I already made out with you, it's too late",
         "11",
         "#WorshipTrump #TrumpXObamaFurryArt",

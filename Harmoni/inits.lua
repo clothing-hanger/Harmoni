@@ -4,6 +4,6 @@ return {
     GameHeight = 936,
 
     -- Window base resolution
-    WindowWidth = 1664,
-    WindowHeight = 936,
+    WindowWidth = 1280,
+    WindowHeight = 720,
 }

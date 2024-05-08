@@ -199,7 +199,6 @@ function SongSelectState:update(dt)
                         selectedDifficulty = selectedDifficulty+1
                         SongSelectState:loadSong(false)
                     end
-                --  SongSelectState:loadSong()
                 elseif Input:pressed("MenuUp") then
                     tweenSongXPositions()
 
@@ -211,7 +210,7 @@ function SongSelectState:update(dt)
                         SongSelectState:loadSong(false)
                     end
                 elseif Input:pressed("MenuConfirm") then
-                    if CurPlayingSong == selectedSong then
+                    if CurPlayingSong == selectedSong and songHasLoaded then
                         if menuState == 1 then
                             menuState = 2
                             selectedDifficulty = 1
@@ -423,6 +422,8 @@ end
 
 
 function SongSelectState:loadSong(doSongRestart)
+    songHasLoaded = false
+
     trackRounding = 100
     velocityPositionMakers = {}
     currentTrackPosition = 0
@@ -438,8 +439,8 @@ function SongSelectState:loadSong(doSongRestart)
     if menuSongTimer then
         Timer.cancel(menuSongTimer)
     end
-
     menuSongTimer = Timer.after(menuSongDelayTime, function()       -- make a setting
+        songHasLoaded = true
         if doSongRestart then
             MenuMusic:stop()
         end

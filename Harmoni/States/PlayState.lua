@@ -14,10 +14,11 @@ local AllDirections = {
 }
 
 function PlayState:enter()
-    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading
+    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading      idk lmao
     hitTimes = {}
     accuracyAndHealthData = {}
     curScreen = "play"
+
 
     lanes = {}
     for i = 1, 4 do
@@ -65,12 +66,7 @@ function PlayState:enter()
     Miss = MissImage
 
     
-    marvTiming = 26
-    perfTiming = 56
-    greatTiming = 86
-    goodTiming = 106
-    okayTiming = 126
-    missTiming = 146
+
 
     marvCount = 0
     perfCount = 0
@@ -96,6 +92,8 @@ function PlayState:enter()
     backgroundBlur = {0}
     comboSize = {1}
     score = 0
+    highestCombo = 0
+    highestNPS = 0
     accuracy = 0
     currentScrollVelocity = 1
     currentBestPossibleScore = 0
@@ -219,6 +217,9 @@ function PlayState:doNoteHit(note)
             splash:emit(3)
         end
         table.insert(notesPerSecond, 1000)
+        if #notesPerSecond > highestNPS then
+            highestNPS = #notesPerSecond
+        end
         if #note.children > 0 then
             note.moveWithScroll = false
         else
@@ -579,6 +580,9 @@ end
 
 function incrementCombo()
     combo = combo + 1
+    if combo > highestCombo then
+        highestCombo = combo
+    end
     if combo % 100 == 0 then
         comboAlertFunction(combo)
     end
@@ -703,34 +707,13 @@ function dimBackground()
     end)
 end
 
---[[ function checkInput()
-    for i, lane in ipairs(lanes) do
-        for j, note in ipairs(lane) do
-            if MusicTime - note.time < missTiming and MusicTime - note.time > -missTiming then
-                if Input:pressed(allInputs[i]) and not paused then
-                    judge(MusicTime - note.time)
-                    table.insert(notesPerSecond, 1)
-                    table.remove(lane, j)
-                    break
-                end
-            end
-        end
-    end
-end ]]
+
 
 
 function PlayState:checkBotInput()
+
+
     botAccuracy = -1
-    botAccuracy = love.math.random(-perfTiming, perfTiming)
-    if botAccuracy > 0 then
-        if love.math.random(1,7) == 1 then
-            botAccuracy = botAccuracy + love.math.random(0, 100)
-        end
-    elseif botAccuracy < 0 then
-        if love.math.random(1,7) == 1 then
-            botAccuracy = botAccuracy + love.math.random(0, 100)
-        end
-    end
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
             if MusicTime - note.time > botAccuracy then
@@ -740,7 +723,6 @@ function PlayState:checkBotInput()
 
                 table.insert(notesPerSecond, 1000)
                 table.insert(hitsPerSecond, 1000)
-
 
                 break
             end
@@ -788,7 +770,7 @@ function PlayState:draw()
                         local spr = _G["Receptor" .. AllDirections[i]]
                             if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
                             love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-                            love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
+                           -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
 
@@ -814,7 +796,7 @@ function PlayState:draw()
         love.graphics.pop()
         love.graphics.push()
     
-            love.graphics.setFont(BigFont)
+            love.graphics.setFont(fontPoland50)
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
     
@@ -891,7 +873,7 @@ function PlayState:draw()
     
     
         love.graphics.setColor(1,1,1,1)
-        love.graphics.setFont(BigFont)
+        love.graphics.setFont(fontPoland50)
         if combo < 500 then
             love.graphics.setColor(1,1,1)
         else
@@ -920,12 +902,12 @@ function PlayState:draw()
         love.graphics.setColor(0,0,0)
 
     
-        love.graphics.rectangle("fill", 896, 636, 13, -508)
+        love.graphics.rectangle("fill", 1200, 836, 13, -608)
     
         love.graphics.setColor(0,0.5,1)
     
     
-        love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+        love.graphics.rectangle("fill", 1200, 832, 5, -printableHealth[1]*600)
         love.graphics.setFont(MediumFontSolid)
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
@@ -944,7 +926,7 @@ function PlayState:draw()
         
         love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 0, Inits.GameHeight/2-150, Inits.GameWidth, "center")
         love.graphics.setColor(1,1,1,1)
-        love.graphics.setFont(BigFont)
+        love.graphics.setFont(fontPoland50)
 
         if canBeSkipped then
             love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
@@ -979,7 +961,7 @@ function PlayState:draw()
             love.graphics.setColor(0,0,0,0.8)
             love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
             love.graphics.setColor(1,1,1,1)
-            love.graphics.setFont(BigFont)
+            love.graphics.setFont(fontPoland50)
             love.graphics.print("Paused")
             local options = {"Resume", "Restart", "Exit"}
             for i = 1, #options do
