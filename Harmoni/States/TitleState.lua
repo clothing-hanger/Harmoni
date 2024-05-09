@@ -1,5 +1,12 @@
 local TitleState = State()
 local noteLanes = {}
+local H = love.graphics.newImage("Images/TITLE/H.png")   -- look it spells friday night funkin
+local A = love.graphics.newImage("Images/TITLE/A.png")
+local R = love.graphics.newImage("Images/TITLE/R.png")
+local M = love.graphics.newImage("Images/TITLE/M.png")
+local O = love.graphics.newImage("Images/TITLE/O.png")
+local N = love.graphics.newImage("Images/TITLE/N.png")
+local I = love.graphics.newImage("Images/TITLE/I.png")
 function TitleState:enter()
     log("TitleState Entered")
     logo = love.graphics.newImage("Images/TITLE/logo.png")
@@ -14,13 +21,7 @@ function TitleState:enter()
     logoBumpTable = {}
 
 
-    H = love.graphics.newImage("Images/TITLE/H.png")   -- look it spells friday night funkin
-    A = love.graphics.newImage("Images/TITLE/A.png")
-    R = love.graphics.newImage("Images/TITLE/R.png")
-    M = love.graphics.newImage("Images/TITLE/M.png")
-    O = love.graphics.newImage("Images/TITLE/O.png")
-    N = love.graphics.newImage("Images/TITLE/N.png")
-    I = love.graphics.newImage("Images/TITLE/I.png")
+
     
 
 

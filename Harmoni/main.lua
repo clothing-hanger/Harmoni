@@ -378,10 +378,7 @@ if disablePrint then
 end
 
 
-function print(text)
-    --notification(tostring(text), notifGeneralIcon)
-end
- 
+
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1

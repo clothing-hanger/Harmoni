@@ -382,8 +382,8 @@ function PlayState:update(dt)
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
         log("Song Ended")
-        State.switch(States.ResultsState)
-        PlayState:leave(States.SongSelectState)
+        PlayState:leave(States.ResultsState)
+
     end   
     
     if printableHealth[1] <= 0 and not gameOver and not Modifiers[6] then            
@@ -562,7 +562,6 @@ end
 function PlayState:leave(state)
     log("PlayState Exited")
     --song = nil
-    background = nil
     State.switch(state)
     resultsScreenTranslate = nil
     resultsScreenTween = nil
