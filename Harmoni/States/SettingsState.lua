@@ -8,6 +8,7 @@ local AllDirections = {
 
 
 function setDefaultSettings()
+    log("Default Settings Restored")
     print(love.filesystem.getSaveDirectory())
     notification("Default Settings Restored", notifInfoIcon)
     startFullscreen = false
@@ -28,7 +29,7 @@ function setDefaultSettings()
     bgBumpSetting = true
     currentSkin = "Skins/Default Arrow/"
     notification("Default Settings Loaded", notifInfoIcon)
-
+    log("Default Settings Loaded")
 end
 
 function writeSettings()
@@ -56,13 +57,14 @@ function writeSettings()
 
     love.filesystem.write("settings", luaStr)
     notification("Settings Saved", notifInfoIcon)
+    log("Settings Saved" .. luaStr)
 end
 
 function loadSettings()
     if love.filesystem.getInfo("settings") then
         local settings = love.filesystem.load("settings")()
-        print("settings loaded idfk")
-
+        print("User Settings Loaded")
+        log("User Settings Loaded")
         for k, v in pairs(settings) do
             _G[k] = v
 
@@ -144,7 +146,7 @@ Skins = love.filesystem.getDirectoryItems("Skins/")
 
 function SettingsState:enter()
     loadSkinPreview()
-
+    log("Settings State Entered")
     CurSettingsMenu = "Tabs"
     
     previewSkin = false
@@ -275,6 +277,8 @@ function SettingsState:update(dt)
         else
             saveSettings()
             writeSettings()
+            log("SettingsState Exited")
+            wipeFade("in")
             State.switch(States.TitleState)
         end
     end
@@ -334,7 +338,7 @@ end
 function loadSkinPreview()
 
     print("Switch Skin")
-    
+    log("Switch Skin")
 
     previewSkin = false 
     ReceptorDown = ReceptorDownImage
@@ -356,6 +360,7 @@ function loadSkinPreview()
         quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty]))
     else
         notification("Chart Failed to Load! Returning to Title Screen.", notifErrorIcon)
+        log("Chart Failed to Load! Returning to Title Screen.")
         State.switch(States.TitleState)
     end
 
@@ -392,6 +397,8 @@ function saveSettings()
         speed3 = -speed3
         speed4 = -speed4
     end
+
+    log("Settings Saved")
 end
 
 
@@ -546,29 +553,31 @@ function SettingsState:draw()
         for i = 1,4 do
             love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 575,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
         end
-        if downScroll then
-            for i, lane in ipairs(lanes) do
-                for k, note in ipairs(lane) do
+        
+      --  if downScroll then
+      --      for i, lane in ipairs(lanes) do
+       --         for k, note in ipairs(lane) do
+--
+       --             if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] < Inits.GameHeight+400 then
+       --                 if MenuMusic:isPlaying() then 
+       --                     love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+       --                 end
+      --              end
+              --  end
+       --     end
+      --  else
+     --       for i, lane in ipairs(lanes) do
+      --          for k, note in ipairs(lane) do
 
-                    if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] < Inits.GameHeight+400 then
-                        if MenuMusic:isPlaying() then 
-                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
-                        end
-                    end
-                end
-            end
-        else
-            for i, lane in ipairs(lanes) do
-                for k, note in ipairs(lane) do
-
-                    if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] > 0 then
-                        if MenuMusic:isPlaying() then 
-                            love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
-                        end
-                    end
-                end
-            end
-        end
+      --              if -(MusicTime - note[1])*_G["speed" .. i]   -(MusicTime - note[1])*_G["speed" .. i] > 0 then
+      --                  if MenuMusic:isPlaying() then 
+      --                      love.graphics.draw(_G["Note" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), -(MusicTime - note[1])*_G["speed" .. i],nil,125/_G["Note" .. AllDirections[i]]:getWidth(),125/_G["Note" .. AllDirections[i]]:getHeight())
+      --                  end
+      --              end
+         --       end
+      --      end
+      --  end
+        --]]
 
     end
 

@@ -54,6 +54,7 @@ function class:implement(...)
     return nil
 end
 
+
 --@name class.isInstanceOf
 --@description Checks if the current class is an instance of the given class
 --@param class table

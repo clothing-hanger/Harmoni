@@ -14,6 +14,11 @@ local AllDirections = {
 }
 
 function PlayState:enter()
+
+    log("PlayState Entered")
+    for i = 1,#Modifiers do
+        log(tostring(Modifiers[i]))
+    end
     --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading      idk lmao
     hitTimes = {}
     accuracyAndHealthData = {}
@@ -209,6 +214,7 @@ function PlayState:updateNotePosition(offset, curTime)
 end
 
 function PlayState:doNoteHit(note)
+    
     if not note.wasGoodHit then
         note.wasGoodHit = true
         judge(MusicTime - note.time)
@@ -281,11 +287,13 @@ function PlayState:checkTimeToNextNote()
     end
 end
 
-function PlayState:doBreak()
+function PlayState:doBreak(dur)
+    local duration = (dur or 3)
+    log("Song Break at" .. MusicTime .. "for duration: " .. duration)
     doingBreak = true
     breakFade = {0}
     Timer.tween(0.4, breakFade, {1}, "linear", function()
-        Timer.after(3.4, function() 
+        Timer.after(duration, function() 
             Timer.tween(0.4, breakFade, {0}, "linear", function()
                 doingBreak = false
             end)
@@ -359,7 +367,8 @@ function PlayState:update(dt)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
-    
+        log("Song Started")
+
     end
 
     self:updateCurrentTrackPosition()
@@ -372,14 +381,9 @@ function PlayState:update(dt)
 
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
+        log("Song Ended")
         State.switch(States.ResultsState)
-        if Input:pressed("MenuConfirm") then
-            resultsScreen = false
-            saveList = love.filesystem.getDirectoryItems("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/")
-            local saveData = "local ScoreData = {Score = ".. score .. "Accuracy = " .. accuracy .. "}"
-            love.filesystem.write("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/" .. #saveList .. ".lua", "test")
-            PlayState:leave(States.SongSelectState)
-        end
+        PlayState:leave(States.SongSelectState)
     end   
     
     if printableHealth[1] <= 0 and not gameOver and not Modifiers[6] then            
@@ -460,7 +464,8 @@ function PlayState:doBPMshit()
         if timingPointsTable[i][1] then
             if MusicTime >= timingPointsTable[i][1] then
                 currentBpm = timingPointsTable[i][2]
-                --print("BPM change: " .. currentBpm)
+                print("BPM change: " .. currentBpm)
+                log("BPM change: " .. currentBpm)
                 table.remove(timingPointsTable, i)
                 break
             end
@@ -555,6 +560,7 @@ function PlayState:gameOver()
 end
 
 function PlayState:leave(state)
+    log("PlayState Exited")
     --song = nil
     background = nil
     State.switch(state)
@@ -732,9 +738,7 @@ end
 
 function PlayState:draw()
 
-        blurEffect(function()
         love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
-        end)
 
         
 

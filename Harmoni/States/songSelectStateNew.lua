@@ -7,6 +7,7 @@ local AllDirections = {
 }
 function SongSelectState:enter()
     curScreen = "songSelect" 
+    log("SongSelectState Entered")
     --selectedSong = randomSong
     menuState = 1
     hangerTilt = {0}
@@ -216,6 +217,8 @@ function SongSelectState:update(dt)
                             selectedDifficulty = 1
                         elseif menuState == 2 then
                             if MenuMusic:isPlaying() then
+                                log("SongSelectState Exited")
+                                wipeFade("in")
                                 State.switch(States.PlayState)
                             end
                         end
@@ -226,10 +229,14 @@ function SongSelectState:update(dt)
                     if menuState == 2 then
                         menuState = 1
                     elseif menuState == 1 then
+                        log("SongSelectState Exited")
+                        wipeFade("in")
                         State.switch(States.TitleState)
                     end
 
                 elseif Input:pressed("importSongs") then
+                    log("SongSelectState Exited")
+                    wipeFade("in")
                     State.switch(States.QuaverImportScreen)
                 elseif Input:pressed("openSongFolder") then
                     os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
@@ -481,6 +488,7 @@ function SongSelectState:loadSong(doSongRestart)
             quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
         else
             notification("Chart File Not Found!", notifErrorIcon)
+            log("Chart File Not Found For Song" .. selectedSong)
         end
             --[[ print(songList[selectedSong])
         print(diffList[selectedDifficulty]) ]]
@@ -502,6 +510,7 @@ function SongSelectState:loadSong(doSongRestart)
                 MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             else
                 notification("Audio Not Loaded!", notifErrorIcon)
+                log("Audio Not Found For Song " .. selectedSong)
             end
             MenuMusic:setPitch(Modifiers[2])
             CurPlayingSong = selectedSong

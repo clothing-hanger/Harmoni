@@ -2,6 +2,7 @@ function quaverParse(file)
     
     if not love.filesystem.getInfo(file, "file") then
         notification("Chart File Not Found!", notifErrorIcon)
+        log("Chart File Not Found For Song " .. selectedSong)
         return false
     end
 
@@ -43,6 +44,7 @@ function quaverParse(file)
             song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         else
             notification("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
+            log("Audio File Not Found For Song " .. selectedSong)
             return
         end
 
@@ -51,6 +53,8 @@ function quaverParse(file)
             background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
         else
             notification("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
+            log("Background File Not Found For Song " .. selectedSong)
+
         end
 
 
@@ -149,6 +153,7 @@ end
 
 
 function harmoniParse(file) -- don't use this
+    log("why did this code run lmfao")
     chart = love.filesystem.load(file)()
     bestScorePerNote = 1000000/#chart
 

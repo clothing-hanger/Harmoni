@@ -1,6 +1,7 @@
 local PreLaunchState = State()
 
 function PreLaunchState:enter()
+    log("PreLaunchState Entered")
     logo = love.graphics.newImage("Images/TITLE/logo.png")
     loading = love.graphics.newImage("Images/SHARED/loading.png")
     preLaunchFade = {1}
@@ -79,6 +80,7 @@ function PreLaunchState:update(dt)
             else
              --   print("not found")
                 table.insert(songNamesTable, frame, "This song's data is corrupt! Open at your own risk.")
+                log("Song processed on frame " .. frame .. " is corrupted.")
             end
 
             loadingString = "Loading...   " .. #songNamesTable .."/" .. #songList
@@ -88,6 +90,7 @@ function PreLaunchState:update(dt)
 
     if #songNamesTable == #songList then
         pastPreLaunch = true
+        wipeFade("in")
         State.switch(States.TitleState)
 
     end

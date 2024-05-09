@@ -1,6 +1,7 @@
 local TitleState = State()
 local noteLanes = {}
 function TitleState:enter()
+    log("TitleState Entered")
     logo = love.graphics.newImage("Images/TITLE/logo.png")
     backgroundFade = {0}
     onTitle = true
@@ -35,11 +36,14 @@ function TitleState:enter()
 
 
         firstTimeOnTitle = false
-
+        curSelection = 1
+        buttonWidth = {0,0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
+        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub", "Discord"}
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
     resetMenuMusic = function(changeSong)
         print("resetMenuMusic(" .. tostring(changeSong)..")")
+        log("resetMenuMusic(" .. tostring(changeSong)..")")
         doingTitleMusicReset = true
         if MenuMusic and MenuMusic:isPlaying() then
             MenuMusic:stop()
@@ -69,9 +73,7 @@ function TitleState:enter()
         chartRandomXPositions = {}
         speedTitle = 0.6
         logoSize = 1
-        curSelection = 1
-        buttonWidth = {0,0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
-        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub", "Discord"}
+
 
         if not MenuMusic then
             notes = {}
@@ -81,7 +83,8 @@ function TitleState:enter()
                     quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
                 else
                     notification("Title Screen Failed to Load Chart", notifErrorIcon)
-                    selectedSong = love.math.random(1,#songList)
+                    log("Title Screen Failed to Load Chart For Song " .. selectedSong)
+                    selectedSong = selectedSong + 1
                     randomDifficulty = 1
 
                     loadTitleSongEnter()
@@ -107,12 +110,15 @@ function TitleState:enter()
                 MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             else
                 notification("Audio Not Found!", notifErrorIcon)
+                log("Audio File Not Found For Song " .. selectedSong)
             end
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background, "file") then
 
                 background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
             else
                 notification("Background Not Found!", notifErrorIcon)
+                log("Background File Not Found For Song " .. selectedSong)
+
             end
             MenuMusic:play()
             MusicTime = 0
@@ -180,11 +186,15 @@ function TitleState:update(dt)
             onTitle = false
            -- MenuMusic:stop()
            if curSelection == 1 then
+            wipeFade("in")
                 State.switch(States.SongSelectState)
            elseif curSelection == 2 then
+            wipeFade("in")
+
                 State.switch(States.SettingsState)
            elseif curSelection == 3 then
-                State.switch(States.QuaverImportScreen)
+            wipeFade("in")
+                State.switch(States.CreditsState)
            elseif curSelection == 4 then
                 love.system.openURL("https://ko-fi.com/harmoni69655")
            elseif curSelection == 5 then

@@ -55,6 +55,7 @@ local function updDialog(self)
 	self.dialog.current.text = self.current
 end
 
+
 local function init(self, Layout, label)
 	self:cd()
 	self.dialog = Layout(

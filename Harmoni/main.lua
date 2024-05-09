@@ -3,6 +3,10 @@ versionNumber = "Harmoni Beta 2.0"
 
 debugMode = false 
 
+function log(text)
+    logString = logString .. text .. "\n"
+end
+
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
 
 local utf8 = require("utf8")
@@ -15,6 +19,10 @@ require("Libraries.lovefs.lovefs")
 forceLag = true  --true?? why did i init this to true lmao
 minFakeLag = 50
 maxFakeLag = 50
+
+
+
+
 
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
@@ -67,6 +75,7 @@ ModifiersLabels = {
 
 if debugMode then
     disablePrint = false
+    log("Debug Mode")
 else
     disablePrint = true
 end
@@ -80,8 +89,36 @@ end
 --]]
 
 
+function wipeFade(dir)
+    if fadeWipeTimerFade then
+        Timer.cancel(fadeWipeTimerFade)
+    end
+    if fadeWipeTimerH then
+        Timer.cancel(fadeWipeTimerH)
+    end
+    if dir == "in" then
+        wipingUp = true
+        doingFadeWipe = true
+        wipeEffect = {Inits.WindowWidth, 0, 0}
+        fadeWipeTimerFade = Timer.tween(0.6, wipeEffect, {[1] = 0, [3] = 1}, "out-expo", function() wipeFade("out") end)
+        fadeWipeTimerH = Timer.tween(0.5, wipeEffect, {[2] = 360}, "out-back")
+        
+    elseif dir == "out" then
+        wipingUp = false
+        wipeEffect = {0, 0, 0}
+        fadeWipeTimerFade = Timer.tween(0.6, wipeEffect, {[1] = -Inits.WindowHeight-50, [3] = 0}, "out-expo", function()
+            doingFadeWipe = false
+        end)
+      --  fadeWipeTimerH = Timer.tween(0.5, wipeEffect, {[2] = 360}, "out-back")
+    else
+        log("Invalid Wipe Direction")
+    end
+end
+
+
 
 function recursivelyDelete( item )
+    log("Song Deleted- " .. item)
     if love.filesystem.getInfo( item , "directory" ) then
         for _, child in ipairs( love.filesystem.getDirectoryItems( item )) do
             recursivelyDelete( item .. '/' .. child )
@@ -93,9 +130,7 @@ function recursivelyDelete( item )
     love.filesystem.remove( item )
 end
 
-function log(text)
-    logString = logString .. text .. "\n"
-end
+
 
 function love.run()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -139,16 +174,34 @@ function love.run()
         end
 	end
 end
-if not debugMode then
 
 function love.errorhandler(msg)
 	msg = tostring(msg)
-   -- love.window.setMode(1000,700)  this makes it die for some reason so its commented out
+
+    errorStrings = {
+        "(not surprising at all)",
+        "Something really fucked up for you to see this",
+        "CLOTHING HANGER FIX YOUR GAME",
+        "this is why you should just stick with osu or quaver or whatever idk",
+        "oopsies :3",
+        "just delete Harmoni",
+        "FUCK YOU HARMONI I HATE YOU YOU NEVER FUCKING WORK",
+        "i blame guglio",
+        "you aren't supposed to see this part lmao",
+        "at least its not the title screen stack overflow\n(it would be fucking hilarious to get this message on that error tho)",
+        "the more i add the more that breaks :sob:",
+
+    }
+
+    errorEasterEgg = errorStrings[love.math.random(1,#errorStrings)]
+   -- love.window.setMode(1000,700) -- this makes it die for some reason so its commented out
 
 	error_printer(msg, 2)
 
+    log(msg)
 
-    love.filesystem.write("Logs/Crash Logs/" .. os.time(), logString)
+
+    love.filesystem.write("Logs/Crash Logs/" .."lmao harmoni doesnt work ".. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
 	if not love.window or not love.graphics or not love.event then
 		return
 	end
@@ -194,7 +247,7 @@ function love.errorhandler(msg)
 
 	local err = {}
 
-	table.insert(err, "Looks like Harmoni crashed \n\n(not very surprising)\n\nPlease send a screenshot of this in the Harmoni Discord Server\n\ndiscord.gg/bBcjrRAeh4\n\n\n\n\n\n\n\n\n\n")
+	table.insert(err, "Looks like Harmoni crashed...\n\n" ..errorEasterEgg .. "\n\nPlease send a screenshot of this in the Harmoni Discord Server\n\ndiscord.gg/bBcjrRAeh4\n\n\n\n")
 	table.insert(err, sanitizedmsg)
 
 	if #sanitizedmsg ~= #msg then
@@ -231,7 +284,7 @@ function love.errorhandler(msg)
 	end
 
 	if love.system then
-		p = p .. "\n\nPress Ctrl+C or tap to copy this error"
+		p = p .. "\n\nPress Ctrl+C to copy this error"
 	end
 
 	return function()
@@ -267,11 +320,12 @@ function love.errorhandler(msg)
 		end
 	end
 
-end
+
 end
 
 
 if love.filesystem.isFused() then
+    log("Fused")
     function print() return end
     discordRPC = require("Modules.discordRPC")
     usingRPC = true
@@ -301,6 +355,8 @@ love.keyboard.setKeyRepeat(true)
 songListLength = love.filesystem.getDirectoryItems("Music")
 if #songListLength == 0 then
     print("Install Included Songs")
+    log("Install Included Songs")
+
     includedSongs = love.filesystem.getDirectoryItems("Included Songs")
     --print(#love.filesystem.getDirectoryItems("Included Songs"))
     for i,dir in ipairs(includedSongs) do
@@ -370,6 +426,7 @@ function love.load()
             randomSongKey = { "key:r" },
             introSkip = { "key:space" },
             takeScreenshot = { "key:f3" },
+            testCrash = { "key:f12" },
         }
     })
     require("Initialize")
@@ -392,6 +449,7 @@ function love.load()
     String = require("Modules.String")
     Table = require("Modules.Table")
     ChartParse = require("Modules.ChartParse")
+    require("Modules.ASCII")
 
     notificationsTable = {}
  
@@ -405,11 +463,16 @@ function love.load()
     maxVolVelocity = 25
     MusicTime = 0
 
+    wipeEffect = {0}
+
 
     testTipImage = love.graphics.newImage("Images/unused/testImage.png")
     kofiImage = love.graphics.newImage("Images/TITLE/kofi.png")
     discordImage = love.graphics.newImage("Images/TITLE/discord.png")
     hengImage = love.graphics.newImage("Images/TITLE/heng.png")
+
+    fadeImage = love.graphics.newImage("Images/SHARED/Fade.png")
+    harmoniH = love.graphics.newImage("Images/SHARED/logoH.png")
 
 
 
@@ -523,6 +586,10 @@ function love.update(dt)
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen)
+    end
+
+    if Input:pressed("testCrash") and debugMode then
+        error("TEST CRASH")
     end
 
     if Input:pressed("takeScreenshot") then
@@ -646,6 +713,7 @@ end
 
 notificationsTable={}
 function notification(contents, icon)
+    log("Notification- " .. contents)
     notifContents = (contents or "Error- No Notification Text")
     notifIcon = (icon or notifGeneralIcon)
     table.insert(notificationsTable, 1, {notifContents, notifIcon, 2500})
@@ -715,6 +783,27 @@ function love.draw()
         love.graphics.pop()
     end
 
+    love.graphics.push()
+        love.graphics.setColor(0,0,0)
+        love.graphics.translate(0, (wipeEffect[1] or 0))
+        if doingFadeWipe then
+            love.graphics.rectangle("fill",0, 0,Inits.WindowWidth ,Inits.WindowHeight)
+            love.graphics.draw(fadeImage, 0, 0, nil, Inits.WindowWidth, -0.7)
+            love.graphics.draw(fadeImage, 0, Inits.WindowHeight, nil, Inits.WindowWidth, 0.7)
+            love.graphics.setColor(1,1,1,(wipeEffect[3] or 0))
+            love.graphics.setColor(0,0,0,(wipeEffect[3] or 0))
+            if wipingUp then
+                love.graphics.setColor(0,0,0)
+                love.graphics.rectangle("fill", 0, -1000, Inits.WindowWidth, 1100)
+            else
+                love.graphics.rectangle("fill", 0, Inits.WindowHeight, Inits.WindowWidth, Inits.WindowHeight)
+            end
+        end
+
+        love.graphics.setColor(1,1,1,(wipeEffect[3] or 0))
+    love.graphics.pop()
+    love.graphics.draw(harmoniH, Inits.WindowWidth/2, Inits.WindowHeight/2, math.rad((wipeEffect[2] or 0)),1,1,harmoniH:getWidth()/2,harmoniH:getHeight()/2)
+
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)
 
@@ -767,7 +856,8 @@ function love.resize(w, h)
 end
 
 function love.quit()
-    love.filesystem.write("Logs/Runtime Logs/" .. os.time(), logString)
+    log("Game Quit")
+    love.filesystem.write("Logs/Runtime Logs/" .. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
     if usingRPC then
         discordRPC.shutdown()
     end

@@ -1,6 +1,7 @@
 local ResultsState = State()
 
 function ResultsState:enter()
+    log("ResultsState Entered")
     resultX = 0
     resultY = -930
     graphWidth = 930
@@ -35,39 +36,13 @@ end
 function ResultsState:update(dt)
 
     if Input:pressed("GameConfirm") then
+        log("ResultsState Exited")
+        wipeFade("in")
         State.switch(States.SongSelectState)
-   -- elseif Input:pressed("GameLeft") then
-   --     for i = 1,#printableHealthGraphTable do
-   --         print(printableHealthGraphTable[i])
-   --     end
+
     end
 
---[[
-    for i = 1,#healthGraphTable do
-        if i > #printableHealthGraphTable then
 
-           -- if hitTimes[i][2] <= resultSongMsThingyIdk[1] then
-           -- table.insert(printableHealthGraphTable, healthGraphTable[i])
-            --print(healthGraphTable[i])
-           -- end
-           print(hitTimes[i][2])
-
-        end
-    end
---]
-    for i = 1,#healthGraphTable do
-        if i%2 == 0 then
-            if (resultSongMsThingyIdk[1] or 0) >= hitTimes[i][2] then
-                table.insert(printableHealthGraphTable, healthGraphTable[1])
-                table.insert(printableHealthGraphTable, healthGraphTable[2])
-                table.remove(healthGraphTable, 1)
-                table.remove(healthGraphTable, 2)
-                print("funny")
-                break
-            end
-        end
-    end
---]]
     for i = 1,#healthGraphTable do
         print(healthGraphTable[i][1] <= resultSongMsThingyIdk[1])
         if healthGraphTable[i][1] <= resultSongMsThingyIdk[1] then
@@ -108,6 +83,7 @@ function ResultsState:update(dt)
 end
 
 function ResultsState:draw()
+    love.graphics.setLineJoin("none")
     love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2-resultBackgroundOffset[1], nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
     love.graphics.setColor(0,0,0,0.7)
     love.graphics.rectangle("fill",0,(936/3),Inits.GameWidth,936-(936/3))
