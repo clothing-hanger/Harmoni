@@ -15,6 +15,10 @@ function PreLaunchState:enter()
     }
 
     loadingEasterEgg = loadingEasterEggs[love.math.random(1,#loadingEasterEggs)]
+
+    if love.math.random(0,2000) == 0 then
+        loadingEasterEgg = "my penis and my balls"
+    end
     songNamesTable = {}
     frame = 0
 
@@ -79,8 +83,14 @@ function PreLaunchState:update(dt)
                 end
             else
              --   print("not found")
-                table.insert(songNamesTable, frame, "This song's data is corrupt! Open at your own risk.")
+                table.insert(songNamesTable, frame, "This song's data is corrupt!")
                 log("Song processed on frame " .. frame .. " is corrupted.")
+
+
+                recursivelyDelete("Music/" .. songList[frame])
+
+                table.remove(songNamesTable, frame)
+                table.remove(songList, frame)
             end
 
             loadingString = "Loading...   " .. #songNamesTable .."/" .. #songList

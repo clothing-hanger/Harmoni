@@ -654,7 +654,7 @@ function SongSelectState:draw()
                 --love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
                 love.graphics.setColor(accentColor)
 
-                if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
+                if songNamesTable[i] == "This song's data is corrupt!" then
                     love.graphics.setColor(1,0,0)
                 else
                     love.graphics.setColor(0,0,0)

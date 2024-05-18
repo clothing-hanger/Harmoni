@@ -19,9 +19,11 @@ function CreditsState:enter()
         "\n\n\n\n\n\nWishlist Rit on Steam!\n\n(this is the only one who i had to censor the quote)",
         "Quaver- The ultimate community-driven, and open-source competitive rhythm game available on Steam.\n\n\nnot related to Harmoni, but I'm crediting Quaver because Harmoni uses Quaver charts",
         "You know, README writing isn't hard",
-        "Hi there! LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, macOS, Linux, Android and iOS.",
+        "Hi there! LÖVE is an *awesome* framework you can use to make 2D games in Lua. It's free, open-source, and works on Windows, macOS, Linux, Android, my balls, and iOS.",
         ""
     }
+    guglioTimestamp = 1692216180
+
 
 
     guglioQuotes = {
@@ -43,13 +45,16 @@ function CreditsState:enter()
         "Foreskin gamer.",
         "I follow people everywhere",
         "I swear to god, if this window is homophobic Goku",
-        "Day 1 of pissing on my cat until Rit is finished", -- how many days has this been 
         "I already made out with you, it's too late",
         "11",
         "#WorshipTrump #TrumpXObamaFurryArt",
         "Y'all got any #TrumpXObamaFurryArt",
-        "haiii!! :33 haii!! :3c"
+        "haiii!! :33 haii!! :3c",
+        "Day " .. (guglioDays or "") .. " of pissing on my cat until Rit is finished", -- this quote must stay at the end of the table
+
     }
+
+
 
     SappleQuotes = {
         "No >:3\noops\nwrong emote",
@@ -134,6 +139,14 @@ function CreditsState:update(dt)
         love.system.openURL(Credits[selectedCredit][3])
     end
 
+
+    currentTimestamp = os.time()
+    unconvertedDays = currentTimestamp - guglioTimestamp
+    guglioMinutes = unconvertedDays / 60
+    guglioHours = guglioMinutes / 60
+    guglioDays = guglioHours / 24
+
+    guglioQuotes[#guglioQuotes] = "Day " .. (string.format("%.5f", (guglioDays or 0))) .. " of pissing on my cat until Rit is finished"
 
     if selectedCredit > #Credits then
         selectedCredit = 1

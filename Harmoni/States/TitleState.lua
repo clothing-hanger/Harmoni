@@ -121,7 +121,12 @@ function TitleState:enter()
                 log("Background File Not Found For Song " .. selectedSong)
 
             end
-            MenuMusic:play()
+            if MenuMusic then
+                MenuMusic:play()
+            else
+                notification("Audio Not Found!", notifErrorIcon)
+                log("Title Screen failed to play MenuMusic")
+            end
             MusicTime = 0
             doingTitleMusicReset = false
         end

@@ -16,6 +16,7 @@ function quaverParse(file)
         timingPointsTable = {}
         scrollVelocities = {}
         totalNoteCount = 0
+        holdNoteCount = 0
         for i = 1,7 do
             table.insert(lanes, {})
         end
@@ -100,6 +101,9 @@ function quaverParse(file)
             local lane = hitObject.Lane
 
             totalNoteCount = totalNoteCount + 1
+            if endTime > 0 then
+                holdNoteCount = holdNoteCount + 1
+            end
 
 
             if Modifiers[4] then
@@ -142,6 +146,7 @@ function quaverParse(file)
         print(songLength)
         songLengthToLastNote = lastNoteTime/1000
         bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        holdNotePercent = math.ceil((holdNoteCount / totalNoteCount)*100)
 
         currentBpm = metaData.bpm
         if currentBpm then

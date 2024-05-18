@@ -1,7 +1,11 @@
  
 versionNumber = "Harmoni Beta 2.0"
+require("Initialize")
+InitializeGame()
 
-debugMode = false 
+require("Libraries.Tserial")
+
+debugMode = true 
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -22,16 +26,16 @@ maxFakeLag = 50
 
 
 
-
-
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
 love.filesystem.createDirectory("Screenshots")
 love.filesystem.createDirectory("Logs/Crash Logs")
 love.filesystem.createDirectory("Logs/Runtime Logs")
-
+if debugMode then 
+    love.filesystem.createDirectory("Logs/Developer Logs/Crash Logs")
+    love.filesystem.createDirectory("Logs/Developer Logs/Runtime Logs")
+end
 logString = ""
-
 --colors
 
 
@@ -41,6 +45,8 @@ nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
 playingSongFillColor = {255/255,71/255,126/255}
 nonSelectedSongAccentColor = {255/255,229/255,236/255}
 playingSongAccentColor = {255/255,10/255,84/255}
+
+
 
 
 local function error_printer(msg, layer)
@@ -61,7 +67,7 @@ end
 
 ModifiersLabels = {
     {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed [TEMPORARILY DISABLED]", "How fast the song plays", "SS x" .. Modifiers[2]},
+    {"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
     {"Sudden Death", "You die if you miss a single note", "SD"},
     {"Lane Swap", "Left becomes right, up becomes down", "LS"},
     {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
@@ -82,12 +88,26 @@ end
 idfkIFThiswillwork = false
 
 
---[[
-function ❓(num)
-    return "This Number is " .. num
+function whatNumberIsThis(num)
+    return "This Number is " .. num .. "."
 end
---]]
 
+
+function whatNumberAreThese(...)
+    local printableNumbers = ""
+    for i,v in ipairs({...}) do
+        if i == #{...} then
+            printableNumbers = printableNumbers .. v .. "."
+        else
+            printableNumbers = printableNumbers .. v .. ", "
+        end
+    end
+    return "These Numbers are " .. printableNumbers
+end
+
+
+--print (whatNumberIsThis(math.pi))
+--print(whatNumberAreThese(1,2,3,4,5))
 
 function wipeFade(dir)
     if fadeWipeTimerFade then
@@ -115,66 +135,6 @@ function wipeFade(dir)
     end
 end
 
-
-
-function recursivelyDelete( item )
-    log("Song Deleted- " .. item)
-    if love.filesystem.getInfo( item , "directory" ) then
-        for _, child in ipairs( love.filesystem.getDirectoryItems( item )) do
-            recursivelyDelete( item .. '/' .. child )
-            love.filesystem.remove( item .. '/' .. child )
-        end
-    elseif love.filesystem.getInfo( item ) then
-        love.filesystem.remove( item )
-    end
-    love.filesystem.remove( item )
-end
-
-
-
-function love.run()
-	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
-
-	-- We don't want the first frame's dt to include time taken by love.load.
-	if love.timer then love.timer.step() end
-
-	local dt = 0
-
-	-- Main loop time.
-	return function()
-		-- Process events.
-		if love.event then
-			love.event.pump()
-			for name, a,b,c,d,e,f in love.event.poll() do
-				if name == "quit" then
-					if not love.quit or not love.quit() then
-						return a or 0
-					end
-				end
-				love.handlers[name](a,b,c,d,e,f)
-			end
-		end
-
-		-- Update dt, as we'll be passing it to update
-		if love.timer then dt = love.timer.step() end
-
-		-- Call update and draw
-		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
-		if love.graphics and love.graphics.isActive() then
-			love.graphics.origin()
-			love.graphics.clear(love.graphics.getBackgroundColor())
-
-			if love.draw then love.draw() end
-
-			love.graphics.present()
-		end
-        idfkIFThiswillwork = not idfkIFThiswillwork
-        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
-		    if love.timer then love.timer.sleep(0.001) end
-        end
-	end
-end
-
 function love.errorhandler(msg)
 	msg = tostring(msg)
 
@@ -200,8 +160,12 @@ function love.errorhandler(msg)
 
     log(msg)
 
-
-    love.filesystem.write("Logs/Crash Logs/" .."lmao harmoni doesnt work ".. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    if debugMode then
+        love.filesystem.write("Logs/Developer Logs/Crash Logs/" .."lmao harmoni doesnt work ".. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    else
+        love.filesystem.write("Logs/Crash Logs/" .."lmao harmoni doesnt work ".. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    end
+        
 	if not love.window or not love.graphics or not love.event then
 		return
 	end
@@ -324,6 +288,77 @@ function love.errorhandler(msg)
 end
 
 
+function recursivelyDelete( item )
+    log("Song Deleted- " .. item)
+    if love.filesystem.getInfo( item , "directory" ) then
+        for _, child in ipairs( love.filesystem.getDirectoryItems( item )) do
+            recursivelyDelete( item .. '/' .. child )
+            love.filesystem.remove( item .. '/' .. child )
+        end
+    elseif love.filesystem.getInfo( item ) then
+        love.filesystem.remove( item )
+    end
+    love.filesystem.remove( item )
+end
+
+
+
+function love.run()
+	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+
+	-- We don't want the first frame's dt to include time taken by love.load.
+	if love.timer then love.timer.step() end
+
+	local dt = 0
+
+	-- Main loop time.
+	return function()
+		-- Process events.
+		if love.event then
+			love.event.pump()
+			for name, a,b,c,d,e,f in love.event.poll() do
+				if name == "quit" then
+					if not love.quit or not love.quit() then
+						return a or 0
+					end
+				end
+				love.handlers[name](a,b,c,d,e,f)
+			end
+		end
+
+		-- Update dt, as we'll be passing it to update
+		if love.timer then dt = love.timer.step() end
+
+		-- Call update and draw
+		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
+		if love.graphics and love.graphics.isActive() then
+			love.graphics.origin()
+			love.graphics.clear(love.graphics.getBackgroundColor())
+
+			if love.draw then love.draw() end
+
+			love.graphics.present()
+		end
+        idfkIFThiswillwork = not idfkIFThiswillwork
+        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
+		    if love.timer then love.timer.sleep(0.001) end
+        end
+	end
+end
+discordRPC = require("Modules.discordRPC")
+usingRPC = true
+function InitializeDiscord()
+    discordRPC.initialize("1200949844655755304", false, "2781170")
+    presenceUpdate = 0
+    presence = {
+        state = "In the Menus",
+        details = "Title Screen",
+        largeImageKey = "rpc_icon"
+    }
+end
+InitializeDiscord()
+
+
 if love.filesystem.isFused() then
     log("Fused")
     function print() return end
@@ -426,8 +461,7 @@ function love.load()
             testCrash = { "key:f12" },
         }
     })
-    require("Initialize")
-    InitializeGame()
+
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     tinyyaml = require("Libraries.tinyyaml")
@@ -854,7 +888,11 @@ end
 
 function love.quit()
     log("Game Quit")
-    love.filesystem.write("Logs/Runtime Logs/" .. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    if debugMode then
+        love.filesystem.write("Logs/Developer Logs/Runtime Logs/" .. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    else
+        love.filesystem.write("Logs/Runtime Logs/" .. os.time() .. ".txt", logString .. ((logoH and logoH()) or ""))
+    end
     if usingRPC then
         discordRPC.shutdown()
     end
