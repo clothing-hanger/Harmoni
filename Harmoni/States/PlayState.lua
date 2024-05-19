@@ -12,6 +12,13 @@ local AllDirections = {
     "Up",
     "Right",
 }
+local replayInputs = {
+    false,
+    false,
+    false,
+    false,
+}
+
 
 function PlayState:enter()
 
@@ -134,6 +141,15 @@ function PlayState:enter()
 
 end
 
+function PlayState:addReplayThingyIdfk(key,isDown,time)
+    if replayString == "NOT INIT" then
+        log("Init Replay Stuff idk")
+        replayString = "return {\n"
+    end
+    replayString = replayString .. "{" .. key .. "," .. isDown .. "time" .. "}\n"
+end
+
+
 function PlayState:initializePositionMarkers()
     if #scrollVelocities == 0 then return end
 
@@ -242,6 +258,13 @@ function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
     table.insert(hitsPerSecond, 1000)
 
+    if not replayInputs[key] then
+        replayInputs[key] = true
+    end
+
+    print(tostring(replayInputs[key]))
+
+
     local lane = lanes[key]
 
     for i, note in ipairs(lane) do
@@ -305,6 +328,12 @@ function PlayState:keyReleased(key)
     if paused then return end
 
     local lane = lanes[key]
+
+    if replayInputs[key] then
+        replayInputs[key] = false
+    end
+
+    print(tostring(replayInputs[key]))
 
     for i, note in ipairs(lane) do
         if not note.moveWithScroll then -- hold was unpressed
@@ -382,6 +411,7 @@ function PlayState:update(dt)
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
         resultsScreen = true
         log("Song Ended")
+        replayString = replayString .. "\n}"
         PlayState:leave(States.ResultsState)
 
     end   
@@ -772,7 +802,7 @@ function PlayState:draw()
                         local inp = allInputs[i]
                         local spr = _G["Receptor" .. AllDirections[i]]
                             if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
-                       --     love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
+                            love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
                            -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
@@ -802,7 +832,8 @@ function PlayState:draw()
 
         love.graphics.pop()
         love.graphics.push()
-    
+    --[[
+        --]]
             love.graphics.setFont(fontPoland50)
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
@@ -810,12 +841,11 @@ function PlayState:draw()
             love.graphics.print(math.floor(printableScore[1]).."\n"..#notesPerSecond.."/"..#hitsPerSecond,0,0-(beatBump[1]*50))
     
             love.graphics.setFont(DefaultFont)
-    
-    
-    
+
+    --]]
             love.graphics.push()
             love.graphics.translate(0,(judgePos[4] or 0))
-    
+    --]]
         love.graphics.setColor(1,1,1,judgeColors[1])
         love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2),  Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[2])
@@ -832,7 +862,7 @@ function PlayState:draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.pop()
         love.graphics.rectangle("fill",Inits.GameWidth/2-1, Inits.GameHeight/2-3, 2, 26)
-
+--]]
         for i = 1,#hitTimes do
             love.graphics.setColor(hitTimes[i][4])
             love.graphics.rectangle("fill", (((hitTimes[i][1])/2)+(Inits.GameWidth/2)-2), Inits.GameHeight/2, 4, 20)
@@ -874,7 +904,7 @@ function PlayState:draw()
             love.graphics.print("Miss",0, (Inits.GameHeight/2)+150)
         end
     
-    
+    --]]
     
     
     
@@ -899,11 +929,11 @@ function PlayState:draw()
         love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
     
     
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0-(beatBump[1]*50), Inits.GameWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%\n", -6, 0-(beatBump[1]*50), Inits.GameWidth, "right")
         gradeColors = {1,1,1}
         love.graphics.setColor(gradeColors)
 
-        love.graphics.printf(grade, 0, 55-(beatBump[1]*50), Inits.GameWidth, "right")
+        love.graphics.printf(grade, -6, 84-(beatBump[1]*50), Inits.GameWidth, "right")
 
         love.graphics.setFont(DefaultFont)
         love.graphics.setColor(0,0,0)

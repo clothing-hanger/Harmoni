@@ -659,8 +659,14 @@ function SongSelectState:draw()
                 else
                     love.graphics.setColor(0,0,0)
                 end
-                love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
-
+                if songNamesTable[i] then
+                    love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
+                else
+                    log("Song name was not found in songNamesTable" .. i)
+                    love.graphics.setColor(1,0,0)
+                    love.graphics.print("Song Name Not Found!", SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
+                    love.graphics.setColor(1,1,1)
+                end
                 if i == #songList and #songList > 10 then
                     love.graphics.setColor(1,1,1,1)
                     love.graphics.draw(hanger, SongListXPositions[i]+10-SongListXPositions2[i], i*60+50, hangerTilt[1], 1, 1, 109, 44)
