@@ -31,7 +31,7 @@ function PlayState:enter()
     accuracyAndHealthData = {}
     curScreen = "play"
 
-
+    replayMode = true
     lanes = {}
     for i = 1, 4 do
         table.insert(lanes, {})
@@ -117,6 +117,7 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
+    replayString = "NOT INIT"
     hitsPerSecond = {}
     notesPerSecond = {}
     hitErrorTable = {}
@@ -141,12 +142,34 @@ function PlayState:enter()
 
 end
 
+
+function PlayState:runReplayShitIdk()
+    if not replayIsLoaded then
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
+            replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
+            replayIsLoaded = true
+        else
+            replayError = true
+            notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
+            PlayState:leave(States.SongSelectState)
+        end
+    end
+    if replayIsLoaded then
+        for i = 1,#replayTable do
+            if replayTable[i][3] >= MusicTime then
+                replayInputs[replayTable[i][1]] = replayTable[i][2]
+                break
+            end
+        end
+    end
+end
+
 function PlayState:addReplayThingyIdfk(key,isDown,time)
     if replayString == "NOT INIT" then
         log("Init Replay Stuff idk")
         replayString = "return {\n"
     end
-    replayString = replayString .. "{" .. key .. "," .. isDown .. "time" .. "}\n"
+    replayString = replayString .. "{" .. key .. "," .. tostring(isDown) .. "," .. MusicTime .. "},\n"
 end
 
 
@@ -258,11 +281,9 @@ function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
     table.insert(hitsPerSecond, 1000)
 
-    if not replayInputs[key] then
-        replayInputs[key] = true
-    end
+    PlayState:addReplayThingyIdfk(key,true,MusicTime)
 
-    print(tostring(replayInputs[key]))
+
 
 
     local lane = lanes[key]
@@ -329,11 +350,8 @@ function PlayState:keyReleased(key)
 
     local lane = lanes[key]
 
-    if replayInputs[key] then
-        replayInputs[key] = false
-    end
+    PlayState:addReplayThingyIdfk(key,false,MusicTime)
 
-    print(tostring(replayInputs[key]))
 
     for i, note in ipairs(lane) do
         if not note.moveWithScroll then -- hold was unpressed
@@ -352,6 +370,9 @@ end
 function PlayState:update(dt)
     blurEffect.boxblur.radius = backgroundBlur[1]
 
+    if replayMode then
+        PlayState:runReplayShitIdk()
+    end
     if paused or gameOver then
         MusicTime = PausedMusicTime
     end
@@ -409,11 +430,14 @@ function PlayState:update(dt)
     end
 
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
-        resultsScreen = true
-        log("Song Ended")
-        replayString = replayString .. "\n}"
-        PlayState:leave(States.ResultsState)
-
+        if not replayError then
+            resultsScreen = true
+            log("Song Ended")
+            replayString = replayString .. "\n}"
+            love.filesystem.createDirectory("Music/" .. songList[selectedSong] .. "/Replays/")
+            love.filesystem.write("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua", replayString)
+            PlayState:leave(States.ResultsState)
+        end
     end   
     
     if printableHealth[1] <= 0 and not gameOver and not Modifiers[6] then            
