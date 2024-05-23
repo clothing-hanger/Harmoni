@@ -7,7 +7,7 @@ local AllDirections = {
 }
 Modifiers = {
     false,
-    0.5, -- speed
+    1, -- speed
     false,  -- sudden death
     false, -- lane swap
     false, -- no scroll velocities
@@ -30,6 +30,8 @@ ModifiersLabels = {
 {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
 }
 
+
+
 function SongSelectState:enter()
     curScreen = "songSelect" 
     log("SongSelectState Entered")
@@ -38,6 +40,8 @@ function SongSelectState:enter()
     hangerTilt = {0}
     subMenuYPos = {512}
     subMenuActive = false
+
+    replayCanvas = love.graphics.newCanvas(450,500)
 
 
     PressToggleString = "Press Tab to Open Mods Menu"
@@ -808,9 +812,23 @@ function SongSelectState:draw()
 
             elseif subMenuState == 3 then
 
+
+                love.graphics.draw(replayCanvas)
+
+
+                love.graphics.setCanvas(replayCanvas)
+                for i=1,5 do
+                    love.graphics.setColor(selectedButtonFillColor)
+                    love.graphics.rectangle("fill", 0 ,0+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(accentColor)
+                    love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(1,1,1,1)                
+                end
+
             end
         
         love.graphics.pop()
+
 
 
 

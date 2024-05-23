@@ -5,7 +5,7 @@ InitializeGame()
 
 require("Libraries.Tserial")
 
-debugMode = false 
+debugMode = true 
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -29,6 +29,7 @@ maxFakeLag = 50
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
 love.filesystem.createDirectory("Screenshots")
+love.filesystem.createDirectory("Replays")
 love.filesystem.createDirectory("Logs/Crash Logs")
 love.filesystem.createDirectory("Logs/Runtime Logs")
 if debugMode then 
