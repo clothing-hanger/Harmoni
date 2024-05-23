@@ -95,7 +95,7 @@ function quaverParse(file)
 
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
-            local startTime = (hitObject.StartTime or 0) / Modifiers[2]
+            local startTime = (hitObject.StartTime or 0) --/ Modifiers[2]
             if not startTime then goto continue end
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane

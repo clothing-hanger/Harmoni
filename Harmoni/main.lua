@@ -5,7 +5,7 @@ InitializeGame()
 
 require("Libraries.Tserial")
 
-debugMode = true 
+debugMode = false 
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -52,30 +52,6 @@ playingSongAccentColor = {255/255,10/255,84/255}
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
-    Modifiers = {
-        false,
-        1, -- speed
-        false,  -- sudden death
-        false, -- lane swap
-        false, -- no scroll velocities
-        false, -- no fail
-        false, -- botplay
-        false, -- randomize
-        false, -- no hold notes
-    }
-
-
-ModifiersLabels = {
-    {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
-    {"Sudden Death", "You die if you miss a single note", "SD"},
-    {"Lane Swap", "Left becomes right, up becomes down", "LS"},
-    {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
-    {"No Fail", "Don't die when you run out of health", "NF"},
-    {"Bot Play", "Watch a perfect playthourgh of the song", "BP"},
-    {"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
-    {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
-}
 
 
 
