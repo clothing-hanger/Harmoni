@@ -82,9 +82,9 @@ function quaverParse(file)
             local startTime = timingPoint.StartTime
             local bpm = (timingPoint.Bpm or 0) / Modifiers[2]
             table.insert(timingPointsTable, {startTime, bpm})
-            if bpm and startTime then
+            -- if bpm and startTime then 
                 --print(" TimingPoint " ..bpm .. "    " .. startTime)
-            end
+            -- end 
 
             if i == 1 then
                 metaData.bpm = timingPoint.Bpm / Modifiers[2]
@@ -107,22 +107,14 @@ function quaverParse(file)
 
 
             if Modifiers[4] then
-                if lane == 1 then
-                    lane = 4
-                elseif lane == 2 then
-                    lane = 3
-                elseif lane == 3 then
-                    lane = 2
-                else
-                    lane = 1
-                end
+            	lane = 5 - lane
             end
 
             local note = Objects.Game.Note(startTime, lane, endTime)
             table.insert(lanes[lane], note)
             
             if not firstNoteTime and startTime then
-                firstNoteTime = math.floor(startTime/1000)
+                firstNoteTime = math.floor(startTime*0.0001)
                 print("first note time: ".. firstNoteTime)
             end
             
@@ -144,13 +136,13 @@ function quaverParse(file)
         print("Total Note Count: ".. totalNoteCount)
         songLength = song:getDuration()
         print(songLength)
-        songLengthToLastNote = lastNoteTime/1000
+        songLengthToLastNote = lastNoteTime*0.001
         bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
         holdNotePercent = math.ceil((holdNoteCount / totalNoteCount)*100)
 
         currentBpm = metaData.bpm
         if currentBpm then
-        print("BPM: "..currentBpm)
+	        print("BPM: "..currentBpm)
         end
     return true
 end

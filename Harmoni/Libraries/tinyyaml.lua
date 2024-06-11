@@ -37,15 +37,18 @@ local function select(list, pred)
 end
 
 local function startswith(haystack, needle)
-  return ssub(haystack, 1, #needle) == needle
+  return haystack:sub(1, #needle) == needle
 end
 
 local function ltrim(str)
-  return smatch(str, "^%s*(.-)$")
+  return str:match("^%s*(.-)$")
 end
 
 local function rtrim(str)
-  return smatch(str, "^(.-)%s*$")
+  return str:match("^(.-)%s*$")
+end
+local function trim(str)
+  return str:match("^%s*(.-)%s*$")
 end
 
 -------------------------------------------------------------------------------
@@ -110,8 +113,7 @@ function types.timestamp:__init(y, m, d, h, i, s, f, z)
 end
 
 function types.timestamp:__tostring()
-  return string.format(
-    '%04d-%02d-%02dT%02d:%02d:%02d.%03d%s',
+  return ('%04d-%02d-%02dT%02d:%02d:%02d.%03d%s'):format(
     self.year, self.month, self.day,
     self.hour, self.minute, self.second, self.fraction,
     self:gettz())
@@ -128,43 +130,44 @@ function types.timestamp:gettz()
   local z = sign and self.timezone or -self.timezone
   local zh = math.floor(z)
   local zi = (z - zh) * 60
-  return string.format(
-    '%s%02d:%02d', sign and '+' or '-', zh, zi)
+  return ('%s%02d:%02d'):format(sign and '+' or '-', zh, zi)
 end
 
 
 local function countindent(line)
-  local _, j = sfind(line, '^%s+')
+
+  local _, j = line:find('^%s+')
   if not j then
     return 0, line
   end
-  return j, ssub(line, j+1)
+  return j, line:sub(j+1)
 end
 
 local function parsestring(line, stopper)
   stopper = stopper or ''
-  local q = ssub(line, 1, 1)
+  local q = line:sub(1, 1)
   if q == ' ' or q == '\t' then
-    return parsestring(ssub(line, 2))
+
+    return parsestring(line:match('^[ \t]+(.+)$'))
   end
   if q == "'" then
-    local i = sfind(line, "'", 2, true)
+    local i = line:find("'", 2, true)
     if not i then
       return nil, line
     end
-    return ssub(line, 2, i-1), ssub(line, i+1)
+    return line:sub(2, i-1), line:sub(i+1)
   end
   if q == '"' then
     local i, buf = 2, ''
     while i < #line do
-      local c = ssub(line, i, i)
+      local c = line:sub(i, i)
       if c == '\\' then
-        local n = ssub(line, i+1, i+1)
+        local n = line:sub(i+1, i+1)
         if UNESCAPES[n] ~= nil then
           buf = buf..UNESCAPES[n]
         elseif n == 'x' then
           local h = ssub(i+2,i+3)
-          if sfind(h, '^[0-9a-fA-F]$') then
+          if h:find('^[0-9a-fA-F]$') then
             buf = buf..schar(tonumber(h, 16))
             i = i + 2
           else
@@ -181,7 +184,7 @@ local function parsestring(line, stopper)
       end
       i = i + 1
     end
-    return buf, ssub(line, i+1)
+    return buf, line:sub(i+1)
   end
   if q == '{' or q == '[' then  -- flow style
     return nil, line
@@ -189,34 +192,31 @@ local function parsestring(line, stopper)
   if q == '|' or q == '>' then  -- block
     return nil, line
   end
-  if q == '-' or q == ':' then
-    if ssub(line, 2, 2) == ' ' or #line == 1 then
-      return nil, line
-    end
+  if (q == '-' or q == ':') and (line:sub(2, 2) == ' ' or #line == 1) then
+    return nil, line
   end
   local buf = ''
   while #line > 0 do
-    local c = ssub(line, 1, 1)
-    if sfind(stopper, c, 1, true) then
-      break
-    elseif c == ':' and (ssub(line, 2, 2) == ' ' or #line == 1) then
-      break
-    elseif c == '#' and (ssub(buf, #buf, #buf) == ' ') then
+    local c = line:sub(1, 1)
+    if stopper:find(c, 1, true)
+    	or (c == ':' and (line:sub(2, 2) == ' ' or #line == 1))
+    	or (c == '#' and (buf:sub(#buf, #buf) == ' '))
+    then
       break
     else
       buf = buf..c
     end
-    line = ssub(line, 2)
+    line = line:sub(2)
   end
   return rtrim(buf), line
 end
 
 local function isemptyline(line)
-  return line == '' or sfind(line, '^%s*$') or sfind(line, '^%s*#')
+  return line == '' or line:find('^%s*$') or line:find('^%s*#')
 end
 
 local function equalsline(line, needle)
-  return startswith(line, needle) and isemptyline(ssub(line, #needle+1))
+  return startswith(line, needle) and isemptyline(line:sub(#needle+1))
 end
 
 local function checkdupekey(map, key)
@@ -237,18 +237,17 @@ local function parseflowstyle(line, lines)
     if #line == 0 then
       if #lines == 0 then
         break
-      else
-        line = tremove(lines, 1)
       end
+      line = tremove(lines, 1)
     end
-    local c = ssub(line, 1, 1)
+    local c = line:sub(1, 1)
     if c == '#' then
       line = ''
     elseif c == ' ' or c == '\t' or c == '\r' or c == '\n' then
-      line = ssub(line, 2)
+      line = line:sub(2)
     elseif c == '{' or c == '[' then
       tinsert(stack, {v={},t=c})
-      line = ssub(line, 2)
+      line = line:sub(2)
     elseif c == ':' then
       local s = tremove(stack)
       tinsert(stack, {v=s.v, t=':'})
@@ -281,7 +280,7 @@ local function parseflowstyle(line, lines)
       if stack[#stack].t == '[' then
         if #stack == 1 then break end
         stack[#stack].t = ']'
-        line = ssub(line, 2)
+        line = line:sub(2)
       else
         line = ','..line
       end
@@ -318,7 +317,7 @@ local function parseblockstylestring(line, lines, indent)
       elseif idt < firstindent then
         break
       end
-      tinsert(s, ssub(ln, firstindent + 1))
+      tinsert(s, ln:sub(firstindent + 1))
     end
     endline = i
   end
@@ -369,18 +368,18 @@ local function parseblockstylestring(line, lines, indent)
   for i = endline, 1, -1 do
     tremove(lines, i)
   end
-  return table.concat(s, sep)..string.rep('\n', eonl)
+  return table.concat(s, sep)..("'\n'"):rep(eonl)
 end
 
 local function parsetimestamp(line)
-  local _, p1, y, m, d = sfind(line, '^(%d%d%d%d)%-(%d%d)%-(%d%d)')
+  local _, p1, y, m, d = line:find('^(%d%d%d%d)%-(%d%d)%-(%d%d)')
   if not p1 then
     return nil, line
   end
   if p1 == #line then
     return types.timestamp(y, m, d), ''
   end
-  local _, p2, h, i, s = sfind(line, '^[Tt ](%d+):(%d+):(%d+)', p1+1)
+  local _, p2, h, i, s = line:find('^[Tt ](%d+):(%d+):(%d+)', p1+1)
   if not p2 then
     return types.timestamp(y, m, d), ssub(line, p1+1)
   end
