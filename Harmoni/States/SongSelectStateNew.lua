@@ -597,11 +597,8 @@ function scrollSongs(y)
 
     if menuState == 1 then  
         selectedSong = selectedSong - y
-        if y < 0 then
-            bumpHanger(true)
-        else
-            bumpHanger(false)
-        end
+        bumpHanger(y < 0)
+        
        -- MenuMusic:stop()
        -- SongSelectState:loadSong(true)
     elseif menuState == 2 then

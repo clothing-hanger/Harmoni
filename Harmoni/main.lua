@@ -3,7 +3,7 @@ versionNumber = "Harmoni Beta 2.0"
 require("Initialize")
 InitializeGame()
 
-require("Libraries.Tserial")
+require("Libraries.TSerial")
 
 debugMode = true 
 
@@ -72,14 +72,7 @@ end
 
 function whatNumberAreThese(...)
     local printableNumbers = ""
-    for i,v in ipairs({...}) do
-        if i == #{...} then
-            printableNumbers = printableNumbers .. v .. "."
-        else
-            printableNumbers = printableNumbers .. v .. ", "
-        end
-    end
-    return "These Numbers are " .. printableNumbers
+    return "These Numbers are " .. table.concat({...},', ')..'.'
 end
 
 

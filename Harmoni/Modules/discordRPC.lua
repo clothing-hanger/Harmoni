@@ -1,3 +1,10 @@
+if(love.system.getOS() ~= "Windows") then return {
+	initialize=function() end,
+	updatePresence=function() end,
+	respond=function() end,
+	shutdown=function() end,
+	runCallbacks=function()end,
+} end
 local ffi = require "ffi"
 local discordRPClib = ffi.load("discord-rpc")
 
