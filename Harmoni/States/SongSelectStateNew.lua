@@ -563,9 +563,12 @@ function SongSelectState:loadSong(doSongRestart)
 
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
             discRotation = 0
-         --   if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
-             --   background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
-          --  end
+            background:release()
+			if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
+			   background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+			else
+				background = love.graphics.newImage(love.image.newImageData(1280,720))
+			end
             if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
             backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
         end)

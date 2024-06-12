@@ -22,9 +22,9 @@ json = require('Libraries.dkjson')
 require("Libraries.lovefs.lovefs")
 
 
-forceLag = true  --true?? why did i init this to true lmao
-minFakeLag = 50
-maxFakeLag = 50
+-- forceLag = true  --true?? why did i init this to true lmao
+-- minFakeLag = 50
+-- maxFakeLag = 50
 
 
 
@@ -42,12 +42,12 @@ logString = ""
 --colors
 
 
-accentColor = {251/255,111/255,146/255}
-selectedButtonFillColor = {255/255,179/255,198/255,0.9}
-nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
-playingSongFillColor = {255/255,71/255,126/255}
-nonSelectedSongAccentColor = {255/255,229/255,236/255}
-playingSongAccentColor = {255/255,10/255,84/255}
+accentColor = {0.2,0.1,0.1}
+selectedButtonFillColor = {1,0.65,0.7,0.9}
+nonSelectedButtonFillColor = {0.36,0.1,0.42,0.5}
+playingSongFillColor = {0.8,0.3,0.7}
+nonSelectedSongAccentColor = {1,0.8,0.7}
+playingSongAccentColor = {1,0.6,0.7}
 
 
 

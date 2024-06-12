@@ -114,6 +114,9 @@ function TitleState:enter()
                 notification("Audio Not Found!", notifErrorIcon)
                 log("Audio File Not Found For Song " .. selectedSong)
             end
+            if(background ~= nil) then
+            	background:release()
+            end
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background, "file") then
 
                 background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)

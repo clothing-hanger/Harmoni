@@ -278,7 +278,7 @@ function fnfParse(file)
 			::NCONTINUE::
 		end
 	end
-	local function sort(n,n2) return n.time < n.time end
+	local function sort(n,n2) return n.time > n.time end
 	for _,lane in pairs(lanes) do
 		table.sort(lane,sort)
 		local remList = {}
