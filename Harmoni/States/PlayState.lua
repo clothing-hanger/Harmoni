@@ -50,7 +50,7 @@ function PlayState:enter()
         MenuMusic:stop()
     end
 
-    local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+    local ok = chartParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
     if not ok then State.switch(States.SongSelectState) return end
 
     self:initializePositionMarkers()

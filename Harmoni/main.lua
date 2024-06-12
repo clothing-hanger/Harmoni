@@ -8,7 +8,8 @@ require("Libraries.TSerial")
 debugMode = true 
 
 function log(text)
-    logString = logString .. text .. "\n"
+    -- logString = logString .. text .. "\n"
+    -- print(text)
 end
 
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
@@ -17,6 +18,7 @@ local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
 Inits = require("inits")
 vudu = require("Libraries.vudu")
+json = require('Libraries.dkjson')
 require("Libraries.lovefs.lovefs")
 
 
