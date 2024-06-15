@@ -67,7 +67,7 @@ function SongSelectState:enter()
     diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
     for i = 1,#diffListAndOtherShitIdfk do 
         local file = diffListAndOtherShitIdfk[i]
-        if file:endsWith("qua") then
+        if getChartInfo("Music/" .. songList[selectedSong] .. "/"..file) then
             table.insert(diffList, file)
         end
     end
@@ -493,11 +493,16 @@ function SongSelectState:loadSong(doSongRestart)
         diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
         for i = 1,#diffListAndOtherShitIdfk do 
             local file = diffListAndOtherShitIdfk[i]
-            if file:endsWith("qua") then
-                local chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffListAndOtherShitIdfk[i]))
-                table.insert(DiffNameList, chart.DifficultyName)
+            local chartInfo = getChartInfo("Music/" .. songList[selectedSong] .. "/" .. file)
+            if(chartInfo) then
+                table.insert(DiffNameList, chartInfo.diffName)
                 table.insert(diffList, file)
             end
+            -- if file:endsWith("qua") then
+            --     local chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[selectedSong] .. "/" .. diffListAndOtherShitIdfk[i]))
+            --     table.insert(DiffNameList, chart.DifficultyName)
+            --     table.insert(diffList, file)
+            -- end
         end
         for i = 1,#diffList do
             table.insert(diffListXPositions, 900)
@@ -514,7 +519,7 @@ function SongSelectState:loadSong(doSongRestart)
         --print("SONG SELECT : " .."Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
 
         if songList[selectedSong] and diffList[selectedDifficulty] and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty], "file") then
-            quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+            chartParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
         else
             notification("Chart File Not Found!", notifErrorIcon)
             log("Chart File Not Found For Song" .. selectedSong)
@@ -558,9 +563,12 @@ function SongSelectState:loadSong(doSongRestart)
 
         backgroundFadeTween = Timer.tween(0.1, backgroundFade, {1}, "linear", function()
             discRotation = 0
-         --   if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
-             --   background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
-          --  end
+            background:release()
+			if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background) then
+			   background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
+			else
+				background = love.graphics.newImage(love.image.newImageData(1280,720))
+			end
             if backgroundFadeTween then Timer.cancel(backgroundFadeTween) end
             backgroundFadeTween = Timer.tween(0.1, backgroundFade, {0})
         end)
@@ -597,11 +605,8 @@ function scrollSongs(y)
 
     if menuState == 1 then  
         selectedSong = selectedSong - y
-        if y < 0 then
-            bumpHanger(true)
-        else
-            bumpHanger(false)
-        end
+        bumpHanger(y < 0)
+        
        -- MenuMusic:stop()
        -- SongSelectState:loadSong(true)
     elseif menuState == 2 then

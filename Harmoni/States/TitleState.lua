@@ -60,7 +60,7 @@ function TitleState:enter()
         diffListAndOtherShitIdfk = love.filesystem.getDirectoryItems("Music/" .. songList[selectedSong] .. "/")
         for i = 1,#diffListAndOtherShitIdfk do 
             local file = diffListAndOtherShitIdfk[i]
-            if file:endsWith("qua") then
+            if getChartInfo("Music/" .. songList[selectedSong] .. "/"..file) then
                 table.insert(diffList, file)
             end
         end
@@ -81,7 +81,7 @@ function TitleState:enter()
             bumpNotes = {}
             loadTitleSongEnter = function()
                 if songList[selectedSong] and diffList[randomDifficulty] and love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty], "file") then
-                    quaverParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
+                    chartParse(("Music/" .. songList[selectedSong] .. "/" .. diffList[randomDifficulty]))
                 else
                     notification("Title Screen Failed to Load Chart", notifErrorIcon)
                     log("Title Screen Failed to Load Chart For Song " .. selectedSong)
@@ -95,17 +95,18 @@ function TitleState:enter()
             for i = 1,#diffList do
                 print(diffList[i])
             end
+            for laneID,lane in pairs(lanes) do
 
-            for i = 1,#chart.HitObjects do
-                local hitObject = chart.HitObjects[i]
-                local startTime = hitObject.StartTime
-                local endTime = hitObject.EndTime or 0
-                local lane = hitObject.Lane
-                table.insert(chartRandomXPositions, love.math.random(0,Inits.GameWidth))
-                table.insert(noteLanes, lane)
-                table.insert(notes, startTime)
-                table.insert(bumpNotes, startTime)
-                lastNoteTime = startTime -- this should work because the last time its run will be the last note
+	            for i,note in pairs(lane) do
+	                local startTime = note.StartTime
+	                local endTime = note.EndTime or 0
+	                local lane = note.Lane
+	                table.insert(chartRandomXPositions, love.math.random(0,Inits.GameWidth))
+	                table.insert(noteLanes, lane)
+	                -- table.insert(notes, startTime)
+	                table.insert(bumpNotes, startTime)
+	                lastNoteTime = startTime -- this should work because the last time its run will be the last note
+	            end
             end
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "file") then
                 MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
@@ -113,13 +114,16 @@ function TitleState:enter()
                 notification("Audio Not Found!", notifErrorIcon)
                 log("Audio File Not Found For Song " .. selectedSong)
             end
+            if(background ~= nil) then
+            	background:release()
+            end
             if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/" .. metaData.background, "file") then
 
                 background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
             else
                 notification("Background Not Found!", notifErrorIcon)
                 log("Background File Not Found For Song " .. selectedSong)
-
+                background = love.graphics.newImage(love.image.newImageData(1280,720))
             end
             if MenuMusic then
                 MenuMusic:play()

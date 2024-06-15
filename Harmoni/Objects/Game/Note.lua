@@ -15,7 +15,6 @@ local HoldNoteImages = {
    -- NoteRightTrailImage
 }
 
-print(NoteLeftTrail)
 
 -- if nil, will not draw an end hold
 local HoldNoteEndImages = {

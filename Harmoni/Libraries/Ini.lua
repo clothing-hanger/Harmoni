@@ -46,14 +46,14 @@ function ini.parse(ini)
     local currentSection = nil
 
     for i, line in ipairs(lines) do
-        local comment = string.match(line, "^%s*;(.*)")
+        local comment = line:match("^%s*;(.*)")
         if line ~= "" and not comment then
-            local sec = string.match(line, "^%s*%[(.*)%]")
+            local sec = line:match("^%s*%[(.*)%]")
             if sec ~= nil then
                 currentSection = sec
                 data[currentSection] = {}
             else
-                local name, value = string.match(line, "^%s*(.-)%s*=%s*(.-)%s*$")
+                local name, value = line:match("^%s*(.-)%s*=%s*(.-)%s*$")
                 if name and value then
                     data[currentSection][name] = convert(value)
                 end

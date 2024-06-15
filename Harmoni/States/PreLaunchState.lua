@@ -53,57 +53,63 @@ end
 function PreLaunchState:update(dt)
 
     frame = frame + 1
-    metaFileFound = false
+    if not songList[frame] then
+        pastPreLaunch = true
+        wipeFade("in")
+        State.switch(States.TitleState)
+        return
+    end
+	if(pastPreLaunch) then return end
+    local metaFileFound = false
       --  for i = #songNamesTable + 1, math.min(#songNamesTable + 10, #songList) do
-            diffListQ = {}
-            diffListAndOtherShitIdfkQ = love.filesystem.getDirectoryItems("Music/" .. songList[frame] .. "/")
-            for q = 1,#diffListAndOtherShitIdfkQ do 
+    diffListQ = {}
+    diffListAndOtherShitIdfkQ = love.filesystem.getDirectoryItems("Music/" .. songList[frame] .. "/")
+    for q = 1,#diffListAndOtherShitIdfkQ do 
 
-                local file = diffListAndOtherShitIdfkQ[q]
-                if file:endsWith("qua") then
-                    table.insert(diffListQ, file)
-                end
+        local file = diffListAndOtherShitIdfkQ[q]
+        if getChartInfo("Music/" .. songList[frame] .. "/" ..file) then
+            table.insert(diffListQ, file)
+        end
 
-                if file == "meta.lua" then
-                    metaFileFound = true
-                end
-            end 
-           -- print(songList[i])
-          --  print(diffListQ[1])
-        -- print("Music/" .. songList[i] .. "/" .. diffListQ[1])
-            if songList[frame] and diffListQ[1] and love.filesystem.getInfo("Music/" .. songList[frame] .. "/" .. diffListQ[1], "file") then
-            --    print("found")
-                if metaFileFound then
-                    songName = love.filesystem.load("Music/" .. songList[frame] .. "/" .."meta.lua")()
-                    table.insert(songNamesTable, frame, songName)
-                else
-                    chart = tinyyaml.parse(love.filesystem.read("Music/" .. songList[frame] .. "/" .. diffListQ[1]))
-                    love.filesystem.write("Music/" .. songList[frame] .. "/" .."meta.lua", "return " .. "\"" .. chart.Title .."\"")
-                    table.insert(songNamesTable, frame, chart.Title)
-                end
-            else
-             --   print("not found")
-                table.insert(songNamesTable, frame, "This song's data is corrupt!")
-                log("Song processed on frame " .. frame .. " is corrupted.")
+        if file == "meta.lua" then
+            metaFileFound = true
+        end
+    end 
+   -- print(songList[i])
+  --  print(diffListQ[1])
+-- print("Music/" .. songList[i] .. "/" .. diffListQ[1])
+    if songList[frame] and diffListQ[1] then
+    --    print("found")
+        if metaFileFound then
+            songName = love.filesystem.load("Music/" .. songList[frame] .. "/meta.lua")()
+            -- songNamesTable[frame] = songName
+            table.insert(songNamesTable,frame,songName)
+        else
+            local chart = getChartInfo("Music/" .. songList[frame] .. "/" .. diffListQ[1])
+            -- tinyyaml.parse(love.filesystem.read("Music/" .. songList[frame] .. "/" .. diffListQ[1]))
+            love.filesystem.write("Music/" .. songList[frame] .. "/" .."meta.lua", "return \"" .. chart.name .."\"")
+            songName = chart.name
+            table.insert(songNamesTable,frame,songName)
+            print(songName)
+        end
+    else
+     --   print("not found")
+        table.insert(songNamesTable, frame, "This song's data is corrupt!")
+        log("Song processed on frame " .. frame .. " is corrupted.")
 
 
-                recursivelyDelete("Music/" .. songList[frame])
+        -- recursivelyDelete("Music/" .. songList[frame])
 
-                table.remove(songNamesTable, frame)
-                table.remove(songList, frame)
-            end
+        -- table.remove(songNamesTable, frame)
+        -- table.remove(songList, frame)
+    end
 
-            loadingString = "Loading...   " .. #songNamesTable .."/" .. #songList
+    loadingString = "Loading...   " .. #songNamesTable .."/" .. #songList
 
         
       --  end
 
-    if #songNamesTable == #songList then
-        pastPreLaunch = true
-        wipeFade("in")
-        State.switch(States.TitleState)
 
-    end
 
 end
 
