@@ -9,10 +9,10 @@ local BaseNoteImages = {
 
 -- If nil, will just default to a rectangle
 local HoldNoteImages = {
-    NoteLeftTrailImage,
-    NoteDownTrailImage,
-    NoteUpTrailImage,
-    NoteRightTrailImage
+   -- NoteLeftTrailImage,
+   -- NoteDownTrailImage,
+   -- NoteUpTrailImage,
+   -- NoteRightTrailImage
 }
 
 print(NoteLeftTrail)
@@ -38,7 +38,7 @@ Note.x = 0
 Note.y = 0
 
 Note.image = nil
-Note.children = {}
+Note.children = {} -- 😍
 Note.moveWithScroll = true
 
 Note.alpha = 1
