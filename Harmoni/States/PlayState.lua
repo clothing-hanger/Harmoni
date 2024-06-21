@@ -866,16 +866,20 @@ function PlayState:draw()
                            -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
-
-
-
-
-
-
             
                 love.graphics.push()
                     if gameOverNotePush[1] ~= 0 then
                         love.graphics.translate(0, gameOverNotePush[1])
+                    end
+
+                    for i, lane in ipairs(lanes) do
+                        for j, note in ipairs(lane) do
+                            if note.y < Inits.GameHeight then
+                                --[[ local noteImg = _G["Note" .. AllDirections[i]]
+                                --love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight()) ]]
+                                note:draw()
+                            end
+                        end
                     end
 
 
