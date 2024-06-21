@@ -5,7 +5,7 @@ InitializeGame()
 
 require("Libraries.Tserial")
 
-debugMode = true 
+debugMode = false 
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -323,7 +323,7 @@ function love.run()
 	end
 end
 discordRPC = require("Modules.discordRPC")
-usingRPC = true
+usingRPC = false
 function InitializeDiscord()
     discordRPC.initialize("1200949844655755304", false, "2781170")
     presenceUpdate = 0

@@ -9,10 +9,10 @@ local BaseNoteImages = {
 
 -- If nil, will just default to a rectangle
 local HoldNoteImages = {
-   -- NoteLeftTrailImage,
-   -- NoteDownTrailImage,
-   -- NoteUpTrailImage,
-   -- NoteRightTrailImage
+    NoteLeftTrailImage,
+    NoteDownTrailImage,
+    NoteUpTrailImage,
+    NoteRightTrailImage
 }
 
 print(NoteLeftTrail)
