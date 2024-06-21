@@ -70,7 +70,7 @@ function whatNumberIsThis(num)
 end
 
 
-function whatNumberAreThese(...)
+function whatNumbersAreThese(...)
     local printableNumbers = ""
     for i,v in ipairs({...}) do
         if i == #{...} then
