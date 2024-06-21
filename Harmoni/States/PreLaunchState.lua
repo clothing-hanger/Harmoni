@@ -11,14 +11,19 @@ function PreLaunchState:enter()
     loadingString = "Loading...   0/" .. #songList
     loadingEasterEggs = {
         "Harmoni runs on hamsters running in little wheels, this might take a while.",
-        "Harmoni is actually held together with duct tape and prayer so don't expect much out of it.",
+        "lmao imagine cancelling a game",
+        "delete the game it would be funny i think",
     }
+    if love.math.random(0,2000) == 0 then
+        loadingEasterEggs = {
+            "my penis and my balls",
+            "Sonisc pean its",
+        }
+    end
 
+    
     loadingEasterEgg = loadingEasterEggs[love.math.random(1,#loadingEasterEggs)]
 
-    if love.math.random(0,2000) == 0 then
-        loadingEasterEgg = "my penis and my balls"
-    end
     songNamesTable = {}
     frame = 0
 
@@ -115,7 +120,7 @@ function PreLaunchState:draw()
     love.graphics.draw(loading, Inits.GameWidth - 100, Inits.GameHeight - 50, math.rad(loadingAngle[1]), 0.5, 0.5, loading:getWidth()/2, loading:getHeight()/2)
     love.graphics.print(loadingString, Inits.GameWidth - 265, Inits.GameHeight - 50)
     love.graphics.setFont(MenuFontBig)
-    love.graphics.printf("Hang tight, Harmoni is processing your songs. \n This could take a little longer if the song has never been processed before. \n(Grey bar means the song is being first-time processed)\n " .. loadingEasterEgg, Inits.GameWidth/2-600, Inits.GameHeight/2, 1200, "center")
+    love.graphics.printf("Hang tight, Harmoni is processing your songs. \n This could take a little longer if the song has never been processed before. \n(Grey bar means the song is being first-time processed)\n\n " .. loadingEasterEgg, Inits.GameWidth/2-600, Inits.GameHeight/2, 1200, "center")
    -- love.graphics.printf(#songNamesTable/#songList, Inits.GameWidth/2-500, Inits.GameHeight/2, 1000, "center")
    if metaFileFound then
     love.graphics.setColor(1,1,1)

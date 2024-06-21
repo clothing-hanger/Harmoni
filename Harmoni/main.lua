@@ -316,10 +316,10 @@ function love.run()
 
 			love.graphics.present()
 		end
-        idfkIFThiswillwork = not idfkIFThiswillwork
-        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
+        --idfkIFThiswillwork = not idfkIFThiswillwork
+      --  if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
 		    if love.timer then love.timer.sleep(0.001) end
-        end
+     --   end
 	end
 end
 discordRPC = require("Modules.discordRPC")
@@ -558,7 +558,7 @@ function love.load()
 
 
 
-    State.switch(States.PreLaunchState)
+    State.switch(States.SplashState)
 
 
     clearNotifs()
@@ -811,7 +811,7 @@ function love.draw()
         love.graphics.setColor(1,1,1,(wipeEffect[3] or 0))
     love.graphics.pop()
     love.graphics.draw(harmoniH, Inits.WindowWidth/2, Inits.WindowHeight/2, math.rad((wipeEffect[2] or 0)),1,1,harmoniH:getWidth()/2,harmoniH:getHeight()/2)
-
+    love.graphics.setColor(1,1,1,1)
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)
 
