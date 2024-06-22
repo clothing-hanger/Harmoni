@@ -16,7 +16,7 @@ love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
 local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
 Inits = require("inits")
-vudu = require("Libraries.vudu")
+vudu = require("Libraries.vudu") 
 require("Libraries.lovefs.lovefs")
 
 
@@ -29,6 +29,7 @@ maxFakeLag = 50
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
 love.filesystem.createDirectory("Screenshots")
+love.filesystem.createDirectory("Replays")
 love.filesystem.createDirectory("Logs/Crash Logs")
 love.filesystem.createDirectory("Logs/Runtime Logs")
 if debugMode then 
@@ -52,30 +53,6 @@ playingSongAccentColor = {255/255,10/255,84/255}
 local function error_printer(msg, layer)
 	print((debug.traceback("Looks like Harmoni crashed \n(not very surprising)\nPlease send a screenshot of this in the Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4" .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
-    Modifiers = {
-        false,
-        1, -- speed
-        false,  -- sudden death
-        false, -- lane swap
-        false, -- no scroll velocities
-        false, -- no fail
-        false, -- botplay
-        false, -- randomize
-        false, -- no hold notes
-    }
-
-
-ModifiersLabels = {
-    {"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
-    {"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
-    {"Sudden Death", "You die if you miss a single note", "SD"},
-    {"Lane Swap", "Left becomes right, up becomes down", "LS"},
-    {"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
-    {"No Fail", "Don't die when you run out of health", "NF"},
-    {"Bot Play", "Watch a perfect playthourgh of the song", "BP"},
-    {"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
-    {"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
-}
 
 
 
@@ -93,7 +70,7 @@ function whatNumberIsThis(num)
 end
 
 
-function whatNumberAreThese(...)
+function whatNumbersAreThese(...)
     local printableNumbers = ""
     for i,v in ipairs({...}) do
         if i == #{...} then
@@ -339,14 +316,14 @@ function love.run()
 
 			love.graphics.present()
 		end
-        idfkIFThiswillwork = not idfkIFThiswillwork
-        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
+        --idfkIFThiswillwork = not idfkIFThiswillwork
+      --  if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
 		    if love.timer then love.timer.sleep(0.001) end
-        end
+     --   end
 	end
 end
 discordRPC = require("Modules.discordRPC")
-usingRPC = true
+usingRPC = false
 function InitializeDiscord()
     discordRPC.initialize("1200949844655755304", false, "2781170")
     presenceUpdate = 0
@@ -581,7 +558,7 @@ function love.load()
 
 
 
-    State.switch(States.PreLaunchState)
+    State.switch(States.SplashState)
 
 
     clearNotifs()
@@ -733,6 +710,10 @@ function love.keypressed(key)
         --]]
 
     end
+
+    if State.current() == States.SplashState then
+        skipSplash()
+    end
 end
 
 function tweenVolumeDisplay()
@@ -834,7 +815,7 @@ function love.draw()
         love.graphics.setColor(1,1,1,(wipeEffect[3] or 0))
     love.graphics.pop()
     love.graphics.draw(harmoniH, Inits.WindowWidth/2, Inits.WindowHeight/2, math.rad((wipeEffect[2] or 0)),1,1,harmoniH:getWidth()/2,harmoniH:getHeight()/2)
-
+    love.graphics.setColor(1,1,1,1)
     debug.printInfo()
     love.graphics.setFont(MenuFontSmall)
 

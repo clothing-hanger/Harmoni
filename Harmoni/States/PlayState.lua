@@ -155,16 +155,59 @@ function PlayState:enter()
     
     song:setPitch(Modifiers[2])
 
+    if replayMode then
+
+        replayVerify = function()
+
+        
+            local ok, replay, err = pcall(love.filesystem.load, "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") 
+            if not ok    then  
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 1 ig??")
+                return false, "Failed loading code: ".. replay  end
+            if not replay then 
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 2 ig??")
+                return false, "Failed reading file: "..err    end
+        
+            local ok, value = pcall(replay) 
+            if not ok then
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 3 ig??")
+                return false, "Failed calling chunk: "..tostring(value)  end
+        
+            return true, value
+        end
+
+        if replayVerify() then
+            goto continue
+        else
+            notification("This Replay is Corrupt and will be deleted. (harmoni sucks)", notifErrorIcon)
+            love.filesystem.remove("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")
+            PlayState:leave(States.SongSelectState)
+        end
+
+        ::continue::
+    end
+
 end
 
 
 function PlayState:runReplayShitIdk()
-
+    if not replayIsLoaded then
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
+            replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
+            replayIsLoaded = true
+        else
+            replayError = true
+            notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
+            PlayState:leave(States.SongSelectState)
+        end
+    end
     if replayIsLoaded then
         for i = 1,#replayTable do
             if replayTable[i][3] <= MusicTime then
                 print("Saved Replay Data" .. replayTable[i][2])
                 replayInputs[replayTable[i][1]] = replayTable[i][2]
+                print(tostring(i .. tostring(replayInputs[replayTable[i][1]])))
+                table.remove(replayTable, i)
                 break
             end
         end
@@ -450,9 +493,8 @@ function PlayState:update(dt)
             log("Song Ended")
             PlayState:saveScore()
             replayString = replayString .. "\n}"
-           -- love.filesystem.createDirectory("Replays")
-           -- love.filesystem.createDirectory("Replays/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
-          --  love.filesystem.write("Replays/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/" ..os.time()..".lua", replayString)
+            love.filesystem.createDirectory("Music/" .. songList[selectedSong] .. "/Replays/")
+            love.filesystem.write("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua", replayString)
             PlayState:leave(States.ResultsState)
         end
     end   
@@ -847,12 +889,6 @@ function PlayState:draw()
                            -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
-
-
-
-
-
-
             
                 love.graphics.push()
                     if gameOverNotePush[1] ~= 0 then
@@ -868,6 +904,8 @@ function PlayState:draw()
                             end
                         end
                     end
+
+
                 love.graphics.pop()
             love.graphics.pop()
 

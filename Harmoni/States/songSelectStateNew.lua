@@ -5,6 +5,33 @@ local AllDirections = {
     "Up",
     "Right",
 }
+Modifiers = {
+    false,
+    1, -- speed
+    false,  -- sudden death
+    false, -- lane swap
+    false, -- no scroll velocities
+    false, -- no fail
+    false, -- botplay
+    false, -- randomize
+    false, -- no hold notes
+}
+
+
+ModifiersLabels = {
+{"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
+{"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
+{"Sudden Death", "You die if you miss a single note", "SD"},
+{"Lane Swap", "Left becomes right, up becomes down", "LS"},
+{"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
+{"No Fail", "Don't die when you run out of health", "NF"},
+{"Bot Play", "Watch a perfect playthourgh of the song", "BP"},
+{"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
+{"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
+}
+
+
+
 function SongSelectState:enter()
     curScreen = "songSelect" 
     log("SongSelectState Entered")
@@ -13,6 +40,8 @@ function SongSelectState:enter()
     hangerTilt = {0}
     subMenuYPos = {512}
     subMenuActive = false
+
+    replayCanvas = love.graphics.newCanvas(450,500)
 
 
     PressToggleString = "Press Tab to Open Mods Menu"
@@ -808,9 +837,23 @@ function SongSelectState:draw()
 
             elseif subMenuState == 3 then
 
+
+                love.graphics.draw(replayCanvas)
+
+
+                love.graphics.setCanvas(replayCanvas)
+                for i=1,5 do
+                    love.graphics.setColor(selectedButtonFillColor)
+                    love.graphics.rectangle("fill", 0 ,0+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(accentColor)
+                    love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(1,1,1,1)                
+                end
+
             end
         
         love.graphics.pop()
+
 
 
 
