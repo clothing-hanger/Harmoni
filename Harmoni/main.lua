@@ -5,7 +5,7 @@ InitializeGame()
 
 require("Libraries.Tserial")
 
-debugMode = false 
+debugMode = true 
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -709,6 +709,10 @@ function love.keypressed(key)
 
         --]]
 
+    end
+
+    if State.current() == States.SplashState then
+        skipSplash()
     end
 end
 
