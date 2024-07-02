@@ -44,6 +44,7 @@ HoldNoteEndRightImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrai
 
 
 SongSelectFrameImage = love.graphics.newImage(skinFolder .. "SONGSELECT/frame.png")
+SongSelectFrameBackImage = love.graphics.newImage(skinFolder .. "SONGSELECT/frameBack.png")
 discImage = love.graphics.newImage(skinFolder .. "SONGSELECT/disc.png")
 decorationImage = love.graphics.newImage(skinFolder .. "SONGSELECT/clothing hanger.png")
 loadingImage = love.graphics.newImage(skinFolder .. "SONGSELECT/loading.png")

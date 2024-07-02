@@ -5,13 +5,43 @@ local AllDirections = {
     "Up",
     "Right",
 }
+Modifiers = {
+    false,
+    1, -- speed
+    false,  -- sudden death
+    false, -- lane swap
+    false, -- no scroll velocities
+    false, -- no fail
+    false, -- botplay
+    false, -- randomize
+    false, -- no hold notes
+}
+
+
+ModifiersLabels = {
+{"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
+{"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
+{"Sudden Death", "You die if you miss a single note", "SD"},
+{"Lane Swap", "Left becomes right, up becomes down", "LS"},
+{"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
+{"No Fail", "Don't die when you run out of health", "NF"},
+{"Bot Play", "Watch a perfect playthourgh of the song", "BP"},
+{"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
+{"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
+}
+
+
+
 function SongSelectState:enter()
     curScreen = "songSelect" 
+    log("SongSelectState Entered")
     --selectedSong = randomSong
     menuState = 1
     hangerTilt = {0}
     subMenuYPos = {512}
     subMenuActive = false
+
+    replayCanvas = love.graphics.newCanvas(450,500)
 
 
     PressToggleString = "Press Tab to Open Mods Menu"
@@ -199,7 +229,6 @@ function SongSelectState:update(dt)
                         selectedDifficulty = selectedDifficulty+1
                         SongSelectState:loadSong(false)
                     end
-                --  SongSelectState:loadSong()
                 elseif Input:pressed("MenuUp") then
                     tweenSongXPositions()
 
@@ -211,12 +240,14 @@ function SongSelectState:update(dt)
                         SongSelectState:loadSong(false)
                     end
                 elseif Input:pressed("MenuConfirm") then
-                    if CurPlayingSong == selectedSong then
+                    if CurPlayingSong == selectedSong and songHasLoaded then
                         if menuState == 1 then
                             menuState = 2
                             selectedDifficulty = 1
                         elseif menuState == 2 then
                             if MenuMusic:isPlaying() then
+                                log("SongSelectState Exited")
+                                wipeFade("in")
                                 State.switch(States.PlayState)
                             end
                         end
@@ -227,10 +258,14 @@ function SongSelectState:update(dt)
                     if menuState == 2 then
                         menuState = 1
                     elseif menuState == 1 then
+                        log("SongSelectState Exited")
+                        wipeFade("in")
                         State.switch(States.TitleState)
                     end
 
                 elseif Input:pressed("importSongs") then
+                    log("SongSelectState Exited")
+                    wipeFade("in")
                     State.switch(States.QuaverImportScreen)
                 elseif Input:pressed("openSongFolder") then
                     os.execute("start " .. love.filesystem.getSaveDirectory() .. "/Music")
@@ -423,6 +458,10 @@ end
 
 
 function SongSelectState:loadSong(doSongRestart)
+    songHasLoaded = false
+
+
+
     trackRounding = 100
     velocityPositionMakers = {}
     currentTrackPosition = 0
@@ -438,8 +477,8 @@ function SongSelectState:loadSong(doSongRestart)
     if menuSongTimer then
         Timer.cancel(menuSongTimer)
     end
-
     menuSongTimer = Timer.after(menuSongDelayTime, function()       -- make a setting
+        songHasLoaded = true
         if doSongRestart then
             MenuMusic:stop()
         end
@@ -480,6 +519,7 @@ function SongSelectState:loadSong(doSongRestart)
             quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
         else
             notification("Chart File Not Found!", notifErrorIcon)
+            log("Chart File Not Found For Song" .. selectedSong)
         end
             --[[ print(songList[selectedSong])
         print(diffList[selectedDifficulty]) ]]
@@ -501,6 +541,7 @@ function SongSelectState:loadSong(doSongRestart)
                 MenuMusic = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
             else
                 notification("Audio Not Loaded!", notifErrorIcon)
+                log("Audio Not Found For Song " .. selectedSong)
             end
             MenuMusic:setPitch(Modifiers[2])
             CurPlayingSong = selectedSong
@@ -533,7 +574,30 @@ function SongSelectState:loadSong(doSongRestart)
    -- end
    doDiffListTween = true
 
+    if songList[selectedSong] and love.filesystem.getInfo("Replays/" .. songList[selectedSong], "directory") then
+        print("Replays found for this song") 
+    else
+        print("Replays not found for this song")
+    end
 
+  --  SongSelectState:loadScores()
+
+end
+
+function SongSelectState:loadScores()
+    
+    if (selectedSong > 0 and selectedSong < #songList) and (selectedDifficulty > 0 and selectedDifficulty < #diffList) and  (love.filesystem.getInfo("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty], "directory")) then
+        scoresTable = love.filesystem.getDirectoryItems("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/")
+        if #scoresTable > 0 then
+            print(#scoresTable .. " scores found.")
+            for i = 1,#scoresTable do
+                local scoreData = love.filesystem.load("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/" .. scoresTable[i])()
+                print(scoreData.score)
+            end
+        else
+            print("No scores found for this song.")
+        end
+    end
 end
 
 function SongSelectState:checkBotInput()
@@ -644,13 +708,19 @@ function SongSelectState:draw()
                 --love.graphics.rectangle("line", SongListXPositions[i]-SongListXPositions2[i], i*60, 1100, 50, 7, 7, 50)
                 love.graphics.setColor(accentColor)
 
-                if songNamesTable[i] == "This song's data is corrupt! Open at your own risk." then
+                if songNamesTable[i] == "This song's data is corrupt!" then
                     love.graphics.setColor(1,0,0)
                 else
                     love.graphics.setColor(0,0,0)
                 end
-                love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
-
+                if songNamesTable[i] then
+                    love.graphics.print(songNamesTable[i], SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
+                else
+                    log("Song name was not found in songNamesTable" .. i)
+                    love.graphics.setColor(1,0,0)
+                    love.graphics.print("Song Name Not Found!", SongListXPositions[i]+12-SongListXPositions2[i], i*60+12)
+                    love.graphics.setColor(1,1,1)
+                end
                 if i == #songList and #songList > 10 then
                     love.graphics.setColor(1,1,1,1)
                     love.graphics.draw(hanger, SongListXPositions[i]+10-SongListXPositions2[i], i*60+50, hangerTilt[1], 1, 1, 109, 44)
@@ -767,9 +837,23 @@ function SongSelectState:draw()
 
             elseif subMenuState == 3 then
 
+
+                love.graphics.draw(replayCanvas)
+
+
+                love.graphics.setCanvas(replayCanvas)
+                for i=1,5 do
+                    love.graphics.setColor(selectedButtonFillColor)
+                    love.graphics.rectangle("fill", 0 ,0+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(accentColor)
+                    love.graphics.rectangle("line", Inits.GameWidth/2-290 ,440+40*i-95, 430, 30, 7, 7, 50)
+                    love.graphics.setColor(1,1,1,1)                
+                end
+
             end
         
         love.graphics.pop()
+
 
 
 

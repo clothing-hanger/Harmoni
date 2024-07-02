@@ -12,12 +12,40 @@ local AllDirections = {
     "Up",
     "Right",
 }
+local replayInputs = {
+    false,
+    false,
+    false,
+    false,
+}
+
 
 function PlayState:enter()
-    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading
+
+    log("PlayState Entered")
+    for i = 1,#Modifiers do
+        log(tostring(Modifiers[i]))
+    end
+    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading      idk lmao
     hitTimes = {}
     accuracyAndHealthData = {}
     curScreen = "play"
+
+    --[[
+
+    replayMode = false    -- this shit will stay unused lmao 
+
+    if not replayIsLoaded then
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
+            replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
+            replayIsLoaded = true
+        else
+            replayError = true
+            notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
+            PlayState:leave(States.SongSelectState)
+        end
+    end
+--]]
 
     lanes = {}
     for i = 1, 4 do
@@ -64,14 +92,6 @@ function PlayState:enter()
     Okay = OkayImage
     Miss = MissImage
 
-    
-    marvTiming = 26
-    perfTiming = 56
-    greatTiming = 86
-    goodTiming = 106
-    okayTiming = 126
-    missTiming = 146
-
     marvCount = 0
     perfCount = 0
     greatCount = 0
@@ -96,6 +116,8 @@ function PlayState:enter()
     backgroundBlur = {0}
     comboSize = {1}
     score = 0
+    highestCombo = 0
+    highestNPS = 0
     accuracy = 0
     currentScrollVelocity = 1
     currentBestPossibleScore = 0
@@ -107,6 +129,7 @@ function PlayState:enter()
     printableAccuracy = {accuracy}
     noteScale = 1
     grade = ""
+    replayString = "NOT INIT"
     hitsPerSecond = {}
     notesPerSecond = {}
     hitErrorTable = {}
@@ -128,7 +151,82 @@ function PlayState:enter()
     blurShader:send("direction", {1 / love.graphics.getWidth(), 1 / love.graphics.getHeight()})
     
     song:setPitch(Modifiers[2])
+
+    if replayMode then
+
+        replayVerify = function()
+
+        
+            local ok, replay, err = pcall(love.filesystem.load, "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") 
+            if not ok    then  
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 1 ig??")
+                return false, "Failed loading code: ".. replay  end
+            if not replay then 
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 2 ig??")
+                return false, "Failed reading file: "..err    end
+        
+            local ok, value = pcall(replay) 
+            if not ok then
+                log("Replay Verify failed on" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua     uhhhh idfk condition 3 ig??")
+                return false, "Failed calling chunk: "..tostring(value)  end
+        
+            return true, value
+        end
+
+        if replayVerify() then
+            goto continue
+        else
+            notification("This Replay is Corrupt and will be deleted. (harmoni sucks)", notifErrorIcon)
+            love.filesystem.remove("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")
+            PlayState:leave(States.SongSelectState)
+        end
+
+        ::continue::
+    end
+
 end
+
+
+function PlayState:runReplayShitIdk()
+    if not replayIsLoaded then
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
+            replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
+            replayIsLoaded = true
+        else
+            replayError = true
+            notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
+            PlayState:leave(States.SongSelectState)
+        end
+    end
+    if replayIsLoaded then
+        for i = 1,#replayTable do
+            if replayTable[i][3] <= MusicTime then
+                print("Saved Replay Data" .. replayTable[i][2])
+                replayInputs[replayTable[i][1]] = replayTable[i][2]
+                print(tostring(i .. tostring(replayInputs[replayTable[i][1]])))
+                table.remove(replayTable, i)
+                break
+            end
+        end
+    end
+end
+
+
+function PlayState:saveScore()
+    scoreTableString = "return {score = "..score..", accuracy = " .. accuracy .. ", grade = " .. grade .. "}"
+    love.filesystem.createDirectory("Scores")
+    love.filesystem.createDirectory("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+    love.filesystem.write("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/" .. os.time() ..".lua", scoreTableString)
+end
+
+function PlayState:addReplayThingyIdfk(key,isDown,time)
+    if replayString == "NOT INIT" then
+        log("Init Replay Stuff idk")
+        replayString = "return {\n"
+    end
+    replayString = replayString .. "{" .. key .. "," .. tostring(isDown) .. "," .. MusicTime .. "},\n"
+end
+
 
 function PlayState:initializePositionMarkers()
     if #scrollVelocities == 0 then return end
@@ -163,7 +261,7 @@ end
 function PlayState:getPositionFromTime(time)
     local _i = 1
     for i = 1, #scrollVelocities do
-        if time < scrollVelocities[i].startTime then
+        if time <= scrollVelocities[i].startTime then
             _i = i
             break
         end
@@ -210,6 +308,7 @@ function PlayState:updateNotePosition(offset, curTime)
 end
 
 function PlayState:doNoteHit(note)
+    
     if not note.wasGoodHit then
         note.wasGoodHit = true
         judge(MusicTime - note.time)
@@ -218,6 +317,9 @@ function PlayState:doNoteHit(note)
             splash:emit(3)
         end
         table.insert(notesPerSecond, 1000)
+        if #notesPerSecond > highestNPS then
+            highestNPS = #notesPerSecond
+        end
         if #note.children > 0 then
             note.moveWithScroll = false
         else
@@ -233,6 +335,11 @@ end
 function PlayState:keyPressed(key) -- key is the lane
     if paused then return end
     table.insert(hitsPerSecond, 1000)
+
+    PlayState:addReplayThingyIdfk(key,true,MusicTime)
+
+
+
 
     local lane = lanes[key]
 
@@ -279,11 +386,13 @@ function PlayState:checkTimeToNextNote()
     end
 end
 
-function PlayState:doBreak()
+function PlayState:doBreak(dur)
+    local duration = (dur or 3)
+    log("Song Break at" .. MusicTime .. "for duration: " .. duration)
     doingBreak = true
     breakFade = {0}
     Timer.tween(0.4, breakFade, {1}, "linear", function()
-        Timer.after(3.4, function() 
+        Timer.after(duration, function() 
             Timer.tween(0.4, breakFade, {0}, "linear", function()
                 doingBreak = false
             end)
@@ -295,6 +404,9 @@ function PlayState:keyReleased(key)
     if paused then return end
 
     local lane = lanes[key]
+
+    PlayState:addReplayThingyIdfk(key,false,MusicTime)
+
 
     for i, note in ipairs(lane) do
         if not note.moveWithScroll then -- hold was unpressed
@@ -311,6 +423,11 @@ function PlayState:keyReleased(key)
 end
 
 function PlayState:update(dt)
+
+    if replayMode then
+        PlayState:runReplayShitIdk()
+    end
+
     if paused or gameOver then
         MusicTime = PausedMusicTime
     end
@@ -355,7 +472,8 @@ function PlayState:update(dt)
 
     if MusicTime >= 0 and not song:isPlaying() and MusicTime < 1000 --[[ to make sure it doesnt restart --]] then
         song:play()
-    
+        log("Song Started")
+
     end
 
     self:updateCurrentTrackPosition()
@@ -367,14 +485,14 @@ function PlayState:update(dt)
     end
 
     if (#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4] == 0) or gameOver and MusicTime > 1 and not paused then
-        resultsScreen = true
-        State.switch(States.ResultsState)
-        if Input:pressed("MenuConfirm") then
-            resultsScreen = false
-            saveList = love.filesystem.getDirectoryItems("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/")
-            local saveData = "local ScoreData = {Score = ".. score .. "Accuracy = " .. accuracy .. "}"
-            love.filesystem.write("Saves/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .."/" .. #saveList .. ".lua", "test")
-            PlayState:leave(States.SongSelectState)
+        if not replayError then
+            resultsScreen = true
+            log("Song Ended")
+            PlayState:saveScore()
+            replayString = replayString .. "\n}"
+            love.filesystem.createDirectory("Music/" .. songList[selectedSong] .. "/Replays/")
+            love.filesystem.write("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua", replayString)
+            PlayState:leave(States.ResultsState)
         end
     end   
     
@@ -456,7 +574,8 @@ function PlayState:doBPMshit()
         if timingPointsTable[i][1] then
             if MusicTime >= timingPointsTable[i][1] then
                 currentBpm = timingPointsTable[i][2]
-                --print("BPM change: " .. currentBpm)
+                print("BPM change: " .. currentBpm)
+                log("BPM change: " .. currentBpm)
                 table.remove(timingPointsTable, i)
                 break
             end
@@ -481,7 +600,7 @@ end
 
 function PlayState:beat()
 
-
+    
     beatBump = {(#notesPerSecond/400 or 0)}
 
 
@@ -551,8 +670,8 @@ function PlayState:gameOver()
 end
 
 function PlayState:leave(state)
+    log("PlayState Exited")
     --song = nil
-    background = nil
     State.switch(state)
     resultsScreenTranslate = nil
     resultsScreenTween = nil
@@ -576,6 +695,9 @@ end
 
 function incrementCombo()
     combo = combo + 1
+    if combo > highestCombo then
+        highestCombo = combo
+    end
     if combo % 100 == 0 then
         comboAlertFunction(combo)
     end
@@ -700,34 +822,13 @@ function dimBackground()
     end)
 end
 
---[[ function checkInput()
-    for i, lane in ipairs(lanes) do
-        for j, note in ipairs(lane) do
-            if MusicTime - note.time < missTiming and MusicTime - note.time > -missTiming then
-                if Input:pressed(allInputs[i]) and not paused then
-                    judge(MusicTime - note.time)
-                    table.insert(notesPerSecond, 1)
-                    table.remove(lane, j)
-                    break
-                end
-            end
-        end
-    end
-end ]]
+
 
 
 function PlayState:checkBotInput()
+
+
     botAccuracy = -1
-    botAccuracy = love.math.random(-perfTiming, perfTiming)
-    if botAccuracy > 0 then
-        if love.math.random(1,7) == 1 then
-            botAccuracy = botAccuracy + love.math.random(0, 100)
-        end
-    elseif botAccuracy < 0 then
-        if love.math.random(1,7) == 1 then
-            botAccuracy = botAccuracy + love.math.random(0, 100)
-        end
-    end
     for i, lane in ipairs(lanes) do
         for j, note in ipairs(lane) do
             if MusicTime - note.time > botAccuracy then
@@ -738,7 +839,6 @@ function PlayState:checkBotInput()
                 table.insert(notesPerSecond, 1000)
                 table.insert(hitsPerSecond, 1000)
 
-
                 break
             end
         end
@@ -746,15 +846,9 @@ function PlayState:checkBotInput()
 end
 
 function PlayState:draw()
-
-        --[[ blurEffect(function()
-        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
-        end) ]]
         love.graphics.setShader(blurShader)
         love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
         love.graphics.setShader()
-
-        
 
         love.graphics.push()
             if skinDrawUnderDim then
@@ -788,10 +882,8 @@ function PlayState:draw()
                         local spr = _G["Receptor" .. AllDirections[i]]
                             if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
                             love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-                            love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
+                           -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
-
-
 
             
                 love.graphics.push()
@@ -808,25 +900,27 @@ function PlayState:draw()
                             end
                         end
                     end
+
+
                 love.graphics.pop()
             love.graphics.pop()
 
         love.graphics.pop()
         love.graphics.push()
-    
-            love.graphics.setFont(BigFont)
+    --[[
+        --]]
+            love.graphics.setFont(fontPoland50)
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
     
             love.graphics.print(math.floor(printableScore[1]).."\n"..#notesPerSecond.."/"..#hitsPerSecond,0,0-(beatBump[1]*50))
     
             love.graphics.setFont(DefaultFont)
-    
-    
-    
+
+    --]]
             love.graphics.push()
             love.graphics.translate(0,(judgePos[4] or 0))
-    
+    --]]
         love.graphics.setColor(1,1,1,judgeColors[1])
         love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2),  Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
         love.graphics.setColor(1,1,1,judgeColors[2])
@@ -843,7 +937,7 @@ function PlayState:draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.pop()
         love.graphics.rectangle("fill",Inits.GameWidth/2-1, Inits.GameHeight/2-3, 2, 26)
-
+--]]
         for i = 1,#hitTimes do
             love.graphics.setColor(hitTimes[i][4])
             love.graphics.rectangle("fill", (((hitTimes[i][1])/2)+(Inits.GameWidth/2)-2), Inits.GameHeight/2, 4, 20)
@@ -885,13 +979,13 @@ function PlayState:draw()
             love.graphics.print("Miss",0, (Inits.GameHeight/2)+150)
         end
     
-    
+    --]]
     
     
     
     
         love.graphics.setColor(1,1,1,1)
-        love.graphics.setFont(BigFont)
+        love.graphics.setFont(fontPoland50)
         if combo < 500 then
             love.graphics.setColor(1,1,1)
         else
@@ -910,22 +1004,22 @@ function PlayState:draw()
         love.graphics.setColor(1+accuracyColor,accuracyColor,accuracyColor)
     
     
-        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 0, 0-(beatBump[1]*50), Inits.GameWidth, "right")
+        love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%\n", -6, 0-(beatBump[1]*50), Inits.GameWidth, "right")
         gradeColors = {1,1,1}
         love.graphics.setColor(gradeColors)
 
-        love.graphics.printf(grade, 0, 55-(beatBump[1]*50), Inits.GameWidth, "right")
+        love.graphics.printf(grade, -6, 84-(beatBump[1]*50), Inits.GameWidth, "right")
 
         love.graphics.setFont(DefaultFont)
         love.graphics.setColor(0,0,0)
 
     
-        love.graphics.rectangle("fill", 896, 636, 13, -508)
+        love.graphics.rectangle("fill", 1200, 836, 13, -608)
     
         love.graphics.setColor(0,0.5,1)
     
     
-        love.graphics.rectangle("fill", 900, 632, 5, -printableHealth[1]*500)
+        love.graphics.rectangle("fill", 1200, 832, 5, -printableHealth[1]*600)
         love.graphics.setFont(MediumFontSolid)
         if BotPlay then
             love.graphics.printf("Bot Play", 0, Inits.GameHeight/2, Inits.GameWidth, "center")
@@ -944,7 +1038,7 @@ function PlayState:draw()
         
         love.graphics.printf(metaData.name.."\n" ..metaData.diffName .. "\nArtist- " .. metaData.artist .. "\nCharter- " .. metaData.creator, 0, Inits.GameHeight/2-150, Inits.GameWidth, "center")
         love.graphics.setColor(1,1,1,1)
-        love.graphics.setFont(BigFont)
+        love.graphics.setFont(fontPoland50)
 
         if canBeSkipped then
             love.graphics.printf("Press Space to Skip Intro", 0, Inits.GameHeight/2+300, Inits.GameWidth, "center")
@@ -964,6 +1058,14 @@ function PlayState:draw()
         if skinDrawAbove then
             skinDrawAbove()
         end
+
+        for i = 1,4 do
+            love.graphics.rectangle("line", 50+(i*25), Inits.GameHeight-50, 20, 20)
+            if replayInputs[i] then
+                love.graphics.rectangle("fill", 50+(i*25), Inits.GameHeight-50, 20, 20)
+            end
+
+        end
         if not songLeave then
             songLeave = 0
         end
@@ -979,7 +1081,7 @@ function PlayState:draw()
             love.graphics.setColor(0,0,0,0.8)
             love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
             love.graphics.setColor(1,1,1,1)
-            love.graphics.setFont(BigFont)
+            love.graphics.setFont(fontPoland50)
             love.graphics.print("Paused")
             local options = {"Resume", "Restart", "Exit"}
             for i = 1, #options do

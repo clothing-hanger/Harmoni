@@ -9,6 +9,7 @@ local frame = 0
 -- TODO: Make the following code work in a thread.
 
 function QuaverImportScreen:enter()
+    log("QuaverImportScreen Entered")
     if MenuMusic:isPlaying() then
         MenuMusic:stop()
     end
@@ -37,6 +38,7 @@ function QuaverImportScreen:update(dt)
                         local dir, _, lFiles = importer:ls()
                         for _, file in ipairs(lFiles) do
                             importer:copy(dir .. sep .. file, songsFolder .. sep .. song .. sep .. file)
+                            log(dir .. sep .. file, songsFolder .. sep .. song .. sep .. file)
                         end
 
                         importer:cd(lastDir)
@@ -61,13 +63,15 @@ function QuaverImportScreen:update(dt)
                     local dir, _, lFiles = importer:ls()
                     for _, file in ipairs(lFiles) do
                         importer:copy(dir .. sep .. file, songsFolder .. sep .. song .. sep .. file)
+                        log(dir .. sep .. file, songsFolder .. sep .. song .. sep .. file)
                     end
                 end
             end
         end
         
     preLaunchFade = {0}
-
+        log("QuaverImportScreen Exited")
+        wipeFade("in")
         State.switch(States.PreLaunchState)
     end
 end

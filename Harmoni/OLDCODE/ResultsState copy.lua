@@ -38,7 +38,7 @@ function ResultsState:draw()
     love.graphics.translate(0,resultsScreenTranslate[1])
     love.graphics.setColor(1,1,1,1)
 
-    love.graphics.setFont(BigFont)
+    love.graphics.setFont(fontPoland50)
 
     love.graphics.printf(metaData.name, 10, 10, 5000)
     love.graphics.printf(string.format("%.2f", tostring(math.min((printableAccuracy[1]))), 100).."%", 50, 500, 200, "right")
@@ -50,7 +50,7 @@ function ResultsState:draw()
 
 
 
-   love.graphics.setFont(ReallyFuckingBigFont)
+   love.graphics.setFont(fontPoland150)
 
     love.graphics.print(grade, 45, Inits.GameHeight/2-235)
 

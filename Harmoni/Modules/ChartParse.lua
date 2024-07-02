@@ -2,6 +2,7 @@ function quaverParse(file)
     
     if not love.filesystem.getInfo(file, "file") then
         notification("Chart File Not Found!", notifErrorIcon)
+        log("Chart File Not Found For Song " .. selectedSong)
         return false
     end
 
@@ -15,6 +16,7 @@ function quaverParse(file)
         timingPointsTable = {}
         scrollVelocities = {}
         totalNoteCount = 0
+        holdNoteCount = 0
         for i = 1,7 do
             table.insert(lanes, {})
         end
@@ -43,6 +45,7 @@ function quaverParse(file)
             song = love.audio.newSource("Music/" .. songList[selectedSong] .. "/" .. metaData.song, "stream")
         else
             notification("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
+            log("Audio File Not Found For Song " .. selectedSong)
             return
         end
 
@@ -51,6 +54,8 @@ function quaverParse(file)
             background = love.graphics.newImage("Music/" .. songList[selectedSong] .. "/" .. metaData.background)
         else
             notification("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
+            log("Background File Not Found For Song " .. selectedSong)
+
         end
 
 
@@ -90,12 +95,15 @@ function quaverParse(file)
 
         for i = 1,#chart.HitObjects do
             local hitObject = chart.HitObjects[i]
-            local startTime = (hitObject.StartTime or 0) / Modifiers[2]
+            local startTime = (hitObject.StartTime or 0) --/ Modifiers[2]
             if not startTime then goto continue end
             local endTime = hitObject.EndTime or 0
             local lane = hitObject.Lane
 
             totalNoteCount = totalNoteCount + 1
+            if endTime > 0 then
+                holdNoteCount = holdNoteCount + 1
+            end
 
 
             if Modifiers[4] then
@@ -138,6 +146,7 @@ function quaverParse(file)
         print(songLength)
         songLengthToLastNote = lastNoteTime/1000
         bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        holdNotePercent = math.ceil((holdNoteCount / totalNoteCount)*100)
 
         currentBpm = metaData.bpm
         if currentBpm then
@@ -149,6 +158,7 @@ end
 
 
 function harmoniParse(file) -- don't use this
+    log("why did this code run lmfao")
     chart = love.filesystem.load(file)()
     bestScorePerNote = 1000000/#chart
 
