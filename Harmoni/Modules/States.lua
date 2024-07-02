@@ -1,7 +1,7 @@
 return {
     TestState = require("States.TestState"),
     PlayState = require("States.PlayState"),
-    SongSelectState = require("States.SongSelectStateNew"),
+    SongSelectState = require("States.songSelectStateNew"),
     ResultsState = require("States.ResultsState"),
     TitleState = require("States.TitleState"),
     SettingsState = require("States.SettingsState"),

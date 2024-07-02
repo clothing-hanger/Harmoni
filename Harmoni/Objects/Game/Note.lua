@@ -72,7 +72,7 @@ function Note:new(time, lane, endTime)
     if self.endTime and self.endTime > self.time then
         local holdObj = {}
         holdObj.image = HoldNoteImages[lane]
-        holdObj.endTime = endTime
+        holdObj.endTime = endTime / Modifiers[2]
         holdObj.height = 125
         holdObj.scaleY = 1
 
