@@ -61,6 +61,9 @@ function PreLaunchState:update(dt)
     metaFileFound = false
       --  for i = #songNamesTable + 1, math.min(#songNamesTable + 10, #songList) do
             diffListQ = {}
+            if not love.filesystem.getInfo("Music/" .. songList[frame] .. "/") then
+                error("Song List Corrupt??? Maybe????? i honestly dont know what could cause this error lmfao")
+            end
             diffListAndOtherShitIdfkQ = love.filesystem.getDirectoryItems("Music/" .. songList[frame] .. "/")
             for q = 1,#diffListAndOtherShitIdfkQ do 
 
@@ -111,6 +114,7 @@ function PreLaunchState:update(dt)
     end
 
 end
+
 
 function PreLaunchState:draw() 
     love.graphics.setColor(1,1,1,preLaunchFade[1])

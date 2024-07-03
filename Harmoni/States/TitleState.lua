@@ -428,6 +428,17 @@ function TitleState:draw()
     love.graphics.printf(versionNumber, 350, 1180, 500, "right")
 
     love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
+
+    love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
+
+
+    love.graphics.printf(versionNumber, 350, 1180, 500, "right")
+
+    love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
+
+    love.graphics.translate(500,Inits.GameWidth-300)
+
+    love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7, 50)
     love.graphics.pop()
     love.graphics.pop()
     love.graphics.translate(Inits.GameWidth/2-logo:getWidth()/2,logoYPos[1]*2)

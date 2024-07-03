@@ -460,6 +460,8 @@ end
 function SongSelectState:loadSong(doSongRestart)
     songHasLoaded = false
 
+
+
     trackRounding = 100
     velocityPositionMakers = {}
     currentTrackPosition = 0
@@ -572,7 +574,30 @@ function SongSelectState:loadSong(doSongRestart)
    -- end
    doDiffListTween = true
 
+    if songList[selectedSong] and love.filesystem.getInfo("Replays/" .. songList[selectedSong], "directory") then
+        print("Replays found for this song") 
+    else
+        print("Replays not found for this song")
+    end
 
+  --  SongSelectState:loadScores()
+
+end
+
+function SongSelectState:loadScores()
+    
+    if (selectedSong > 0 and selectedSong < #songList) and (selectedDifficulty > 0 and selectedDifficulty < #diffList) and  (love.filesystem.getInfo("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty], "directory")) then
+        scoresTable = love.filesystem.getDirectoryItems("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/")
+        if #scoresTable > 0 then
+            print(#scoresTable .. " scores found.")
+            for i = 1,#scoresTable do
+                local scoreData = love.filesystem.load("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/" .. scoresTable[i])()
+                print(scoreData.score)
+            end
+        else
+            print("No scores found for this song.")
+        end
+    end
 end
 
 function SongSelectState:checkBotInput()

@@ -5,7 +5,7 @@ InitializeGame()
 
 require("Libraries.Tserial")
 
-debugMode = true 
+debugMode = false  
 
 function log(text)
     logString = logString .. text .. "\n"

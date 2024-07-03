@@ -31,7 +31,22 @@ function PlayState:enter()
     accuracyAndHealthData = {}
     curScreen = "play"
 
-    --replayMode = true
+    --[[
+
+    replayMode = false    -- this shit will stay unused lmao 
+
+    if not replayIsLoaded then
+        if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
+            replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
+            replayIsLoaded = true
+        else
+            replayError = true
+            notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
+            PlayState:leave(States.SongSelectState)
+        end
+    end
+--]]
+
     lanes = {}
     for i = 1, 4 do
         table.insert(lanes, {})
@@ -180,17 +195,16 @@ function PlayState:runReplayShitIdk()
         if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
             replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
             replayIsLoaded = true
-            log("Replay Loaded" .. "Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")
         else
             replayError = true
             notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
-            log("Replay Not Loaded" .. "Music/" .. songList[selectedSong] .. "/Replays/?")
             PlayState:leave(States.SongSelectState)
         end
     end
     if replayIsLoaded then
         for i = 1,#replayTable do
-            if replayTable[i][3] >= MusicTime then
+            if replayTable[i][3] <= MusicTime then
+                print("Saved Replay Data" .. replayTable[i][2])
                 replayInputs[replayTable[i][1]] = replayTable[i][2]
                 print(tostring(i .. tostring(replayInputs[replayTable[i][1]])))
                 table.remove(replayTable, i)
@@ -198,6 +212,14 @@ function PlayState:runReplayShitIdk()
             end
         end
     end
+end
+
+
+function PlayState:saveScore()
+    scoreTableString = "return {score = "..score..", accuracy = " .. accuracy .. ", grade = " .. grade .. "}"
+    love.filesystem.createDirectory("Scores")
+    love.filesystem.createDirectory("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
+    love.filesystem.write("Scores/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty] .. "/" .. os.time() ..".lua", scoreTableString)
 end
 
 function PlayState:addReplayThingyIdfk(key,isDown,time)
@@ -471,9 +493,10 @@ function PlayState:update(dt)
         if not replayError then
             resultsScreen = true
             log("Song Ended")
+            PlayState:saveScore()
             replayString = replayString .. "\n}"
-            love.filesystem.createDirectory("Replays/" .. songList[selectedSong] .. "/")
-            love.filesystem.write("Replays/" .. songList[selectedSong] .. "/" .. os.time() ..".lua", replayString)
+            love.filesystem.createDirectory("Music/" .. songList[selectedSong] .. "/Replays/")
+            love.filesystem.write("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua", replayString)
             PlayState:leave(States.ResultsState)
         end
     end   
@@ -1040,6 +1063,14 @@ function PlayState:draw()
     
         if skinDrawAbove then
             skinDrawAbove()
+        end
+
+        for i = 1,4 do
+            love.graphics.rectangle("line", 50+(i*25), Inits.GameHeight-50, 20, 20)
+            if replayInputs[i] then
+                love.graphics.rectangle("fill", 50+(i*25), Inits.GameHeight-50, 20, 20)
+            end
+
         end
         if not songLeave then
             songLeave = 0
