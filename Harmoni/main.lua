@@ -20,7 +20,7 @@ vudu = require("Libraries.vudu")
 require("Libraries.lovefs.lovefs")
 
 
-forceLag = true  --true?? why did i init this to true lmao
+forceLag = true -- true?? why did i init this to true lmao
 minFakeLag = 50
 maxFakeLag = 50
 

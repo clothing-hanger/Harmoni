@@ -222,11 +222,13 @@ function PlayState:initializePositionMarkers()
 end
 
 function PlayState:updateCurrentTrackPosition()
+    
     while currentSvIndex <= #scrollVelocities and MusicTime >= scrollVelocities[currentSvIndex].startTime do
         currentSvIndex = currentSvIndex + 1
     end
 
     currentTrackPosition = self:GetPositionFromTime(MusicTime, currentSvIndex)
+    
 end
 
 function PlayState:GetPositionFromTime(time, index)
