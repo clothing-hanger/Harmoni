@@ -698,7 +698,7 @@ function SongSelectState:draw()
                 if i == selectedSong then
                     love.graphics.setColor(accentColor)
                 elseif i ~= selectedSong then
-                    love.graphics.setColor(nonSelectedSongAccentColor)
+                    love.graphics.setColor(nonSelectedButtonFillColor)
                 end
                 if i == CurPlayingSong then
                     love.graphics.setColor(playingSongAccentColor)
@@ -711,6 +711,13 @@ function SongSelectState:draw()
                 if songNamesTable[i] == "This song's data is corrupt!" then
                     love.graphics.setColor(1,0,0)
                 else
+                    if i == selectedSong then
+                        love.graphics.setColor(0,0,0)
+                    else
+                        love.graphics.setColor(1,1,1)
+                    end
+                end
+                if i == CurPlayingSong then
                     love.graphics.setColor(0,0,0)
                 end
                 if songNamesTable[i] then

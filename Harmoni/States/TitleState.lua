@@ -418,10 +418,15 @@ function TitleState:draw()
 
     if imageTip then
         love.graphics.draw(currentTip[2], -400, 1050, nil, 300/currentTip[2]:getWidth(), 150/currentTip[2]:getHeight())
+        love.graphics.setColor(0,0,0)
         love.graphics.printf(currentTip[1], -390, 1060, 280,"center")
     else
+        love.graphics.setColor(0,0,0)
+
         love.graphics.printf(currentTip, -390, 1060, 280,"center")
     end
+    love.graphics.setColor(0,0,0)
+
     love.graphics.rectangle("fill", -400,1190,300*tipBoxBarLenght[1],10, 7, 7, 50)
 
 

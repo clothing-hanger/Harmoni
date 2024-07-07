@@ -46,6 +46,16 @@ nonSelectedSongAccentColor = {255/255,229/255,236/255}
 playingSongAccentColor = {255/255,10/255,84/255}
 
 
+accentColor = {1,1,1}
+selectedButtonFillColor = {1,1,1}
+nonSelectedButtonFillColor = {0.5,0.5,0.5,0.6}
+playingSongFillColor = {1,1,1}
+nonSelectedSongAccentColor = {0,0,0}
+playingSongAccentColor = {1,1,1}
+
+
+
+
 
 accentColor = {0.5,0.5,0.5}
 

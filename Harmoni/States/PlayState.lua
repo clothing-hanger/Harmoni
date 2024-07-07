@@ -1,5 +1,8 @@
 local PlayState = State()
 
+
+-- i sincerely appologize to anyone who attempts to read this code
+
 local allInputs = {
     "GameLeft",
     "GameDown",
