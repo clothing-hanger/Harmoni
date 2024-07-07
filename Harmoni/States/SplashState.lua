@@ -37,7 +37,7 @@ function SplashState:draw()
 
     love.graphics.draw(logo, (Inits.GameWidth/2)-(logo:getWidth()/2), (Inits.GameHeight/2-logo:getHeight()/2)-80)
     love.graphics.setFont(MenuFontBig)
-    love.graphics.printf("Harmoni is on a temporary (or permanent idk) break from development.\nThe game is still very unfinished, please do not expect a polished (or even fully functional) game.\n\n\nPress Space to skip.", Inits.GameWidth/2-600, Inits.GameHeight/2, 1200, "center")
+    love.graphics.printf("Harmoni is on a temporary (or permanent idk) break from development.\nThe game is still very unfinished, please do not expect a polished (or even fully functional) game.\n\n\nPress any key to skip.", Inits.GameWidth/2-600, Inits.GameHeight/2, 1200, "center")
    -- love.graphics.printf(#songNamesTable/#songList, Inits.GameWidth/2-500, Inits.GameHeight/2, 1000, "center")
     love.graphics.setColor(1,1,1)
    -- love.graphics.rectangle("fill", 0,0, 100, 100)

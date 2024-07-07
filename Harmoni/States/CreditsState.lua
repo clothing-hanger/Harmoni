@@ -6,7 +6,7 @@ function CreditsState:enter()
     selectedCredit = 1
 
     Credits = {
-        {"c l o t h i n g h a n g e r", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
+        {"CH", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
         {"GuglioIsStupid", "Rewrote Notes / added SV support", "https://ilovefemboys.org/"},  -- this is guglios real website link 💀💀
         {"Swan/The Quaver Team", "Quaver Map Format", "https://quavergame.com/"},
         {"AM7999", "Github README", "https://github.com/am7999"},
@@ -15,7 +15,7 @@ function CreditsState:enter()
     }
 
     Quotes = {
-        "I may not be super fucking mario but I am fucking super mario",
+        "imagine working at dollar general (the joke is that i work at dollar general)",
         "\n\n\n\n\n\nWishlist Rit on Steam!\n\n(this is the only one who i had to censor the quote)",
         "Quaver- The ultimate community-driven, and open-source competitive rhythm game available on Steam.\n\n\nnot related to Harmoni, but I'm crediting Quaver because Harmoni uses Quaver charts",
         "You know, README writing isn't hard",

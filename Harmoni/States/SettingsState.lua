@@ -117,13 +117,13 @@ Tabs = {
 }
 
 Gameplay = {
-    {"Down Scroll",  downScroll, "Notes scroll downward when this is enabled"},
+    {"Down Scroll",  downScroll, "Notes scroll downward when this is enabled [WARNING- VERY UNFINISHED]"},
     {"Scroll Speed", speed, "How fast notes scroll"},
     {"Note Lane Width", LaneWidth, "The space between the note lanes"},
     {"Background Dim", backgroundDimSetting, "How dark the background is during gameplay"},
     {"Bot Play", BotPlay, "Watch a perfect playthrough of the song"},
     {"Note Lane Height", verticalNoteOffset, "The space between the receptors and edge of the screen"},
-    {"Background Blur", backgroundBlurSetting, "How blurred the background is during gameplay"},
+    {"Background Blur", backgroundBlurSetting, "How blurred the background is during gameplay [REMOVED]"},
     {"Instant Pause", instantPause, "Skip the 0.3 second timer before pausing when you press the pause button"},
     {"Background Bumping", bgBumpSetting, "Background bumps depending on how high the combo is"},
 }
