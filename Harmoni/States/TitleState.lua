@@ -150,8 +150,10 @@ function TitleState:enter()
 end
 
 function TitleState:update(dt)
+    if SappleQuotes then
 
-    
+        notification(SappleQuotes[love.math.random(1,#SappleQuotes)])
+    end
 
     if #bumpNotes == 0 then
         bumpNotes = notes

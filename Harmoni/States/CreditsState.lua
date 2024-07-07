@@ -15,7 +15,7 @@ function CreditsState:enter()
     }
 
     Quotes = {
-        "imagine working at dollar general (the joke is that i work at dollar general)",
+        "idk",
         "\n\n\n\n\n\nWishlist Rit on Steam!\n\n(this is the only one who i had to censor the quote)",
         "Quaver- The ultimate community-driven, and open-source competitive rhythm game available on Steam.\n\n\nnot related to Harmoni, but I'm crediting Quaver because Harmoni uses Quaver charts",
         "You know, README writing isn't hard",
