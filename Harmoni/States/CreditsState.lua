@@ -6,9 +6,9 @@ function CreditsState:enter()
     selectedCredit = 1
 
     Credits = {
-        {"c l o t h i n g h a n g e r", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
+        {"CH", "Lead Programmer", "https://www.youtube.com/channel/UCR0avx7eHcQqn9fqYfcQUFQ"},
         {"GuglioIsStupid", "Rewrote Notes / added SV support", "https://ilovefemboys.org/"},  -- this is guglios real website link 💀💀
-        {"Swan/The Quaver Team", "Quaver Map Format", "https://quavergame.com/"},
+        {"Swan/The Quaver Team", "Quaver Map Format (not affiliated with Harmoni)", "https://quavergame.com/"},
         {"AM7999", "Github README", "https://github.com/am7999"},
         {"The Love2D Team", "Love2D", "https://www.love2d.org"},
         {"Sapple", "fortcock", "https://twitter.com/oldsockslott/status/1577437966288330753"},

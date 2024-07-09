@@ -1,5 +1,5 @@
  
-versionNumber = "Harmoni Beta 2.0"
+versionNumber = "Harmoni Beta 2.5"
 require("Initialize")
 InitializeGame()
 
@@ -13,6 +13,7 @@ function log(text)
 end
 
 love.window.setIcon(love.image.newImageData("Images/ICONS/H.png"))
+love.window.setTitle(versionNumber)
 
 local utf8 = require("utf8")
 moonshine = require("Libraries.moonshine")
@@ -20,12 +21,9 @@ Inits = require("inits")
 vudu = require("Libraries.vudu") 
 require("Libraries.lovefs.lovefs")
 
-
-forceLag = true -- true?? why did i init this to true lmao
-minFakeLag = 50
-maxFakeLag = 50
-
-
+                      -- this code is so fucking messy please delete it all
+                      -- its the result of just piling features on without caring about cleanliness at all :(
+                      -- i just put shit anywhere pretty much
 
 love.filesystem.createDirectory("Skins")
 love.filesystem.createDirectory("Saves")
@@ -42,13 +40,25 @@ logString = ""
 
 
 accentColor = {251/255,111/255,146/255}
-selectedButtonFillColor = {255/255,179/255,198/255,0.9}
-nonSelectedButtonFillColor = {71/255,18/255,107/255,0.5}
+selectedButtonFillColor = {255/255,179/255,198/255,1.9}
+nonSelectedButtonFillColor = {71/255,18/255,107/255,1.5}
 playingSongFillColor = {255/255,71/255,126/255}
 nonSelectedSongAccentColor = {255/255,229/255,236/255}
 playingSongAccentColor = {255/255,10/255,84/255}
 
 
+accentColor = {1,1,1}
+selectedButtonFillColor = {1,1,1}
+nonSelectedButtonFillColor = {0.5,0.5,0.5,0.6}
+playingSongFillColor = {1,1,1}
+nonSelectedSongAccentColor = {0,0,0}
+playingSongAccentColor = {1,1,1}
+
+
+
+
+
+accentColor = {0.5,0.5,0.5}
 
 
 local function error_printer(msg, layer)
@@ -63,15 +73,15 @@ if debugMode then
 else
     disablePrint = true
 end
-idfkIFThiswillwork = false
+idfkIFThiswillwork = false  
 
 
-function whatNumberIsThis(num)
+function whatNumberIsThis(num)   -- this is a very important function
     return "This Number is " .. num .. "."
 end
 
 
-function whatNumbersAreThese(...)
+function whatNumbersAreThese(...)    -- this is also a very important function
     local printableNumbers = ""
     for i,v in ipairs({...}) do
         if i == #{...} then

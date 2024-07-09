@@ -1,5 +1,8 @@
 local PlayState = State()
 
+
+-- i sincerely appologize to anyone who attempts to read this code
+
 local allInputs = {
     "GameLeft",
     "GameDown",
@@ -26,16 +29,15 @@ function PlayState:enter()
     for i = 1,#Modifiers do
         log(tostring(Modifiers[i]))
     end
-    --load assets     why did you even put this comment you literally just set random variabls here lmfao not assets loading      idk lmao
     hitTimes = {}
     accuracyAndHealthData = {}
     curScreen = "play"
 
-    --[[
+
 
     replayMode = false    -- this shit will stay unused lmao 
 
-    if not replayIsLoaded then
+    if replayMode and not replayIsLoaded then
         if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
             replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
             replayIsLoaded = true
@@ -45,7 +47,6 @@ function PlayState:enter()
             PlayState:leave(States.SongSelectState)
         end
     end
---]]
 
     lanes = {}
     for i = 1, 4 do
@@ -65,8 +66,7 @@ function PlayState:enter()
         MenuMusic:stop()
     end
 
-    local ok = quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
-    if not ok then State.switch(States.SongSelectState) return end
+    quaverParse("Music/" .. songList[selectedSong] .. "/" .. diffList[selectedDifficulty])
 
     self:initializePositionMarkers()
     self:updateCurrentTrackPosition()
@@ -789,12 +789,23 @@ function judge(noteTime)
     judgePos = {0.5,0.5,0, 0}
     curBPMJudgeBump = ((60000/currentBpm)/1000)/2
 
-    judgeTween = Timer.after(0, function() 
+    judgeTween = Timer.after(0, function()
+        if judgeTween2 then
+            Timer.cancel(judgeTween2)
+            Timer.cancel(judgeTween3)
+        end
 
-        Timer.tween(curBPMJudgeBump, judgePos, {[1] = 1}, "out-quad")
-        Timer.tween(curBPMJudgeBump, judgePos, {[2] = 1}, "out-back")
-        Timer.tween(0.05, judgePos, {[4] = -15}, "out-quad", function()
-            Timer.tween(0.05, judgePos, {[4] = 0}, "in-quad")
+        if judgeTween4 then
+            Timer.cancel(judgeTween4)
+        end
+
+        judgeTween2 = Timer.tween(curBPMJudgeBump, judgePos, {[1] = 1}, "out-quad")
+        judgeTween3 = Timer.tween(curBPMJudgeBump, judgePos, {[2] = 1}, "out-back")
+        judgeTween4 = Timer.tween(0.05, judgePos, {[4] = -15}, "out-quad", function()
+            if judgeTween5 then
+                Timer.cancel(judgeTween5)
+            end
+            judgeTween5 = Timer.tween(0.05, judgePos, {[4] = 0}, "in-quad")
         end)
 
     end)
@@ -888,7 +899,6 @@ function PlayState:draw()
                         local spr = _G["Receptor" .. AllDirections[i]]
                             if Input:down(inp) and not BotPlay then spr = _G["Receptor" .. AllDirections[i] .. "Pressed"] end
                             love.graphics.draw(spr, Inits.GameWidth/2-(LaneWidth*(3-i)), 0 ,nil,125/spr:getWidth(),125/spr:getHeight())
-                           -- love.graphics.draw(splash, Inits.GameWidth/2-(LaneWidth*(3-i)), 0)
                     end
 
             
@@ -900,8 +910,6 @@ function PlayState:draw()
                     for i, lane in ipairs(lanes) do
                         for j, note in ipairs(lane) do
                             if note.y < Inits.GameHeight then
-                                --[[ local noteImg = _G["Note" .. AllDirections[i]]
-                                --love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight()) ]]
                                 note:draw()
                             end
                         end
@@ -925,7 +933,7 @@ function PlayState:draw()
 
     --]]
             love.graphics.push()
-            love.graphics.translate(0,(judgePos[4] or 0))
+            love.graphics.translate(0,(judgePos[4] or 0)+50)
     --]]
         love.graphics.setColor(1,1,1,judgeColors[1])
         love.graphics.draw(Marvelous, (Inits.GameWidth/2)-(judgementWidth/Marvelous:getWidth()/2),  Inits.GameHeight/2-(JudgementPosition*downscrollOffset), nil, judgementWidth/Marvelous:getWidth() * (judgePos[2] or 0), (judgementHeight/Marvelous:getHeight() * (judgePos[1] or 0)), (Marvelous:getWidth()/2), Marvelous:getHeight()/2)
@@ -1034,9 +1042,9 @@ function PlayState:draw()
 
         love.graphics.setColor(0,0,0,math.min(0.7, breakFade[1]))
         love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
-        love.graphics.setColor(1,1,1, breakFade[1])
+        love.graphics.setColor(1,1,1,breakFade[1])
 
-        love.graphics.printf("Current Stats".."\n\n" .."Accuracy: " .. accuracy .. "\nScore: " .. score .. "\nHealth: " .. health*100 .. "%", 0, Inits.GameHeight/2-250, Inits.GameWidth, "center")
+        love.graphics.printf("Current Stats".."\n\n" .."Accuracy: " .. string.format("%.2f", tostring(math.min((accuracy))), 100).."%" .. "\nScore: " .. score .. "\nHealth: " .. math.min(math.ceil(health*100), 100) .. "%", 0, Inits.GameHeight/2-250, Inits.GameWidth, "center")
 
         love.graphics.setColor(0,1,1,songInfoAlpha)
         love.graphics.setFont(MediumFontSolid)
@@ -1064,10 +1072,10 @@ function PlayState:draw()
         if skinDrawAbove then
             skinDrawAbove()
         end
-
+        love.graphics.setColor(1,1,1,1)
         for i = 1,4 do
             love.graphics.rectangle("line", 50+(i*25), Inits.GameHeight-50, 20, 20)
-            if replayInputs[i] then
+            if Input:down(allInputs[i]) then
                 love.graphics.rectangle("fill", 50+(i*25), Inits.GameHeight-50, 20, 20)
             end
 

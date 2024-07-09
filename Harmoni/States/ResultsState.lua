@@ -85,6 +85,8 @@ end
 function ResultsState:draw()
     love.graphics.setLineJoin("none")
     love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2-resultBackgroundOffset[1], nil, Inits.GameWidth/background:getWidth()+beatBump[1],Inits.GameHeight/background:getHeight()+beatBump[1], background:getWidth()/2, background:getHeight()/2)
+    love.graphics.setColor(0,0,0)
+    love.graphics.draw(fadeImage, 0, Inits.GameHeight-resultBackgroundOffset[1],nil, Inits.GameWidth, -1)
     love.graphics.setColor(0,0,0,0.7)
     love.graphics.rectangle("fill",0,(936/3),Inits.GameWidth,936-(936/3))
     love.graphics.setColor(1,0,0)
@@ -104,6 +106,15 @@ function ResultsState:draw()
     love.graphics.setColor(0.6,0.6,0.6)
     love.graphics.setFont(fontPoland150)
     love.graphics.print(grade, Inits.GameWidth-240, 40)
+
+
+    love.graphics.setColor(nonSelectedButtonFillColor)
+    love.graphics.circle("fill", 1000, 130, 115)
+    love.graphics.setColor(1,1,1)
+    love.graphics.arc("fill", 1000, 130, 115, math.rad(0-90), math.rad(360*accuracy-90), 2000)
+    love.graphics.setColor(0,0,0)
+    love.graphics.circle("fill", 1000, 130, 105)
+
     love.graphics.setFont(fontPoland50)
 
     love.graphics.setColor(1,1,1)
@@ -218,7 +229,6 @@ function ResultsState:draw()
     love.graphics.translate(-1045, -973)
     love.graphics.scale(1, 2)
 
-   -- love.graphics.rotate(math.rad(90))
 
     love.graphics.scale(1,0.7)
 
@@ -241,6 +251,8 @@ function ResultsState:draw()
 
     love.graphics.pop()
     love.graphics.setLineWidth(2)
+
+    
 
 
 

@@ -1,5 +1,5 @@
-function InitializeGame()   -- eventually most of the stuff above and inside of love.load() main will be moved here
-    print("this function does nothing lmao")
+function InitializeGame() 
+      -- eventually most of the stuff above and inside of love.load() main will be moved here                     no it wont lmao
 end
 marvTiming = 26
 perfTiming = 56
