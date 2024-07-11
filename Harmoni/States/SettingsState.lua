@@ -12,7 +12,7 @@ function setDefaultSettings()
     print(love.filesystem.getSaveDirectory())
     notification("Default Settings Restored", notifInfoIcon)
     startFullscreen = false
-    defaultVolume = 0.02
+    defaultVolume = 1
     menuSongDelayTime = 0.2
     downScroll = false
     speed = 1.6
@@ -546,14 +546,25 @@ function SettingsState:draw()
   
     love.graphics.rectangle("line", -400, 1050, 300, 150, 7, 7)
     love.graphics.setColor(1,1,1,1)
-    if previewSkin then
+  --  if previewSkin then
         love.graphics.translate(270,verticalNoteOffset)
 
-
         for i = 1,4 do
-            love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 575,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
+            love.graphics.draw(_G["Receptor" .. AllDirections[i]], Inits.GameWidth/2-(LaneWidth*2)+(LaneWidth*(i-1)), not downScroll and 0 or 385,nil,125/_G["Receptor" .. AllDirections[i]]:getWidth(),125/_G["Receptor" .. AllDirections[i]]:getHeight())
         end
-        
+    
+    
+        for i, lane in ipairs(lanes) do
+            for j, note in ipairs(lane) do
+                if note.y < Inits.GameHeight then
+                    --[[ local noteImg = _G["Note" .. AllDirections[i]]
+                    --love.graphics.draw(noteImg, Inits.GameWidth/2-(LaneWidth*(3-i)), note[3],nil,125/noteImg:getWidth(),125/noteImg:getHeight()) ]]
+                    note:draw()
+                end
+            end
+        end
+
+
       --  if downScroll then
       --      for i, lane in ipairs(lanes) do
        --         for k, note in ipairs(lane) do
@@ -579,7 +590,7 @@ function SettingsState:draw()
       --  end
         --]]
 
-    end
+   -- end
 
 
 end

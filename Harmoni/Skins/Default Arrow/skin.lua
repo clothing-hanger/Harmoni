@@ -32,10 +32,12 @@ GoodImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Good.png")
 OkayImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Okay.png")
 MissImage = love.graphics.newImage(skinFolder .. "JUDGEMENTS/Miss.png")
 
-NoteLeftTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
-NoteRightTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
-NoteUpTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
-NoteDownTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
+NoteLeftTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail.png")
+NoteRightTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail.png")
+NoteUpTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail.png")
+NoteDownTrailImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail.png")
+
+
 
 HoldNoteEndLeftImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
 HoldNoteEndDownImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")

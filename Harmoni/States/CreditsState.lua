@@ -15,7 +15,7 @@ function CreditsState:enter()
     }
 
     Quotes = {
-        "idk",
+        "i wasted 7 months on this game",
         "\n\n\n\n\n\nWishlist Rit on Steam!\n\n(this is the only one who i had to censor the quote)",
         "Quaver- The ultimate community-driven, and open-source competitive rhythm game available on Steam.\n\n\nnot related to Harmoni, but I'm crediting Quaver because Harmoni uses Quaver charts",
         "You know, README writing isn't hard",
@@ -50,6 +50,7 @@ function CreditsState:enter()
         "#WorshipTrump #TrumpXObamaFurryArt",
         "Y'all got any #TrumpXObamaFurryArt",
         "haiii!! :33 haii!! :3c",
+        "hole hole hole hole hole hole hole hole hole hole hole hole hole hole hole beer beer beer",
         "Day " .. (guglioDays or "") .. " of pissing on my cat until Rit is finished", -- this quote must stay at the end of the table
 
     }
@@ -182,7 +183,7 @@ function CreditsState:draw()
             end
         love.graphics.pop()
         love.graphics.push()
-        love.graphics.translate(-50,0)
+        love.graphics.translate(100,0)
             love.graphics.setColor(selectedButtonFillColor)
 
             love.graphics.rectangle("fill", 670, 100, 600, 50, 7, 7, 50)

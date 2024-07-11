@@ -7,6 +7,43 @@ local M = love.graphics.newImage("Images/TITLE/M.png")
 local O = love.graphics.newImage("Images/TITLE/O.png")
 local N = love.graphics.newImage("Images/TITLE/N.png")
 local I = love.graphics.newImage("Images/TITLE/I.png")
+
+Tips = {
+    "Press F11 to Fullscreen",
+    "imagine cancelling a game lmao",
+    "Harmoni deserved to die",
+    "Why are you even playing this?",
+    "You must just like bad games.",
+    "delete this garbage :skull:",
+    "Please report any bugs you find by opening a Github issue or reporting it in the Harmoni Discord server",
+    "Press R in the Song Select menu to pick a random song", 
+    "Request features by opening a Github issue or asking about it in the Harmoni Discord server",
+    "Don't miss",
+    "Wishlist Rit on Steam!\n\nIt's like Harmoni, but if Harmoni was good",
+    "Hold ALT and scroll to change the volume",
+    "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
+    "Press F3 to take a screenshot",
+    {"Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4\n\n\nplease do not join.", discordImage},
+
+}
+
+
+extremeRareTips = {
+    "you should just delete the game honestly",
+    "still better than osu\n this is a FUCKINMG JOKE osu people dont get mad",
+    "\"did you know that in heat colors change to another color dont believe me stick your fingers up your ass\"\n-Sapple",
+    "just play quaver lmao",
+    "pickles",
+    "\"The best part of fucking Yoshi is that you have a ride home in the morning\"\n-President Barack Obama",
+--    {"Is an interesting game  ◦ \nAm just play it\nWow\n\n-Heng", hengImage},
+    "Do it jiggle?",
+    "\"Is good game, would give it a try\"\n\n-Sapple",
+    "When she doin' acrobatics on the peenor, so you gotta lock in",
+    "We harmomize the entire house without a single drop of cheese falling\n\ncry about it guglio",
+    "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
+}
+
+
 function TitleState:enter()
     log("TitleState Entered")
     logo = love.graphics.newImage("Images/TITLE/logo.png")
@@ -38,8 +75,8 @@ function TitleState:enter()
 
         firstTimeOnTitle = false
         curSelection = 1
-        buttonWidth = {0,0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
-        ButtonLabels = {"Play", "Options", "Credits", "Donate", "GitHub", "Discord"}
+        buttonWidth = {0,0,0,0,0}  -- what does this even do???????   nvm lmao i found it (its bad when this is how i see my own code)
+        ButtonLabels = {"Play", "Options", "Credits", "GitHub", "Discord"}
     gradient = love.graphics.newImage("Images/TITLE/gradient.png")
     logoSize = 1
     resetMenuMusic = function(changeSong)
@@ -150,10 +187,6 @@ function TitleState:enter()
 end
 
 function TitleState:update(dt)
-    if SappleQuotes then
-
-        notification(SappleQuotes[love.math.random(1,#SappleQuotes)])
-    end
 
     if #bumpNotes == 0 then
         bumpNotes = notes
@@ -204,11 +237,11 @@ function TitleState:update(dt)
             wipeFade("in")
                 State.switch(States.CreditsState)
            elseif curSelection == 4 then
-                love.system.openURL("https://ko-fi.com/harmoni69655")
-           elseif curSelection == 5 then
-                love.system.openURL("https://github.com/clothing-hanger/Harmoni")
-           elseif curSelection == 6 then
+            love.system.openURL("https://github.com/clothing-hanger/Harmoni")
+        elseif curSelection == 5 then
             love.system.openURL("https://discord.gg/bBcjrRAeh4")
+
+           elseif curSelection == 6 then
         end
 
         end

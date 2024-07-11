@@ -1,3 +1,5 @@
+debugMode = false  
+
 function love.conf(t)
     t.window.title = "Harmoni"
     t.identity = "harmoni"
@@ -5,5 +7,7 @@ function love.conf(t)
     t.window.height = 720
     t.window.vsync = false
     t.window.resizable = true
-    t.console = true
+    if debugMode then
+        t.console = true
+    end
 end  

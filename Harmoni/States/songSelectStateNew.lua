@@ -666,7 +666,6 @@ function SongSelectState:draw()
 
     love.graphics.push()
     love.graphics.setColor(0.75,0.75,0.75)
-    love.graphics.draw(disc, 450, 150, discRotation, 0.08, 0.08,disc:getWidth()/2,disc:getHeight()/2)
     love.graphics.pop()
     love.graphics.setColor(0,0,0,backgroundFade[1])
     love.graphics.rectangle("fill", 0,0,Inits.GameWidth,Inits.GameHeight)
@@ -750,6 +749,16 @@ function SongSelectState:draw()
         love.graphics.print((songNamesTable[CurPlayingSong] or "ERROR- NO SONG PLAYING"), Inits.GameWidth/2-300+20, 15)
         love.graphics.setFont(MenuFontSmall)
         love.graphics.printf("Song: " .. metaData.name.."  Difficulty: " ..metaData.diffName .. "  Artist: " .. metaData.artist .. "   Charter: " .. metaData.creator, Inits.GameWidth/2-300+20, 100, 2000)
+        love.graphics.setColor(0.2,0.2,0.2)
+        love.graphics.circle("fill", Inits.GameWidth-50, 50, 45)
+        love.graphics.setColor(0,0,0)
+        love.graphics.setLineWidth(5)
+        love.graphics.circle("line", Inits.GameWidth-50, 50, 42)
+        love.graphics.setLineWidth(1)
+
+
+        love.graphics.setColor(0.7,0.7,0.7)
+        love.graphics.draw(disc, Inits.GameWidth-50, 50, discRotation, 0.08, 0.08,disc:getWidth()/2,disc:getHeight()/2)
 
 
     love.graphics.push()

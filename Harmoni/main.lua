@@ -1,12 +1,33 @@
  
 versionNumber = "Harmoni Beta 2.5"
 require("Initialize")
+function ClearOSModule()
+    for k, _ in pairs(os) do
+        if k ~= "clock" and k ~= "date" and k ~= "difftime" and 
+            k ~= "time" and k ~= "tmpname" and k ~= "getenv" and
+            k ~= "setlocale" then
+            os[k] = nil
+        end
+    end
+end
+ClearOSModule()
 InitializeGame()
 
 require("Libraries.Tserial")
 
+--turn back!!
 
-debugMode = false  
+--im warning you
+
+--you do NOT wanna be looking in this code
+
+--unless you wanna lose half your braincells
+
+--im not joking i have no fucking clue how to code this game is a fucking sin
+
+--just close your ide lmao
+
+--but before you leave please see the whatNumberIsThis() and the whatNumbersAreThese() functions
 
 function log(text)
     logString = logString .. text .. "\n"
@@ -40,9 +61,9 @@ logString = ""
 
 
 accentColor = {251/255,111/255,146/255}
-selectedButtonFillColor = {255/255,179/255,198/255,1.9}
-nonSelectedButtonFillColor = {71/255,18/255,107/255,1.5}
-playingSongFillColor = {255/255,71/255,126/255}
+selectedButtonFillColor = {255/255,179/255,198/255,1.9}  -- dude what the alpha value is 1 instead of 0 lmfao that wont do anything
+nonSelectedButtonFillColor = {71/255,18/255,107/255,1.5}     -- not deleting because
+playingSongFillColor = {255/255,71/255,126/255}              -- cuz idk lmao i just dont wanna 
 nonSelectedSongAccentColor = {255/255,229/255,236/255}
 playingSongAccentColor = {255/255,10/255,84/255}
 
@@ -129,7 +150,7 @@ function love.errorhandler(msg)
     errorStrings = {
         "(not surprising at all)",
         "Something really fucked up for you to see this",
-        "CLOTHING HANGER FIX YOUR GAME",
+        "CH FIX YOUR GAME",
         "this is why you should just stick with osu or quaver or whatever idk",
         "oopsies :3",
         "just delete Harmoni",
@@ -327,10 +348,10 @@ function love.run()
 
 			love.graphics.present()
 		end
-        --idfkIFThiswillwork = not idfkIFThiswillwork
-      --  if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
-		    if love.timer then love.timer.sleep(0.001) end
-     --   end
+        idfkIFThiswillwork = not idfkIFThiswillwork
+        if idfkIFThiswillwork and pastPreLaunch then          -- this is probably fucking the game up somehow im just not noticing yet lmfao
+		    --if love.timer then love.timer.sleep(0.001) end
+        end
 	end
 end
 discordRPC = require("Modules.discordRPC")
@@ -464,6 +485,7 @@ function love.load()
     -- Initialize Game
     States = require("Modules.States")
     loadSettings()
+    volume = 1
     Objects = require("Modules.Objects")
     String = require("Modules.String")
     Table = require("Modules.Table")
@@ -511,36 +533,6 @@ function love.load()
 
 
     ]]
-    Tips = {
-        "Press F11 to Fullscreen",
-        "Please report any bugs you find by opening a Github issue or reporting it in the Harmoni Discord server",
-        "Press R in the Song Select menu to pick a random song", 
-        "Request features by opening a Github issue or asking about it in the Harmoni Discord server",
-        "Don't miss",
-        "Wishlist Rit on Steam!",
-        "Hold ALT and scroll to change the volume",
-        "To import your own songs from Quaver, just export the song in Quaver, extract it, and place it in Harmoni's Music Folder.",
-        "Press F3 to take a screenshot",
-        {"Please consider donating to help development", kofiImage},
-        {"Harmoni Discord Server\ndiscord.gg/bBcjrRAeh4", discordImage},
-
-    }
-
-    
-    extremeRareTips = {
-        "you should just delete the game honestly",
-        "still better than osu\n this is a FUCKINMG JOKE osu people dont get mad",
-        "\"did you know that in heat colors change to another color dont believe me stick your fingers up your ass\"\n-Sapple",
-        "just play quaver lmao",
-        "pickles",
-        "\"The best part of fucking Yoshi is that you have a ride home in the morning\"\n-President Barack Obama",
-    --    {"Is an interesting game  ◦ \nAm just play it\nWow\n\n-Heng", hengImage},
-        "Do it jiggle?",
-        "\"Is good game, would give it a try\"\n\n-Sapple",
-        "When she doin' acrobatics on the peenor, so you gotta lock in",
-        "We harmomize the entire house without a single drop of cheese falling\n\ncry about it guglio",
-        "\"not gonna lie this game is just trying to copy osu!mania, don't deserve my time\"\n-The guy on Steam", 
-    }
 
     fontDosis65 = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 65)
     fontDosis60 = love.graphics.newFont("Fonts/Dosis-Medium.ttf", 60)

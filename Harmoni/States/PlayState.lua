@@ -1,4 +1,5 @@
 local PlayState = State()
+local doScript -- why am i even making this local? theres like more variables in this file than people on earth and none of the others are local
 
 
 -- i sincerely appologize to anyone who attempts to read this code
@@ -34,10 +35,11 @@ function PlayState:enter()
     curScreen = "play"
 
 
-
+    drawHUD = true
     replayMode = false    -- this shit will stay unused lmao 
 
-    if replayMode and not replayIsLoaded then
+    if replayMode and not replayIsLoaded then  
+        -- i promise the replay location here was TEMPORARY. replays were not planned to be stored in the fucking music folder lmfao
         if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua") then
             replayTable = love.filesystem.load("Music/" .. songList[selectedSong] .. "/Replays/" .. diffList[selectedDifficulty]..".lua")()
             replayIsLoaded = true
@@ -46,6 +48,12 @@ function PlayState:enter()
             notification("Replay Data Not Found! Returning to Song Select Menu.", notifErrorIcon)
             PlayState:leave(States.SongSelectState)
         end
+    end
+
+    doScript = false
+    if love.filesystem.getInfo("Music/" .. songList[selectedSong] .. "/script.lua") then
+        doScript = true
+        love.filesystem.load("Music/" .. songList[selectedSong] .. "script.lua")()
     end
 
     lanes = {}
@@ -872,6 +880,10 @@ function PlayState:draw()
                 skinDrawUnderDim()
             end
 
+            if doScript and scriptDrawUnderDim then
+                scriptDrawUnderDim()
+            end
+
             love.graphics.setColor(0,0,0,backgroundDim[1])
             love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
             love.graphics.setColor(1,1,1,1)
@@ -880,8 +892,14 @@ function PlayState:draw()
             love.graphics.rectangle("fill", 0, Inits.GameHeight-20, Inits.GameWidth*timeLeftPercent, 20)
             
             love.graphics.pop()
+
+
             if skinDrawAboveDimUnderNotes then
                 skinDrawAboveDimUnderNotes()
+            end
+
+            if doScript and scriptDrawAboveDimUnderNotes then
+                scriptDrawAboveDimUnderNotes()
             end
 
             love.graphics.push()
@@ -923,6 +941,15 @@ function PlayState:draw()
         love.graphics.push()
     --[[
         --]]
+            
+        if skinDrawUnderHUD then
+            skinDrawUnderHUD()
+        end
+    
+        if doScript and scriptDrawUnderHUD then
+            scriptDrawUnderHUD()
+        end
+        if drawHUD then
             love.graphics.setFont(fontPoland50)
             love.graphics.setColor(0,0.5,1)
             love.graphics.setColor(1,1,1)
@@ -1028,7 +1055,6 @@ function PlayState:draw()
         love.graphics.setColor(0,0,0)
 
     
-        love.graphics.rectangle("fill", 1200, 836, 13, -608)
     
         love.graphics.setColor(0,0.5,1)
     
@@ -1069,9 +1095,7 @@ function PlayState:draw()
     
     
     
-        if skinDrawAbove then
-            skinDrawAbove()
-        end
+
         love.graphics.setColor(1,1,1,1)
         for i = 1,4 do
             love.graphics.rectangle("line", 50+(i*25), Inits.GameHeight-50, 20, 20)
@@ -1080,6 +1104,15 @@ function PlayState:draw()
             end
 
         end
+
+        if skinDrawAboveHUD then
+            skinDrawAboveHUD()
+        end
+
+        if doScript and scriptDrawAboveHUD then
+            scriptDrawAboveDimHUD()
+        end
+    end  -- this end looks so random its tied to if drawHUD
         if not songLeave then
             songLeave = 0
         end

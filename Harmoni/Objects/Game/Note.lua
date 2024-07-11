@@ -38,7 +38,7 @@ Note.x = 0
 Note.y = 0
 
 Note.image = nil
-Note.children = {} -- 😍      -WHAT WHO TYPED THAT
+Note.children = {}
 Note.moveWithScroll = true
 
 Note.alpha = 1
