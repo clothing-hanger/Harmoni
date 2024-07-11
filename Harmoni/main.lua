@@ -597,6 +597,7 @@ function love.update(dt)
     if Input:pressed("setFullscreen") then
         isFullscreen = not isFullscreen
         love.window.setFullscreen(isFullscreen)
+        
     end
 
     if Input:pressed("testCrash") and debugMode then
@@ -676,18 +677,19 @@ end
 
 function takeScreenshot()
     love.graphics.captureScreenshot(function(q)
+        screenshotFlash = {0.3}
         screenshot = love.graphics.newImage(q)
         q:encode('png','Screenshots/' .. os.time() .. '.png')
         screenshotSize = {1}
         screenshotTranslate = {0}
-        screenshotSizeTween = Timer.tween(0.5, screenshotSize, {0.2}, "out-quad", function()
-            Timer.tween(0.7, screenshotTranslate, {screenshot:getWidth()*(screenshotSize[1]+10)}, "in-expo", function()
-                notification("Screenshot Saved", notifInfoIcon)
-            end)
+        screenshotFlashTween = Timer.tween(0.4, screenshotFlash, {0}, "in-back")
+        screenshotSizeTween = Timer.tween(0.7, screenshotSize, {0.1}, "out-quad", function()
+
         end)
-
+        Timer.tween(0.7, screenshotTranslate, {screenshot:getWidth()*(screenshotSize[1]+10)}, "in-expo", function()
+            notification("Screenshot Saved", notifInfoIcon)
+        end)
     end)
-
 end
 
 function love.textinput(t)
@@ -790,6 +792,12 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+    if screenshotFlash then
+
+        love.graphics.setColor(1,1,1,screenshotFlash[1])
+        love.graphics.rectangle("fill", 0, 0, Inits.GameWidth, Inits.GameHeight)
+    end
+    love.graphics.setColor(1,1,1,1)
     if screenshot then
         love.graphics.push()
         love.graphics.scale(screenshotSize[1], screenshotSize[1])

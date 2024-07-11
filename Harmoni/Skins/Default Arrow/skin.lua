@@ -44,6 +44,8 @@ HoldNoteEndDownImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrail
 HoldNoteEndUpImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
 HoldNoteEndRightImage = love.graphics.newImage(skinFolder .. "NOTES/NoteDownTrailEnd.png")
 
+scrollTickSound = love.audio.newSource(skinFolder .. "SOUNDS/tick.mp3", "static")
+
 
 SongSelectFrameImage = love.graphics.newImage(skinFolder .. "SONGSELECT/frame.png")
 SongSelectFrameBackImage = love.graphics.newImage(skinFolder .. "SONGSELECT/frameBack.png")

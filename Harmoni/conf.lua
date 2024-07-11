@@ -1,4 +1,4 @@
-debugMode = false  
+debugMode = true  
 
 function love.conf(t)
     t.window.title = "Harmoni"

@@ -31,7 +31,7 @@ ModifiersLabels = {
 }
 
 
-
+local songsScrolledPerSecond = {}
 function SongSelectState:enter()
     curScreen = "songSelect" 
     log("SongSelectState Entered")
@@ -94,6 +94,8 @@ function SongSelectState:enter()
     frame = SongSelectFrameImage
     shift = love.graphics.newImage("Images/SONGSELECT/shift.png")
     tab = love.graphics.newImage("Images/SONGSELECT/tab.png")
+
+    scrollTick = scrollTickSound
 
     discRotation = 0
 
@@ -196,6 +198,15 @@ function SongSelectState:update(dt)
     MusicTime = MusicTime + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
 
+    if songsScrolledPerSecond then
+        for i = 1,#songsScrolledPerSecond do
+            songsScrolledPerSecond[i] = songsScrolledPerSecond[i] - 1000*dt
+            if songsScrolledPerSecond [i] <= 0 then
+                table.remove(songsScrolledPerSecond, i)
+                break
+            end
+        end
+    end
 
 
     if MenuMusic:tell() >= MenuMusic:getDuration("seconds") then
@@ -619,9 +630,16 @@ function SongSelectState:checkBotInput()
 end
 
 function scrollSongs(y)
-
+    local volume = 0.2
     if menuState == 1 then  
         selectedSong = selectedSong - y
+        table.insert(songsScrolledPerSecond, 1000)
+        local tick = scrollTickSound:clone()
+        tick:setPitch(0.8)
+        tick:setVolume(math.min(volume,  math.min((#songsScrolledPerSecond/100), volume)))
+        print(math.min(volume,  math.min((#songsScrolledPerSecond/100), volume)))
+
+        tick:play()
         if y < 0 then
             bumpHanger(true)
         else
@@ -631,7 +649,7 @@ function scrollSongs(y)
        -- SongSelectState:loadSong(true)
     elseif menuState == 2 then
         selectedDifficulty = selectedDifficulty - y
-        SongSelectState:loadSong(false)
+
     end
 end
 
