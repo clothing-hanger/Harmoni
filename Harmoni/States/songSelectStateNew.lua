@@ -650,6 +650,8 @@ function scrollSongs(y)
     elseif menuState == 2 then
         selectedDifficulty = selectedDifficulty - y
 
+        SongSelectState:loadSong(false)
+
     end
 end
 

@@ -13,6 +13,34 @@ end
 ClearOSModule()
 InitializeGame()
 
+👅 = true
+
+Modifiers = {
+    false,
+    1, -- speed
+    false,  -- sudden death
+    false, -- lane swap
+    false, -- no scroll velocities
+    false, -- no fail
+    false, -- botplay
+    false, -- randomize
+    false, -- no hold notes
+}
+
+
+ModifiersLabels = {
+{"Modifiers Menu", "this string will never be seen lmao", "this string will also never be seen lmao"},
+{"Song Speed [TEMPORARILY DISABLED maybe lmfao idk]", "How fast the song plays", "SS x" .. Modifiers[2]},
+{"Sudden Death", "You die if you miss a single note", "SD"},
+{"Lane Swap", "Left becomes right, up becomes down", "LS"},
+{"No Scroll Velocities", "Disables Scroll Velocities", "NSV"},
+{"No Fail", "Don't die when you run out of health", "NF"},
+{"Bot Play", "Watch a perfect playthourgh of the song", "BP"},
+{"Randomize", "Randomize the lanes - NOT ADDED YET", "R"},
+{"No Hold Notes", "Remove all the icky disgusting awful fucking hold notes I HATE HOLD NOTES!!!!!!!!!!!!!!!!!", "NHN"}
+}
+
+
 require("Libraries.Tserial")
 
 --turn back!!
@@ -386,7 +414,6 @@ if love.filesystem.isFused() then
 end
 
 
-
 function mod(a, b)
     return a - (math.floor(a/b)*b)
 end
@@ -553,6 +580,11 @@ function love.load()
 
 
     DefaultFont = love.graphics.newFont(12)
+
+
+    if 👅 then
+        initFreakyMode()
+    end
 
 
     firstTimeOnTitle = true
