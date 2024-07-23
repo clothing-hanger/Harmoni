@@ -13,8 +13,6 @@ end
 ClearOSModule()
 InitializeGame()
 
-👅 = true
-
 Modifiers = {
     false,
     1, -- speed
