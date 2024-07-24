@@ -1,12 +1,14 @@
 function InitializeGame() 
       -- eventually most of the stuff above and inside of love.load() main will be moved here                     no it wont lmao
 end
-marvTiming = 26
-perfTiming = 56
-greatTiming = 86
-goodTiming = 106
-okayTiming = 126
-missTiming = 146
+marvTiming = 23
+perfTiming = 40
+greatTiming = 74
+goodTiming = 103
+okayTiming = 127
+missTiming = 160
+
+
 
 function initFreakyMode()
       fontDosis65 = love.graphics.newFont("Fonts/papyrus.ttf", 65)

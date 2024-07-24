@@ -14,7 +14,7 @@ end
 ClearOSModule()
 InitializeGame()
 
-
+👅 = false
 require("Libraries.Tserial")
 
 --turn back!!

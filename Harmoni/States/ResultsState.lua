@@ -308,7 +308,7 @@ function ResultsState:draw()
 
           --  love.graphics.line(0, -(hitTimes[i][5]*healthGraphHeight), graphWidth, -(hitTimes[i][5]*healthGraphHeight))
             love.graphics.setColor(1,1,1)
-            love.graphics.print(string.format("%.2f", tostring(math.min(health*100))) .. "%", -40, -(hitTimes[i][5]*healthGraphHeight))
+            love.graphics.print(string.format("%.2f", tostring(math.min(accuracy*100))) .. "%", -40, -(hitTimes[i][5]*healthGraphHeight))
 
         end
     end
