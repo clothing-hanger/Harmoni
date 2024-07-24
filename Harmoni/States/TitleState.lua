@@ -159,6 +159,8 @@ function TitleState:enter()
 
             end
             if MenuMusic then
+                MenuMusic:setPitch(Modifiers[2])
+
                 MenuMusic:play()
             else
                 notification("Audio Not Found!", notifErrorIcon)

@@ -1,6 +1,7 @@
  
 versionNumber = "Harmoni Beta 2.5"
 require("Initialize")
+
 function ClearOSModule()
     for k, _ in pairs(os) do
         if k ~= "clock" and k ~= "date" and k ~= "difftime" and 

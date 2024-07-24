@@ -23,4 +23,12 @@ function initFreakyMode()
       NotificationFont = love.graphics.newFont("Fonts/papyrus.ttf", 14)
       MenuFontExtraBig = love.graphics.newFont("Fonts/papyrus.ttf", 50)
       DefaultFont = love.graphics.newFont("Fonts/papyrus.ttf", 12)
+
+      versionNumber = "Freakoni Beta 2.5"
+
+      love.window.setTitle(versionNumber)
+      love.window.setIcon(love.image.newImageData("Images/ICONS/tongue.png"))
+
+      Modifiers[2] = 0.75
+
 end
