@@ -436,6 +436,7 @@ function PlayState:keyReleased(key)
 end
 
 function PlayState:update(dt)
+
     blurEffect.boxblur.radius = backgroundBlur[1]
 
     if replayMode then
@@ -622,9 +623,19 @@ function PlayState:beat()
         Timer.cancel(beatBumpTimer)
     end
     beatBumpTimer = Timer.tween((60000/currentBpm)/1000, beatBump, {0}, "out-quad")
+    if Modifiers[2] == 1 then  -- because when using speed mod the game SHITS ITSELF WHEN IT TRIES TO RESYNC 
+        PlayState:checkDesync()
+    end
 end
 
-
+function PlayState:checkDesync()
+    local thePenisandtheBalls = song:tell("seconds")*1000
+    local theBallsandthePenis = math.abs((thePenisandtheBalls) - (MusicTime))
+    if theBallsandthePenis > 15 then
+        MusicTime = thePenisandtheBalls
+        print("Song desynced by " .. theBallsandthePenis .. " milliseconds\nsetting MusicTime to " .. thePenisandtheBalls)
+    end
+end
 
 function PlayState:doGradeShitIdk()
     if convertedAccuracy == 100 then 

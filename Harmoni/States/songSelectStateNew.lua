@@ -637,7 +637,6 @@ function scrollSongs(y)
         local tick = scrollTickSound:clone()
         tick:setPitch(0.8)
         tick:setVolume(math.min(volume,  math.min((#songsScrolledPerSecond/100), volume)))
-        print(math.min(volume,  math.min((#songsScrolledPerSecond/100), volume)))
 
         tick:play()
         if y < 0 then
