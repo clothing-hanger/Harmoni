@@ -8,9 +8,7 @@ end
 
 function Note:update(dt)
     self.Y = self.StartTime - MusicTime
-    print(self.Y)
 end
-
 function Note:draw()
     love.graphics.circle("fill", self.X, self.Y, 25)
 end
