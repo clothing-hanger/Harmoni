@@ -17,7 +17,7 @@ function quaverParse(file)
         scrollVelocities = {}
         totalNoteCount = 0
         holdNoteCount = 0
-        for i = 1,7 do
+        for i = 1,4 do
             table.insert(lanes, {})
         end
         banner = nil
@@ -42,7 +42,7 @@ function quaverParse(file)
         
 
         if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
-            song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "stream")
+            Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "stream")
         else
             print("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
             print("Audio File Not Found For Song " .. SelectedSong)
@@ -118,7 +118,7 @@ function quaverParse(file)
                 end
             end
 --]]
-            local note = Objects.Game.Note(startTime, lane, endTime)
+            local note = Objects.Game.Note(lane, startTime, endTime)
             table.insert(lanes[lane], note)
             
             if not firstNoteTime and startTime then
@@ -142,7 +142,7 @@ function quaverParse(file)
         end
  
         print("Total Note Count: ".. totalNoteCount)
-        songLength = song:getDuration()
+        songLength = Song:getDuration()
         print(songLength)
         songLengthToLastNote = lastNoteTime/1000
         bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])

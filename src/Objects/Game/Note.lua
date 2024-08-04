@@ -1,16 +1,27 @@
 local Note = Class:extend()
 
+
+
 function Note:new(lane, StartTime)
-    self.X = Inits.GameWidth/2
+
+    self.Directions = {
+        "Left",
+        "Down",
+        "Up",
+        "Right",
+    }
+
+    self.image = Skin.Notes[self.Directions[lane]]
+    self.X = LanesPositions[lane]
     self.Y = 0
     self.StartTime = StartTime
 end
 
 function Note:update(dt)
-    self.Y = self.StartTime - MusicTime
+    self.Y = -(MusicTime - self.StartTime)*ScrollSpeed
 end
 function Note:draw()
-    love.graphics.circle("fill", self.X, self.Y, 25)
+    love.graphics.draw(self.image, self.X, self.Y, 0, Skin.Params["Note Size"]/self.image:getWidth(), Skin.Params["Note Size"]/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
 end
 
 function Note:release()
