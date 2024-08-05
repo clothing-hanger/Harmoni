@@ -145,8 +145,11 @@ function quaverParse(file)
         songLength = Song:getDuration()
         print(songLength)
         songLengthToLastNote = lastNoteTime/1000
-        bestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        InitializeJudgments()
+        print("BestScorePerNote " .. BestScorePerNote)
         holdNotePercent = math.ceil((holdNoteCount / totalNoteCount)*100)
+        InitializeJudgments()
 
         currentBpm = metaData.bpm
         if currentBpm then
