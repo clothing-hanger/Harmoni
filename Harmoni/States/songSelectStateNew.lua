@@ -609,7 +609,7 @@ function SongSelectState:loadScores()
             print("No scores found for this song.")
         end
     end
-end
+end 
 
 function SongSelectState:checkBotInput()
     for i, lane in ipairs(lanes) do
