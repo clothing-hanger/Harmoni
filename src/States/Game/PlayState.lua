@@ -37,19 +37,15 @@ function PlayState:judge(noteTime)
     print(ConvertedNoteTime)
 
     for Judgement = 1, #JudgementNames do
-        local judgment = Judgements[JudgementNames[Judgement]]
-        if noteTime <= judgment.Timing then
-            return judgment.Score
+        local judgement = Judgements[JudgementNames[Judgement]]
+        if noteTime <= judgement.Timing then
+            judgement.Count = plusEq(judgement.Count)
+            return judgement.Score
+
         end
     end
 
-    for i = 1, #JudgementNames do
-        if ConvertedNoteTime <= Judgements[JudgementNames[i]].Timing then
-            Score = Score + Judgements[JudgementNames[i]].Score
-            Judgements[JudgementNames[i]].Count = Judgements[JudgementNames[i]].Count + 1
-            break
-        end
-    end
+
 end
 
 function PlayState:checkInput()
@@ -58,7 +54,7 @@ function PlayState:checkInput()
 
             for q, Note in ipairs(Lane) do
                 local noteTime = math.abs((MusicTime - Note.StartTime))
-                if Note.Lane == i and noteTime < Judgements["Miss"].Timing then
+                if Note.Lane == i and noteTime < Judgements["Miss"].Timing and not Note.wasHit then
                     PlayState:judge(noteTime)
                     Note:hit(noteTime)
                     break
@@ -71,6 +67,10 @@ end
 function PlayState:draw()
     love.graphics.print("MusicTime: " .. MusicTime)
 
+
+    for i = 1,#JudgementNames do
+        love.graphics.printf(Judgements[JudgementNames[i]].Count, Inits.GameWidth-100, ((Inits.GameHeight/2)+(25*i)) - (3*25), 100, "right")
+    end
     love.graphics.push()
     love.graphics.translate(0, LaneHeight)
     for i, Receptor in ipairs(Receptors) do

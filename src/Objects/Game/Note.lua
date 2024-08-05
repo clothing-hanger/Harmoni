@@ -17,6 +17,7 @@ function Note:new(lane, StartTime)
     self.Y = 0
     self.StartTime = StartTime
     self.visible = true
+    self.wasHit = false
 end
 
 function Note:update(dt)
@@ -25,6 +26,7 @@ end
 
 function Note:hit(noteTime)
     self.visible = false
+    self.wasHit = true
 end
 
 function Note:draw()

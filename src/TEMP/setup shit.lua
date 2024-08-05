@@ -5,11 +5,20 @@ ScrollSpeed = 1.6
 love.filesystem.load("Skins/Default Arrow/Skin.lua")()
 
 LanesPositions = {
-    Inits.GameWidth/2 - (LaneWidth*1.5),
-    Inits.GameWidth/2 - (LaneWidth*0.5),
-    Inits.GameWidth/2 + (LaneWidth*0.5),
-    Inits.GameWidth/2 + (LaneWidth*1.5),
+    Inits.WindowWidth/2 - (LaneWidth*1.5),
+    Inits.WindowWidth/2 - (LaneWidth*0.5),
+    Inits.WindowWidth/2 + (LaneWidth*0.5),
+    Inits.WindowWidth/2 + (LaneWidth*1.5),
 }
+
+function ResizeLanePositions()
+    LanesPositions = {
+        Inits.WindowWidth/2 - (LaneWidth*1.5),
+        Inits.WindowWidth/2 - (LaneWidth*0.5),
+        Inits.WindowWidth/2 + (LaneWidth*0.5),
+        Inits.WindowWidth/2 + (LaneWidth*1.5),
+    }
+end
 
 laneCount = 4
 
