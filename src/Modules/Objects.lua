@@ -5,5 +5,6 @@ return {
         Judgement = require("Objects/Game/Judgement"),
         Background = require("Objects/Game/Background"),
         HUDTopLeft = require("Objects/Game/HUDTopLeft"),
+        HUDTopRight = require("Objects/Game/HUDTopLeft"),
     }
 }
