@@ -83,6 +83,8 @@ function love.load()
     require("Modules.Parse")
     require("Modules.Debug")
 
+    defaultFont = love.graphics.newFont(12)
+
     State.switch(States.Menu.SongSelect)
 end
 

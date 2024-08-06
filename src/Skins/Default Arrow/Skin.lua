@@ -9,6 +9,13 @@ Skin.Params = {
     ["Judgement X Offset"] = 0,       -- nothing weird with X, lower goes left higher goes right
 }
 
+Skin.Fonts = {
+    ["HUD Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 65),
+    ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 15),
+    ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 12),
+    ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 20),
+}
+
 Skin.Notes = {
     ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeft.png"),
     ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDown.png"),

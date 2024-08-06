@@ -9,20 +9,36 @@ local Directions = {
 
 local Receptors = {}
 
+
+
+
 function PlayState:enter()
+    --Init local variables
+
+
+
+--Init global variables
+    score = 0
+    combo = 0
+    accuracy = 0
+
+    
     quaverParse("Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty])
     updateMusicTime = true
+    MusicTime = -2000
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
     Objects.Game.Judgement:new()
+    Objects.Game.HUDTopLeft:new()
     Objects.Game.Background:new(background)
-    PlayState.score = 0
+    Objects.Game.Background:setDimness(dimSetting, true)
 end
 
 function PlayState:update(dt)
     PlayState:checkInput()
     PlayState:checkMiss()
+    PlayState:updateObjects()
 
     updateMusicTimeFunction()
     if MusicTime >= 0 and not Song:isPlaying() then
@@ -35,6 +51,10 @@ function PlayState:update(dt)
     end
 end
 
+function PlayState:updateObjects()
+    Objects.Game.HUDTopLeft:update()
+end
+
 function PlayState:judge(noteTime)
     print("Playstate:judge(" .. noteTime .. ")")
     local ConvertedNoteTime = math.abs(noteTime)
@@ -44,14 +64,30 @@ function PlayState:judge(noteTime)
         if ConvertedNoteTime <= judgement.Timing then
             judgement.Count = judgement.Count + 1
             Objects.Game.Judgement:judge(judgement.Judgement)
-            PlayState.score = PlayState.score + judgement.Score
+            score = score + judgement.Score
+            PlayState:calculateAccuracy()
             return 
         end
     end
     -- must be a miss then lmfao LOSER you SUCK 
     Judgements["Miss"].Count = Judgements["Miss"].Count + 1
     Objects.Game.Judgement:judge("Miss")
+    PlayState:calculateAccuracy()
     return
+end
+
+function PlayState:calculateAccuracy()
+    local currentBestPossibleScore
+    local hitNotesCount = 0
+    for i, Lane in ipairs(lanes) do
+        for q, Note in ipairs(Lane) do
+            if Note.wasHit then
+                hitNotesCount = plusEq(hitNotesCount)
+            end
+        end
+    end
+    currentBestPossibleScore = BestScorePerNote*hitNotesCount
+    accuracy = (score/currentBestPossibleScore)*100
 end
 
 function PlayState:checkInput()
@@ -84,8 +120,7 @@ function PlayState:checkMiss()
 end
 
 function PlayState:draw()
-    love.graphics.print(PlayState.score,100,100)
-    Objects.Game.Background:draw()
+    Objects.Game.Background:draw() 
 
     for i = 1,#JudgementNames do
         love.graphics.printf(Judgements[JudgementNames[i]].Count, Inits.GameWidth-100, ((Inits.GameHeight/2)+(25*i)) - (3*25), 100, "right")
@@ -102,6 +137,7 @@ function PlayState:draw()
     end
     love.graphics.pop()
     Objects.Game.Judgement:draw()
+    Objects.Game.HUDTopLeft:draw()
 end
 
 return PlayState

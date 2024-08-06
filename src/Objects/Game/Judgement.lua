@@ -25,10 +25,10 @@ function Judgement:judge(judgement)
 end
 
 function Judgement:draw()
-    love.graphics.translate(Inits.WindowWidth/2, Inits.WindowHeight/2)
+    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
     love.graphics.setColor(1, 1, 1, self.alpha[1])
     love.graphics.draw(self.image, self.x + self.animationValues.x, self.y + self.animationValues.y, self.r, Skin.Params["Judgement Size"] + self.animationValues.w, Skin.Params["Judgement Size"] + self.animationValues.h, self.image:getWidth()/2, self.image:getHeight()/2)
-    love.graphics.translate(-Inits.WindowWidth/2, -Inits.WindowHeight/2)
+    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
 
 end
 
