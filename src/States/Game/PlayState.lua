@@ -16,6 +16,8 @@ function PlayState:enter()
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
     Objects.Game.Judgement:new()
+    Objects.Game.Background:new(background)
+    PlayState.score = 0
 end
 
 function PlayState:update(dt)
@@ -37,23 +39,19 @@ function PlayState:judge(noteTime)
     print("Playstate:judge(" .. noteTime .. ")")
     local ConvertedNoteTime = math.abs(noteTime)
     print(ConvertedNoteTime)
-
     for Judgement = 1, #JudgementNames do
         local judgement = Judgements[JudgementNames[Judgement]]
-        print(noteTime <= judgement.Timing)
-        if noteTime <= judgement.Timing then
-            judgement.Count = plusEq(judgement.Count)
+        if ConvertedNoteTime <= judgement.Timing then
+            judgement.Count = judgement.Count + 1
             Objects.Game.Judgement:judge(judgement.Judgement)
-            break
-        elseif noteTime > Judgements["Miss"].Timing then -- must be a miss         
-            Judgements["Miss"].Count = plusEq(Judgements["Miss"].Count)             -- killing myself and its cuz
-            Objects.Game.Judgement:judge("Miss")                                    -- of this code right here      
-            break                                                                   -- i HARDCODED missing 😭
+            PlayState.score = PlayState.score + judgement.Score
+            return 
         end
-
     end
-
-
+    -- must be a miss then lmfao LOSER you SUCK 
+    Judgements["Miss"].Count = Judgements["Miss"].Count + 1
+    Objects.Game.Judgement:judge("Miss")
+    return
 end
 
 function PlayState:checkInput()
@@ -86,8 +84,8 @@ function PlayState:checkMiss()
 end
 
 function PlayState:draw()
-    love.graphics.print("MusicTime: " .. MusicTime)
-
+    love.graphics.print(PlayState.score,100,100)
+    Objects.Game.Background:draw()
 
     for i = 1,#JudgementNames do
         love.graphics.printf(Judgements[JudgementNames[i]].Count, Inits.GameWidth-100, ((Inits.GameHeight/2)+(25*i)) - (3*25), 100, "right")

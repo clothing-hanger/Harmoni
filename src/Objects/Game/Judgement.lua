@@ -14,7 +14,6 @@ function Judgement:update(dt)
 end
 
 function Judgement:judge(judgement)
-    print("FDHIAJFJIHDJHIFKD")
     self.alpha = {1}
     self.image = Skin.Judgements[judgement]
     self.animationValues = {w = 0, h = 0, x = 0, y = 0}
@@ -29,6 +28,8 @@ function Judgement:draw()
     love.graphics.translate(Inits.WindowWidth/2, Inits.WindowHeight/2)
     love.graphics.setColor(1, 1, 1, self.alpha[1])
     love.graphics.draw(self.image, self.x + self.animationValues.x, self.y + self.animationValues.y, self.r, Skin.Params["Judgement Size"] + self.animationValues.w, Skin.Params["Judgement Size"] + self.animationValues.h, self.image:getWidth()/2, self.image:getHeight()/2)
+    love.graphics.translate(-Inits.WindowWidth/2, -Inits.WindowHeight/2)
+
 end
 
 function Judgement:release()

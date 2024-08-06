@@ -94,10 +94,10 @@ end
 
 function love.draw()
     love.graphics.push()
-      --  love.graphics.setCanvas(GameScreen)
+        love.graphics.setCanvas(GameScreen)
             love.graphics.clear(0,0,0,1)
             State.draw()
-        --love.graphics.setCanvas()
+        love.graphics.setCanvas()
     love.graphics.pop()
 
     -- ratio
@@ -106,7 +106,7 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
-   -- love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
     love.graphics.setShader()
 
     debug.printInfo()

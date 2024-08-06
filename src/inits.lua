@@ -1,9 +1,9 @@
 return {
     -- Game base resolution
-    GameWidth = 1280,
-    GameHeight = 720,
+    GameWidth = 1664,
+    GameHeight = 936,
 
     -- Window base resolution
-    WindowWidth = 1280,
-    WindowHeight = 720,
+    WindowWidth = 1664,
+    WindowHeight = 936,
 }
