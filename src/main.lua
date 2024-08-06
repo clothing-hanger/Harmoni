@@ -72,6 +72,7 @@ function love.load()
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     Tinyyaml = require("Libraries.Tinyyaml")
+    Timer = require("Libraries.Timer")
     GameScreen = love.graphics.newCanvas(Inits.GameWidth, Inits.GameHeight)
 
     -- Initialize Game
@@ -88,6 +89,7 @@ end
 function love.update(dt)
     Input:update()
     State.update(dt)
+    Timer.update(dt)
 end
 
 function love.draw()

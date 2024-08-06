@@ -30,7 +30,7 @@ function Note:hit(noteTime)
 end
 
 function Note:draw()
-    if not self.visible then return end
+    if not self.visible or not (self.Y < Inits.GameHeight) then return end
     love.graphics.draw(self.image, self.X, self.Y, 0, Skin.Params["Note Size"]/self.image:getWidth(), Skin.Params["Note Size"]/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
 end
 

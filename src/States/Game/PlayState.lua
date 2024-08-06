@@ -15,10 +15,12 @@ function PlayState:enter()
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
+    Objects.Game.Judgement:new()
 end
 
 function PlayState:update(dt)
     PlayState:checkInput()
+    PlayState:checkMiss()
 
     updateMusicTimeFunction()
     if MusicTime >= 0 and not Song:isPlaying() then
@@ -38,11 +40,17 @@ function PlayState:judge(noteTime)
 
     for Judgement = 1, #JudgementNames do
         local judgement = Judgements[JudgementNames[Judgement]]
+        print(noteTime <= judgement.Timing)
         if noteTime <= judgement.Timing then
             judgement.Count = plusEq(judgement.Count)
-            return judgement.Score
-
+            Objects.Game.Judgement:judge(judgement.Judgement)
+            break
+        elseif noteTime > Judgements["Miss"].Timing then -- must be a miss         
+            Judgements["Miss"].Count = plusEq(Judgements["Miss"].Count)             -- killing myself and its cuz
+            Objects.Game.Judgement:judge("Miss")                                    -- of this code right here      
+            break                                                                   -- i HARDCODED missing 😭
         end
+
     end
 
 
@@ -59,6 +67,19 @@ function PlayState:checkInput()
                     Note:hit(noteTime)
                     break
                 end
+            end
+        end
+    end
+end
+
+function PlayState:checkMiss()
+    for i, Lane in ipairs(lanes) do
+        for q, Note in ipairs(Lane) do
+            local noteTime = (MusicTime - Note.StartTime)
+            if noteTime > Judgements["Miss"].Timing and not Note.wasHit then
+                PlayState:judge(noteTime)
+                Note:hit(noteTime)
+                break
             end
         end
     end
@@ -82,6 +103,7 @@ function PlayState:draw()
         end
     end
     love.graphics.pop()
+    Objects.Game.Judgement:draw()
 end
 
 return PlayState
