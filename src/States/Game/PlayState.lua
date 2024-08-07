@@ -90,18 +90,28 @@ function PlayState:incrementCombo()
     end
 end
 
+--[[
+
 function PlayState:calculateAccuracy()
     local currentBestPossibleScore
     local hitNotesCount = 0
     for i, Lane in ipairs(lanes) do
         for q, Note in ipairs(Lane) do
             if Note.wasHit then
-                hitNotesCount = plusEq(hitNotesCount)
+                hitNotesCount = plusEq(hitNotesCount)        old LOSER code lmao
             end
         end
     end
     currentBestPossibleScore = BestScorePerNote*hitNotesCount
     accuracy = (score/currentBestPossibleScore)*100
+end
+
+--]]  
+function PlayState:calculateAccuracy()
+    local allHits = (allHits or 0)
+    local allHits = plusEq(allHits) 
+    local currentBestPossibleScore = BestScorePerNote*allHits          --new loser code :(
+    accuracy = (score/currentBestPossibleScore)*100 
 end
 
 function PlayState:checkInput()
