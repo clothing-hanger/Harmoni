@@ -11,7 +11,6 @@ function InitializeJudgments()
     }
 
 
-  --  (BestScorePerNote and (BestScorePerNote*(5/5))
 
 
     local judgementsArray = {}

@@ -71,7 +71,7 @@ function PlayState:judge(noteTime)
         if ConvertedNoteTime <= judgement.Timing then
             judgement.Count = judgement.Count + 1
             Objects.Game.Judgement:judge(judgement.Judgement)
-            score = score + judgement.Score
+            score = score + (BestScorePerNote*judgement.Score)
             PlayState:calculateAccuracy()
             return 
         end
@@ -109,7 +109,7 @@ end
 --]]  
 function PlayState:calculateAccuracy()
     local allHits = (allHits or 0)
-    local allHits = plusEq(allHits) 
+    local allHits = plusEq(allHits)
     local currentBestPossibleScore = BestScorePerNote*allHits          --new loser code :(
     accuracy = (score/currentBestPossibleScore)*100 
 end
