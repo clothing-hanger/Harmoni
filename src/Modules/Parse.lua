@@ -42,7 +42,7 @@ function quaverParse(file)
         
 
         if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
-            Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "stream")
+            Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
         else
             print("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
             print("Audio File Not Found For Song " .. SelectedSong)

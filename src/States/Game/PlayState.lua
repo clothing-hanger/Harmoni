@@ -9,9 +9,6 @@ local Directions = {
 
 local Receptors = {}
 
-
-
-
 function PlayState:enter()
     --Init local variables
     local myBalls = math.huge
@@ -25,7 +22,7 @@ function PlayState:enter()
     NPSData = {NPS = {}, HPS = {}}
 
     
-    quaverParse("Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty])
+    quaverParse(SongString)
     updateMusicTime = true
     MusicTime = -2000
     for i = 1, #lanes do
@@ -40,11 +37,13 @@ function PlayState:initObjects()
     Objects.Game.HUD:new()
     Objects.Game.Background:new(background)
     Objects.Game.Background:setDimness(dimSetting, true)
+    Objects.Game.ComboAlert:new()
+    Objects.Game.Combo:new()
+
 end
 
 function PlayState:update(dt)
     PlayState:checkInput()
-    PlayState:checkMiss()
     PlayState:updateObjects()
 
     updateMusicTimeFunction()
@@ -53,6 +52,9 @@ function PlayState:update(dt)
     end
     for i, Lane in ipairs(lanes) do
         for q, Note in ipairs(Lane) do
+            if Note.StartTime - MusicTime > 15000 then 
+                break
+           end
             Note:update()
         end
     end
@@ -63,9 +65,7 @@ function PlayState:updateObjects()
 end
 
 function PlayState:judge(noteTime)
-    print("Playstate:judge(" .. noteTime .. ")")
     local ConvertedNoteTime = math.abs(noteTime)
-    print(ConvertedNoteTime)
     for Judgement = 1, #JudgementNames do
         local judgement = Judgements[JudgementNames[Judgement]]
         if ConvertedNoteTime <= judgement.Timing then
@@ -83,61 +83,49 @@ function PlayState:judge(noteTime)
     return
 end
 
-function PlayState:incrementCombo()
-    combo = plusEq(combo)
-    if combo % 100 == 0 then
-        Objects.Game.ComboAlert:doComboAlert(combo)
-    end
-end
-
---[[
-
-function PlayState:calculateAccuracy()
-    local currentBestPossibleScore
-    local hitNotesCount = 0
-    for i, Lane in ipairs(lanes) do
-        for q, Note in ipairs(Lane) do
-            if Note.wasHit then
-                hitNotesCount = plusEq(hitNotesCount)        old LOSER code lmao
-            end
+function PlayState:incrementCombo(reset)
+    if reset then
+        combo = 0 -- fuckin loser
+    else
+        combo = plusEq(combo)
+        if combo % 100 == 0 then
+            Objects.Game.ComboAlert:doComboAlert(combo)
         end
     end
-    currentBestPossibleScore = BestScorePerNote*hitNotesCount
-    accuracy = (score/currentBestPossibleScore)*100
 end
 
---]]  
 function PlayState:calculateAccuracy()
-    local allHits = (allHits or 0)
-    local allHits = plusEq(allHits)
-    local currentBestPossibleScore = BestScorePerNote*allHits          --new loser code :(
+    allHits = (allHits or 0)
+    allHits = plusEq(allHits)
+    local currentBestPossibleScore = BestScorePerNote*allHits
     accuracy = (score/currentBestPossibleScore)*100 
 end
 
 function PlayState:checkInput()
     for i, Lane in ipairs(lanes) do
         if Input:pressed("lane" .. tostring(i)) then
-
             for q, Note in ipairs(Lane) do
                 local noteTime = math.abs((MusicTime - Note.StartTime))
                 if Note.Lane == i and noteTime < Judgements["Miss"].Timing and not Note.wasHit then
-                    PlayState:judge(noteTime)
+                    PlayState:judge(noteTime, false)
                     Note:hit(noteTime)
+                    if noteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
+                        PlayState:incrementCombo(false)  -- false means we dont reset it
+                    else
+                        PlayState:incrementCombo(true)   -- true means we do reset it
+                    end
                     table.insert(NPSData.NPS, 1000)
                     break
                 end
             end
         end
-    end
-end
 
-function PlayState:checkMiss()
-    for i, Lane in ipairs(lanes) do
         for q, Note in ipairs(Lane) do
             local noteTime = (MusicTime - Note.StartTime)
             if noteTime > Judgements["Miss"].Timing and not Note.wasHit then
                 PlayState:judge(noteTime)
-                Note:hit(noteTime)
+                Note:hit(noteTime, true)
+                PlayState:incrementCombo(true)
                 break
             end
         end
@@ -146,10 +134,6 @@ end
 
 function PlayState:draw()
     Objects.Game.Background:draw() 
-
-    for i = 1,#JudgementNames do
-        love.graphics.printf(Judgements[JudgementNames[i]].Count, Inits.GameWidth-100, ((Inits.GameHeight/2)+(25*i)) - (3*25), 100, "right")
-    end
     love.graphics.push()
     love.graphics.translate(0, LaneHeight)
     for i, Receptor in ipairs(Receptors) do
@@ -163,6 +147,8 @@ function PlayState:draw()
     love.graphics.pop()
     Objects.Game.Judgement:draw()
     Objects.Game.HUD:draw()
+    Objects.Game.ComboAlert:draw()
+    Objects.Game.Combo:draw()
 end
 
 return PlayState

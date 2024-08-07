@@ -44,10 +44,6 @@ function love.run()
 	end
 end
 
-function plusEq(value)
-    return value + 1
-end
-
 function toGameScreen(x, y)
     -- converts a position to the game screen
     local ratio = 1
@@ -61,14 +57,7 @@ end
 
 function love.load()
     -- Setup Libraries
-    Input = (require("Libraries.Baton")).new({
-        controls = {
-            lane1 = {"key:d"},
-            lane2 = {"key:f"},
-            lane3 = {"key:j"},
-            lane4 = {"key:k"},
-        }
-    })
+    require("Modules.Controls") -- this goes with other libs since it inits a lib
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     Tinyyaml = require("Libraries.Tinyyaml")
@@ -79,6 +68,8 @@ function love.load()
     States = require("Modules.States")
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
+    require("Modules.Math")
+    require("Modules.String")
     require("Modules.MusicTime")
     require("Modules.Parse")
     require("Modules.Debug")

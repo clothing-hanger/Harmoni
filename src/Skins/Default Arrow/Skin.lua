@@ -5,15 +5,17 @@ SkinFolder = "Skins/Default Arrow/"
 Skin.Params = {
     ["Note Size"] = 125,
     ["Judgement Size"] = 0.4,
-    ["Judgement Y Offset"] = -150,    -- remember, negative numbers go higher on the screen, positive goes lower
+    ["Judgement Y Offset"] = -150,    -- remember, negative numbers go higher on the screen, positive goes lower (0, 0 is center of the screen)
     ["Judgement X Offset"] = 0,       -- nothing weird with X, lower goes left higher goes right
+    ["Combo Y Offset"] = -170,
+    ["Combo X Offset"] = 0,
 }
 
 Skin.Fonts = {
     ["HUD Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 65),
-    ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 15),
-    ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 12),
-    ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-VariableFont_wght.ttf", 20),
+    ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 15),
+    ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 12),
+    ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 35),
 }
 
 Skin.Notes = {

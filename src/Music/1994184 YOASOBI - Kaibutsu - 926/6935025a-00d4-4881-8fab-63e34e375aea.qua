@@ -1,0 +1,2691 @@
+AudioFile: audio.mp3
+SongPreviewTime: 151463
+BackgroundFile: kaibutsu.jpg
+MapId: -1
+MapSetId: -1
+Mode: Keys4
+Title: Kaibutsu
+Artist: YOASOBI
+Source: BEASTARS
+Tags: Track 6 THE BOOK 2 ?????? ???? ??? 2? 2nd Second Season Ikura Ikuta Rira Lilas Ayase Monster Japanese Anime J-Pop JPOP Opening Furry
+Creator: Harbyter
+DifficultyName: Easy
+Description: This is a Quaver converted version of Harbyter's map.
+EditorLayers: []
+CustomAudioSamples:
+- Path: kick.wav
+- Path: snare.wav
+- Path: bacchetta.wav
+SoundEffects: []
+TimingPoints:
+- StartTime: 1905
+  Bpm: 170
+SliderVelocities:
+- StartTime: 35787
+  Multiplier: 1
+- StartTime: 55552
+  Multiplier: 1
+- StartTime: 151552
+  Multiplier: 1
+- StartTime: 190816
+  Multiplier: 1
+HitObjects:
+- StartTime: 1904
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 2610
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 3316
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 4022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 4728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 5434
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 6140
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 6846
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 7552
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 8257
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 8963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 9669
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 10375
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 11081
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 11787
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 12140
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 12493
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 13199
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 13552
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 13904
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 14257
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 14610
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 14963
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 15316
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 15669
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 16022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 16375
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 16728
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 17081
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 17434
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 17787
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 18140
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 18493
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 18846
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 19199
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 19552
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 19904
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 20257
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 20610
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 20963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 21316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 21669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 22022
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 22375
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 22728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 23081
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 23434
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 23787
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 24140
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 24493
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 25022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 25375
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 25728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 26787
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 27316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 27846
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 28199
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 28552
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 29434
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 29787
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 30140
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 30493
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 30846
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 31199
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 31552
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 31904
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 32257
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 32610
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 32963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 33316
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 33669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 34022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 34375
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 34728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 35081
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 35434
+  Lane: 3
+  EndTime: 35787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 35787
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 35787
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 36140
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 36493
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 36846
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 37199
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 37552
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 37904
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 38257
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 38610
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 38963
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 39316
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 39669
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 40022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 40375
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 40728
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 41081
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 41434
+  Lane: 2
+  EndTime: 41787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 41787
+  Lane: 3
+  EndTime: 42140
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 42140
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 42493
+  Lane: 4
+  EndTime: 42846
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 42846
+  Lane: 2
+  EndTime: 43199
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 43199
+  Lane: 3
+  EndTime: 43552
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 43552
+  Lane: 2
+  EndTime: 43904
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 43904
+  Lane: 4
+  EndTime: 44257
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 44257
+  Lane: 3
+  EndTime: 44610
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 44610
+  Lane: 2
+  EndTime: 44963
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 44963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 45316
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 45669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 46022
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 46375
+  Lane: 3
+  EndTime: 46728
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 46728
+  Lane: 2
+  EndTime: 47081
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 47081
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 47081
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 47434
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 47787
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 48140
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 48493
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 48846
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 49199
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 49552
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 49904
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 50257
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 50610
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 50963
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 51316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 51669
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 52022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 52375
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 52728
+  Lane: 1
+  EndTime: 53081
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 53081
+  Lane: 2
+  EndTime: 53434
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 53434
+  Lane: 3
+  EndTime: 53787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 53787
+  Lane: 4
+  EndTime: 54140
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 54140
+  Lane: 3
+  EndTime: 54493
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 54493
+  Lane: 2
+  EndTime: 54846
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 54846
+  Lane: 1
+  EndTime: 55199
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 55199
+  Lane: 4
+  EndTime: 55552
+  KeySounds: []
+- StartTime: 55552
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 55552
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 55904
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 56081
+  Lane: 3
+  KeySounds: []
+- StartTime: 56257
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 56610
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 56963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 57316
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 57669
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 58022
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 58375
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 58728
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 58904
+  Lane: 3
+  KeySounds: []
+- StartTime: 59081
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 59434
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 59787
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 60140
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 60493
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 60846
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 61199
+  Lane: 2
+  EndTime: 61552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 61552
+  Lane: 1
+  EndTime: 61904
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 61904
+  Lane: 3
+  EndTime: 62257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 62257
+  Lane: 2
+  EndTime: 62610
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 62610
+  Lane: 4
+  EndTime: 62963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 62963
+  Lane: 2
+  EndTime: 63316
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 63316
+  Lane: 3
+  EndTime: 63669
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 63669
+  Lane: 1
+  EndTime: 64022
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 64022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 64375
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 64728
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 65081
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 65434
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 65787
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 66140
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 66493
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 66846
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 67199
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 67552
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 67904
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 68257
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 68610
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 68963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 69316
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 69669
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 70022
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 70375
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 70728
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 71081
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 71434
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 71787
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 72140
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 72493
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 72846
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 73199
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 73552
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 73904
+  Lane: 1
+  EndTime: 74257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 74257
+  Lane: 2
+  EndTime: 74610
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 74610
+  Lane: 3
+  EndTime: 74963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 74963
+  Lane: 4
+  EndTime: 75316
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 75316
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 75669
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 75846
+  Lane: 2
+  KeySounds: []
+- StartTime: 76022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 76375
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 76552
+  Lane: 3
+  KeySounds: []
+- StartTime: 76728
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 77081
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 77257
+  Lane: 2
+  KeySounds: []
+- StartTime: 77434
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 77787
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 77963
+  Lane: 3
+  KeySounds: []
+- StartTime: 78140
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 78493
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 78669
+  Lane: 1
+  KeySounds: []
+- StartTime: 78846
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 79199
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 79375
+  Lane: 4
+  KeySounds: []
+- StartTime: 79552
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 79904
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 80081
+  Lane: 1
+  KeySounds: []
+- StartTime: 80257
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 80610
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 80787
+  Lane: 4
+  KeySounds: []
+- StartTime: 80963
+  Lane: 2
+  EndTime: 81316
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 81316
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 81669
+  Lane: 2
+  EndTime: 82022
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 82022
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 82375
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 82728
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 83081
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 83434
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 83787
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 84140
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 84493
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 84846
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 85199
+  Lane: 2
+  EndTime: 85552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 85552
+  Lane: 3
+  EndTime: 85904
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 85904
+  Lane: 1
+  EndTime: 86257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 86257
+  Lane: 4
+  EndTime: 86610
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 86963
+  Lane: 1
+  KeySounds: []
+- StartTime: 87669
+  Lane: 1
+  KeySounds: []
+- StartTime: 88375
+  Lane: 1
+  KeySounds: []
+- StartTime: 89081
+  Lane: 1
+  KeySounds: []
+- StartTime: 89787
+  Lane: 4
+  KeySounds: []
+- StartTime: 90493
+  Lane: 4
+  KeySounds: []
+- StartTime: 91199
+  Lane: 4
+  KeySounds: []
+- StartTime: 91904
+  Lane: 4
+  KeySounds: []
+- StartTime: 92257
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 92610
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 92963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 93316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 93669
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 94022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 94375
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 94728
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 95081
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 95434
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 95787
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 96140
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 96493
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 96669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 96846
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 97022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 97199
+  Lane: 1
+  EndTime: 97552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 97552
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 97904
+  Lane: 2
+  EndTime: 98610
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 98963
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 99669
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 100728
+  Lane: 3
+  EndTime: 101434
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 101963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 102493
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 103552
+  Lane: 1
+  EndTime: 104257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 104610
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 105316
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 106375
+  Lane: 4
+  EndTime: 107081
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 107610
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 108140
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 109199
+  Lane: 1
+  EndTime: 109904
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 109199
+  Lane: 2
+  EndTime: 109904
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 110257
+  Lane: 1
+  EndTime: 110963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 110257
+  Lane: 2
+  EndTime: 110963
+  KeySounds: []
+- StartTime: 110963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 112022
+  Lane: 3
+  EndTime: 112728
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 112022
+  Lane: 4
+  EndTime: 112728
+  KeySounds: []
+- StartTime: 113257
+  Lane: 3
+  EndTime: 113787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 113257
+  Lane: 4
+  EndTime: 113787
+  KeySounds: []
+- StartTime: 113787
+  Lane: 2
+  EndTime: 114140
+  KeySounds: []
+- StartTime: 113787
+  Lane: 1
+  EndTime: 114140
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 114316
+  Lane: 3
+  EndTime: 114846
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 114316
+  Lane: 4
+  EndTime: 114846
+  KeySounds: []
+- StartTime: 114846
+  Lane: 2
+  EndTime: 115552
+  KeySounds: []
+- StartTime: 114846
+  Lane: 1
+  EndTime: 115552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 115904
+  Lane: 1
+  EndTime: 116610
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 115904
+  Lane: 2
+  EndTime: 116610
+  KeySounds: []
+- StartTime: 116610
+  Lane: 4
+  EndTime: 116963
+  KeySounds: []
+- StartTime: 116610
+  Lane: 3
+  EndTime: 116963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 117669
+  Lane: 3
+  EndTime: 118375
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 117669
+  Lane: 4
+  EndTime: 118375
+  KeySounds: []
+- StartTime: 118904
+  Lane: 3
+  EndTime: 119434
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 118904
+  Lane: 4
+  EndTime: 119434
+  KeySounds: []
+- StartTime: 119434
+  Lane: 1
+  EndTime: 119787
+  KeySounds: []
+- StartTime: 119434
+  Lane: 2
+  EndTime: 119787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 119963
+  Lane: 3
+  EndTime: 120493
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 119963
+  Lane: 4
+  EndTime: 120493
+  KeySounds: []
+- StartTime: 120493
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 120493
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 120846
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 121199
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 121552
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 121904
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 122257
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 122610
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 122963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 123316
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 123669
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 124022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 124375
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 124728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 125081
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 125434
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 125787
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 126140
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 126493
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 126846
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 127199
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 127552
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 127904
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 128257
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 128610
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 128963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 129316
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 129669
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 130022
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 130375
+  Lane: 3
+  KeySounds: []
+- StartTime: 131787
+  Lane: 1
+  EndTime: 133199
+  KeySounds: []
+- StartTime: 131787
+  Lane: 4
+  KeySounds: []
+- StartTime: 133199
+  Lane: 2
+  EndTime: 134610
+  KeySounds: []
+- StartTime: 133199
+  Lane: 3
+  KeySounds: []
+- StartTime: 134610
+  Lane: 1
+  KeySounds: []
+- StartTime: 134610
+  Lane: 3
+  EndTime: 136022
+  KeySounds: []
+- StartTime: 136022
+  Lane: 2
+  KeySounds: []
+- StartTime: 136022
+  Lane: 4
+  EndTime: 136728
+  KeySounds: []
+- StartTime: 136728
+  Lane: 1
+  KeySounds: []
+- StartTime: 136728
+  Lane: 3
+  EndTime: 137434
+  KeySounds: []
+- StartTime: 137434
+  Lane: 2
+  EndTime: 138846
+  KeySounds: []
+- StartTime: 137434
+  Lane: 4
+  KeySounds: []
+- StartTime: 138846
+  Lane: 1
+  EndTime: 139552
+  KeySounds: []
+- StartTime: 138846
+  Lane: 3
+  KeySounds: []
+- StartTime: 139552
+  Lane: 2
+  EndTime: 140257
+  KeySounds: []
+- StartTime: 139552
+  Lane: 4
+  KeySounds: []
+- StartTime: 140257
+  Lane: 1
+  KeySounds: []
+- StartTime: 140257
+  Lane: 3
+  EndTime: 141669
+  KeySounds: []
+- StartTime: 141669
+  Lane: 2
+  KeySounds: []
+- StartTime: 141669
+  Lane: 4
+  EndTime: 142375
+  KeySounds: []
+- StartTime: 142375
+  Lane: 1
+  KeySounds: []
+- StartTime: 142375
+  Lane: 3
+  EndTime: 143081
+  KeySounds: []
+- StartTime: 143081
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 143434
+  Lane: 3
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 143963
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 144140
+  Lane: 3
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 144493
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 144846
+  Lane: 4
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 145375
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 145552
+  Lane: 4
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 145728
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 145904
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 146257
+  Lane: 1
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 146787
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 146963
+  Lane: 1
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 147316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 147669
+  Lane: 2
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 148199
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 148375
+  Lane: 2
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 148552
+  Lane: 3
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 148728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 149081
+  Lane: 3
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 149610
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 149787
+  Lane: 3
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 150140
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 30
+- StartTime: 150493
+  Lane: 4
+  KeySounds:
+  - Sample: 3
+    Volume: 50
+- StartTime: 150846
+  Lane: 3
+  EndTime: 151552
+  KeySounds: []
+- StartTime: 151552
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 151552
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 151904
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 152257
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 152610
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 152963
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 153316
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 153669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 154022
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 154375
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 154728
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 155081
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 155434
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 155787
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 156140
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 156493
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 156846
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 157199
+  Lane: 1
+  EndTime: 157552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 157552
+  Lane: 2
+  EndTime: 157904
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 157904
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 158257
+  Lane: 4
+  EndTime: 158610
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 158610
+  Lane: 3
+  EndTime: 158963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 158963
+  Lane: 2
+  EndTime: 159316
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 159316
+  Lane: 1
+  EndTime: 159669
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 159669
+  Lane: 4
+  EndTime: 160022
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 160022
+  Lane: 3
+  EndTime: 160375
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 160375
+  Lane: 2
+  EndTime: 160728
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 160728
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 161081
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 161434
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 161787
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 162140
+  Lane: 2
+  EndTime: 162493
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 162493
+  Lane: 1
+  EndTime: 162846
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 162846
+  Lane: 2
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 162846
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 163199
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 163552
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 163904
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 164257
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 164610
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 164963
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 165316
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 165669
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 166022
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 166375
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 166728
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 167081
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 167434
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 167787
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 168140
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 168493
+  Lane: 1
+  EndTime: 168846
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 168846
+  Lane: 2
+  EndTime: 169199
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 169199
+  Lane: 3
+  EndTime: 169552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 169552
+  Lane: 4
+  EndTime: 169904
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 169904
+  Lane: 3
+  EndTime: 170257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 170257
+  Lane: 2
+  EndTime: 170610
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 170610
+  Lane: 1
+  EndTime: 170963
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 170963
+  Lane: 2
+  EndTime: 171316
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 171316
+  Lane: 3
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 171316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 171669
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 172022
+  Lane: 2
+  EndTime: 172375
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 172375
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 172728
+  Lane: 1
+  EndTime: 173081
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 173081
+  Lane: 3
+  EndTime: 173434
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 173434
+  Lane: 2
+  EndTime: 173787
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 173787
+  Lane: 4
+  EndTime: 174140
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 174140
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 174493
+  Lane: 1
+  EndTime: 174846
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 174846
+  Lane: 4
+  EndTime: 175199
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 175199
+  Lane: 3
+  EndTime: 175552
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 175552
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 175904
+  Lane: 2
+  EndTime: 176257
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 176257
+  Lane: 1
+  EndTime: 176610
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 176610
+  Lane: 4
+  EndTime: 176963
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 176963
+  Lane: 1
+  EndTime: 177316
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 177316
+  Lane: 2
+  EndTime: 177669
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 177669
+  Lane: 3
+  EndTime: 178022
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 178022
+  Lane: 4
+  EndTime: 178375
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 178375
+  Lane: 2
+  EndTime: 178728
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 178728
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 179081
+  Lane: 2
+  EndTime: 179434
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 179434
+  Lane: 3
+  EndTime: 179787
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 179787
+  Lane: 4
+  EndTime: 180140
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 180140
+  Lane: 2
+  EndTime: 180493
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 180493
+  Lane: 1
+  EndTime: 180846
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 180846
+  Lane: 4
+  EndTime: 181199
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 181199
+  Lane: 3
+  EndTime: 181552
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 181552
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 181728
+  Lane: 2
+  KeySounds: []
+- StartTime: 181904
+  Lane: 3
+  EndTime: 182257
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 182257
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 182610
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 182963
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 183140
+  Lane: 3
+  KeySounds: []
+- StartTime: 183316
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 183669
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 183846
+  Lane: 2
+  KeySounds: []
+- StartTime: 184022
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 184375
+  Lane: 2
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 184552
+  Lane: 3
+  KeySounds: []
+- StartTime: 184728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 185081
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 185257
+  Lane: 3
+  KeySounds: []
+- StartTime: 185434
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 185787
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 185963
+  Lane: 2
+  KeySounds: []
+- StartTime: 186140
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 186493
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 186669
+  Lane: 3
+  KeySounds: []
+- StartTime: 186846
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 187199
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 187552
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 187904
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 188257
+  Lane: 1
+  EndTime: 188610
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 188610
+  Lane: 2
+  EndTime: 188963
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 188963
+  Lane: 3
+  EndTime: 189316
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 189316
+  Lane: 4
+  EndTime: 189669
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 189669
+  Lane: 1
+  EndTime: 190022
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 190022
+  Lane: 2
+  EndTime: 190375
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 190375
+  Lane: 3
+  EndTime: 190728
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 190728
+  Lane: 4
+  KeySounds: []
+- StartTime: 191081
+  Lane: 1
+  HitSound: Finish
+  KeySounds: []
+- StartTime: 191081
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 191434
+  Lane: 3
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 191787
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 191963
+  Lane: 3
+  KeySounds: []
+- StartTime: 192140
+  Lane: 2
+  EndTime: 192493
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 192493
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 192846
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 193199
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 193375
+  Lane: 2
+  KeySounds: []
+- StartTime: 193552
+  Lane: 3
+  EndTime: 193904
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 193904
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 194257
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 194610
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 194787
+  Lane: 3
+  KeySounds: []
+- StartTime: 194963
+  Lane: 2
+  EndTime: 195316
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 195316
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 195669
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 196022
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 196199
+  Lane: 2
+  KeySounds: []
+- StartTime: 196375
+  Lane: 4
+  EndTime: 196728
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 196728
+  Lane: 1
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 197081
+  Lane: 1
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 197434
+  Lane: 2
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 197610
+  Lane: 3
+  KeySounds: []
+- StartTime: 197787
+  Lane: 2
+  EndTime: 198140
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 198140
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 198493
+  Lane: 4
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 198846
+  Lane: 3
+  KeySounds:
+  - Sample: 1
+    Volume: 50
+- StartTime: 199022
+  Lane: 2
+  KeySounds: []
+- StartTime: 199199
+  Lane: 3
+  EndTime: 199552
+  KeySounds:
+  - Sample: 2
+    Volume: 30
+- StartTime: 199552
+  Lane: 1
+  EndTime: 200257
+  KeySounds: []
+- StartTime: 200257
+  Lane: 3
+  EndTime: 200610
+  KeySounds: []
+- StartTime: 200610
+  Lane: 2
+  EndTime: 200963
+  KeySounds: []
+- StartTime: 200963
+  Lane: 4
+  EndTime: 201669
+  KeySounds: []
+- StartTime: 201669
+  Lane: 3
+  EndTime: 202022
+  KeySounds: []
+- StartTime: 202022
+  Lane: 2
+  EndTime: 202375
+  KeySounds: []
+- StartTime: 202375
+  Lane: 4
+  KeySounds:
+  - Sample: 1
+    Volume: 50
