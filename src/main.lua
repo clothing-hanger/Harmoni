@@ -82,7 +82,8 @@ function love.load()
     require("Modules.MusicTime")
     require("Modules.Parse")
     require("Modules.Debug")
-
+    require("Modules.Judgements")
+    require("Modules.Grades")
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Menu.SongSelect)

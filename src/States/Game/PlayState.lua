@@ -14,13 +14,15 @@ local Receptors = {}
 
 function PlayState:enter()
     --Init local variables
+    local myBalls = math.huge
 
 
-
---Init global variables
+    --Init global variables
     score = 0
     combo = 0
     accuracy = 0
+    grade = "-"
+    NPSData = {NPS = {}, HPS = {}}
 
     
     quaverParse("Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty])
@@ -29,8 +31,13 @@ function PlayState:enter()
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
+    PlayState:initObjects()
+
+end
+
+function PlayState:initObjects()
     Objects.Game.Judgement:new()
-    Objects.Game.HUDTopLeft:new()
+    Objects.Game.HUD:new()
     Objects.Game.Background:new(background)
     Objects.Game.Background:setDimness(dimSetting, true)
 end
@@ -52,7 +59,7 @@ function PlayState:update(dt)
 end
 
 function PlayState:updateObjects()
-    Objects.Game.HUDTopLeft:update()
+    Objects.Game.HUD:update()
 end
 
 function PlayState:judge(noteTime)
@@ -74,6 +81,13 @@ function PlayState:judge(noteTime)
     Objects.Game.Judgement:judge("Miss")
     PlayState:calculateAccuracy()
     return
+end
+
+function PlayState:incrementCombo()
+    combo = plusEq(combo)
+    if combo % 100 == 0 then
+        Objects.Game.ComboAlert:doComboAlert(combo)
+    end
 end
 
 function PlayState:calculateAccuracy()
@@ -99,6 +113,7 @@ function PlayState:checkInput()
                 if Note.Lane == i and noteTime < Judgements["Miss"].Timing and not Note.wasHit then
                     PlayState:judge(noteTime)
                     Note:hit(noteTime)
+                    table.insert(NPSData.NPS, 1000)
                     break
                 end
             end
@@ -137,7 +152,7 @@ function PlayState:draw()
     end
     love.graphics.pop()
     Objects.Game.Judgement:draw()
-    Objects.Game.HUDTopLeft:draw()
+    Objects.Game.HUD:draw()
 end
 
 return PlayState
