@@ -1,6 +1,7 @@
 Inits = require("inits")
 
 require("TEMP/setup shit")
+love.filesystem.createDirectory("Music")
 
 function love.run()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -77,7 +78,7 @@ function love.load()
     require("Modules.Grades")
     defaultFont = love.graphics.newFont(12)
 
-    State.switch(States.Menu.SongSelect)
+    State.switch(States.Misc.PreLoader)
 end
 
 function love.update(dt)

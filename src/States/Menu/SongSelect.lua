@@ -10,8 +10,8 @@ function SongSelect:enter()
 end
 
 function SongSelect:setupSongButtons()
-    for i = 1,#songList do
-        
+    --for i = 1,#songList do
+
 end
 
 function SongSelect:update(dt)
