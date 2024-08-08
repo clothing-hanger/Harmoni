@@ -9,13 +9,20 @@ function SongSelect:enter()
     DifficultyList = {}
 end
 
+function SongSelect:setupSongButtons()
+    for i = 1,#songList do
+        
+end
+
 function SongSelect:update(dt)
     if Input:pressed("menuDown") then
-        SelectedSong = (SelectedSong % #SongList) + 1
-        SelectedDifficulty = (SelectedDifficulty % #DifficultyList) + 1
+        if MenuState == "Song" then SelectedSong = (SelectedSong % #SongList) + 1
+        elseif MenuState == "Difficulty" then
+        SelectedDifficulty = (SelectedDifficulty % #DifficultyList) + 1 end
     elseif Input:pressed("menuUp") then
-        SelectedSong = (SelectedSong - 2) % #SongList + 1
-        SelectedDifficulty = (SelectedDifficulty - 2) % #DifficultyList + 1
+        if MenuState == "Song" then SelectedSong = (SelectedSong - 2) % #SongList + 1
+        elseif MenuState == "Difficulty" then
+        SelectedDifficulty = (SelectedDifficulty - 2) % #DifficultyList + 1 end
     elseif Input:pressed("menuConfirm") then
         if MenuState == "Song" then
             MenuState = "Difficulty"

@@ -7,5 +7,8 @@ return {
         HUD = require("Objects/Game/HUD"),
         ComboAlert = require("Objects/Game/ComboAlert"),
         Combo = require("Objects/Game/Combo"),
+    },
+    Menu = {
+        SongButton = require("Objects.Menu.SongButton"),
     }
 }
