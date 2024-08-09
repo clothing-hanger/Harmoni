@@ -113,7 +113,7 @@ function PlayState:checkInput()
                     PlayState:judge(ConvertedNoteTime, false)
                     Note:hit(ConvertedNoteTime)
                     Objects.Game.HitErrorMeter:addHit(NoteTime)
-                    if noteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
+                    if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
                         PlayState:incrementCombo(false)  -- false means we dont reset it
                     else
                         PlayState:incrementCombo(true)   -- true means we do reset it
@@ -127,7 +127,7 @@ function PlayState:checkInput()
         for q, Note in ipairs(Lane) do
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
-            if ConvertedNoteTime > Judgements["Miss"].Timing and not Note.wasHit then
+            if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime)
                 Note:hit(ConvertedNoteTime, true)
                 PlayState:incrementCombo(true)
