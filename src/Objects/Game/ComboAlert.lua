@@ -30,6 +30,7 @@ function ComboAlert:draw()
     love.graphics.setColor(self.color)
     love.graphics.printf(self.text, self.x[1], self.y[1], 1000, "left")
     love.graphics.setFont(defaultFont)
+    love.graphics.setColor(1,1,1)
 end
 
 function ComboAlert:release()

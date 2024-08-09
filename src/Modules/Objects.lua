@@ -7,8 +7,12 @@ return {
         HUD = require("Objects/Game/HUD"),
         ComboAlert = require("Objects/Game/ComboAlert"),
         Combo = require("Objects/Game/Combo"),
+        HitErrorMeter = require("Objects/Game/HitErrorMeter"),
     },
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),
+    },
+    Misc = {
+        Cursor = require("Objects.Misc.Cursor")
     }
 }

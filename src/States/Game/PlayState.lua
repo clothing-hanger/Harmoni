@@ -39,7 +39,7 @@ function PlayState:initObjects()
     Objects.Game.Background:setDimness(dimSetting, true)
     Objects.Game.ComboAlert:new()
     Objects.Game.Combo:new()
-
+    Objects.Game.HitErrorMeter:new()
 end
 
 function PlayState:update(dt)
@@ -62,6 +62,7 @@ end
 
 function PlayState:updateObjects()
     Objects.Game.HUD:update()
+    Objects.Game.HitErrorMeter:update()
 end
 
 function PlayState:judge(noteTime)
@@ -102,13 +103,16 @@ function PlayState:calculateAccuracy()
 end
 
 function PlayState:checkInput()
+
     for i, Lane in ipairs(lanes) do
         if Input:pressed("lane" .. tostring(i)) then
             for q, Note in ipairs(Lane) do
-                local noteTime = math.abs((MusicTime - Note.StartTime))
-                if Note.Lane == i and noteTime < Judgements["Miss"].Timing and not Note.wasHit then
-                    PlayState:judge(noteTime, false)
-                    Note:hit(noteTime)
+                local NoteTime = (MusicTime - Note.StartTime)
+                local ConvertedNoteTime = math.abs(NoteTime)
+                if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
+                    PlayState:judge(ConvertedNoteTime, false)
+                    Note:hit(ConvertedNoteTime)
+                    Objects.Game.HitErrorMeter:addHit(NoteTime)
                     if noteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
                         PlayState:incrementCombo(false)  -- false means we dont reset it
                     else
@@ -121,11 +125,13 @@ function PlayState:checkInput()
         end
 
         for q, Note in ipairs(Lane) do
-            local noteTime = (MusicTime - Note.StartTime)
-            if noteTime > Judgements["Miss"].Timing and not Note.wasHit then
-                PlayState:judge(noteTime)
-                Note:hit(noteTime, true)
+            local NoteTime = (MusicTime - Note.StartTime)
+            local ConvertedNoteTime = math.abs(NoteTime)
+            if ConvertedNoteTime > Judgements["Miss"].Timing and not Note.wasHit then
+                PlayState:judge(ConvertedNoteTime)
+                Note:hit(ConvertedNoteTime, true)
                 PlayState:incrementCombo(true)
+                Objects.Game.HitErrorMeter:addHit(NoteTime)
                 break
             end
         end
@@ -149,6 +155,7 @@ function PlayState:draw()
     Objects.Game.HUD:draw()
     Objects.Game.ComboAlert:draw()
     Objects.Game.Combo:draw()
+    Objects.Game.HitErrorMeter:draw()
 end
 
 return PlayState

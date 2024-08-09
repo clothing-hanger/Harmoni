@@ -7,14 +7,27 @@ function SongSelect:enter()
     SelectedSong = 1
     SelectedDifficulty = 1
     DifficultyList = {}
+    SongButtons = {}
+    SongSelect:setupSongButtons()
 end
 
 function SongSelect:setupSongButtons()
-    --for i = 1,#songList do
+    for i = 1,#SongList do
+        print("Music/"..SongList[i].."/meta.lua")
+        local metaData = love.filesystem.load("Music/"..SongList[i].."/meta.lua")()
+        table.insert(SongButtons, Objects.Menu.SongButton(metaData.songName))
+    end
+end
 
+function SongSelect:updateSongButtons()
+    for i, SongButton in ipairs(SongButtons) do
+        SongButton:update()
+        SongButton.y = (SongButton.height + 10) * i
+    end
 end
 
 function SongSelect:update(dt)
+    SongSelect:updateSongButtons()
     if Input:pressed("menuDown") then
         if MenuState == "Song" then SelectedSong = (SelectedSong % #SongList) + 1
         elseif MenuState == "Difficulty" then
@@ -58,6 +71,11 @@ function SongSelect:draw()
             if i == SelectedDifficulty then love.graphics.setColor(0, 1, 1) else love.graphics.setColor(1, 1, 1) end
             love.graphics.print(DifficultyList[i], 300, 100 + (15 * i))
         end
+    end
+
+
+    for i, SongButton in ipairs(SongButtons) do
+        SongButton:draw()
     end
 end
 

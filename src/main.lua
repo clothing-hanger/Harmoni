@@ -79,9 +79,11 @@ function love.load()
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Misc.PreLoader)
+    Objects.Misc.Cursor()
 end
 
 function love.update(dt)
+    cursorX, cursorY = love.mouse.getPosition()
     Input:update()
     State.update(dt)
     Timer.update(dt)
@@ -92,6 +94,7 @@ function love.draw()
         love.graphics.setCanvas(GameScreen)
             love.graphics.clear(0,0,0,1)
             State.draw()
+           -- Objects.Misc.Cursor:draw()
         love.graphics.setCanvas()
     love.graphics.pop()
 

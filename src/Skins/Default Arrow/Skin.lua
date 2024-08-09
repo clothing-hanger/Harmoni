@@ -2,6 +2,13 @@
 Skin = {}
 SkinFolder = "Skins/Default Arrow/"
 
+
+--[[
+INSTRUCTIONS
+ill fill this in later lmao
+i know how to use this file obviously i literally made it
+--]]
+
 Skin.Params = {
     ["Note Size"] = 125,
     ["Judgement Size"] = 0.4,
@@ -9,6 +16,13 @@ Skin.Params = {
     ["Judgement X Offset"] = 0,       -- nothing weird with X, lower goes left higher goes right
     ["Combo Y Offset"] = -170,
     ["Combo X Offset"] = 0,
+    ["Hit Error Meter Y"] = 0,
+    ["Hit Error Meter X"] = 0,
+    ["Hit Error Meter Height"] = 15,
+    ["Hit Error Meter Width"] = 30,
+    ["Hit Error Meter Solid"] = true, -- not yet used
+    ["Hit Error Meter Fade"] = 500, -- fade time in milliseconds
+
 }
 
 Skin.Fonts = {
