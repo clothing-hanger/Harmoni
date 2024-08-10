@@ -5,6 +5,7 @@ Input = (require("Libraries.Baton")).new({
         menuRight = {"key:right"},
         menuLeft = {"key:left"},
         menuConfirm = {"key:return"},
+        menuBack = {"key:escape"},
 
         menuClickLeft = {"mouse:1"},
 

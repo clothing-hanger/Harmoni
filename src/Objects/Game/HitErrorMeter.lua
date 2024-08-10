@@ -24,18 +24,14 @@ function HitErrorMeter:update(dt)
         end
     end
 end
---[[
-function HitErrorMeter:addHit(noteTime)
 
-    table.insert(self.hits, {noteTime, 500})
-end
---]]
+
 function HitErrorMeter:addHit(noteTime)
     local color = {1, 1, 1, 1}
     local hitTable = {}
     table.insert(hitTable, noteTime)
     for _, Judgement in ipairs(JudgementNames) do
-        if noteTime <= Judgements[Judgement].Timing then
+        if math.abs(noteTime) <= Judgements[Judgement].Timing then
             color = Judgements[Judgement].Color
             table.insert(hitTable, color[1])
             table.insert(hitTable, color[2])
@@ -53,7 +49,7 @@ function HitErrorMeter:addHit(noteTime)
     table.insert(self.hits, hitTable)
 end
 
---hitTable = {noteTime, r, g, b, fadeTime}
+--hitTable = {noteTime, r, g, b, fadeTime}      the format of a a hit in the hitTable
 
 function HitErrorMeter:draw()
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)

@@ -22,13 +22,13 @@ Skin.Params = {
     ["Hit Error Meter Height"] = 15,
     ["Hit Error Meter Width"] = 30,
     ["Hit Error Meter Solid"] = true, -- not yet used
-    ["Hit Error Meter Fade"] = 500, -- fade time in milliseconds
+    ["Hit Error Meter Fade"] = 1000, -- fade time in milliseconds
     ["Marvelous Color"] = rgb({255, 215, 0}),
     ["Perfect Color"] = rgb({0, 255, 0}),
     ["Great Color"] = rgb({0, 191, 255}),
     ["Good Color"] = rgb({30, 144, 255}),
     ["Okay Color"] = rgb({255, 255, 0}),
-    ["Miss Color"] = rgb({255, 0, 0}),     
+    ["Miss Color"] = rgb({255, 0, 0}),
 }
 
 
@@ -68,5 +68,4 @@ Skin.Judgements = {
     ["Good"] = love.graphics.newImage(SkinFolder .. "JUDGEMENTS/Good.png"),
     ["Okay"] = love.graphics.newImage(SkinFolder .. "JUDGEMENTS/Okay.png"),
     ["Miss"] = love.graphics.newImage(SkinFolder .. "JUDGEMENTS/Miss.png"),
-    
 }

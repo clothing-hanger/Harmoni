@@ -47,7 +47,7 @@ end
 function PlayState:update(dt)
     PlayState:checkInput()
     PlayState:updateObjects()
-    performance = difficulty*(accuracy/100)
+    performance = difficulty* math.pow(accuracy/98, 6)
 
     updateMusicTimeFunction()
     if MusicTime >= 0 and not Song:isPlaying() then

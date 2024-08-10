@@ -11,6 +11,7 @@ return {
     },
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),
+        DifficultyButton = require("Objects.Menu.DifficultyButton"),
     },
     Misc = {
         Cursor = require("Objects.Misc.Cursor")
