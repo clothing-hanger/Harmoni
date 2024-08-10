@@ -34,14 +34,20 @@ function HitErrorMeter:addHit(noteTime)
     local color = {1, 1, 1, 1}
     local hitTable = {}
     table.insert(hitTable, noteTime)
-    for _, Judgement in pairs(Judgements) do
-        if noteTime <= Judgement.Timing then
-            color = Judgement.Color
+    for _, Judgement in ipairs(JudgementNames) do
+        if noteTime <= Judgements[Judgement].Timing then
+            color = Judgements[Judgement].Color
             table.insert(hitTable, color[1])
             table.insert(hitTable, color[2])
             table.insert(hitTable, color[3])
             break
         end
+    end
+    if #hitTable < 2 then -- colours were not added
+        color = Judgements.Miss.Color
+        table.insert(hitTable, color[1])
+        table.insert(hitTable, color[2])
+        table.insert(hitTable, color[3])
     end
     table.insert(hitTable, self.fadeTime)
     table.insert(self.hits, hitTable)

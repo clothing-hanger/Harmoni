@@ -11,6 +11,7 @@ i know how to use this file obviously i literally made it
 
 Skin.Params = {
     ["Note Size"] = 125,
+    ["Receptor Size"] = 125,
     ["Judgement Size"] = 0.4,
     ["Judgement Y Offset"] = -150,    -- remember, negative numbers go higher on the screen, positive goes lower (0, 0 is center of the screen)
     ["Judgement X Offset"] = 0,       -- nothing weird with X, lower goes left higher goes right
