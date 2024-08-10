@@ -23,6 +23,7 @@ function PlayState:enter()
     grade = "-"
     performance = difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
+    health = 1
 
     
     updateMusicTime = true
@@ -42,11 +43,13 @@ function PlayState:initObjects()
     Objects.Game.ComboAlert:new()
     Objects.Game.Combo:new()
     Objects.Game.HitErrorMeter:new()
+    Objects.Game.HealthBar:new()
 end
 
 function PlayState:update(dt)
-    PlayState:checkInput()
-    PlayState:updateObjects()
+    if BotPlay then PlayState:checkBotInput() else PlayState:checkInput() end
+
+    PlayState:updateObjects(dt)
     performance = difficulty* math.pow(accuracy/98, 6)
 
     updateMusicTimeFunction()
@@ -61,11 +64,18 @@ function PlayState:update(dt)
             Note:update()
         end
     end
+
+    
 end
 
-function PlayState:updateObjects()
-    Objects.Game.HUD:update()
-    Objects.Game.HitErrorMeter:update()
+function PlayState:updateObjects(dt)
+    Objects.Game.HUD:update(dt)
+    Objects.Game.HitErrorMeter:update(dt)
+    Objects.Game.HealthBar:update(dt)
+end
+
+function PlayState:gameOver()
+    print("fucking loser")
 end
 
 function PlayState:judge(noteTime)
@@ -76,26 +86,17 @@ function PlayState:judge(noteTime)
             judgement.Count = judgement.Count + 1
             Objects.Game.Judgement:judge(judgement.Judgement)
             score = score + (BestScorePerNote*judgement.Score)
+            health = health + judgement.Health
             PlayState:calculateAccuracy()
-            return 
+            return
         end
     end
     -- must be a miss then lmfao LOSER you SUCK 
     Judgements["Miss"].Count = Judgements["Miss"].Count + 1
     Objects.Game.Judgement:judge("Miss")
+    health = health + Judgements["Miss"].Health
     PlayState:calculateAccuracy()
     return
-end
-
-function PlayState:incrementCombo(reset)
-    if reset then
-        combo = 0 -- fuckin loser
-    else
-        combo = plusEq(combo)
-        if combo % 100 == 0 then
-            Objects.Game.ComboAlert:doComboAlert(combo)
-        end
-    end
 end
 
 function PlayState:calculateAccuracy()
@@ -106,7 +107,6 @@ function PlayState:calculateAccuracy()
 end
 
 function PlayState:checkInput()
-
     for i, Lane in ipairs(lanes) do
         if Input:pressed("lane" .. tostring(i)) then
             for q, Note in ipairs(Lane) do
@@ -117,9 +117,9 @@ function PlayState:checkInput()
                     Note:hit(ConvertedNoteTime)
                     Objects.Game.HitErrorMeter:addHit(NoteTime)
                     if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
-                        PlayState:incrementCombo(false)  -- false means we dont reset it
+                        Objects.Game.Combo:incrementCombo(false)  -- false means we dont reset it
                     else
-                        PlayState:incrementCombo(true)   -- true means we do reset it
+                        Objects.Game.Combo:incrementCombo(true)   -- true means we do reset it
                     end
                     table.insert(NPSData.NPS, 1000)
                     break
@@ -133,8 +133,24 @@ function PlayState:checkInput()
             if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime)
                 Note:hit(ConvertedNoteTime, true)
-                PlayState:incrementCombo(true)
+                Objects.Game.Combo:incrementCombo(true)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)
+                break
+            end
+        end
+    end
+end
+
+function PlayState:checkBotInput()
+    for i, Lane in ipairs(lanes) do
+        for q, Note in ipairs(Lane) do
+            local NoteTime = (MusicTime - Note.StartTime)
+            local ConvertedNoteTime = math.abs(NoteTime)
+            if Note.Lane == i and ConvertedNoteTime < 5 and not Note.wasHit then
+                PlayState:judge(ConvertedNoteTime, false)
+                Note:hit(ConvertedNoteTime)
+                Objects.Game.HitErrorMeter:addHit(NoteTime)            
+                table.insert(NPSData.NPS, 1000)
                 break
             end
         end
@@ -159,6 +175,7 @@ function PlayState:draw()
     Objects.Game.ComboAlert:draw()
     Objects.Game.Combo:draw()
     Objects.Game.HitErrorMeter:draw()
+    Objects.Game.HealthBar:draw()
 end
 
 return PlayState

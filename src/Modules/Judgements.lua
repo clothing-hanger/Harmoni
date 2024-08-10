@@ -8,7 +8,8 @@ function InitializeJudgments()
             Score = 1,
             Count = 0,
             ID = 1,
-            Color = Skin.Params["Marvelous Color"]
+            Color = Skin.Params["Marvelous Color"],
+            Health = 0.01,
         },
         ["Perfect"] = {
             Judgement = "Perfect",
@@ -16,7 +17,8 @@ function InitializeJudgments()
             Score = 4/5,
             Count = 0,
             ID = 2,
-            Color = Skin.Params["Perfect Color"]
+            Color = Skin.Params["Perfect Color"],
+            Health = 0.005,
         },
         ["Great"] = {
             Judgement = "Great",
@@ -24,7 +26,8 @@ function InitializeJudgments()
             Score = 3/5,
             Count = 0,
             ID = 3,
-            Color = Skin.Params["Great Color"]
+            Color = Skin.Params["Great Color"],
+            Health = -0.01,
         },
         ["Good"] = {
             Judgement = "Good",
@@ -32,7 +35,9 @@ function InitializeJudgments()
             Score = 2/5,
             Count = 0,
             ID = 4,
-            Color = Skin.Params["Good Color"]
+            Color = Skin.Params["Good Color"],
+            Health = -0.03,
+
         },
         ["Okay"] = {
             Judgement = "Okay",
@@ -40,7 +45,8 @@ function InitializeJudgments()
             Score = 1/5,
             Count = 0,
             ID = 5,
-            Color = Skin.Params["Okay Color"]
+            Color = Skin.Params["Okay Color"],
+            Health = -0.07,
         },
         ["Miss"] = {
             Judgement = "Miss",
@@ -48,7 +54,8 @@ function InitializeJudgments()
             Score = 0,
             Count = 0,
             ID = 6,
-            Color = Skin.Params["Miss Color"]
+            Color = Skin.Params["Miss Color"],
+            Health = -0.12,
         }
     }
     
