@@ -43,7 +43,7 @@ function HitErrorMeter:addHit(noteTime)
             break
         end
     end
-    if #hitTable < 2 then -- colours were not added
+    if #hitTable < 2 then -- colors were not added
         color = Judgements.Miss.Color
         table.insert(hitTable, color[1])
         table.insert(hitTable, color[2])

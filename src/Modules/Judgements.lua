@@ -68,4 +68,6 @@ function InitializeJudgments()
     for i, judgement in ipairs(judgementsArray) do
         table.insert(JudgementNames, judgement.Judgement)
     end
+
+
 end
