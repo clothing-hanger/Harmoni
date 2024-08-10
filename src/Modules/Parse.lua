@@ -155,5 +155,9 @@ function quaverParse(file)
         if currentBpm then
         print("BPM: "..currentBpm)
         end
+        difficulty = calculateDifficulty(lanes, songLengthToLastNote)
+        print("Difficulty: " .. difficulty)
+
+        
     return true
 end

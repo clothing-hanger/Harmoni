@@ -1,6 +1,7 @@
 -- Extension of debug module in lua
 
 function debug.printInfo()
+    love.graphics.setFont(defaultFont)
     love.graphics.print(
         "FPS: " .. tostring(love.timer.getFPS()) .. 
         "\nLua Memory (KB): " .. tostring(math.floor(collectgarbage("count"))) ..

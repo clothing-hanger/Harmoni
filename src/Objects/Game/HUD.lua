@@ -4,7 +4,8 @@ local accuracyTween
 
 function HUD:new()
     self.printableScore = {score}
-    self.printableAccuracy = {0}
+    self.printableAccuracy = {accuracy}
+    self.printablePerformance = {performance}
 end
 
 function HUD:update(dt)
@@ -13,6 +14,9 @@ function HUD:update(dt)
     
     if accuracyTween then Timer.cancel(accuracyTween) end
     accuracyTween = Timer.tween(0.15, self.printableAccuracy, {accuracy}, "out-quad")
+
+    if performanceTween then Timer.cancel(performanceTween) end
+    performanceTween = Timer.tween(0.15, self.printablePerformance, {performance}, "out-quad")
 
     for i, Table in pairs(NPSData) do
         for q = 1,#Table do
@@ -35,7 +39,7 @@ function HUD:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.setFont(Skin.Fonts["HUD Large"])
     love.graphics.printf(math.ceil(self.printableScore[1]) .. "\n" .. string.format("%.2f", self.printableAccuracy[1]) .. "%", 0, 0, Inits.GameWidth, "left")
-    love.graphics.printf(grade .. "\n" .. #NPSData.NPS .. "/" .. #NPSData.HPS, 0, 0, Inits.GameWidth, "right")
+    love.graphics.printf(grade .. "\n" .. #NPSData.NPS .. "/" .. #NPSData.HPS .. "\n" .. string.format("%.2f", self.printablePerformance[1]) .. "/" .. string.format("%.2f", difficulty), 0, 0, Inits.GameWidth, "right")
     love.graphics.setFont(defaultFont)
 end
 

@@ -1,6 +1,5 @@
 Inits = require("inits")
 
-require("TEMP/setup shit")
 love.filesystem.createDirectory("Music")
 
 function love.run()
@@ -71,15 +70,19 @@ function love.load()
     Objects = require("Modules.Objects")
     require("Modules.Math")
     require("Modules.String")
+    require("Modules.RGB")
     require("Modules.MusicTime")
     require("Modules.Parse")
     require("Modules.Debug")
     require("Modules.Judgements")
     require("Modules.Grades")
+    require("Modules.DifficultyCalculator")
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Misc.PreLoader)
     Objects.Misc.Cursor()
+    require("TEMP/setup shit")
+
 end
 
 function love.update(dt)

@@ -10,6 +10,8 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
+    quaverParse(SongString)
+
     --Init local variables
     local myBalls = math.huge
 
@@ -19,10 +21,10 @@ function PlayState:enter()
     combo = 0
     accuracy = 0
     grade = "-"
+    performance = difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
 
     
-    quaverParse(SongString)
     updateMusicTime = true
     MusicTime = -2000
     for i = 1, #lanes do
@@ -45,6 +47,7 @@ end
 function PlayState:update(dt)
     PlayState:checkInput()
     PlayState:updateObjects()
+    performance = difficulty*(accuracy/100)
 
     updateMusicTimeFunction()
     if MusicTime >= 0 and not Song:isPlaying() then
