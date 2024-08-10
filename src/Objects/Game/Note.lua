@@ -1,16 +1,13 @@
 local Note = Class:extend()
 
-
+Note.Directions = {
+    "Left",
+    "Down",
+    "Up",
+    "Right",
+}
 
 function Note:new(lane, StartTime)
-
-    self.Directions = {
-        "Left",
-        "Down",
-        "Up",
-        "Right",
-    }
-
     self.image = Skin.Notes[self.Directions[lane]]
     self.Lane = lane
     self.X = LanesPositions[lane]
