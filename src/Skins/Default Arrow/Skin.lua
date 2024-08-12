@@ -16,7 +16,7 @@ Skin.Params = {
     ["Hit Error Meter X"] = 0,                    -- you get it by now
     ["Hit Error Meter Height"] = 15,              -- how tall the hit error graph is
     ["Hit Error Meter Width"] = 150,               -- how wide the hit error graph is
-    ["Hit Error Meter Solid"] = true,            -- if true, the graph will be made of colored rectangles to show where the judgment windows are, hits will be black, if false, the only visible part of the graph will be the hits, and they will be colored as the color of the judgmement they are
+    ["Hit Error Meter Solid"] = false,            -- if true, the graph will be made of colored rectangles to show where the judgment windows are, hits will be black, if false, the only visible part of the graph will be the hits, and they will be colored as the color of the judgmement they are
     ["Hit Error Meter Fade"] = 1000,              -- how long in milliseconds a hit will take to fade from the hit error graph
     ["Health Bar X"] = 350,
     ["Health Bar Y"] = 300,
@@ -37,6 +37,7 @@ Skin.Fonts = {
     ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 15),
     ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 12),
     ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 35),
+    ["Menu Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 25),
 }
 
 Skin.Notes = {
@@ -45,6 +46,7 @@ Skin.Notes = {
     ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
     ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
 }
+
 
 Skin.Receptors = {
     Up = {

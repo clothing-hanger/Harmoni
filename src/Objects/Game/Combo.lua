@@ -42,7 +42,7 @@ end
 function Combo:draw()
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
 
-    --if combo == 0 then return end
+    if combo == 0 then love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2) return end
     love.graphics.setFont(Skin.Fonts["Combo"])
     love.graphics.setColor(1,1,1,(self.alpha[1] or 0))
     love.graphics.printf(combo, self.x-(self.limit/2), self.y, self.limit, "center", 0, self.width[1], self.height[1])

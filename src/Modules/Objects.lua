@@ -15,6 +15,5 @@ return {
         DifficultyButton = require("Objects.Menu.DifficultyButton"),
     },
     Misc = {
-        Cursor = require("Objects.Misc.Cursor")
     }
 }

@@ -1,5 +1,7 @@
 function quaverParse(file)
-    
+    if not file then
+        error("you cant parse nothing idiot, add a file")
+    end
     if not love.filesystem.getInfo(file, "file") then
         print("Chart File Not Found!", notifErrorIcon)
         print("Chart File Not Found For Song " .. SelectedSong)

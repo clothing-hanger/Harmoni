@@ -27,7 +27,7 @@ function PlayState:enter()
 
     
     updateMusicTime = true
-    MusicTime = -2000
+    MusicTime = -3000
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
@@ -146,7 +146,7 @@ function PlayState:checkBotInput()
         for q, Note in ipairs(Lane) do
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
-            if Note.Lane == i and ConvertedNoteTime < 5 and not Note.wasHit then
+            if Note.Lane == i and ConvertedNoteTime < 1 and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime, false)
                 Note:hit(ConvertedNoteTime)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)            

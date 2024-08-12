@@ -1,8 +1,8 @@
 local SongButton = Class:extend()
 
 function SongButton:new(songName, charterName, artistName, id)
-    self.x, self.y = 700, 250
-    self.width, self.height = 400, 50
+    self.x, self.y = 0, 0
+    self.width, self.height = 1000, 50
     self.songName = songName or "Song Name not found!"
     self.charterName = charterName or ""  -- no need for error text for these since they arent that important
     self.artistName = artistName or ""
@@ -20,13 +20,20 @@ end
 
 function SongButton:click()
     print(self.songName .. " Clicked")
-    SelectedSong = self.id
-    States.Menu.SongSelect:SwitchMenuState("Difficulty")
+
+    if self.id == PlayingSong then 
+        States.Menu.SongSelect:SwitchMenuState("Difficulty")
+    else
+        SelectedSong = self.id
+        PlayingSong = self.id
+    end
 end
 
 function SongButton:draw()
+    if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
     love.graphics.print(self.songName, self.x, self.y)
+    love.graphics.setColor(1,1,1)
 end
 
 function SongButton:release()

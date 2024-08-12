@@ -8,7 +8,6 @@ function DifficultyButton:new(diffName, charterName, difficulty, id)
     self.difficulty = difficulty or "Difficulty not found!"
     self.hovered = false
     self.id = id
-    return self -- game crashes without this but it isnt needed for any other object (including the song buttons) :skull:
 end
 
 function DifficultyButton:update(dt)
@@ -20,9 +19,12 @@ function DifficultyButton:update(dt)
 end
 
 function DifficultyButton:click()
-    print(self.diffName .. " Clicked")
-    SelectedDifficulty = 1
-   -- States.Menu.SongSelect:enterPlayState()
+
+    if self.id == SelectedDifficulty then
+        States.Menu.SongSelect:switchToPlayState()
+    else
+        SelectedDifficulty = self.id
+    end
 end
 
 function DifficultyButton:draw()

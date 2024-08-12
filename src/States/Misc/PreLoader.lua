@@ -35,9 +35,16 @@ function PreLoader:update(dt)
             if i == 1 then
                 metaString = string.format("return {\nsongName = \"%s\",\ndifficulties = {\n", chart.Title)
             end 
-            metaString = metaString .. string.format("{fileName = \"%s\", diffName = \"%s\"},\n", DifficultyList[i], chart.DifficultyName)
+            metaString = metaString .. string.format(
+                "{fileName = \"%s\", diffName = \"%s\", artistName = \"%s\", charterName = \"%s\", background = \"%s\"},\n", 
+                DifficultyList[i], 
+                chart.DifficultyName, 
+                chart.Artist, 
+                chart.Creator, 
+                chart.BackgroundFile
+            )
             if i == #DifficultyList then
-                metaString = metaString .. "},\n}\n"
+                metaString = metaString .. "metaVersion = 1\n},\n}\n"
             end
         end
         love.filesystem.write("Music/" .. SongList[frame] .. "/meta.lua", metaString)
