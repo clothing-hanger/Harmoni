@@ -39,6 +39,8 @@ function HUD:draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.setFont(Skin.Fonts["HUD Large"])
     love.graphics.printf(math.ceil(self.printableScore[1]) .. "\n" .. string.format("%.2f", self.printableAccuracy[1]) .. "%", 0, 0, Inits.GameWidth, "left")
+  --    love.graphics.printf(score .. "\n" .. accuracy .. "%", 0, 0, Inits.GameWidth, "left")
+
     love.graphics.printf(string.format("%.2f", self.printablePerformance[1]) .. " | " .. grade .. "\n" .. #NPSData.NPS .. "/" .. #NPSData.HPS .. "\n", 0, 0, Inits.GameWidth, "right")
     love.graphics.setFont(defaultFont)
 end

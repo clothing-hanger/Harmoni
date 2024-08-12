@@ -77,27 +77,33 @@ function love.load()
     require("Modules.Judgements")
     require("Modules.Grades")
     require("Modules.DifficultyCalculator")
+    require("Modules.Cursor")
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Misc.PreLoader)
-    Objects.Misc.Cursor()
     require("TEMP/setup shit")
 
 end
 
 function love.update(dt)
-    cursorX, cursorY = love.mouse.getPosition()
     Input:update()
     State.update(dt)
     Timer.update(dt)
+    updateCursor(dt)
 end
+
+function love.wheelmoved(x,y)
+    if State.current() == States.Menu.SongSelect then
+        States.Menu.SongSelect:scroll(y)
+    end
+end
+
 
 function love.draw()
     love.graphics.push()
         love.graphics.setCanvas(GameScreen)
             love.graphics.clear(0,0,0,1)
             State.draw()
-           -- Objects.Misc.Cursor:draw()
         love.graphics.setCanvas()
     love.graphics.pop()
 
@@ -108,6 +114,7 @@ function love.draw()
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+
     love.graphics.setShader()
 
     debug.printInfo()

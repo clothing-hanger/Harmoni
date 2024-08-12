@@ -8,12 +8,12 @@ return {
         ComboAlert = require("Objects/Game/ComboAlert"),
         Combo = require("Objects/Game/Combo"),
         HitErrorMeter = require("Objects/Game/HitErrorMeter"),
+        HealthBar = require("Objects.Game.HealthBar"),
     },
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),
         DifficultyButton = require("Objects.Menu.DifficultyButton"),
     },
     Misc = {
-        Cursor = require("Objects.Misc.Cursor")
     }
 }

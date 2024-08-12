@@ -3,32 +3,32 @@ Skin = {}
 SkinFolder = "Skins/Default Arrow/"
 
 
---[[
-INSTRUCTIONS
-ill fill this in later lmao
-i know how to use this file obviously i literally made it
---]]
 
 Skin.Params = {
-    ["Note Size"] = 125,
-    ["Receptor Size"] = 125,
-    ["Judgement Size"] = 0.4,
-    ["Judgement Y Offset"] = -150,    -- remember, negative numbers go higher on the screen, positive goes lower (0, 0 is center of the screen)
-    ["Judgement X Offset"] = 0,       -- nothing weird with X, lower goes left higher goes right
-    ["Combo Y Offset"] = -170,
-    ["Combo X Offset"] = 0,
-    ["Hit Error Meter Y"] = 0,
-    ["Hit Error Meter X"] = 0,
-    ["Hit Error Meter Height"] = 15,
-    ["Hit Error Meter Width"] = 30,
-    ["Hit Error Meter Solid"] = true, -- not yet used
-    ["Hit Error Meter Fade"] = 1000, -- fade time in milliseconds
-    ["Marvelous Color"] = rgb({255, 215, 0}),
-    ["Perfect Color"] = rgb({0, 255, 0}),
-    ["Great Color"] = rgb({0, 191, 255}),
-    ["Good Color"] = rgb({30, 144, 255}),
-    ["Okay Color"] = rgb({255, 255, 0}),
-    ["Miss Color"] = rgb({255, 0, 0}),
+    ["Note Size"] = 125,                          -- size of the notes, pretty obvious i think
+    ["Receptor Size"] = 125,                      -- do you even need to ask
+    ["Judgement Size"] = 0.4,                     -- same as above
+    ["Judgement Y Offset"] = -150,                -- Y position of the judgmement (0 is center of the screen, higher number means lower on screen)         
+    ["Judgement X Offset"] = 0,                   -- X position of the judgmement (0 is center of the screen, higher number means further right on screen)
+    ["Combo Y Offset"] = -120,                    -- same as judgement positions but for the combo display
+    ["Combo X Offset"] = 0,                       -- same again
+    ["Hit Error Meter Y"] = 0,                    -- also same, but for hit error graph
+    ["Hit Error Meter X"] = 0,                    -- you get it by now
+    ["Hit Error Meter Height"] = 15,              -- how tall the hit error graph is
+    ["Hit Error Meter Width"] = 150,               -- how wide the hit error graph is
+    ["Hit Error Meter Solid"] = false,            -- if true, the graph will be made of colored rectangles to show where the judgment windows are, hits will be black, if false, the only visible part of the graph will be the hits, and they will be colored as the color of the judgmement they are
+    ["Hit Error Meter Fade"] = 1000,              -- how long in milliseconds a hit will take to fade from the hit error graph
+    ["Health Bar X"] = 350,
+    ["Health Bar Y"] = 300,
+    ["Health Bar Height"] = 700,
+    ["Health Bar Width"] = 15,
+    ["Health Bar Direction"] = "vertical",
+    ["Marvelous Color"] = rgb({0, 213, 255}),     -- color of marvelous (used for judgment display and hit error graph)
+    ["Perfect Color"] = rgb({0,  0, 225}),        -- color of perfect
+    ["Great Color"] = rgb({0, 255, 81}),          -- color of great
+    ["Good Color"] = rgb({0, 153, 81}),           -- color of good
+    ["Okay Color"] = rgb({210, 13, 81}),          -- color of okay
+    ["Miss Color"] = rgb({209, 0, 0}),            -- color of miss
 }
 
 
@@ -37,6 +37,7 @@ Skin.Fonts = {
     ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 15),
     ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 12),
     ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 35),
+    ["Menu Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 25),
 }
 
 Skin.Notes = {
@@ -45,6 +46,7 @@ Skin.Notes = {
     ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
     ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
 }
+
 
 Skin.Receptors = {
     Up = {

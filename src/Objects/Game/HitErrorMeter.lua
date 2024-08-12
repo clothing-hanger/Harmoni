@@ -1,4 +1,5 @@
 local HitErrorMeter = Class:extend()
+local tween
 
 function HitErrorMeter:new()
     self.x, self.y = Skin.Params["Hit Error Meter X"], Skin.Params["Hit Error Meter Y"]
@@ -6,6 +7,9 @@ function HitErrorMeter:new()
     self.solid = Skin.Params["Hit Error Meter Solid"]
     self.fadeTime = Skin.Params["Hit Error Meter Fade"]
     self.hits = {}
+    self.pointerX = 0
+    self.printablePointerX = {self.pointerX}
+    self.currentTime = 0
 end
 
 function HitErrorMeter:update(dt)
@@ -23,6 +27,8 @@ function HitErrorMeter:update(dt)
             i = i + 1
         end
     end
+    if tween then Timer.cancel(tween) end
+    tween = Timer.tween(0.2, self.printablePointerX, {self.pointerX}, "out-expo")
 end
 
 
@@ -47,19 +53,38 @@ function HitErrorMeter:addHit(noteTime)
     end
     table.insert(hitTable, self.fadeTime)
     table.insert(self.hits, hitTable)
+    self.pointerX = (noteTime / 100) * (self.width / 2)
+    self.currentTime = noteTime
 end
 
 --hitTable = {noteTime, r, g, b, fadeTime}      the format of a a hit in the hitTable
 
 function HitErrorMeter:draw()
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
-    love.graphics.setColor(1,1,1)
-    for i = 1,#self.hits do
-        love.graphics.setColor(self.hits[i][2], self.hits[i][3],self.hits[i][4], self.hits[i][5]/self.fadeTime)
-        love.graphics.rectangle("fill", self.hits[i][1], self.y, 5, self.height)
-    end
+    love.graphics.setColor(1, 1, 1)
 
-    love.graphics.rectangle("fill", -1, 0, 2, 10)
+    if self.solid then
+        for i = #JudgementNames, 1, -1 do
+            local Judgement = JudgementNames[i]
+            local timing = Judgements[Judgement].Timing
+            local color = Judgements[Judgement].Color
+            local scaledWidth = (timing / 100) * (self.width / 2)
+            love.graphics.setColor(color[1], color[2], color[3], 1)
+            love.graphics.rectangle("fill", -scaledWidth+4, self.y, scaledWidth * 2, self.height)  -- gotta add 4 to the X to account for width of a hit thingy
+        end
+    end
+    for i = 1, #self.hits do
+        local scaledX = (self.hits[i][1] / 100) * (self.width / 2)
+        love.graphics.setColor(self.hits[i][2], self.hits[i][3], self.hits[i][4], self.hits[i][5] / self.fadeTime)
+        if self.solid then
+            love.graphics.setColor(0,0,0,self.hits[i][5] / self.fadeTime)
+        end
+        love.graphics.rectangle("fill", scaledX, self.y, 5, self.height)
+    end
+    love.graphics.setColor(1,1,1)
+
+    love.graphics.setFont(defaultFont)
+    love.graphics.printf(string.format("%.0f", self.currentTime), (1 + self.printablePointerX[1])-25, self.y-self.height+2, 50, "center")
 
     love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
 end
