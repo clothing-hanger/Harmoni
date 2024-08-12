@@ -12,14 +12,7 @@ LanesPositions = {
     Inits.GameWidth/2 + (LaneWidth*1.5),
 }
 
-function ResizeLanePositions()
-    LanesPositions = {
-        Inits.GameWidth/2 - (LaneWidth*1.5),
-        Inits.GameWidth/2 - (LaneWidth*0.5),
-        Inits.GameWidth/2 + (LaneWidth*0.5),
-        Inits.GameWidth/2 + (LaneWidth*1.5),
-    }
-end
+
 
 laneCount = 4
 

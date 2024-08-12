@@ -116,8 +116,7 @@ end
 function love.resize(w, h)
     Inits.WindowWidth = w
     Inits.WindowHeight = h
-    ResizeLanePositions()
-
+  
 end
 
 function love.quit()
