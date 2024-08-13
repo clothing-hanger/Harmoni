@@ -2,7 +2,7 @@ function convertScrollSpeed(speed)
     return Inits.GameHeight / speed
 end
 
-BotPlay = true
+BotPlay = false
 LaneWidth = 120
 LaneHeight = 110
 ScrollSpeed = convertScrollSpeed(480)

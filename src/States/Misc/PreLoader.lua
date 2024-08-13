@@ -29,7 +29,7 @@ function PreLoader:update(dt)
             foundMeta = true
         end
     end
-    if not foundMeta then
+    if foundMeta then
         for i = 1,#DifficultyList do
             chart = Tinyyaml.parse(love.filesystem.read("Music/" .. SongList[frame] .. "/" .. DifficultyList[i]))
             if i == 1 then

@@ -13,6 +13,16 @@ function SongSelect:enter()
     DifficultyButtons = {}
     SongSelect:setupSongButtons()
     SongSelect:switchSong()
+
+    SongSelect:initObjects()
+end
+
+function SongSelect:initObjects()
+    Objects.Menu.ModifiersMenu:new()
+end
+
+function SongSelect:updateObjects(dt)
+    Objects.Menu.ModifiersMenu:update()
 end
 
 function SongSelect:setupSongButtons()
@@ -23,7 +33,6 @@ function SongSelect:setupSongButtons()
         
     end
 end
-
 
 function SongSelect:updateButtons(dt)
     local speed = 15
@@ -68,6 +77,8 @@ end
 
 function SongSelect:update(dt)
     SongSelect:updateButtons(dt)
+    SongSelect:updateObjects(dt)
+
     if Input:pressed("menuDown") then
         if MenuState == "Song" then SelectedSong = (SelectedSong % #SongList) + 1
         elseif MenuState == "Difficulty" then
@@ -170,6 +181,8 @@ function SongSelect:draw()
     love.graphics.setColor(1,1,1)
     love.graphics.setFont(Skin.Fonts["Menu Large"])
     love.graphics.printf(songName, 30, 30, 800, "left")
+
+    Objects.Menu.ModifiersMenu:draw()
 end
 
 function SongSelect:debug()

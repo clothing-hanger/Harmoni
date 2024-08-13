@@ -13,6 +13,7 @@ return {
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),
         DifficultyButton = require("Objects.Menu.DifficultyButton"),
+        ModifiersMenu = require("Objects.Menu.ModifiersMenu"),
     },
     Misc = {
     }
