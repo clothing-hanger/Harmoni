@@ -19,7 +19,7 @@ function Note:new(lane, StartTime)
 end
 
 function Note:update(dt)
-    self.Y = -(MusicTime - self.StartTime)*ScrollSpeed
+    self.Y = -(MusicTime - self.StartTime)*Settings.scrollSpeed
 end
 
 function Note:hit(noteTime, wasMiss)

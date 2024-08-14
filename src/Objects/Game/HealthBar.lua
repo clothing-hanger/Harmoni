@@ -17,7 +17,11 @@ function HealthBar:update(dt)
     end
 
     if tween then Timer.cancel(tween) end
-    tween = Timer.tween(0.1, printableHealth, {health}, "out-quad")
+    tween = Timer.tween(0.1, printableHealth, {health-0.001}, "out-quad")
+
+    if printableHealth[1] <= 0 then
+        States.Game.PlayState:gameOver()
+    end
 end
 
 function  HealthBar:draw()

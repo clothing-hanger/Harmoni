@@ -23,7 +23,7 @@ function PlayState:enter()
     combo = 0
     accuracy = 0
     grade = "-"
-    performance = difficulty*(accuracy/100)
+    performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
     health = 1
 
@@ -45,7 +45,7 @@ function PlayState:initObjects()
     Objects.Game.Judgement:new()
     Objects.Game.HUD:new()
     Objects.Game.Background:new(background)
-    Objects.Game.Background:setDimness(dimSetting, true)
+    Objects.Game.Background:setDimness(Settings.backgroundDimness, true)
     Objects.Game.ComboAlert:new()
     Objects.Game.Combo:new()
     Objects.Game.HitErrorMeter:new()
@@ -56,10 +56,11 @@ function PlayState:update(dt)
     if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
-    performance = difficulty* math.pow(accuracy/98, 6)
+    performance = metaData.difficulty* math.pow(accuracy/98, 6)
 
     updateMusicTimeFunction()
-    if MusicTime >= 0 and not Song:isPlaying() then
+    if Song and (MusicTime >= 0 and not Song:isPlaying()) then
+        Song:setPitch(Mods.songRate)
         Song:play()
     end
     for i, Lane in ipairs(lanes) do
@@ -71,6 +72,9 @@ function PlayState:update(dt)
         end
     end
 
+    if Mods.suddenDeath and Judgements["Miss"].Count > 0 then
+        PlayState:gameOver()
+    end
     
 end
 
@@ -81,7 +85,13 @@ function PlayState:updateObjects(dt)
 end
 
 function PlayState:gameOver()
+    if Mods.noFail then return end
     print("fucking loser")
+    gameOver = true
+    State.switch(States.Menu.SongSelect)
+    Song:stop()
+    Song = nil
+
 end
 
 function PlayState:judge(noteTime)
@@ -166,7 +176,7 @@ end
 function PlayState:draw()
     Objects.Game.Background:draw() 
     love.graphics.push()
-    love.graphics.translate(0, LaneHeight)
+    love.graphics.translate(0, Settings.laneHeight)
     for i, Receptor in ipairs(Receptors) do
         Receptor:draw()
     end
