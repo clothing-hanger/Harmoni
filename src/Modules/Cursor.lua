@@ -1,5 +1,4 @@
 function love.mousepressed()
-    print("test")
 end
 
 function updateCursor(dt)

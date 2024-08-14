@@ -127,6 +127,7 @@ end
 
 
 function SongSelect:switchToPlayState()
+    Objects.Menu.ModifiersMenu:configureMods()
     SongString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
     print(SongString)
     State.switch(States.Game.PlayState)

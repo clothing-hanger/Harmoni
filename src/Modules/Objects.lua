@@ -16,5 +16,9 @@ return {
         ModifiersMenu = require("Objects.Menu.ModifiersMenu"),
     },
     Misc = {
-    }
+    },
+    UI = {
+        Slider = require("Objects.UI.Slider"),
+        Toggle = require("Objects.UI.Toggle"),
+    },
 }

@@ -1,4 +1,5 @@
 local PlayState = State()
+Mods = {}
 
 local Directions = {
     "Left",
@@ -10,6 +11,7 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
+
     quaverParse(SongString)
 
     --Init local variables
@@ -35,6 +37,10 @@ function PlayState:enter()
 
 end
 
+function PlayState:initModifiers()
+
+end
+
 function PlayState:initObjects()
     Objects.Game.Judgement:new()
     Objects.Game.HUD:new()
@@ -47,7 +53,7 @@ function PlayState:initObjects()
 end
 
 function PlayState:update(dt)
-    if BotPlay then PlayState:checkBotInput() else PlayState:checkInput() end
+    if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
     performance = difficulty* math.pow(accuracy/98, 6)
