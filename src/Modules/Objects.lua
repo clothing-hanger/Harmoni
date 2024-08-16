@@ -14,8 +14,10 @@ return {
         SongButton = require("Objects.Menu.SongButton"),
         DifficultyButton = require("Objects.Menu.DifficultyButton"),
         ModifiersMenu = require("Objects.Menu.ModifiersMenu"),
+        ListMenu = require("Objects.Menu.ListMenu"),
     },
     Misc = {
+        -- imagine being the Objects.Misc table lmao stupid ass empty useless fuck
     },
     UI = {
         Slider = require("Objects.UI.Slider"),

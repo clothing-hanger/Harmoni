@@ -2,6 +2,7 @@ local SongSelect = State()
 SongList = love.filesystem.getDirectoryItems("Music")
 local MenuState
 local selectedSongHeight = Inits.GameHeight/2
+local hovered
 
 function SongSelect:enter()
     MenuState = "Song"
@@ -19,10 +20,16 @@ end
 
 function SongSelect:initObjects()
     Objects.Menu.ModifiersMenu:new()
+    Objects.Menu.ListMenu:new()
+
+    for i = 1,10 do
+        Objects.Menu.ListMenu:addItem({text = "PLACEHOLDER .. " .. i})
+    end
 end
 
 function SongSelect:updateObjects(dt)
     Objects.Menu.ModifiersMenu:update()
+    Objects.Menu.ListMenu:update(dt)
 end
 
 function SongSelect:setupSongButtons()
@@ -30,9 +37,9 @@ function SongSelect:setupSongButtons()
         print("Music/"..SongList[i].."/meta.lua")
         local metaData = love.filesystem.load("Music/"..SongList[i].."/meta.lua")()
         table.insert(SongButtons, Objects.Menu.SongButton(metaData.songName, "PLACEHOLDER", "PLACEHOLDER", i))
-        
     end
 end
+
 
 function SongSelect:updateButtons(dt)
     local speed = 15
@@ -53,9 +60,15 @@ function SongSelect:updateButtons(dt)
             DifficultyButton.y = DifficultyButton.y + (targetY - DifficultyButton.y) * speed * dt
         end
     end
+
+    hovered = cursorX > Inits.GameWidth/2
 end
 
-function SongSelect:scroll(y)
+function SongSelect:wheelmoved(y)
+
+    Objects.Menu.ListMenu:wheelmoved(y)
+
+    if not hovered then return end
     if MenuState == "Song" then
         SelectedSong = SelectedSong - y
     elseif MenuState == "Difficulty" then
@@ -71,6 +84,7 @@ function SongSelect:scroll(y)
     elseif SelectedDifficulty < 1 then
         SelectedDifficulty = #SongList
     end
+
 end
 
 
@@ -184,6 +198,7 @@ function SongSelect:draw()
     love.graphics.printf(songName, 30, 30, 800, "left")
 
     Objects.Menu.ModifiersMenu:draw()
+    --Objects.Menu.ListMenu:draw()
 end
 
 function SongSelect:debug()

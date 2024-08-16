@@ -12,6 +12,7 @@ settingsData = {
     ["Gameplay"] = {
         id = 1,
         scrollSpeed = {type = "number", value = 480, min = 100, max = 10000, name = "Scroll Speed", description = "How long in milliseconds it takes the notes to reach the receptors"},
+        scrollDirection = {type = "select", value = "Up", options = {"Up", "Down", "Split"}, name = "Scroll Direction", description = "Direction the notes scroll"}, -- adding funny split scroll
         backgroundDimness = {type = "number", value = 80, min = 0, max = 100, name = "Background Dimness", description = "How dim the background in"},
         laneWidth = {type = "number", value = 120, min = 30, max = 500, name = "Lane Width", description = "The distance between the note lanes"},
         laneHeight = {type = "number", value = 110, min = 0, max = Inits.GameHeight/2, description = "The distance between the receptors and the edge of the screen"},

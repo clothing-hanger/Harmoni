@@ -94,9 +94,7 @@ function love.update(dt)
 end
 
 function love.wheelmoved(x,y)
-    if State.current() == States.Menu.SongSelect then
-        States.Menu.SongSelect:scroll(y)
-    end
+    State.wheelmoved(y)
 end
 
 

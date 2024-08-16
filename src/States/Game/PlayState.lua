@@ -1,6 +1,8 @@
 local PlayState = State()
 Mods = {}
 
+
+
 local Directions = {
     "Left",
     "Down",
@@ -26,6 +28,7 @@ function PlayState:enter()
     performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
     health = 1
+    waveTime = 1
 
     
     updateMusicTime = true
@@ -68,14 +71,19 @@ function PlayState:update(dt)
             if Note.StartTime - MusicTime > 15000 then 
                 break
            end
-            Note:update()
+            Note:update(dt)
         end
     end
 
     if Mods.suddenDeath and Judgements["Miss"].Count > 0 then
         PlayState:gameOver()
     end
-    
+
+    if Mods.waves then
+        waveTime = math.sin(love.timer.getTime()) * 0.3
+        print(waveTime)
+        if Song then Song:setPitch(1 + waveTime) end  
+    end
 end
 
 function PlayState:updateObjects(dt)

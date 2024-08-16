@@ -74,17 +74,17 @@ function quaverParse(file)
         end
         
         if Mods.mirror then
-            local mirrorMap4 = {1, 2, 3, 4}
-            local mirrorMap7 = {1, 2, 3, 4, 5, 6, 7}
+            print("mirro")
+            local mirrorMap4 = {4,3,2,1}
+            local mirrorMap7 = {7,6,5,4,3,2,1}
             
             if metaData.inputMode == "4" then
-                lane = mirrorMap4[5 - lane]
+                lane = mirrorMap4[lane]
             elseif metaData.inputMode == "7" then
-                if lane <= 3 then
-                    lane = mirrorMap7[8 - lane]
-                end
+                lane = mirrorMap7[lane]
             end
         end
+
 
         local note = Objects.Game.Note(lane, startTime, endTime)
         table.insert(lanes[lane], note)
