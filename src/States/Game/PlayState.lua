@@ -1,8 +1,6 @@
 local PlayState = State()
 Mods = {}
 
-
-
 local Directions = {
     "Left",
     "Down",
@@ -13,12 +11,13 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
-
     quaverParse(SongString)
 
-    --Init local variables
-    local myBalls = math.huge
-
+    --Init self variables
+    self.myBalls = math.huge
+    self.ScrollVelocityMarks = {}
+    self.SvIndex = 1
+    self.CurrentTime = 0
 
     --Init global variables
     score = 0
@@ -29,7 +28,6 @@ function PlayState:enter()
     NPSData = {NPS = {}, HPS = {}}
     health = 1
     waveTime = 1
-
     
     updateMusicTime = true
     MusicTime = -3000
@@ -38,6 +36,8 @@ function PlayState:enter()
     end
     PlayState:initObjects()
 
+    PlayState:initSVMarks()
+    PlayState:initNotePositions()
 end
 
 function PlayState:initModifiers()
@@ -59,9 +59,11 @@ function PlayState:update(dt)
     if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
-    performance = metaData.difficulty* math.pow(accuracy/98, 6)
+    ---@diagnostic disable-next-line: deprecated
+    performance = metaData.difficulty * math.pow(accuracy/98, 6)
 
     updateMusicTimeFunction()
+    self:updateTime()
     if Song and (MusicTime >= 0 and not Song:isPlaying()) then
         Song:setPitch(Mods.songRate)
         Song:play()
@@ -84,6 +86,64 @@ function PlayState:update(dt)
         print(waveTime)
         if Song then Song:setPitch(1 + waveTime) end  
     end
+end
+
+function PlayState:initSVMarks()
+    if #scrollVelocities < 1 then
+        return
+    end
+
+    local first = scrollVelocities[1]
+
+    local time = first.StartTime
+    table.insert(self.ScrollVelocityMarks, time)
+
+    for i = 2, #scrollVelocities do
+        local prev = scrollVelocities[i-1]
+        local current = scrollVelocities[i]
+
+        time = time + (current.StartTime - prev.StartTime) * prev.Multiplier
+        table.insert(self.ScrollVelocityMarks, time)
+    end
+end
+
+function PlayState:initNotePositions()
+    for _, lane in ipairs(lanes) do
+        for _, note in ipairs(lane) do
+            note.InitialStartTime = self:getPositionFromTime(note.StartTime)
+        end
+    end
+end
+
+function PlayState:getPositionFromTime(time, index)
+    local index = index or -1
+
+    if index == -1 then
+        for i = 1, #scrollVelocities do
+            if time < scrollVelocities[i].StartTime then
+                index = i
+                break
+            else
+                index = 1
+            end
+        end
+    end
+
+    
+    local previous = scrollVelocities[index-1] or Objects.Game.ScrollVelocity(0, 1)
+
+    local pos = self.ScrollVelocityMarks[index-1] or 0
+    pos = pos + (time - previous.StartTime) * previous.Multiplier
+
+    return pos
+end
+
+function PlayState:updateTime()
+    while (self.SvIndex < #scrollVelocities and scrollVelocities[self.SvIndex].StartTime <= (MusicTime)) do
+        self.SvIndex = plusEq(self.SvIndex)
+    end
+
+    self.CurrentTime = self:getPositionFromTime(MusicTime, self.SvIndex)
 end
 
 function PlayState:updateObjects(dt)
@@ -170,11 +230,19 @@ function PlayState:checkBotInput()
         for q, Note in ipairs(Lane) do
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
-            if Note.Lane == i and ConvertedNoteTime < 1 and not Note.wasHit then
+            if Note.Lane == i and NoteTime > 1 and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime, false)
                 Note:hit(ConvertedNoteTime)
-                Objects.Game.HitErrorMeter:addHit(NoteTime)            
+                Objects.Game.HitErrorMeter:addHit(NoteTime)           
                 table.insert(NPSData.NPS, 1000)
+                break
+            end
+
+            if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
+                PlayState:judge(ConvertedNoteTime)
+                Note:hit(ConvertedNoteTime, true)
+                Objects.Game.Combo:incrementCombo(true)
+                Objects.Game.HitErrorMeter:addHit(NoteTime)
                 break
             end
         end

@@ -40,9 +40,10 @@ function love.run()
 			love.graphics.present()
 		end
 
-		--if love.timer then love.timer.sleep(0.001) end
+		if love.timer then love.timer.sleep(0.001) end
 	end
 end
+love.audio.setVolume(0.15)
 
 function toGameScreen(x, y)
     -- converts a position to the game screen
@@ -116,7 +117,7 @@ function love.draw()
 
     love.graphics.setShader()
 
-    debug.printInfo()
+   --[[  debug.printInfo() ]]
 end
 
 function love.resize(w, h)

@@ -14,7 +14,7 @@ function InitializeJudgments()
         ["Perfect"] = {
             Judgement = "Perfect",
             Timing = 56,
-            Score = 4/5,
+            Score = 0.8,
             Count = 0,
             ID = 2,
             Color = Skin.Params["Perfect Color"],
@@ -23,7 +23,7 @@ function InitializeJudgments()
         ["Great"] = {
             Judgement = "Great",
             Timing = 86,
-            Score = 3/5,
+            Score = 0.6,
             Count = 0,
             ID = 3,
             Color = Skin.Params["Great Color"],
@@ -32,7 +32,7 @@ function InitializeJudgments()
         ["Good"] = {
             Judgement = "Good",
             Timing = 106,
-            Score = 2/5,
+            Score = 0.4,
             Count = 0,
             ID = 4,
             Color = Skin.Params["Good Color"],
@@ -42,7 +42,7 @@ function InitializeJudgments()
         ["Okay"] = {
             Judgement = "Okay",
             Timing = 126,
-            Score = 1/5,
+            Score = 0.2,
             Count = 0,
             ID = 5,
             Color = Skin.Params["Okay Color"],

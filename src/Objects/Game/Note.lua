@@ -8,17 +8,29 @@ Note.Directions = {
     "Right",
 }
 
-function Note:new(lane, StartTime)
+function Note:new(lane, StartTime, EndTime)
     self.image = Skin.Notes[self.Directions[lane]]
     self.Lane = lane
     self.X = LanesPositions[lane]
     self.Y = Inits.GameHeight*2
     self.StartTime = StartTime
+    self.EndTime = EndTime or 0 -- if 0, not a hold
     self.visible = true
     self.wasHit = false
     self.tooLate = false
     if Mods.fadeIn then
         self.alpha = 0
+    end
+
+    self.InitialStartTime = 0
+    self.InitialEndtime = 0
+end
+
+function Note:getNotePosition(time)
+    if Settings.downscroll then
+        return Inits.GameHeight - 200 + (States.Game.Gameplay.CurrentTime - time) * Settings.scrollSpeed
+    else
+        return -(States.Game.PlayState.CurrentTime - time) * Settings.scrollSpeed
     end
 end
 
@@ -28,7 +40,8 @@ function Note:update(dt)
         self.StartTime = self.StartTime - waveTime
     end
 
-    self.Y = -(MusicTime - self.StartTime)*Settings.scrollSpeed
+    --[[ self.Y = Inits.GameHeight-200+(MusicTime - self.StartTime)*Settings.scrollSpeed ]]
+    self.Y = self:getNotePosition(self.InitialStartTime)
 
     if Mods.fadeOut and Settings.scrollDirection == "Up" then
         if self.Y < Inits.GameHeight/2 then
@@ -41,9 +54,6 @@ function Note:update(dt)
             self.alpha = self.alpha+5*dt
         end
     end
-
-
-    
 end
 
 function Note:hit(noteTime, wasMiss)
