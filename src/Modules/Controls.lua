@@ -13,5 +13,8 @@ Input = (require("Libraries.Baton")).new({
         lane2 = {"key:f"},
         lane3 = {"key:j"},
         lane4 = {"key:k"},
+
+
+        debugConsoleToggle = {"key:`"}
     }
 })

@@ -1,5 +1,5 @@
 Inits = require("inits")
-
+utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 
 function love.run()
@@ -43,6 +43,8 @@ function love.run()
 		if love.timer then love.timer.sleep(0.001) end
 	end
 end
+
+
 love.audio.setVolume(0.15)
 
 function toGameScreen(x, y)
@@ -84,20 +86,34 @@ function love.load()
 
     State.switch(States.Misc.PreLoader)
     require("TEMP/setup shit")
+    debugInit()
 
 end
 
 function love.update(dt)
-    Input:update()
+    if not console.isOpen then Input:update() end
     State.update(dt)
     Timer.update(dt)
     updateCursor(dt)
+    debugUpdate(dt)
 end
 
 function love.wheelmoved(x,y)
     State.wheelmoved(y)
 end
 
+function love.textinput(text)
+    if console.isOpen then consoleTextinpput(text) end
+end
+
+function love.keypressed(key)
+    if console.isOpen then
+        consoleKeypressed(key)
+    end
+    if key == "f1" then
+        console.isOpen = not console.isOpen
+    end
+end
 
 function love.draw()
     love.graphics.push()
@@ -117,7 +133,7 @@ function love.draw()
 
     love.graphics.setShader()
 
-   --[[  debug.printInfo() ]]
+    debugDraw()
 end
 
 function love.resize(w, h)

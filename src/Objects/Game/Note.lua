@@ -40,6 +40,8 @@ function Note:update(dt)
         self.StartTime = self.StartTime - waveTime
     end
 
+    if Mods.ramp then self.StartTime = self.StartTime + rampTime end
+
     --[[ self.Y = Inits.GameHeight-200+(MusicTime - self.StartTime)*Settings.scrollSpeed ]]
     self.Y = self:getNotePosition(self.InitialStartTime)
 

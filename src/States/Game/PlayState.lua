@@ -11,8 +11,9 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
-    quaverParse(SongString)
+    MusicTime = -3000
 
+    quaverParse(SongString)
     --Init self variables
     self.myBalls = math.huge
     self.ScrollVelocityMarks = {}
@@ -27,10 +28,17 @@ function PlayState:enter()
     performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
     health = 1
+
+    -- Modifier stuff
     waveTime = 1
+    rampTime = 0.8
     
+
+
+
+
     updateMusicTime = true
-    MusicTime = -3000
+    
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
@@ -59,12 +67,12 @@ function PlayState:update(dt)
     if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
-    ---@diagnostic disable-next-line: deprecated
+    
     performance = metaData.difficulty * math.pow(accuracy/98, 6)
 
     updateMusicTimeFunction()
     self:updateTime()
-    if Song and (MusicTime >= 0 and not Song:isPlaying()) then
+    if Song and (MusicTime >= 0 and not Song:isPlaying()) then -- to make sure it doesnt restart
         Song:setPitch(Mods.songRate)
         Song:play()
     end
@@ -85,6 +93,12 @@ function PlayState:update(dt)
         waveTime = math.sin(love.timer.getTime()) * 0.3
         print(waveTime)
         if Song then Song:setPitch(1 + waveTime) end  
+    end
+
+    if Mods.rampUp then
+        if Mods.rampUp  then
+        end
+        
     end
 end
 
@@ -139,7 +153,7 @@ function PlayState:getPositionFromTime(time, index)
 end
 
 function PlayState:updateTime()
-    while (self.SvIndex < #scrollVelocities and scrollVelocities[self.SvIndex].StartTime <= (MusicTime)) do
+    while (self.SvIndex <= #scrollVelocities and scrollVelocities[self.SvIndex].StartTime <= (MusicTime)) do
         self.SvIndex = plusEq(self.SvIndex)
     end
 

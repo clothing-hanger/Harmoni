@@ -4,6 +4,7 @@ return {
     },
     Menu = {
         SongSelect = require("States.Menu.SongSelect"),
+        SettingsMenu = require("States.Menu.SettingsMenu"),
     },
     Misc = {
         PreLoader = require("States.Misc.PreLoader")
