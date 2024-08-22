@@ -1,6 +1,7 @@
 Inits = require("inits")
 utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
+love.filesystem.createDirectory("Settings")
 
 function love.run()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -75,6 +76,7 @@ function love.load()
     require("Modules.String")
     require("Modules.RGB")
     require("Modules.MusicTime")
+    require("Modules.TableToFile")
     require("Modules.Settings")
     require("Modules.Parse")
     require("Modules.Debug")
@@ -82,6 +84,8 @@ function love.load()
     require("Modules.Grades")
     require("Modules.DifficultyCalculator")
     require("Modules.Cursor")
+
+    loadSettings()
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Misc.PreLoader)
@@ -91,15 +95,22 @@ function love.load()
 end
 
 function love.update(dt)
+    cursorText = nil
     if not console.isOpen then Input:update() end
     State.update(dt)
     Timer.update(dt)
     updateCursor(dt)
     debugUpdate(dt)
+
+    mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
 end
 
 function love.wheelmoved(x,y)
     State.wheelmoved(y)
+end
+
+function love.mousemoved()
+    mouseTimer = 1000
 end
 
 function love.textinput(text)
@@ -130,6 +141,7 @@ function love.draw()
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+    cursorTextDraw()
 
     love.graphics.setShader()
 

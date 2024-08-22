@@ -107,11 +107,9 @@ function ModifiersMenu:setUpMenu(menu)
             objectNumber = plusEq(objectNumber)
 
             if Modifier.type == "number" then   -- make sure to not try to do anything with id
-                --print("are you running")
-                self.sliders[i] = Objects.UI.Slider(self.x+30, self.y+50*objectNumber, self.width-60, Modifier.min, Modifier.max, Modifier.value, Modifier.name)
+                self.sliders[i] = Objects.UI.Slider(self.x+30, self.y+50*objectNumber, self.width-60, Modifier.min, Modifier.max, Modifier.value, Modifier.name, Modifier.description)
             elseif Modifier.type == "toggle" then
-                print("FJDHKSHJKFDJHKUFHD")
-                self.toggles[i] = Objects.UI.Toggle(self.x+30, self.y+50*objectNumber, self.width-60, 40, Modifier.value, Modifier.name)
+                self.toggles[i] = Objects.UI.Toggle(self.x+30, self.y+50*objectNumber, self.width-60, 40, Modifier.value, Modifier.name, Modifier.description)
             end
         end
     end

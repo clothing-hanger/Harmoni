@@ -1,6 +1,7 @@
 local Slider = Class:extend()
 
-function Slider:new(x, y, width, min, max, value, name)
+function Slider:new(x, y, width, min, max, value, name, description)
+    self.description = description or "NO DESCRIPTION SET YOU IDIOT"
     self.x = x
     self.y = y
     self.width = width
@@ -39,6 +40,12 @@ function Slider:update(dt)
     else
         self.dragging = false
     end
+    
+    self.hovered = cursorX > self.x and cursorX < self.x + self.width and cursorY > self.y and cursorY < self.y + self.height
+
+    if self.hovered then 
+        cursorText = self.description
+    end
 
 end
 
@@ -49,13 +56,14 @@ end
 function Slider:draw()
     -- slider rectangle thingy
     love.graphics.setColor(0.7, 0.7, 0.7)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    love.graphics.line(self.x, self.y + self.height / 2, self.x + self.width, self.y + self.height / 2)
     -- slider circle thingy
     love.graphics.setColor(1, 0.5, 0.5)
     love.graphics.circle("fill", self.knobX, self.y + self.height / 2, self.knobRadius)
     -- print the value
-    love.graphics.setColor(0,0,0)
+    love.graphics.setColor(1,1,1)
     love.graphics.print(string.format("%.2f", self.value), self.knobX + 15, self.y - 5)
 end
+
 
 return Slider

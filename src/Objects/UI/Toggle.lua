@@ -1,30 +1,37 @@
 local Toggle = Class:extend()
 
-function Toggle:new(x, y, width, height, initialState, name)
+function Toggle:new(x, y, width, height, initialState, name, description)
+    self.description = description
     self.x = x
     self.y = y
     self.width = width
     self.height = height
     self.value = initialState or false
     self.name = name
-    self.isHovered = false
+    self.hovered = false
     self.isPressed = false
 end
 
 function Toggle:update()
-    self.isHovered = cursorX > self.x and cursorX < self.x + self.width and cursorY > self.y and cursorY < self.y + self.height
+    self.hovered = cursorX > self.x and cursorX < self.x + self.width and cursorY > self.y and cursorY < self.y + self.height
     
     if Input:pressed("menuClickLeft") then
-        if self.isHovered then
+        if self.hovered then
             self.isPressed = true
         end
     else
         if self.isPressed then
             self.isPressed = false
-            if self.isHovered then
+            if self.hovered then
                 self.value = not self.value
             end
         end
+    end
+
+        
+
+    if self.hovered then 
+        cursorText = self.description
     end
 end
 

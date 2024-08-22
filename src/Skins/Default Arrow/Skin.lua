@@ -38,6 +38,8 @@ Skin.Fonts = {
     ["HUD Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 12),
     ["Combo"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 35),
     ["Menu Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 25),
+    ["Menu Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 15),
+    ["Menu Extra Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 12),
 }
 
 Skin.Notes = {

@@ -117,7 +117,11 @@ function SongSelect:update(dt)
             SongSelect:switchToPlayState()
         end
     elseif Input:pressed("menuBack") then
-        SongSelect:SwitchMenuState("Song")
+        if MenuState == "Difficulty" then
+            SongSelect:SwitchMenuState("Song")
+        elseif MenuState == "Song" then
+            State.switch(States.Menu.TitleScreen)
+        end
     end
 end
 

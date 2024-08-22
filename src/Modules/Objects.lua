@@ -23,5 +23,6 @@ return {
     UI = {
         Slider = require("Objects.UI.Slider"),
         Toggle = require("Objects.UI.Toggle"),
+        Select = require("Objects.UI.Select"),
     },
 }

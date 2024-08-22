@@ -52,7 +52,7 @@ function PreLoader:update(dt)
     else
         print("Meta Found")
     end
-    if frame == #SongList then State.switch(States.Menu.SongSelect) end
+    if frame == #SongList then State.switch(States.Menu.TitleScreen) end
 end
 
 
