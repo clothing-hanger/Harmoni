@@ -114,6 +114,7 @@ function SongSelect:update(dt)
                 SongSelect:SwitchMenuState("Difficulty")
             end
         elseif MenuState == "Difficulty" then
+            MusicTime = -100000
             SongSelect:switchToPlayState()
         end
     elseif Input:pressed("menuBack") then

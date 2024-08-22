@@ -38,6 +38,8 @@ function PlayState:enter()
 
 
     updateMusicTime = true
+
+    if fuck then updateMusicTime = false end   -- for trying to debug songs not resetting
     
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))

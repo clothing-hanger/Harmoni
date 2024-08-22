@@ -28,8 +28,8 @@ commands = {
         name = "skipToEnd",
         help = "is SUPPOSED to skip to 5 seconds before the last note BUT IT DOESNT FUCKING WORK",
         func = function()
-            MusicTime = (metaData.songLengthToLastNote - 5)*1000
-            Song:seek(metaData.songLengthToLastNote)
+           -- MusicTime = (metaData.songLengthToLastNote - 5)*1000
+          --  Song:seek(metaData.songLengthToLastNote)
         end
     },
     {
@@ -175,7 +175,13 @@ function consoleDraw()
 
 
 
-        
+
+
+end
+
+function debugDraw()
+    consoleDraw()
+            
     love.graphics.translate(0, Inits.GameHeight-200)
     love.graphics.setFont(defaultFont)
     love.graphics.setColor(0,0,0,0.5)
@@ -188,10 +194,5 @@ function consoleDraw()
         "\nMusic Time (MS): " .. tostring(MusicTime)
     )
     love.graphics.translate(0, -Inits.GameHeight-200)
-
-end
-
-function debugDraw()
-    consoleDraw()
 end
 

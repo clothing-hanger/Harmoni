@@ -102,6 +102,8 @@ function love.update(dt)
     updateCursor(dt)
     debugUpdate(dt)
 
+    updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
+
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
 end
 
@@ -115,6 +117,12 @@ end
 
 function love.textinput(text)
     if console.isOpen then consoleTextinpput(text) end
+
+    if State.current() == States.Menu.SettingsMenu then
+        for _, TextBox in pairs(textBoxes) do
+            TextBox:textinput(text)
+        end
+    end
 end
 
 function love.keypressed(key)
@@ -123,6 +131,11 @@ function love.keypressed(key)
     end
     if key == "f1" then
         console.isOpen = not console.isOpen
+    end
+    if State.current() == States.Menu.SettingsMenu then
+        for _, TextBox in pairs(textBoxes) do
+            TextBox:keypressed(key)
+        end
     end
 end
 

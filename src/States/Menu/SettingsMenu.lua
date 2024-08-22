@@ -33,7 +33,8 @@ local tabs = {
         {key = "showFramerate", name = "Show Framerate", type = "toggle", value = true, description = "(NOT ADDED) Display current FPS in the bottom right corner"},
     },
     {
-        tab = "Keybinds (NOT ADDED)"
+        tab = "Keybinds",
+        {key = "keyBinds4k", name = "4 Key Keybinds", type = "text", value = "dfjk", description = "Type 4 characters to set as your 4 key keyinds"},
     },
     {
         tab = "Skin (NOT ADDED)"
@@ -43,10 +44,13 @@ local tabs = {
 
 
 function SettingsMenu:enter()
+
     tabButtons = {}
     sliders = {}
     toggles = {}
     selects = {}
+    textBoxes = {}
+
     tabButtonWidth = 130
     tabButtonHeight = 50
     settingWidth = 300
@@ -70,6 +74,7 @@ function SettingsMenu:setupSettingsTab(tabname)
     sliders = {}
     toggles = {}
     selects = {}
+    textBoxes = {}
     local tabName = tabname
     for Tab = 1,#tabs do
         if tabs[Tab].tab == tabName then
@@ -80,6 +85,8 @@ function SettingsMenu:setupSettingsTab(tabname)
                     toggles[tabs[Tab][Setting].key] = Objects.UI.Toggle(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 elseif tabs[Tab][Setting].type == "select" then
                     selects[tabs[Tab][Setting].key] = Objects.UI.Select(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].options, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
+                elseif tabs[Tab][Setting].type == "text" then
+                    textBoxes[tabs[Tab][Setting].key] = Objects.UI.TextBox(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 end
             end
         end
@@ -130,6 +137,8 @@ function SettingsMenu:saveSettings()
     
     -- Saving the settings to a file
     love.filesystem.write("Settings/Settings.lua", savedSettings)
+
+    loadSettings()
 end
 
 function SettingsMenu:updateObjects(dt)
@@ -166,6 +175,17 @@ function SettingsMenu:updateObjects(dt)
         end
     end
 
+    for key, TextBox in pairs(textBoxes) do
+        TextBox:update()
+        for Tab = 1, #tabs do
+            for Setting = 1, #tabs[Tab] do
+                if tabs[Tab][Setting].key == key then
+                    tabs[Tab][Setting].value = TextBox:giveValue()
+                end
+            end
+        end
+    end
+
 end
 
 function SettingsMenu:TabButtonDraw(TabButton) -- not gonna use actual objects for this because this is good enough, even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)
@@ -192,6 +212,10 @@ function SettingsMenu:draw()
 
     for i, Select in pairs(selects) do
         Select:draw()
+    end
+
+    for i, TextBox in pairs(textBoxes) do
+        TextBox:draw()
     end
 
 end

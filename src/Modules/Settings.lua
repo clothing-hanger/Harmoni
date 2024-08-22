@@ -1,5 +1,10 @@
 function loadSettings()
     settingsFile = love.filesystem.load("Settings/Settings.lua")
+
+    if not settingsFile then
+        States.Menu.SettingsMenu:saveSettings()  -- sets up default settings
+    end
+
     Settings = settingsFile()
     print(Settings.backgroundDim)
     
@@ -9,6 +14,10 @@ function loadSettings()
         Inits.GameWidth/2 + (Settings.laneWidth*0.5),
         Inits.GameWidth/2 + (Settings.laneWidth*1.5),
     }
+
+    keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+
+    setupControls()
 
 end
 
