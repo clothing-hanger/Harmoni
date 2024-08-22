@@ -10,14 +10,14 @@ local settingHeight
 local tabs = {
     {
         tab = "Gameplay",
-        {key = "scrollSpeed", name = "Scroll Speed", type = "number", value = 480, min = 100, max = 2000, description = "(ADDED) How long in milliseconds it takes for a note to reach the receptors"},
+        {key = "scrollSpeed", name = "Scroll Speed", type = "number", value = 480, min = 100, max = 2000, description = "How long in milliseconds it takes for a note to reach the receptors"},
         {key = "scrollDirection", name = "Scroll Direction", type = "select", value = "Up", options = {"Up", "Down"}, description = "(NOT ADDED) Direction the notes scroll"},
         {key = "alwaysPlayFirstMiss", name = "Always Play First Miss Sound", type = "toggle", value = true, description = "(NOT ADDED) Always play the miss sound on the first miss, regardless of whether or not miss sounds are enabled"},
         {key = "playMissSound", name = "Play Miss Sounds", type = "toggle", value = true, description = "(NOT ADDED) Play the miss sound when you miss a note"},
-        {key = "backgroundDim", name = "Background Dimness", type = "number", value = 80, min = 0, max = 100, description = "(ADDED) How dim the background is during gameplay"},
+        {key = "backgroundDim", name = "Background Dimness", type = "number", value = 80, min = 0, max = 100, description = "How dim the background is during gameplay"},
         {key = "backgroundRed", name = "Low Health Background Redness", type = "toggle", value = true, description = "(NOT ADDED) Make the background red when you are about to fail"},
-        {key = "laneWidth", name = "Lane Width", type = "number", value = 120, min = 50, max = 500, description = "(ADDED) The space between the note lanes"},
-        {key = "laneHeight", name = "Lane Height", type = "number", value = 120, min = 50, max = 500, description = "(ADDED) The space between the edge of the screen and the receptors"},
+        {key = "laneWidth", name = "Lane Width", type = "number", value = 120, min = 50, max = 500, description = "The space between the note lanes"},
+        {key = "laneHeight", name = "Lane Height", type = "number", value = 120, min = 50, max = 500, description = "The space between the edge of the screen and the receptors"},
         {key = "backgroundBump", name = "Background Bumping", type = "select", value = "NPS Based", options = {"NPS Based", "BPM Only", "Off"}, description = "(NOT ADDED) Background bumps to the BPM, NPS Based makes it bump more or less depending on the current NPS"},
     },
     {
