@@ -274,7 +274,9 @@ end
 function PlayState:draw()
     Objects.Game.Background:draw() 
     love.graphics.push()
-    love.graphics.translate(0, Settings.laneHeight)
+    love.graphics.translate(0, (Settings.scrollDirection == "Down" and Inits.GameHeight) or 0)
+    love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
+    
     for i, Receptor in ipairs(Receptors) do
         Receptor:draw()
     end
