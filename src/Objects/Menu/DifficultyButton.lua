@@ -8,6 +8,7 @@ function DifficultyButton:new(diffName, charterName, difficulty, id)
     self.difficulty = difficulty or "Difficulty not found!"
     self.hovered = false
     self.id = id
+    self.selected = false
 end
 
 function DifficultyButton:update(dt)
@@ -28,10 +29,11 @@ function DifficultyButton:click()
 end
 
 function DifficultyButton:draw()
+    if self.selected then love.graphics.setColor(0, 1, 1) end
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
     love.graphics.print(self.diffName, self.x, self.y)
     --print(self.diffName)
-
+    love.graphics.setColor(1, 1, 1)
 end
 
 function DifficultyButton:release()

@@ -92,6 +92,7 @@ function love.load()
     State.switch(States.Misc.PreLoader)
     require("TEMP/setup shit")
     debugInit()
+    riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")
 
 end
 
@@ -155,7 +156,11 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
+    if freakyMode then
+        love.graphics.setShader(riodejanerio)
+    end
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.setShader()
     cursorTextDraw()
 
     love.graphics.setShader()

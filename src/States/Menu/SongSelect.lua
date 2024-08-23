@@ -62,6 +62,7 @@ function SongSelect:updateButtons(dt)
     end
 
     hovered = cursorX > Inits.GameWidth/2
+    DifficultyButtons[SelectedDifficulty].selected = true
 end
 
 function SongSelect:wheelmoved(y)
