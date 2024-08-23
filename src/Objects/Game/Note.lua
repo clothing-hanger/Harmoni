@@ -27,8 +27,8 @@ function Note:new(lane, StartTime, EndTime)
 end
 
 function Note:getNotePosition(time)
-    if Settings.downscroll then
-        return Inits.GameHeight - 200 + (States.Game.Gameplay.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+    if Settings.scrollDirection == "Down" then
+        return (States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     else
         return -(States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     end
@@ -45,15 +45,27 @@ function Note:update(dt)
     --[[ self.Y = Inits.GameHeight-200+(MusicTime - self.StartTime)*Settings.scrollSpeed ]]
     self.Y = self:getNotePosition(self.InitialStartTime)
 
-    if Mods.fadeOut and Settings.scrollDirection == "Up" then
-        if self.Y < Inits.GameHeight/2 then
-            self.alpha = self.alpha-10*dt
+    if Mods.fadeOut then
+        if Settings.scrollDirection == "Up" then  -- fix downscroll
+            if self.Y < Inits.GameHeight/2 then
+                self.alpha = self.alpha-10*dt
+            end
+        else
+            if self.Y > Inits.GameHeight/2 then
+                self.alpha = self.alpha-10*dt
+            end
         end
     end
 
-    if Mods.fadeIn and Settings.scrollDirection == "Up" then
-        if self.Y < Inits.GameHeight/2+200 then
-            self.alpha = self.alpha+5*dt
+    if Mods.fadeIn then
+        if Settings.scrollDirection == "Up" then  -- fix downscroll
+            if self.Y < Inits.GameHeight/2+200 then
+                self.alpha = self.alpha+5*dt
+            end
+        else
+            if self.Y > Inits.GameHeight/2-200 then
+                self.alpha = self.alpha+5*dt
+            end
         end
     end
 end
@@ -65,7 +77,16 @@ function Note:hit(noteTime, wasMiss)
 end
 
 function Note:draw()
-    if not self.visible or not (self.Y < Inits.GameHeight) or (self.Y < 0 - Skin.Params["Note Size"]) then return end
+    if Settings.scrollDirection == "Up" then
+        if not self.visible or self.Y > Inits.GameHeight or self.Y < 0 then
+            return
+        end
+    else
+        if not self.visible or self.Y < -Inits.GameHeight or self.Y > Inits.GameHeight*2 then
+            return
+        end
+    end
+    
     love.graphics.setColor(1,1,1,self.alpha)
     if self.tooLate then love.graphics.setColor(0.5,0.5,0.5,1) end
     love.graphics.draw(self.image, self.X, self.Y, 0, Skin.Params["Note Size"]/self.image:getWidth(), Skin.Params["Note Size"]/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
