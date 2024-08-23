@@ -75,5 +75,13 @@ Skin.Judgements = {
 }
 
 Skin.Menu = {
-    ["loadingSpinner"] = love.graphics.newImage(SkinFolder .. "MENU/logoH.png"),
+    ["Loading Spinner"] = love.graphics.newImage(SkinFolder .. "MENU/logoH.png"),
+}
+
+Skin.Sounds = {
+    ["First Miss"] = nil,  -- miss sound, exclusive to the first miss
+    ["Miss"] = nil,        -- general miss sound
+    ["Menu Scroll"] = nil, --sound for scrolling (you should use a quick click for this)
+    ["Hit Sound"] = nil,   -- sound for hitting notes
+    ["Tap Sound"] = nil,   -- sound for tapping keys, but not hitting notes
 }

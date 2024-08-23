@@ -25,6 +25,7 @@ function PlayState:enter()
     score = 0
     combo = 0
     accuracy = 0
+    gameOver = false
     grade = "-"
     performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
@@ -170,9 +171,12 @@ function PlayState:updateObjects(dt)
 end
 
 function PlayState:gameOver()
+    if gameOver then return end
     if Mods.noFail then return end
     print("fucking loser")
     gameOver = true
+
+    
 
     doScreenWipe("leftIn", function() 
         if Song then Song:stop() end
@@ -237,6 +241,13 @@ function PlayState:checkInput()
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
+                if Settings.alwaysPlayFirstMiss and not self.firstMiss then
+                    self.firstMiss = true
+                    if Skin.Sounds["First Miss"] then Skin.Sounds["First Miss"]:play() end
+                end
+                if Settings.playMissSound and self.firstMiss then
+                    if Skin.Sounds["Miss"] then Skin.Sounds["Miss"]:play() end
+                end
                 PlayState:judge(ConvertedNoteTime)
                 Note:hit(ConvertedNoteTime, true)
                 Objects.Game.Combo:incrementCombo(true)

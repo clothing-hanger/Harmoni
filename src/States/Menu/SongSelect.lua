@@ -35,7 +35,6 @@ end
 
 function SongSelect:setupSongButtons()
     for i = 1,#SongList do
-        print("Music/"..SongList[i].."/meta.lua")
         local metaData = love.filesystem.load("Music/"..SongList[i].."/meta.lua")()
         table.insert(SongButtons, Objects.Menu.SongButton(metaData.songName, "PLACEHOLDER", "PLACEHOLDER", i))
     end

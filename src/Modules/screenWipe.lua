@@ -1,8 +1,12 @@
 local screenWipeValues = {x = 0, y = 0, width = 0, height = 0, rotation = 0}
 local spinner
 
+
+-- THIS FILE IS SO FUCKING UGLY :(
+
+
 function doScreenWipe(dir, func)
-    if not spinner then spinner = Skin.Menu["loadingSpinner"] end -- load it here since the skin isnt loaded when this file is initialized
+    if not spinner then spinner = Skin.Menu["Loading Spinner"] end -- load it here since the skin isnt loaded when this file is initialized
     if dir == "rightIn" then
         screenWipeValues = {x = 0, y = 0, width = 0, height = Inits.GameHeight, rotation = 0}
         Timer.after(0.3, function() Timer.tween(0.5, screenWipeValues, {rotation = 360}, "out-back")
