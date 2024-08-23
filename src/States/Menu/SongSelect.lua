@@ -5,6 +5,7 @@ local selectedSongHeight = Inits.GameHeight/2
 local hovered
 
 function SongSelect:enter()
+    doScreenWipe("leftOut")
     MenuState = "Song"
     SelectedSong = 1
     PlayingSong = SelectedSong
@@ -149,8 +150,9 @@ function SongSelect:switchToPlayState()
     Objects.Menu.ModifiersMenu:configureMods()
     SongString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
     print(SongString)
-    State.switch(States.Game.PlayState)
-end
+    doScreenWipe("rightIn", function()
+        State.switch(States.Game.PlayState)
+    end)end
 
 function SongSelect:SwitchMenuState(state)
     if state == "Song" then
@@ -202,8 +204,8 @@ function SongSelect:draw()
     love.graphics.setFont(Skin.Fonts["Menu Large"])
     love.graphics.printf(songName, 30, 30, 800, "left")
 
-    Objects.Menu.ModifiersMenu:draw()
-    --Objects.Menu.ListMenu:draw()
+    --Objects.Menu.ModifiersMenu:draw()
+    Objects.Menu.ListMenu:draw()
 end
 
 function SongSelect:debug()

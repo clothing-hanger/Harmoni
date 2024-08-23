@@ -11,6 +11,7 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
+    doScreenWipe("rightOut")
     MusicTime = -3000
 
     quaverParse(SongString)
@@ -172,9 +173,14 @@ function PlayState:gameOver()
     if Mods.noFail then return end
     print("fucking loser")
     gameOver = true
-    State.switch(States.Menu.SongSelect)
-    Song:stop()
-    Song = nil
+
+    doScreenWipe("leftIn", function() 
+        if Song then Song:stop() end
+        Song = nil
+        State.switch(States.Menu.SongSelect) 
+
+    end)
+
 
 end
 

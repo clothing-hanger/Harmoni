@@ -73,3 +73,7 @@ Skin.Judgements = {
     ["Okay"] = love.graphics.newImage(SkinFolder .. "JUDGEMENTS/Okay.png"),
     ["Miss"] = love.graphics.newImage(SkinFolder .. "JUDGEMENTS/Miss.png"),
 }
+
+Skin.Menu = {
+    ["loadingSpinner"] = love.graphics.newImage(SkinFolder .. "MENU/logoH.png"),
+}
