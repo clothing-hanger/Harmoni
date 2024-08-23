@@ -203,8 +203,8 @@ function SongSelect:draw()
     love.graphics.setFont(Skin.Fonts["Menu Large"])
     love.graphics.printf(songName, 30, 30, 800, "left")
 
-    --Objects.Menu.ModifiersMenu:draw()
-    Objects.Menu.ListMenu:draw()
+    Objects.Menu.ModifiersMenu:draw()
+    --Objects.Menu.ListMenu:draw()
 end
 
 function SongSelect:debug()
