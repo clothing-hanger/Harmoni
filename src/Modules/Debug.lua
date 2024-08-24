@@ -45,6 +45,17 @@ commands = {
         help = "...",
         func = function()
             freakyMode = true
+            Skin.Fonts = {
+                ["HUD Large"] = love.graphics.newFont("FONTS/papyrus.ttf", 65),
+                ["HUD Small"] = love.graphics.newFont("FONTS/papyrus.ttf", 15),
+                ["HUD Extra Small"] = love.graphics.newFont("FONTS/papyrus.ttf", 12),
+                ["Combo"] = love.graphics.newFont("FONTS/papyrus.ttf", 35),
+                ["Menu Large"] = love.graphics.newFont("FONTS/papyrus.ttf", 25),
+                ["Menu Small"] = love.graphics.newFont("FONTS/papyrus.ttf", 15),
+                ["Menu Extra Small"] = love.graphics.newFont("FONTS/papyrus.ttf", 12),
+            }
+            defaultFont = love.graphics.newFont("FONTS/papyrus.ttf", 12)
+
         end
     },
 }
