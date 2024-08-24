@@ -36,10 +36,6 @@ function PlayState:enter()
     waveTime = 1
     rampTime = 0.8
     
-
-
-
-
     updateMusicTime = true
 
     if fuck then updateMusicTime = false end   -- for trying to debug songs not resetting
@@ -73,7 +69,7 @@ function PlayState:update(dt)
 
     PlayState:updateObjects(dt)
     
-    performance = metaData.difficulty * math.pow(accuracy/98, 6)
+    performance = metaData.difficulty * math.pow(accuracy/198, 6)
 
     updateMusicTimeFunction()
     self:updateTime()

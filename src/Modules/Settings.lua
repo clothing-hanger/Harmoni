@@ -9,10 +9,12 @@ function loadSettings()
     print(Settings.backgroundDim)
     
     LanesPositions = {
-        Inits.GameWidth/2 - (Settings.laneWidth*1.5),
-        Inits.GameWidth/2 - (Settings.laneWidth*0.5),
-        Inits.GameWidth/2 + (Settings.laneWidth*0.5),
-        Inits.GameWidth/2 + (Settings.laneWidth*1.5),
+        ["4K"] = {
+            Inits.GameWidth/2 - (Settings.laneWidth*1.5),
+            Inits.GameWidth/2 - (Settings.laneWidth*0.5),
+            Inits.GameWidth/2 + (Settings.laneWidth*0.5),
+            Inits.GameWidth/2 + (Settings.laneWidth*1.5),
+        }
     }
 
     keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
