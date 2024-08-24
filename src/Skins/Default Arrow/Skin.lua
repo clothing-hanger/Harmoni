@@ -6,6 +6,8 @@ SkinFolder = "Skins/Default Arrow/"
 
 Skin.Params = {
     ["Note Size"] = 125,                          -- size of the notes, pretty obvious i think
+    ["Hold Size"] = 125,                          -- ditto
+    ["HoldEnd Size"] = 125,                       -- ditto
     ["Receptor Size"] = 125,                      -- do you even need to ask
     ["Judgement Size"] = 0.4,                     -- same as above
     ["Judgement Y Offset"] = -150,                -- Y position of the judgmement (0 is center of the screen, higher number means lower on screen)         
@@ -51,6 +53,23 @@ Skin.Notes = {
     }
 }
 
+Skin.HoldNotes = {
+    ["4K"] = {
+        ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+    }
+}
+
+Skin.HoldEndNotes = {
+    ["4K"] = {
+        ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+    }
+}
 
 Skin.Receptors = {
     Up = {

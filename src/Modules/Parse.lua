@@ -86,6 +86,7 @@ function quaverParse(file)
         end
 
 
+        print(endTime)
         local note = Objects.Game.Note(lane, startTime, endTime)
         table.insert(lanes[lane], note)
         

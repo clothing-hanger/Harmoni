@@ -20,7 +20,7 @@ function PlayState:enter()
     self.ScrollVelocityMarks = {}
     self.SvIndex = 1
     self.CurrentTime = 0
-    self.strumYPosition = Settings.downscroll and Inits.GameHeight-200 or 0
+    self.strumYPosition = Settings.scrollDirection == "Down" and Inits.GameHeight or 0
 
     --Init global variables
     score = 0
@@ -69,6 +69,7 @@ function PlayState:update(dt)
 
     PlayState:updateObjects(dt)
     
+    ---@diagnostic disable-next-line: deprecated
     performance = metaData.difficulty * math.pow(accuracy/198, 6)
 
     updateMusicTimeFunction()
@@ -86,20 +87,23 @@ function PlayState:update(dt)
         end
     end
 
+    for i, Receptor in ipairs(Receptors) do
+        Receptor:update(dt)
+    end
+
     if Mods.suddenDeath and Judgements["Miss"].Count > 0 then
         PlayState:gameOver()
     end
 
     if Mods.waves then
         waveTime = math.sin(love.timer.getTime()) * 0.3
-        print(waveTime)
-        if Song then Song:setPitch(1 + waveTime) end  
+        
+        if Song then Song:setPitch(1 + waveTime) end 
     end
 
     if Mods.rampUp then
         if Mods.rampUp  then
         end
-        
     end
 end
 
@@ -126,6 +130,7 @@ function PlayState:initNotePositions()
     for _, lane in ipairs(lanes) do
         for _, note in ipairs(lane) do
             note.InitialStartTime = self:getPositionFromTime(note.StartTime)
+            note.InitialEndTime = self:getPositionFromTime(note.EndTime)
         end
     end
 end
@@ -173,16 +178,11 @@ function PlayState:gameOver()
     print("fucking loser")
     gameOver = true
 
-    
-
     doScreenWipe("leftIn", function() 
         if Song then Song:stop() end
         Song = nil
         State.switch(States.Menu.SongSelect) 
-
     end)
-
-
 end
 
 function PlayState:judge(noteTime)
@@ -215,12 +215,13 @@ end
 
 function PlayState:checkInput()
     for i, Lane in ipairs(lanes) do
+        -- PRESSED INPUT
         if Input:pressed("lane" .. tostring(i)) then
             for q, Note in ipairs(Lane) do
                 local NoteTime = (MusicTime - Note.StartTime)
                 local ConvertedNoteTime = math.abs(NoteTime)
                 if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
-                    PlayState:judge(ConvertedNoteTime, false)
+                    PlayState:judge(ConvertedNoteTime)
                     Note:hit(ConvertedNoteTime)
                     Objects.Game.HitErrorMeter:addHit(NoteTime)
                     if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
@@ -234,50 +235,17 @@ function PlayState:checkInput()
             end
         end
 
-        for q, Note in ipairs(Lane) do
-            local NoteTime = (MusicTime - Note.StartTime)
-            local ConvertedNoteTime = math.abs(NoteTime)
-            if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
-                --[[
-                if Settings.alwaysPlayFirstMiss and not self.firstMiss then
-                    self.firstMiss = true
-                    if Skin.Sounds["First Miss"] then Skin.Sounds["First Miss"]:play() end
-                end
-                if Settings.playMissSound and self.firstMiss then
-                    if Skin.Sounds["Miss"] then Skin.Sounds["Miss"]:play() end
-                end
-                --]]
-                PlayState:judge(ConvertedNoteTime)
-                Note:hit(ConvertedNoteTime, true)
-                Objects.Game.Combo:incrementCombo(true)
-                Objects.Game.HitErrorMeter:addHit(NoteTime)
-                break
-            end
-        end
-    end
-end
-
-function PlayState:checkInput()
-    for i, Lane in ipairs(lanes) do
-        if Input:pressed("lane" .. tostring(i)) then
-            for q, Note in ipairs(Lane) do
-                local NoteTime = (MusicTime - Note.StartTime)
-                local ConvertedNoteTime = math.abs(NoteTime)
-                if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
-                    PlayState:judge(ConvertedNoteTime, false)
-                    Note:hit(ConvertedNoteTime)
-                    Objects.Game.HitErrorMeter:addHit(NoteTime)
-                    if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
-                        Objects.Game.Combo:incrementCombo(false)  -- false means we dont reset it
-                    else
-                        Objects.Game.Combo:incrementCombo(true)   -- true means we do reset it
-                    end
-                    table.insert(NPSData.NPS, 1000)
-                    break
-                end
-            end
+        -- HELD INPUT
+        if Input:down("lane" .. i) then
+            Receptors[i].down = true
         end
 
+        -- RELEASED INPUT
+        if Input:released("lane" .. i) then
+            Receptors[i].down = false
+        end
+
+        -- MISS CHECKER
         for q, Note in ipairs(Lane) do
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
@@ -298,7 +266,7 @@ function PlayState:checkBotInput()
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if Note.Lane == i and NoteTime > 1 and not Note.wasHit then
-                PlayState:judge(ConvertedNoteTime, false)
+                PlayState:judge(ConvertedNoteTime)
                 Note:hit(ConvertedNoteTime)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)           
                 table.insert(NPSData.NPS, 1000)
@@ -319,7 +287,6 @@ end
 function PlayState:draw()
     Objects.Game.Background:draw() 
     love.graphics.push()
-    love.graphics.translate(0, (Settings.scrollDirection == "Down" and Inits.GameHeight) or 0)
     love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
     
     for i, Receptor in ipairs(Receptors) do

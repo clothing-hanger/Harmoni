@@ -1,5 +1,9 @@
 {
     "Lua.diagnostics.globals": [
         "cursorText"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-global",
+        "lowercase-global"
     ]
 }
