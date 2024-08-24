@@ -25,6 +25,7 @@ function Background:setDimness(dimness, tween, time, tweenType)
 end
 
 function Background:draw()
+    if not (self.image and type(self.image) == "userdata") then return end
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
 
     love.graphics.setColor(1,1,1,1)

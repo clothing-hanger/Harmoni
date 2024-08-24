@@ -28,9 +28,9 @@ end
 
 function Note:getNotePosition(time)
     if Settings.downscroll then
-        return Inits.GameHeight - 200 + (States.Game.Gameplay.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return States.Game.PlayState.strumYPosition + (States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     else
-        return -(States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return States.Game.PlayState.strumYPosition + -(States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     end
 end
 

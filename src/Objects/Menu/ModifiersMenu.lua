@@ -18,6 +18,7 @@ function ModifiersMenu:new()
             id = 1,
             songRate = {isSetting = false, type = "number", min = 0.10, max = 3, value = 1, name = "Song Rate", sname = "SR", description = "How fast the song plays"},--added
             botPlay = {isSetting = false, type = "toggle", value = false, name = "Botplay", sname = "BP", description = "Watch a perfect replay of the song"},--added
+            downscroll = {isSetting = false, type = "toggle", value = false, name = "Downscroll", sname = "DS", description = "Notes scroll down instead of up"},--added
             perfect = {isSetting = false, type = "select", options = {"Off", "Marvelous", "Perfect"}, name = "Perfect", sname = "PF", description = "Must hit only the selected Judgement or better"},
             suddenDeath = {isSetting = false, type = "toggle", value = false, name = "Sudden Death", sname = "SD", description = "Must not miss"}, --added
             scrollSpeed = {isSetting = true, type = "number", min = 300, max = 2000, value = convertScrollSpeed(Settings.scrollSpeed), name = "Scroll Speed", description = "Adjust your scroll speed"},
@@ -125,7 +126,7 @@ function ModifiersMenu:configureMods()
         end
     end
     Settings.scrollSpeed = convertScrollSpeed(Mods.scrollSpeed)
-
+    Settings.downscroll = Mods.downscroll
 end
 
 

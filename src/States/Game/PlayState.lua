@@ -20,6 +20,7 @@ function PlayState:enter()
     self.ScrollVelocityMarks = {}
     self.SvIndex = 1
     self.CurrentTime = 0
+    self.strumYPosition = Settings.downscroll and Inits.GameHeight-200 or 0
 
     --Init global variables
     score = 0

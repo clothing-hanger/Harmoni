@@ -8,13 +8,10 @@ Receptor.Directions = {
 }
 
 function Receptor:new(lane)
-
-    
-
     --self.image = Skin.Receptors.Up[self.Directions[lane]]
     self.image = Skin.Receptors.Up[self.Directions[lane]]
     self.X = LanesPositions[lane]
-    self.Y = 0
+    self.Y = States.Game.PlayState.strumYPosition
 end
 
 function Receptor:update(dt)
