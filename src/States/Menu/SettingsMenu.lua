@@ -111,6 +111,14 @@ end
 
 
 function SettingsMenu:saveSettings()
+    for Tab = 1, #tabs do
+        for Setting = 1, #tabs[Tab] do
+            local key = tabs[Tab][Setting].key
+            if Settings[key] ~= nil then
+                tabs[Tab][Setting].value = Settings[key]
+            end
+        end
+    end
     Settings = {}
     for Tab = 1,#tabs do
         for Setting = 1,#tabs[Tab] do

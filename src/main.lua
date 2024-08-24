@@ -85,14 +85,17 @@ function love.load()
     require("Modules.Grades")
     require("Modules.DifficultyCalculator")
     require("Modules.Cursor")
+    require("Modules.VolumeControl")
 
     loadSettings()
     defaultFont = love.graphics.newFont(12)
 
     State.switch(States.Misc.PreLoader)
-    require("TEMP/setup shit")
     debugInit()
-    riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")
+
+
+    --shaders
+    riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")  --👅👅👅
 
 end
 
@@ -103,6 +106,7 @@ function love.update(dt)
     Timer.update(dt)
     updateCursor(dt)
     debugUpdate(dt)
+    volumeUpdate(dt)
 
     updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
@@ -110,6 +114,10 @@ function love.update(dt)
 end
 
 function love.wheelmoved(x,y)
+    if love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt") then
+        volumeScroll(y)
+        return 
+    end
     State.wheelmoved(y)
 end
 
@@ -147,6 +155,7 @@ function love.draw()
             love.graphics.clear(0,0,0,1)
             State.draw()
             screenWipeDraw()
+            volumeControlDraw()
         love.graphics.setCanvas()
     love.graphics.pop()
 
@@ -175,5 +184,5 @@ function love.resize(w, h)
 end
 
 function love.quit()
-
+    States.Menu.SettingsMenu:saveSettings()
 end
