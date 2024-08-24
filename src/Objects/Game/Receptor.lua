@@ -1,20 +1,10 @@
 local Receptor = Class:extend()
 
-Receptor.Directions = {
-    "Left",
-    "Down",
-    "Up",
-    "Right",
-}
-
 function Receptor:new(lane)
-
-    
-
     --self.image = Skin.Receptors.Up[self.Directions[lane]]
-    self.image = Skin.Receptors.Up[self.Directions[lane]]
-    self.X = LanesPositions[lane]
-    self.Y = 0
+    self.image = Skin.Receptors.Up["4K"][Constants.Directions["4K"][lane]]
+    self.X = LanesPositions["4K"][lane]
+    self.Y = States.Game.PlayState.strumYPosition
 end
 
 function Receptor:update(dt)

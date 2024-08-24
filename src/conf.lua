@@ -5,8 +5,8 @@ function love.conf(t)
     t.identity = "Harmoni Rewrite"
 
 
-    t.window.width = 1664
-    t.window.height = 936
+    t.window.width = 1280
+    t.window.height = 720
     t.console = true
 
     t.window.resizable = true

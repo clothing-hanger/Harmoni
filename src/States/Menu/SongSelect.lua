@@ -137,7 +137,13 @@ function SongSelect:switchSong()
         print(tostring(DifficultyList[SelectedDifficulty]))
         if tostring(DifficultyList[SelectedDifficulty]) == difficulty.fileName then
             print("diff")
-            background = love.graphics.newImage("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background)
+            if love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background) and
+                love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background).type == "file" then
+                    
+                background = love.graphics.newImage("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background)
+            else
+                background = nil
+            end
             songName = metaData.songName
             difficultyName = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].diffName
             print(metaData.difficulties[SelectedDifficulty].background)

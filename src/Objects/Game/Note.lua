@@ -9,9 +9,9 @@ Note.Directions = {
 }
 
 function Note:new(lane, StartTime, EndTime)
-    self.image = Skin.Notes[self.Directions[lane]]
+    self.image = Skin.Notes["4K"][Constants.Directions["4K"][lane]]
     self.Lane = lane
-    self.X = LanesPositions[lane]
+    self.X = LanesPositions["4K"][lane]
     self.Y = Inits.GameHeight*2
     self.StartTime = StartTime
     self.EndTime = EndTime or 0 -- if 0, not a hold
@@ -28,9 +28,9 @@ end
 
 function Note:getNotePosition(time)
     if Settings.downscroll then
-        return Inits.GameHeight - 200 + (States.Game.Gameplay.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return States.Game.PlayState.strumYPosition + (States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     else
-        return -(States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return States.Game.PlayState.strumYPosition + -(States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     end
 end
 
