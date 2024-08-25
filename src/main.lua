@@ -4,6 +4,7 @@ love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 
 require("Modules.Love")
+require("Modules.Lua")
 
 love.audio.setVolume(0.15)
 
@@ -32,8 +33,6 @@ function love.load()
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
     require("Modules.Constants")
-    require("Modules.Math")
-    require("Modules.String")
     require("Modules.RGB")
     require("Modules.MusicTime")
     require("Modules.TableToFile")

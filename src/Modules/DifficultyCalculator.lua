@@ -1,6 +1,6 @@
 function calculateDifficulty(lanes, songDuration)  -- all it uses is nps 💀
     local totalNoteCount = 0
-    for i = 1, 4 do
+    for i = 1, #lanes do
         totalNoteCount = totalNoteCount + #lanes[i]
     end
     local nps = totalNoteCount / songDuration

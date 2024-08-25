@@ -9,9 +9,9 @@ Note.Directions = {
 }
 
 function Note:new(lane, StartTime, EndTime)
-    self.image = Skin.Notes["4K"][Constants.Directions["4K"][lane]]
+    self.image = Skin.Notes[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][lane]]
     self.Lane = lane
-    self.X = LanesPositions["4K"][lane]
+    self.X = LanesPositions[States.Game.PlayState.inputMode][lane]
     self.Y = Inits.GameHeight*2
     self.StartTime = StartTime
     self.EndTime = EndTime or 0 -- if 0, not a hold
@@ -34,12 +34,12 @@ function Note:new(lane, StartTime, EndTime)
 
         self.children = {}
         self.children[1] = {
-            image = Skin.HoldNotes["4K"][Constants.Directions["4K"][lane]],
+            image = Skin.HoldNotes[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][lane]],
             height = 175,
             y = 0,
         }
         self.children[2] = {
-            image = Skin.HoldEndNotes["4K"][Constants.Directions["4K"][lane]],
+            image = Skin.HoldEndNotes[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][lane]],
             height = 175,
             y = 0,
         }
@@ -113,7 +113,7 @@ function Note:draw()
             end
         end
     end
---]]
+    --]]
     if not self.visible or not (self.Y <= Inits.GameHeight+Skin.Params["Note Size"]) or (self.Y <= 0 - Skin.Params["Note Size"]) then love.graphics.setColor(1,1,1); return end
     love.graphics.draw(self.image, self.X, self.Y, 0, Skin.Params["Note Size"]/self.image:getWidth(), Skin.Params["Note Size"]/(self.image:getHeight()), self.image:getWidth()/2, self.image:getHeight()/2)
     love.graphics.setColor(1,1,1)

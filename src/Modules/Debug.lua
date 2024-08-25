@@ -166,9 +166,7 @@ function debug.printInfo()
         stateString
     )
     love.graphics.translate(0, -Inits.GameHeight-200)
-
 end
-
 
 function consoleDraw()
     if not console.isOpen then return end
@@ -183,12 +181,6 @@ function consoleDraw()
     love.graphics.rectangle("fill", 10, console.height + 25, console.width, 15)
     love.graphics.setColor(1,1,1)
     love.graphics.print(console.textPrompt .. console.textInput .. console.blinkingCursor, 10, console.height + 25)
-
-
-
-
-
-
 end
 
 local debugStats = {}
@@ -208,7 +200,6 @@ function __updateDebugStats()
 end
 
 function debugUpdate(dt)
-    rectangleCallCount = 0
 
     statsUpdateTime = statsUpdateTime + dt
     if statsUpdateTime >= statsUpdateTimeMax then
@@ -240,7 +231,6 @@ function debugDraw()
     )
     rectangleCallCount = 0
 
-    
     love.graphics.pop()
 
     love.graphics.translate(0, -Inits.GameHeight + 200)

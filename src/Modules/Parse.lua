@@ -41,6 +41,8 @@ function quaverParse(file)
     for i = 1, tonumber(metaData.inputMode) do
         table.insert(lanes, {})
     end
+    States.Game.PlayState.inputMode = #lanes .. "K"
+    print(States.Game.PlayState.inputMode)
     
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
         Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
@@ -92,8 +94,6 @@ function quaverParse(file)
             end
         end
 
-
-        print(endTime)
         local note = Objects.Game.Note(lane, startTime, endTime)
         table.insert(lanes[lane], note)
         
@@ -114,7 +114,7 @@ function quaverParse(file)
         table.insert(scrollVelocities, Objects.Game.ScrollVelocity(startTime, velocityChange))
     end
 
-    for i = 1, 4 do
+    for i = 1, #lanes do
         table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
     end
 
@@ -125,5 +125,6 @@ function quaverParse(file)
     InitializeJudgments()
     currentBpm = metaData.bpm
     metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
+
     return true
 end

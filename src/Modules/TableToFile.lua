@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated, need-check-nil
 --[[
 	Save Table to File/Stringtable
 	Load Table from File/Stringtable

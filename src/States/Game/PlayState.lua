@@ -20,6 +20,7 @@ function PlayState:enter()
     self.SvIndex = 1
     self.CurrentTime = 0
     self.strumYPosition = Settings.scrollDirection == "Down" and Inits.GameHeight or 0
+    self.inputMode = self.inputMode or "4K"
 
     --Init global variables
     score = 0
@@ -39,6 +40,7 @@ function PlayState:enter()
 
     if fuck then updateMusicTime = false end   -- for trying to debug songs not resetting
     
+    Receptors = {}
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
     end
@@ -181,7 +183,7 @@ function PlayState:gameOver()
 
     doScreenWipe("leftIn", function() 
         if Song then Song:stop() end
-        Song = nil
+        Song:release()
         State.switch(States.Menu.SongSelect) 
     end)
 end
@@ -217,7 +219,7 @@ end
 function PlayState:checkInput()
     for i, Lane in ipairs(lanes) do
         -- PRESSED INPUT
-        if Input:pressed("lane" .. tostring(i)) then
+        if Input:pressed("lane" .. i .. self.inputMode) then
             for q, Note in ipairs(Lane) do
                 local NoteTime = (MusicTime - Note.StartTime)
                 local ConvertedNoteTime = math.abs(NoteTime)
@@ -237,12 +239,12 @@ function PlayState:checkInput()
         end
 
         -- HELD INPUT
-        if Input:down("lane" .. i) then
+        if Input:down("lane" .. i .. self.inputMode) then
             Receptors[i].down = true
         end
 
         -- RELEASED INPUT
-        if Input:released("lane" .. i) then
+        if Input:released("lane" .. i .. self.inputMode) then
             Receptors[i].down = false
         end
 
