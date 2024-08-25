@@ -1,3 +1,4 @@
+---@class HealthBar
 local HealthBar = Class:extend()
 local tween
 

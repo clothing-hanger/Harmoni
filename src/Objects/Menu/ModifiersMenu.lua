@@ -1,3 +1,4 @@
+---@class ModifiersMenu
 local ModifiersMenu = Class:extend()
 
 function ModifiersMenu:new()
@@ -73,9 +74,8 @@ function ModifiersMenu:update(dt)
             end
         end
     end
-
-    
 end
+
 function ModifiersMenu:updateObjects()
     for key, Slider in pairs(self.sliders) do
         Slider:update()
@@ -97,6 +97,7 @@ function ModifiersMenu:updateObjects()
     end
 end
 
+---@param menu string The menu to setup
 function ModifiersMenu:setUpMenu(menu)
     self.sliders = {}
     self.toggles = {}

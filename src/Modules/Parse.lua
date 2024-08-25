@@ -1,5 +1,6 @@
 
-
+---@param file string
+---@return boolean passed If wether or not, the parser failed whilst loading the chart
 function quaverParse(file)
     print("quaverParse(" .. file .. ")")
     if not file then State.switch(States.SongSelectState) end
@@ -13,7 +14,6 @@ function quaverParse(file)
     BestScorePerNote = 0
     currentBpm = 0
     metaData.difficulty = 0
-
 
     local chart = Tinyyaml.parse(love.filesystem.read(file))
     lanes = {}
@@ -41,13 +41,14 @@ function quaverParse(file)
     for i = 1, tonumber(metaData.inputMode) do
         table.insert(lanes, {})
     end
+    States.Game.PlayState.inputMode = #lanes .. "K"
     
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
         Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
     else
         print("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
         print("Audio File Not Found For Song " .. SelectedSong)
-        return
+        return false
     end
 
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.background, "file") then
@@ -56,7 +57,6 @@ function quaverParse(file)
         print("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
         print("Background File Not Found For Song " .. SelectedSong)
     end
-
 
     for i = 1,#chart.TimingPoints do
         local timingPoint = chart.TimingPoints[i]
@@ -92,8 +92,6 @@ function quaverParse(file)
             end
         end
 
-
-        print(endTime)
         local note = Objects.Game.Note(lane, startTime, endTime)
         table.insert(lanes[lane], note)
         
@@ -114,10 +112,9 @@ function quaverParse(file)
         table.insert(scrollVelocities, Objects.Game.ScrollVelocity(startTime, velocityChange))
     end
 
-    for i = 1, 4 do
+    for i = 1, #lanes do
         table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
     end
-
 
     metaData.songLength = Song:getDuration()
     metaData.songLengthToLastNote = metaData.lastNoteTime/1000
@@ -125,5 +122,6 @@ function quaverParse(file)
     InitializeJudgments()
     currentBpm = metaData.bpm
     metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
+
     return true
 end

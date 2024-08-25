@@ -17,10 +17,13 @@ local wheelSettings = {
     musicVolume = "musicVolume",
 }
 
+---@param wheel string The key for the momentum
+---@param y number The momentum to increase
 local function updateMomentum(wheel, y)
     momentum[wheel] = momentum[wheel] + y * 6
 end
 
+---@param y number the y value for the scroll wheel (-1 - 1)
 function volumeScroll(y)
     for wheel, pos in pairs(wheelPositions) do
         if math.abs(cursorX - pos.x) < 50 and math.abs(cursorY - pos.y) < 50 then
@@ -31,6 +34,9 @@ function volumeScroll(y)
     updateMomentum("masterVolume", y)
 end
 
+---Applies the momentum
+---@param setting string
+---@param dt number
 local function applyMomentum(setting, dt)
     Settings[setting] = Settings[setting] + momentum[setting] * dt
     Settings[setting] = clamp(Settings[setting], 0, 100)
@@ -51,15 +57,15 @@ function volumeUpdate(dt)
             applyMomentum(setting, dt)
         end
 
-            alpha = alpha + 7*dt
+        alpha = alpha + 7*dt
     else
         alpha = alpha - 7*dt
         for key in pairs(momentum) do
             momentum[key] = 0
         end
     end
-    clamp(alpha, 0, 1)                       -- how does this not work
-    alpha = math.max(0, math.min(alpha, 1))  -- but this does
+
+    alpha = clamp(alpha, 0, 1)
     
 end
 

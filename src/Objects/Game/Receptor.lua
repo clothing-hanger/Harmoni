@@ -1,8 +1,9 @@
+---@class Receptor
 local Receptor = Class:extend()
 
 function Receptor:new(lane)
-    self.image = Skin.Receptors.Up["4K"][Constants.Directions["4K"][lane]]
-    self.X = LanesPositions["4K"][lane]
+    self.image = Skin.Receptors.Up[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][lane]]
+    self.X = LanesPositions[States.Game.PlayState.inputMode][lane]
     self.Y = States.Game.PlayState.strumYPosition
     self.down = false
     self.lane = lane
@@ -10,9 +11,9 @@ end
 
 function Receptor:update(dt)
     if self.down then
-        self.image = Skin.Receptors.Down["4K"][Constants.Directions["4K"][self.lane]]
+        self.image = Skin.Receptors.Down[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][self.lane]]
     else
-        self.image = Skin.Receptors.Up["4K"][Constants.Directions["4K"][self.lane]]
+        self.image = Skin.Receptors.Up[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][self.lane]]
     end
 end
 

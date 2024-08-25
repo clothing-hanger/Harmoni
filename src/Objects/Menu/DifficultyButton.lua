@@ -1,5 +1,10 @@
+---@class DifficultyButton
 local DifficultyButton = Class:extend()
 
+---@param diffName string The Song name
+---@param charterName string The name of the charter
+---@param difficulty string The difficulty nae
+---@param id number the id of the song
 function DifficultyButton:new(diffName, charterName, difficulty, id)
     self.x, self.y = 700, 250
     self.width, self.height = 400, 50
@@ -12,13 +17,14 @@ function DifficultyButton:new(diffName, charterName, difficulty, id)
 end
 
 function DifficultyButton:update(dt)
-    self.hovered =  ((cursorX > self.x and cursorX < self.x + self.width) and (cursorY > self.y and cursorY < self.y + self.height)) 
+    self.hovered = ((cursorX > self.x and cursorX < self.x + self.width) and (cursorY > self.y and cursorY < self.y + self.height))
 
     if self.hovered and Input:pressed("menuClickLeft") then
         self:click()
     end
 end
 
+---If the button was clicked
 function DifficultyButton:click()
 
     if self.id == SelectedDifficulty then

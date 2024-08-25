@@ -81,7 +81,7 @@ function consoleCursorBlink() -- this is so useless lmao
     end
 end
 
-
+---@param text table
 function consoleWriteLine(text)
     if not text then return end
 
@@ -106,6 +106,7 @@ function debugUpdate(dt)
 
 end
 
+---@param key love.KeyConstant
 function consoleKeypressed(key)
     if key == "backspace" then
         local byteoffset = utf8.offset(console.textInput, -1)
@@ -121,6 +122,7 @@ function consoleKeypressed(key)
     end
 end
 
+---@param input string
 function consoleExecute(input)
     for Key, Command in ipairs(commands) do
         if Command.name == input then
@@ -166,9 +168,7 @@ function debug.printInfo()
         stateString
     )
     love.graphics.translate(0, -Inits.GameHeight-200)
-
 end
-
 
 function consoleDraw()
     if not console.isOpen then return end
@@ -183,12 +183,31 @@ function consoleDraw()
     love.graphics.rectangle("fill", 10, console.height + 25, console.width, 15)
     love.graphics.setColor(1,1,1)
     love.graphics.print(console.textPrompt .. console.textInput .. console.blinkingCursor, 10, console.height + 25)
+end
+
+local debugStats = {}
 
 
+local mFloor = math.floor
+local statsUpdateTime, statsUpdateTimeMax = 0, 1
 
+function __updateDebugStats()
+    debugStats.fps = love.timer.getFPS()
+    debugStats.memUsage = mFloor(collectgarbage("count"))
 
+    local graphicsStats = love.graphics.getStats()
+    debugStats.graphicsMem = mFloor(graphicsStats.texturememory / 1024 / 1024)
+    debugStats.drawCalls = graphicsStats.drawcalls
+    debugStats.frameTime = string.format("%.2f", love.timer.getDelta())
+end
 
+function debugUpdate(dt)
 
+    statsUpdateTime = statsUpdateTime + dt
+    if statsUpdateTime >= statsUpdateTimeMax then
+        __updateDebugStats()
+        statsUpdateTime = 0
+    end
 end
 
 function debugDraw()
@@ -204,17 +223,16 @@ function debugDraw()
     
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(
-        "FPS: " .. tostring(love.timer.getFPS()) .. 
-        "\nLua Memory (KB): " .. tostring(math.floor(collectgarbage("count"))) ..
-        "\nGraphics Memory (MB): " .. tostring(math.floor(love.graphics.getStats().texturememory / 1024 / 1024)) .. 
-        "\nMusic Time (MS): " .. tostring(MusicTime) ..
-        "\nDraw Calls: " .. tostring(love.graphics.getStats().drawcalls) ..
-        "\nFrame Time (MS): " .. string.format("%.2f", 1000 / love.timer.getFPS()) ..
-        "\nRectangle Calls: " .. tostring(rectangleCallCount)
+        "FPS: " .. debugStats.fps .. 
+        "\nLua Memory (KB): " .. debugStats.memUsage ..
+        "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
+        "\nMusic Time (MS): " .. MusicTime ..
+        "\nDraw Calls: " .. debugStats.drawCalls ..
+        "\nFrame Time (MS): " .. debugStats.frameTime ..
+        "\nRectangle Calls: " .. rectangleCallCount
     )
     rectangleCallCount = 0
 
-    
     love.graphics.pop()
 
     love.graphics.translate(0, -Inits.GameHeight + 200)

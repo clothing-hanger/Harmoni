@@ -3,55 +3,8 @@ utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 
-originalRectangle = love.graphics.rectangle
-rectangleCallCount = 0
-function love.graphics.rectangle(mode, x, y, width, height, rx, ry, segments)
-    rectangleCallCount = rectangleCallCount + 1
-    originalRectangle(mode, x, y, width, height, rx, ry, segments)
-end
-
-function love.run()
-	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
-
-	-- We don't want the first frame's dt to include time taken by love.load.
-	if love.timer then love.timer.step() end
-
-	local dt = 0
-
-	-- Main loop time.
-	return function()
-		-- Process events.
-		if love.event then
-			love.event.pump()
-			for name, a,b,c,d,e,f in love.event.poll() do
-				if name == "quit" then
-					if not love.quit or not love.quit() then
-						return a or 0
-					end
-				end
-				love.handlers[name](a,b,c,d,e,f)
-			end
-		end
-
-		-- Update dt, as we'll be passing it to update
-		if love.timer then dt = love.timer.step() end
-
-		-- Call update and draw
-		if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
-
-		if love.graphics and love.graphics.isActive() then
-			love.graphics.origin()
-			love.graphics.clear(love.graphics.getBackgroundColor())
-
-			if love.draw then love.draw() end
-
-			love.graphics.present()
-		end
-
-		--if love.timer then love.timer.sleep(0.001) end
-	end
-end
-
+require("Modules.Love")
+require("Modules.Lua")
 
 love.audio.setVolume(0.15)
 
@@ -80,8 +33,6 @@ function love.load()
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
     require("Modules.Constants")
-    require("Modules.Math")
-    require("Modules.String")
     require("Modules.RGB")
     require("Modules.MusicTime")
     require("Modules.TableToFile")
@@ -100,7 +51,7 @@ function love.load()
 
     State.switch(States.Misc.PreLoader)
     debugInit()
-
+    __updateDebugStats() -- force our stats to update
 
     --shaders
     riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")  --👅👅👅
@@ -110,6 +61,7 @@ end
 function love.update(dt)
     cursorText = nil
     if not console.isOpen then Input:update() end
+    debugUpdate(dt)
     State.update(dt)
     Timer.update(dt)
     updateCursor(dt)
@@ -171,6 +123,7 @@ function love.draw()
     local ratio = 1
     ratio = math.min(Inits.WindowWidth/Inits.GameWidth, Inits.WindowHeight/Inits.GameHeight)
     love.graphics.setColor(1,1,1,1)
+
     -- draw game screen with the calculated ratio and center it on the screen
     love.graphics.setShader(Shaders.CurrentShader)
     if freakyMode then
@@ -178,10 +131,8 @@ function love.draw()
     end
     love.graphics.draw(GameScreen, Inits.WindowWidth/2, Inits.WindowHeight/2, 0, ratio, ratio, Inits.GameWidth/2, Inits.GameHeight/2)
     love.graphics.setShader()
+    
     cursorTextDraw()
-
-    love.graphics.setShader()
-
     debugDraw()
 end
 

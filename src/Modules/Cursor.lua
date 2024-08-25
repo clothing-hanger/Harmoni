@@ -13,5 +13,6 @@ function cursorTextDraw()
     love.graphics.setFont(Skin.Fonts["Menu Small"])
     love.graphics.setColor(1,1,1)
 
-    love.graphics.print(cursorText, cursorX+15, cursorY)
+    local mx, my = love.mouse.getPosition() -- cant use our converted position
+    love.graphics.borderPrint(cursorText, mx+15, my)
 end

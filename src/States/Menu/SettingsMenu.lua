@@ -35,6 +35,7 @@ local tabs = {
     {
         tab = "Keybinds",
         {key = "keyBinds4k", name = "4 Key Keybinds", type = "text", value = "dfjk", description = "Type 4 characters to set as your 4 key keyinds"},
+        {key = "keyBinds7k", name = "7 Key Keybinds", type = "text", value = "sdf jkl", description = "Type 7 characters to set as your 7 key keyinds"},
     },
     {
         tab = "Skin (NOT ADDED)"
@@ -44,7 +45,6 @@ local tabs = {
 
 
 function SettingsMenu:enter()
-
     tabButtons = {}
     sliders = {}
     toggles = {}
@@ -60,14 +60,8 @@ function SettingsMenu:enter()
         local tabButtonY = (tabButtonHeight + 15)*(Tab)
         table.insert(tabButtons, {name = tabs[Tab].tab, x = tabButtonX, y = tabButtonY}) --(tabs[Tab].tab) 💀💀💀 god i suck at coding lmfao (but its named so it should be fine.. not really tho its still bad)
     end
-    for Tab = 1, #tabs do
-        for Setting = 1, #tabs[Tab] do
-            local key = tabs[Tab][Setting].key
-            if Settings[key] ~= nil then
-                tabs[Tab][Setting].value = Settings[key]
-            end
-        end
-    end
+
+    self:checkForMissingSettings()
 
 end
 function SettingsMenu:setupSettingsTab(tabname)
@@ -93,6 +87,28 @@ function SettingsMenu:setupSettingsTab(tabname)
     end
 end
 
+function SettingsMenu:checkForMissingSettings()
+    local isMissing = false
+
+    for key, _ in pairs(Settings) do
+        local found = false
+        for _, tab in ipairs(tabs) do
+            for _, option in ipairs(tab) do
+                if type(option) == "table" then
+                    if option.key == key then
+                        found = true
+                    end
+                end
+            end
+        end
+
+        if not found then
+            isMissing = true
+        end
+    end
+
+    return isMissing
+end
 
 function SettingsMenu:update(dt)
 
@@ -111,17 +127,6 @@ end
 
 
 function SettingsMenu:saveSettings()
-    --[[
-    for Tab = 1, #tabs do
-        for Setting = 1, #tabs[Tab] do
-            local key = tabs[Tab][Setting].key
-            if Settings[key] ~= nil then
-                tabs[Tab][Setting].value = Settings[key]
-            end
-        end
-    end 
-
-    --]]
     Settings = {}
     for Tab = 1,#tabs do
         for Setting = 1,#tabs[Tab] do
@@ -148,8 +153,6 @@ function SettingsMenu:saveSettings()
     
     -- Saving the settings to a file
     love.filesystem.write("Settings/Settings.lua", savedSettings)
-
-    loadSettings()
 end
 
 function SettingsMenu:updateObjects(dt)
@@ -199,7 +202,9 @@ function SettingsMenu:updateObjects(dt)
 
 end
 
-function SettingsMenu:TabButtonDraw(TabButton) -- not gonna use actual objects for this because this is good enough, even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)
+function SettingsMenu:TabButtonDraw(TabButton)
+    -- not gonna use actual objects for this because this is good enough, 
+    -- even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)
     love.graphics.rectangle("line", tabButtons[TabButton].x, tabButtons[TabButton].y, tabButtonWidth, tabButtonHeight)
     love.graphics.print(tabButtons[TabButton].name, tabButtons[TabButton].x+15, tabButtons[TabButton].y+15)
 end

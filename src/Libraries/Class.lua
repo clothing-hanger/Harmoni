@@ -80,6 +80,7 @@ end
 --@return table
 function class:__call(...)
     local inst = setmetatable({}, self)
+    ---@diagnostic disable-next-line: redundant-parameter
     inst:new(...)
     return inst
 end

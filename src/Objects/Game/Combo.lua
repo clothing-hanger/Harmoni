@@ -1,6 +1,8 @@
+---@class Combo
 local Combo = Class:extend()
 
 local Tweens = {}
+
 function Combo:new()
     self.x, self.y = Skin.Params["Combo X Offset"], Skin.Params["Combo Y Offset"]
     self.width = {1}
@@ -13,41 +15,41 @@ function Combo:update(dt)
 
 end
 
+---@param reset boolean
+---Increments the combo, if reset is true, resets the combo to 0
 function Combo:incrementCombo(reset)
-  local tween
-  if reset then
-      combo = 0 -- fuckin loser
-  else
-      combo = plusEq(combo)
-      if combo % 100 == 0 then
-        Objects.Game.ComboAlert:doComboAlert(combo)
-      end
-  end
-  if tween then Timer.cancel(tween) end
+    local tween
+    if reset then
+        combo = 0 -- fuckin loser
+    else
+        combo = plusEq(combo)
+        if combo % 100 == 0 then
+            Objects.Game.ComboAlert:doComboAlert(combo)
+        end
+    end
+    if tween then Timer.cancel(tween) end
 
-  self.height = {0.5}
-  self.alpha = {1}
+    self.height = {0.5}
+    self.alpha = {1}
 
-  for i = 1,#Tweens do if Tweens[i] then Timer.cancel(Tweens[i]) end end
-    
+    for i = 1,#Tweens do 
+        if Tweens[i] then Timer.cancel(Tweens[i]) end
+    end
 
-  Tweens[1] = Timer.tween(0.25, self.height, {1}, "out-back", function()
-    Timer.tween(0.15, self.alpha, {0})
-  end)
-  
-
-  
+    Tweens[1] = Timer.tween(0.25, self.height, {1}, "out-back", function()
+        Timer.tween(0.15, self.alpha, {0})
+    end)
 end
 
 function Combo:draw()
-    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
+    love.graphics.push()
 
-    if combo == 0 then love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2) return end
+    love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
     love.graphics.setFont(Skin.Fonts["Combo"])
     love.graphics.setColor(1,1,1,(self.alpha[1] or 0))
     love.graphics.printf(combo, self.x-(self.limit/2), self.y, self.limit, "center", 0, self.width[1], self.height[1])
-    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
 
+    love.graphics.pop()
 end
 
 function Combo:release()
