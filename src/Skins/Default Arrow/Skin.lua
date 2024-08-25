@@ -2,8 +2,6 @@
 Skin = {}
 SkinFolder = "Skins/Default Arrow/"
 
-
-
 Skin.Params = {
     ["Note Size"] = 125,                          -- size of the notes, pretty obvious i think
     ["Hold Size"] = 125,                          -- ditto
@@ -32,7 +30,6 @@ Skin.Params = {
     ["Okay Color"] = rgb({210, 13, 81}),          -- color of okay
     ["Miss Color"] = rgb({209, 0, 0}),            -- color of miss
 }
-
 
 Skin.Fonts = {
     ["HUD Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 65),
