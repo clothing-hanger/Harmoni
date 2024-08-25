@@ -7,3 +7,31 @@ function love.graphics.rectangle(...)
 
     o_loveGraphicsRectangle(...)
 end
+
+function love.graphics.borderPrint(...)
+    local args = {...}
+
+    love.graphics.setColor(0, 0, 0)
+    for x = -1, 1 do
+        for y = -1, 1 do
+            love.graphics.print(args[1], args[2] + x, args[3] + y, select(4, unpack(args)))
+        end
+    end
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print(...)
+end
+
+function love.graphics.borderPrintf(...)
+    local args = {...}
+    
+    love.graphics.setColor(0, 0, 0)
+    for x = -1, 1 do
+        for y = -1, 1 do
+            love.graphics.printf(args[1], args[2] + x, args[3] + y, select(4, unpack(args)))
+        end
+    end
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(...)
+end
