@@ -100,10 +100,10 @@ function SettingsMenu:checkForMissingSettings()
                     end
                 end
             end
+        end
 
-            if not found then
-                isMissing = true
-            end
+        if not found then
+            isMissing = true
         end
     end
 

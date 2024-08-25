@@ -51,15 +51,15 @@ function volumeUpdate(dt)
             applyMomentum(setting, dt)
         end
 
-            alpha = alpha + 7*dt
+        alpha = alpha + 7*dt
     else
         alpha = alpha - 7*dt
         for key in pairs(momentum) do
             momentum[key] = 0
         end
     end
-    clamp(alpha, 0, 1)                       -- how does this not work
-    alpha = math.max(0, math.min(alpha, 1))  -- but this does
+
+    alpha = clamp(alpha, 0, 1)
     
 end
 

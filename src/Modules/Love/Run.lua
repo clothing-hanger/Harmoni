@@ -1,4 +1,5 @@
 function love.run()
+    ---@diagnostic disable-next-line: redundant-parameter, undefined-field
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
 	-- We don't want the first frame's dt to include time taken by love.load.

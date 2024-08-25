@@ -14,7 +14,6 @@ function quaverParse(file)
     currentBpm = 0
     metaData.difficulty = 0
 
-
     local chart = Tinyyaml.parse(love.filesystem.read(file))
     lanes = {}
     timingPoints = {}
@@ -42,7 +41,6 @@ function quaverParse(file)
         table.insert(lanes, {})
     end
     States.Game.PlayState.inputMode = #lanes .. "K"
-    print(States.Game.PlayState.inputMode)
     
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
         Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
@@ -58,7 +56,6 @@ function quaverParse(file)
         print("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
         print("Background File Not Found For Song " .. SelectedSong)
     end
-
 
     for i = 1,#chart.TimingPoints do
         local timingPoint = chart.TimingPoints[i]
@@ -117,7 +114,6 @@ function quaverParse(file)
     for i = 1, #lanes do
         table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
     end
-
 
     metaData.songLength = Song:getDuration()
     metaData.songLengthToLastNote = metaData.lastNoteTime/1000

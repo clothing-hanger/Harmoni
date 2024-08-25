@@ -335,4 +335,8 @@ function Object:typeOf(name) end
 --- The current os
 ---@alias love._os string
 
+--- The love handlers
+---@type table
+love.handlers = {}
+
 return love

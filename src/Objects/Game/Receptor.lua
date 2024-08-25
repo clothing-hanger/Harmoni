@@ -13,7 +13,6 @@ function Receptor:update(dt)
         self.image = Skin.Receptors.Down[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][self.lane]]
     else
         self.image = Skin.Receptors.Up[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][self.lane]]
-        print(self.lane)
     end
 end
 
