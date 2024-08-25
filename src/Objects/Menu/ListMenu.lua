@@ -1,11 +1,11 @@
 ---@class ListMenu
 local ListMenu = Class:extend()
 
----@param x number The x position
----@param y number The y position
----@param width number the width
----@param height number the height
----@param name string the name of the item
+---@param x? number The x position
+---@param y? number The y position
+---@param width? number the width
+---@param height? number the height
+---@param name? string the name of the item
 function ListMenu:new(x, y, width, height, name)
     self.x = x or 0
     self.y = y or 240

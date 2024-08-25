@@ -6,7 +6,7 @@ local rotationDuration = 0.5
 local delayBeforeRotation = 0.3
 
 ---@param tweenParams table The parameters if the tween
----@param callback function The function to call when finished
+---@param callback? function The function to call when finished
 local function applyTween(tweenParams, callback)
     Timer.tween(wipeDuration, screenWipeValues, tweenParams, "out-in-sine", callback)
 end
@@ -24,7 +24,7 @@ end
 ---| "rightOut" # Tweens out the right
 ---| "leftIn" # Tweens in the left
 ---| "leftOut" # Tweens out the left
----@param func function The callback function
+---@param func? function The callback function
 ---Wipes the screen in/out with a given direction
 function doScreenWipe(dir, func)
     if not spinner then
