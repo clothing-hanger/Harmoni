@@ -35,12 +35,12 @@ function Note:new(lane, StartTime, EndTime)
         self.children = {}
         self.children[1] = {
             image = Skin.HoldNotes["4K"][Constants.Directions["4K"][lane]],
-            height = 200,
+            height = 175,
             y = 0,
         }
         self.children[2] = {
-            image = Skin.HoldNotes["4K"][Constants.Directions["4K"][lane]],
-            height = 200,
+            image = Skin.HoldEndNotes["4K"][Constants.Directions["4K"][lane]],
+            height = 175,
             y = 0,
         }
     end
@@ -67,7 +67,7 @@ function Note:update(dt)
     self.Y = self:getNotePosition(self.InitialStartTime)
 
     if self.isHeld then
-        local endY = self:getNotePosition(self.InitialStartTime)
+        local endY = self:getNotePosition(self.InitialEndtime)
 
         self.children[1].y = self.Y
         self.children[2].y = endY
@@ -77,9 +77,10 @@ function Note:update(dt)
         self.children[1].height = pixelDiff - 200
         self.children[2].y = self.children[2].y - 200
 
-        if (self.Y < Inits.GameHeight) or (self.Y < 0 - Skin.Params["Note Size"]) then
+        
+        --[[ if (self.Y < Inits.GameHeight) or (self.Y < 0 - Skin.Params["Note Size"]) then
             print(pixelDiff)
-        end
+        end ]]
     end
 
     if Mods.fadeOut and Settings.scrollDirection == "Up" then
@@ -108,7 +109,7 @@ function Note:draw()
     if self.isHeld and not self.holdWasFinished then
         if (self.Y <= Inits.GameHeight+Skin.Params["Note Size"]) or (self.Y <= 0 - Skin.Params["Note Size"]) then
             for i, child in ipairs(self.children) do
-                love.graphics.draw(child.image, self.X, child.y, 0, Skin.Params["Hold" .. (i == 2 and "End" or "") .. " Size"]/child.image:getWidth(), (i == 2 and Skin.Params["Hold Size"] or child.height)/child.image:getHeight(), child.image:getWidth()/2, child.image:getHeight()/2)
+                love.graphics.draw(child.image, self.X, child.y, 0, Skin.Params["Hold" .. (i == 2 and "End" or "") .. " Size"]/child.image:getWidth(), (i == 2 and Skin.Params["Hold Size"] or child.height)/child.image:getHeight(), child.image:getWidth()/2)
             end
         end
     end
