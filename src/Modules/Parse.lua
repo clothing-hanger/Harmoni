@@ -7,7 +7,15 @@ function quaverParse(file)
         State.switch(States.SongSelectState)
     end
 
-    local chart= Tinyyaml.parse(love.filesystem.read(file))
+    metaData = {}
+    metaData.songLength = 0
+    metaData.songLengthToLastNote = 0
+    BestScorePerNote = 0
+    currentBpm = 0
+    metaData.difficulty = 0
+
+
+    local chart = Tinyyaml.parse(love.filesystem.read(file))
     lanes = {}
     timingPoints = {}
     scrollVelocities = {}
@@ -74,7 +82,6 @@ function quaverParse(file)
         end
         
         if Mods.mirror then
-            print("mirro")
             local mirrorMap4 = {4,3,2,1}
             local mirrorMap7 = {7,6,5,4,3,2,1}
             

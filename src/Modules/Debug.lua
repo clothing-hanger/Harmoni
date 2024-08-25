@@ -192,18 +192,33 @@ end
 
 function debugDraw()
     consoleDraw()
-            
-    love.graphics.translate(0, Inits.GameHeight-200)
+    
+    -- Save the current coordinate system
+    love.graphics.push()
+    
+    -- Translate to the position where the debug info should be drawn
+    love.graphics.translate(0, 600)
+
+    -- Draw the semi-transparent background rectangle
     love.graphics.setFont(defaultFont)
-    love.graphics.setColor(0,0,0,0.5)
+    love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", 0, 0, 200, 200)
-    love.graphics.setColor(1,1,1)
+    
+    -- Set color to white for the text
+    love.graphics.setColor(1, 1, 1)
     love.graphics.print(
         "FPS: " .. tostring(love.timer.getFPS()) .. 
         "\nLua Memory (KB): " .. tostring(math.floor(collectgarbage("count"))) ..
-        "\nGraphics Memory (MB): " .. tostring(math.floor(love.graphics.getStats().texturememory/1024/1024)) .. 
-        "\nMusic Time (MS): " .. tostring(MusicTime)
+        "\nGraphics Memory (MB): " .. tostring(math.floor(love.graphics.getStats().texturememory / 1024 / 1024)) .. 
+        "\nMusic Time (MS): " .. tostring(MusicTime) ..
+        "\nDraw Calls: " .. tostring(love.graphics.getStats().drawcalls) ..
+        "\nFrame Time (MS): " .. string.format("%.2f", 1000 / love.timer.getFPS()) ..
+        "\nRectangle Calls: " .. tostring(rectangleCallCount)
     )
-    love.graphics.translate(0, -Inits.GameHeight-200)
-end
+    
+    -- Restore the previous coordinate system
+    love.graphics.pop()
 
+    -- Undo the initial translation by resetting to the original position
+    love.graphics.translate(0, -Inits.GameHeight + 200)
+end
