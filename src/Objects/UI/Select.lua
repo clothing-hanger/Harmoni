@@ -1,5 +1,14 @@
+---@class Select
 local Select = Class:extend()
 
+---@param x number The x position
+---@param y number The y position
+---@param width number The width
+---@param height number The height
+---@param options table<any> Table of options
+---@param value any The starting value
+---@param name string The name of the Select
+---@param description string The description of the Select
 function Select:new(x, y, width, height, options, value, name, description)
     self.x = x
     self.y = y

@@ -1,3 +1,4 @@
+---@class Receptor
 local Receptor = Class:extend()
 
 function Receptor:new(lane)

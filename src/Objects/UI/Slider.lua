@@ -1,5 +1,14 @@
+---@class Slider
 local Slider = Class:extend()
 
+---@param x number The x position
+---@param y number The y position
+---@param width number The width
+---@param min number The minimum value
+---@param max number The maximum value
+---@param value number The starting value 
+---@param name string The name of the slider
+---@param description string The description of the slider
 function Slider:new(x, y, width, min, max, value, name, description)
     self.description = description or "NO DESCRIPTION SET YOU IDIOT"
     self.x = x
@@ -20,6 +29,7 @@ function Slider:calculateKnobPosition()
     return self.x + ratio * self.width
 end
 
+---@param mouseX number
 function Slider:updateValueFromMouse(mouseX)
     local ratio = (mouseX - self.x) / self.width
     self.value = math.max(self.min, math.min(self.max, self.min + ratio * (self.max - self.min)))

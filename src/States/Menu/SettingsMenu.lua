@@ -90,7 +90,7 @@ end
 function SettingsMenu:checkForMissingSettings()
     local isMissing = false
 
-    for key, setting in pairs(Settings) do
+    for key, _ in pairs(Settings) do
         local found = false
         for _, tab in ipairs(tabs) do
             for _, option in ipairs(tab) do
@@ -127,17 +127,6 @@ end
 
 
 function SettingsMenu:saveSettings()
-    --[[
-    for Tab = 1, #tabs do
-        for Setting = 1, #tabs[Tab] do
-            local key = tabs[Tab][Setting].key
-            if Settings[key] ~= nil then
-                tabs[Tab][Setting].value = Settings[key]
-            end
-        end
-    end 
-
-    --]]
     Settings = {}
     for Tab = 1,#tabs do
         for Setting = 1,#tabs[Tab] do
@@ -213,7 +202,9 @@ function SettingsMenu:updateObjects(dt)
 
 end
 
-function SettingsMenu:TabButtonDraw(TabButton) -- not gonna use actual objects for this because this is good enough, even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)
+function SettingsMenu:TabButtonDraw(TabButton)
+    -- not gonna use actual objects for this because this is good enough, 
+    -- even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)
     love.graphics.rectangle("line", tabButtons[TabButton].x, tabButtons[TabButton].y, tabButtonWidth, tabButtonHeight)
     love.graphics.print(tabButtons[TabButton].name, tabButtons[TabButton].x+15, tabButtons[TabButton].y+15)
 end

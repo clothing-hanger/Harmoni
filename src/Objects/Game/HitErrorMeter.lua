@@ -1,3 +1,4 @@
+---@class HitErrorMeter
 local HitErrorMeter = Class:extend()
 local tween
 
@@ -31,7 +32,8 @@ function HitErrorMeter:update(dt)
     tween = Timer.tween(0.2, self.printablePointerX, {self.pointerX}, "out-expo")
 end
 
-
+---@param noteTime number The ms of the note hit
+---Adds a marker to the meter with a given notetime
 function HitErrorMeter:addHit(noteTime)
     local color = {1, 1, 1, 1}
     local hitTable = {}

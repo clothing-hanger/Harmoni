@@ -5,16 +5,27 @@ local wipeDuration = 0.5
 local rotationDuration = 0.5
 local delayBeforeRotation = 0.3
 
+---@param tweenParams table The parameters if the tween
+---@param callback function The function to call when finished
 local function applyTween(tweenParams, callback)
     Timer.tween(wipeDuration, screenWipeValues, tweenParams, "out-in-sine", callback)
 end
 
+---@param rotation number The rotation
+---@param delay number the delay of the tween
 local function applyRotation(rotation, delay)
     Timer.after(delay, function()
         Timer.tween(rotationDuration, screenWipeValues, {rotation = rotation}, "out-back")
     end)
 end
 
+---@param dir string The direction of the tween
+---| "rightIn" # Tweens in the right
+---| "rightOut" # Tweens out the right
+---| "leftIn" # Tweens in the left
+---| "leftOut" # Tweens out the left
+---@param func function The callback function
+---Wipes the screen in/out with a given direction
 function doScreenWipe(dir, func)
     if not spinner then
         spinner = Skin.Menu["Loading Spinner"]

@@ -8,6 +8,7 @@ function love.graphics.rectangle(...)
     o_loveGraphicsRectangle(...)
 end
 
+---See [love.graphics.print](lua://love.graphics.print)
 function love.graphics.borderPrint(...)
     local args = {...}
 
@@ -22,9 +23,10 @@ function love.graphics.borderPrint(...)
     love.graphics.print(...)
 end
 
+---See [love.graphics.printf](lua://love.graphics.printf)
 function love.graphics.borderPrintf(...)
     local args = {...}
-    
+
     love.graphics.setColor(0, 0, 0)
     for x = -1, 1 do
         for y = -1, 1 do

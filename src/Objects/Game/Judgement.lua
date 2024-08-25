@@ -1,3 +1,4 @@
+---@class Judgement
 local Judgement = Class:extend()
 
 function Judgement:new()

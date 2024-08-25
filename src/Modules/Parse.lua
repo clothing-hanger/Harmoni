@@ -1,5 +1,6 @@
 
-
+---@param file string
+---@return boolean passed If wether or not, the parser failed whilst loading the chart
 function quaverParse(file)
     print("quaverParse(" .. file .. ")")
     if not file then State.switch(States.SongSelectState) end
@@ -47,7 +48,7 @@ function quaverParse(file)
     else
         print("Audio Failed to Load! Chart Loading Cancelled.", notifErrorIcon)
         print("Audio File Not Found For Song " .. SelectedSong)
-        return
+        return false
     end
 
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.background, "file") then

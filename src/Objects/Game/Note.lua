@@ -1,5 +1,5 @@
+---@class Note
 local Note = Class:extend()
-
 
 Note.Directions = {
     "Left",
@@ -8,6 +8,9 @@ Note.Directions = {
     "Right",
 }
 
+---@param lane integer Which lane the note is for
+---@param StartTime number The start time of the note
+---@param EndTime number The end time of the note
 function Note:new(lane, StartTime, EndTime)
     self.image = Skin.Notes[States.Game.PlayState.inputMode][Constants.Directions[States.Game.PlayState.inputMode][lane]]
     self.Lane = lane
@@ -46,6 +49,9 @@ function Note:new(lane, StartTime, EndTime)
     end
 end
 
+---@param time number The time for the note
+---@return number the position of the Note
+---Returns the converted pixel position of the note
 function Note:getNotePosition(time)
     if not self.moveWithScroll then
         return States.Game.PlayState.strumYPosition
@@ -96,6 +102,8 @@ function Note:update(dt)
     end
 end
 
+---@param noteTime number The time the note was hit
+---@param wasMiss boolean If the note was a miss
 function Note:hit(noteTime, wasMiss)
     self.visible = wasMiss
     self.wasHit = true

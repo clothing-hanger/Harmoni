@@ -38,6 +38,8 @@ end
 
 love.filesystem.load("Skins/Default Arrow/Skin.lua")()
 
+---@param speed number The speed in ms
+---@return number convertedScrollspeed the speed in pixels/ms
 function convertScrollSpeed(speed)
     local convertedSpeed = (Inits.GameHeight) / speed
     return convertedSpeed

@@ -81,7 +81,7 @@ function consoleCursorBlink() -- this is so useless lmao
     end
 end
 
-
+---@param text table
 function consoleWriteLine(text)
     if not text then return end
 
@@ -106,6 +106,7 @@ function debugUpdate(dt)
 
 end
 
+---@param key love.KeyConstant
 function consoleKeypressed(key)
     if key == "backspace" then
         local byteoffset = utf8.offset(console.textInput, -1)
@@ -121,6 +122,7 @@ function consoleKeypressed(key)
     end
 end
 
+---@param input string
 function consoleExecute(input)
     for Key, Command in ipairs(commands) do
         if Command.name == input then
