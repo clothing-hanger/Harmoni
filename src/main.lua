@@ -3,6 +3,13 @@ utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 
+originalRectangle = love.graphics.rectangle
+rectangleCallCount = 0
+function love.graphics.rectangle(mode, x, y, width, height, rx, ry, segments)
+    rectangleCallCount = rectangleCallCount + 1
+    originalRectangle(mode, x, y, width, height, rx, ry, segments)
+end
+
 function love.run()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
@@ -41,7 +48,7 @@ function love.run()
 			love.graphics.present()
 		end
 
-		if love.timer then love.timer.sleep(0.001) end
+		--if love.timer then love.timer.sleep(0.001) end
 	end
 end
 
@@ -112,6 +119,7 @@ function love.update(dt)
     updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
+    rectangleCallCount = 0
 end
 
 function love.wheelmoved(x,y)
@@ -185,5 +193,5 @@ function love.resize(w, h)
 end
 
 function love.quit()
-    States.Menu.SettingsMenu:saveSettings()
+    --States.Menu.SettingsMenu:saveSettings()
 end

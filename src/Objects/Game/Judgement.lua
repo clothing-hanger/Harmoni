@@ -5,6 +5,9 @@ function Judgement:new()
 end
 
 function Judgement:judge(judgement)
+    if 1 == 1 then return end
+
+
     local newJudgement = {
         x = Skin.Params["Judgement X Offset"],
         y = Skin.Params["Judgement Y Offset"],

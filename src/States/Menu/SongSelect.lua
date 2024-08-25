@@ -7,7 +7,7 @@ local hovered
 function SongSelect:enter()
     doScreenWipe("leftOut")
     MenuState = "Song"
-    SelectedSong = 1
+    SelectedSong = (SelectedSong or 1)
     PlayingSong = SelectedSong
     SelectedDifficulty = 1
     DifficultyList = {}

@@ -11,7 +11,6 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
-    doScreenWipe("rightOut")
     MusicTime = -3000
 
     quaverParse(SongString)
@@ -47,6 +46,8 @@ function PlayState:enter()
 
     PlayState:initSVMarks()
     PlayState:initNotePositions()
+    doScreenWipe("rightOut")
+
 end
 
 function PlayState:initModifiers()

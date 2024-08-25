@@ -105,6 +105,7 @@ end
 function Note:draw()
     love.graphics.setColor(1,1,1,self.alpha)
     if self.tooLate then love.graphics.setColor(0.5,0.5,0.5,1) end
+    --[[
     if self.isHeld and not self.holdWasFinished then
         if (self.Y <= Inits.GameHeight+Skin.Params["Note Size"]) or (self.Y <= 0 - Skin.Params["Note Size"]) then
             for i, child in ipairs(self.children) do
@@ -112,7 +113,7 @@ function Note:draw()
             end
         end
     end
-
+--]]
     if not self.visible or not (self.Y <= Inits.GameHeight+Skin.Params["Note Size"]) or (self.Y <= 0 - Skin.Params["Note Size"]) then love.graphics.setColor(1,1,1); return end
     love.graphics.draw(self.image, self.X, self.Y, 0, Skin.Params["Note Size"]/self.image:getWidth(), Skin.Params["Note Size"]/(self.image:getHeight()), self.image:getWidth()/2, self.image:getHeight()/2)
     love.graphics.setColor(1,1,1)
