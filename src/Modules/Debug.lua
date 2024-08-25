@@ -103,6 +103,7 @@ function debugUpdate(dt)
     if cursorTimer <= 0 then
         consoleCursorBlink()
     end
+
 end
 
 function consoleKeypressed(key)
@@ -193,18 +194,14 @@ end
 function debugDraw()
     consoleDraw()
     
-    -- Save the current coordinate system
     love.graphics.push()
     
-    -- Translate to the position where the debug info should be drawn
     love.graphics.translate(0, 600)
 
-    -- Draw the semi-transparent background rectangle
     love.graphics.setFont(defaultFont)
     love.graphics.setColor(0, 0, 0, 0.5)
     love.graphics.rectangle("fill", 0, 0, 200, 200)
     
-    -- Set color to white for the text
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(
         "FPS: " .. tostring(love.timer.getFPS()) .. 
@@ -215,10 +212,10 @@ function debugDraw()
         "\nFrame Time (MS): " .. string.format("%.2f", 1000 / love.timer.getFPS()) ..
         "\nRectangle Calls: " .. tostring(rectangleCallCount)
     )
+    rectangleCallCount = 0
+
     
-    -- Restore the previous coordinate system
     love.graphics.pop()
 
-    -- Undo the initial translation by resetting to the original position
     love.graphics.translate(0, -Inits.GameHeight + 200)
 end
