@@ -116,7 +116,6 @@ function love.update(dt)
     updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
-    
 end
 
 function love.wheelmoved(x,y)
