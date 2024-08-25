@@ -190,6 +190,32 @@ function consoleDraw()
 
 end
 
+local debugStats = {}
+
+
+local mFloor = math.floor
+local statsUpdateTime, statsUpdateTimeMax = 0, 1
+
+function __updateDebugStats()
+    debugStats.fps = love.timer.getFPS()
+    debugStats.memUsage = mFloor(collectgarbage("count"))
+
+    local graphicsStats = love.graphics.getStats()
+    debugStats.graphicsMem = mFloor(graphicsStats.texturememory / 1024 / 1024)
+    debugStats.drawCalls = graphicsStats.drawcalls
+    debugStats.frameTime = string.format("%.2f", love.timer.getDelta())
+end
+
+function debugUpdate(dt)
+    rectangleCallCount = 0
+
+    statsUpdateTime = statsUpdateTime + dt
+    if statsUpdateTime >= statsUpdateTimeMax then
+        __updateDebugStats()
+        statsUpdateTime = 0
+    end
+end
+
 function debugDraw()
     consoleDraw()
     
@@ -207,13 +233,13 @@ function debugDraw()
     -- Set color to white for the text
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(
-        "FPS: " .. tostring(love.timer.getFPS()) .. 
-        "\nLua Memory (KB): " .. tostring(math.floor(collectgarbage("count"))) ..
-        "\nGraphics Memory (MB): " .. tostring(math.floor(love.graphics.getStats().texturememory / 1024 / 1024)) .. 
-        "\nMusic Time (MS): " .. tostring(MusicTime) ..
-        "\nDraw Calls: " .. tostring(love.graphics.getStats().drawcalls) ..
-        "\nFrame Time (MS): " .. string.format("%.2f", 1000 / love.timer.getFPS()) ..
-        "\nRectangle Calls: " .. tostring(rectangleCallCount)
+        "FPS: " .. debugStats.fps .. 
+        "\nLua Memory (KB): " .. debugStats.memUsage ..
+        "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
+        "\nMusic Time (MS): " .. MusicTime ..
+        "\nDraw Calls: " .. debugStats.drawCalls ..
+        "\nFrame Time (MS): " .. debugStats.frameTime ..
+        "\nRectangle Calls: " .. rectangleCallCount
     )
     
     -- Restore the previous coordinate system

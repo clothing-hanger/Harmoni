@@ -3,12 +3,7 @@ utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 
-originalRectangle = love.graphics.rectangle
-rectangleCallCount = 0
-function love.graphics.rectangle(mode, x, y, width, height, rx, ry, segments)
-    rectangleCallCount = rectangleCallCount + 1
-    originalRectangle(mode, x, y, width, height, rx, ry, segments)
-end
+require("Modules.Love")
 
 function love.run()
 	if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
@@ -100,6 +95,7 @@ function love.load()
 
     State.switch(States.Misc.PreLoader)
     debugInit()
+    __updateDebugStats() -- force our stats to update
 
 
     --shaders
@@ -110,6 +106,7 @@ end
 function love.update(dt)
     cursorText = nil
     if not console.isOpen then Input:update() end
+    debugUpdate(dt)
     State.update(dt)
     Timer.update(dt)
     updateCursor(dt)
@@ -119,7 +116,7 @@ function love.update(dt)
     updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
-    rectangleCallCount = 0
+    
 end
 
 function love.wheelmoved(x,y)
