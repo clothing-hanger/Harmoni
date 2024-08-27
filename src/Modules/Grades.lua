@@ -7,4 +7,3 @@ Grades = {
     {grade = "D", accuracy = 60, color = {}},
     {grade = "F", accuracy = -1, color = {}},  -- accuracy is set to -1 to ensure the game never gives F as a normal grade, since its a special case
 }
-

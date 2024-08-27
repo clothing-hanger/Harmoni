@@ -1,5 +1,10 @@
+---@class SongButton
 local SongButton = Class:extend()
 
+---@param songName string The song name
+---@param charterName string The name of the charter
+---@param artistName string  The name of the song artist
+---@param id number The id of the song
 function SongButton:new(songName, charterName, artistName, id)
     self.x, self.y = 0, 0
     self.width, self.height = 1000, 50

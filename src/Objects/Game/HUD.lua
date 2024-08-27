@@ -1,3 +1,4 @@
+---@class HUD
 local HUD = Class:extend()
 local scoreTween
 local accuracyTween

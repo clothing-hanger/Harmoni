@@ -1,3 +1,4 @@
+---@class Judgement
 local Judgement = Class:extend()
 
 function Judgement:new()
@@ -5,6 +6,8 @@ function Judgement:new()
 end
 
 function Judgement:judge(judgement)
+
+
     local newJudgement = {
         x = Skin.Params["Judgement X Offset"],
         y = Skin.Params["Judgement Y Offset"],

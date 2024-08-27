@@ -2,10 +2,10 @@
 Skin = {}
 SkinFolder = "Skins/Default Arrow/"
 
-
-
 Skin.Params = {
     ["Note Size"] = 125,                          -- size of the notes, pretty obvious i think
+    ["Hold Size"] = 125,                          -- ditto
+    ["HoldEnd Size"] = 125,                       -- ditto
     ["Receptor Size"] = 125,                      -- do you even need to ask
     ["Judgement Size"] = 0.4,                     -- same as above
     ["Judgement Y Offset"] = -150,                -- Y position of the judgmement (0 is center of the screen, higher number means lower on screen)         
@@ -31,7 +31,6 @@ Skin.Params = {
     ["Miss Color"] = rgb({209, 0, 0}),            -- color of miss
 }
 
-
 Skin.Fonts = {
     ["HUD Large"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 65),
     ["HUD Small"] = love.graphics.newFont(SkinFolder .. "FONTS/SourceCodePro-Medium.ttf", 15),
@@ -43,25 +42,93 @@ Skin.Fonts = {
 }
 
 Skin.Notes = {
-    ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeft.png"),
-    ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDown.png"),
-    ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
-    ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
+    ["4K"] = {
+        ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeft.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDown.png"),
+        ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
+    },
+    ["7K"] = {
+        ["Left1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeft.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDown.png"),
+        ["Left2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeft.png"),
+        ["Center"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
+        ["Right1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUp.png"),
+        ["Right2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRight.png"),
+    }
 }
 
+Skin.HoldNotes = {
+    ["4K"] = {
+        ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+    },
+    ["7K"] = {
+        ["Left1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Center"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+        ["Left2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+        ["Right2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+    }
+}
+
+Skin.HoldEndNotes = {
+    ["4K"] = {
+        ["Left"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+    },
+    ["7K"] = {
+        ["Left1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Down"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteDownTrail.png"),
+        ["Right1"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+        ["Center"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+        ["Left2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteLeftTrail.png"),
+        ["Up"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteUpTrail.png"),
+        ["Right2"] = love.graphics.newImage(SkinFolder .. "NOTES/NoteRightTrail.png"),
+    }
+}
 
 Skin.Receptors = {
     Up = {
-        ["Left"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorLeft.png"),
-        ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorDown.png"),
-        ["Right"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorRight.png"),
-        ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorUp.png"),
+        ["4K"] = {
+            ["Left"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorLeft.png"),
+            ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorDown.png"),
+            ["Right"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorRight.png"),
+            ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorUp.png"),
+        },
+        ["7K"] = {
+            ["Left1"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorLeft.png"),
+            ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorDown.png"),
+            ["Right1"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorRight.png"),
+            ["Center"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorUp.png"),
+            ["Left2"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorLeft.png"),
+            ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorUp.png"),
+            ["Right2"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorRight.png"),
+        }
     },
     Down = {
-        ["Left"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedLeft.png"),
-        ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedDown.png"),
-        ["Right"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedRight.png"),
-        ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedUp.png"),
+        ["4K"] = {
+            ["Left"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedLeft.png"),
+            ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedDown.png"),
+            ["Right"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedRight.png"),
+            ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedUp.png"),
+        },
+        ["7K"] = {
+            ["Left1"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedLeft.png"),
+            ["Down"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedDown.png"),
+            ["Right1"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedRight.png"),
+            ["Center"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedUp.png"),
+            ["Left2"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedLeft.png"),
+            ["Up"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedUp.png"),
+            ["Right2"] = love.graphics.newImage(SkinFolder .. "RECEPTORS/ReceptorPressedRight.png"),
+        }
     }
 }
 

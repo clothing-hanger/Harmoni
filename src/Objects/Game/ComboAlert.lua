@@ -1,3 +1,4 @@
+---@class ComboAlert
 local ComboAlert = Class:extend()
 local tween
 
@@ -12,6 +13,8 @@ function ComboAlert:update(dt)
 
 end
 
+---@param num number The combo to display
+---Does the combo alert with the given combo
 function ComboAlert:doComboAlert(num)
     self.text = tostring(num) .. " Combo!"
     self.color[4] = 1

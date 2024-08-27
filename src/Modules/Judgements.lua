@@ -58,9 +58,6 @@ function InitializeJudgments()
             Health = -0.12,
         }
     }
-    
-
-
 
     local judgementsArray = {}
     for k, v in pairs(Judgements) do
@@ -75,6 +72,4 @@ function InitializeJudgments()
     for i, judgement in ipairs(judgementsArray) do
         table.insert(JudgementNames, judgement.Judgement)
     end
-
-
 end

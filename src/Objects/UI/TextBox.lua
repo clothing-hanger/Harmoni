@@ -1,5 +1,13 @@
+---@class TextBox
 local TextBox = Class:extend()
 
+---@param x number The x position   
+---@param y number The y position
+---@param width number The width
+---@param height number The height
+---@param initialText string The initial text of the text box
+---@param name string The name of the text box
+---@param description string The description of the text box
 function TextBox:new(x, y, width, height, initialText, name, description)
     self.x = x
     self.y = y
@@ -30,12 +38,14 @@ function TextBox:update(dt)
     end
 end
 
+---@param text string
 function TextBox:textinput(text)
     if self.active then
         self.text = self.text .. text
     end
 end
 
+---@param key love.KeyConstant
 function TextBox:keypressed(key)
     if self.active then
         if key == "backspace" then

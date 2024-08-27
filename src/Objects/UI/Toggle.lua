@@ -1,5 +1,13 @@
+---@class Toggle
 local Toggle = Class:extend()
 
+---@param x number The x position
+---@param y number The y position
+---@param width number The width
+---@param height number The height
+---@param initialState boolean The initial state of the toggle
+---@param name string The name of the toggle
+---@param description string The description of the toggle
 function Toggle:new(x, y, width, height, initialState, name, description)
     self.description = description
     self.x = x
