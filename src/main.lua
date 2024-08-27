@@ -81,6 +81,7 @@ function love.load()
     require("Modules.Parse")
     require("Modules.Debug")
     require("Modules.screenWipe")
+    require("Modules.Notifications")
     require("Modules.Judgements")
     require("Modules.Grades")
     require("Modules.DifficultyCalculator")
@@ -103,6 +104,7 @@ function love.update(dt)
     Timer.update(dt)
     updateCursor(dt)
     debugUpdate(dt)
+    notificationUpdate(dt)
 
     updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
@@ -147,6 +149,7 @@ function love.draw()
             love.graphics.clear(0,0,0,1)
             State.draw()
             screenWipeDraw()
+            notificationDraw()
         love.graphics.setCanvas()
     love.graphics.pop()
 

@@ -6,6 +6,7 @@ function SongButton:new(songName, charterName, artistName, id)
     self.songName = songName or "Song Name not found!"
     self.charterName = charterName or ""  -- no need for error text for these since they arent that important
     self.artistName = artistName or ""
+    self.corrupt = false
     self.hovered = false
     self.id = id
 end
@@ -31,6 +32,7 @@ end
 
 function SongButton:draw()
     if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
+    if self.corrupt then love.graphics.setColor(1,0,0) end
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)

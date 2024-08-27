@@ -260,40 +260,6 @@ function PlayState:checkInput()
     end
 end
 
-function PlayState:checkInput()
-    for i, Lane in ipairs(lanes) do
-        if Input:pressed("lane" .. tostring(i)) then
-            for q, Note in ipairs(Lane) do
-                local NoteTime = (MusicTime - Note.StartTime)
-                local ConvertedNoteTime = math.abs(NoteTime)
-                if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
-                    PlayState:judge(ConvertedNoteTime, false)
-                    Note:hit(ConvertedNoteTime)
-                    Objects.Game.HitErrorMeter:addHit(NoteTime)
-                    if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
-                        Objects.Game.Combo:incrementCombo(false)  -- false means we dont reset it
-                    else
-                        Objects.Game.Combo:incrementCombo(true)   -- true means we do reset it
-                    end
-                    table.insert(NPSData.NPS, 1000)
-                    break
-                end
-            end
-        end
-
-        for q, Note in ipairs(Lane) do
-            local NoteTime = (MusicTime - Note.StartTime)
-            local ConvertedNoteTime = math.abs(NoteTime)
-            if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
-                PlayState:judge(ConvertedNoteTime)
-                Note:hit(ConvertedNoteTime, true)
-                Objects.Game.Combo:incrementCombo(true)
-                Objects.Game.HitErrorMeter:addHit(NoteTime)
-                break
-            end
-        end
-    end
-end
 
 function PlayState:checkBotInput()
     for i, Lane in ipairs(lanes) do

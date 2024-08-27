@@ -62,7 +62,16 @@ function SongSelect:updateButtons(dt)
     end
 
     hovered = cursorX > Inits.GameWidth/2
-    DifficultyButtons[SelectedDifficulty].selected = true
+
+    
+    if DifficultyButtons[SelectedDifficulty] then
+        DifficultyButtons[SelectedDifficulty].selected = true
+    else
+        if not SongButtons[SelectedSong].corrupt then notification("Selected Song is corrupt! (Case 1)") end
+        SongButtons[SelectedSong].corrupt = true
+    end
+    
+
 end
 
 function SongSelect:wheelmoved(y)
