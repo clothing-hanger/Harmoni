@@ -121,6 +121,9 @@ function quaverParse(file)
     BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
     InitializeJudgments()
     currentBpm = metaData.bpm
+   -- calculateBeatLength(currentBPM)
+    print(currentBPM)
+    print("WHY")
     metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
 
     return true
