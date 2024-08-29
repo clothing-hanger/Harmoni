@@ -30,8 +30,16 @@ function loadSettings()
         }
     }
 
-    keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
-    keyBinds7k = splitIntoLetters(Settings.keyBinds7k)
+    if Settings.keyBinds4k then
+        keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+    else
+        Settings.keyBinds4k = splitIntoLetters("dfjk")
+    end
+    if Settings.keyBinds7k then
+        keyBinds7k = splitIntoLetters(Settings.keyBinds7k)
+    else
+        keyBinds7k = splitIntoLetters("sdf jkl")
+    end
 
     Input = setupControls()
 end
