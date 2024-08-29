@@ -89,15 +89,25 @@ end
 
 function SettingsMenu:checkForMissingSettings()
     local isMissing = false
-
+    print("Check for missing settings")
     for key, _ in pairs(Settings) do
         local found = false
+        --[[
         for _, tab in ipairs(tabs) do
             for _, option in ipairs(tab) do
                 if type(option) == "table" then
                     if option.key == key then
                         found = true
                     end
+                end
+            end
+        end
+--]]
+
+        for _, tab in ipairs(tabs) do
+            for _, setting in ipairs(tab) do
+                if type(setting) == "table" then
+                    print(setting.key)
                 end
             end
         end

@@ -20,6 +20,8 @@ function toGameScreen(x, y)
 end
 
 function love.load()
+
+    love.graphics.setDefaultFilter("nearest")
     -- Setup Libraries
     require("Modules.Controls") -- this goes with other libs since it inits a lib
     Class = require("Libraries.Class")
