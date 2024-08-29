@@ -142,6 +142,8 @@ Skin.Judgements = {
 }
 
 Skin.Menu = {
+    ["Main Logo"] = love.graphics.newImage(SkinFolder .. "Menu/main logo.png"),
+    ["Icon Logo"]  = love.graphics.newImage(SkinFolder .. "Menu/logoH.png"),
     ["Loading Spinner"] = love.graphics.newImage(SkinFolder .. "MENU/logoH.png"),
 }
 

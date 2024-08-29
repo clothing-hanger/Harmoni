@@ -11,14 +11,14 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
-    MusicTime = -3000
-
+    MusicTime = -99999999 -- just a super low number, musicTime will get actually initialized on frame 2  (THIS IS TEMPORARY) ((which means permamnent probably))
     quaverParse(SongString)
     --Init self variables
     self.myBalls = math.huge
     self.ScrollVelocityMarks = {}
     self.SvIndex = 1
     self.CurrentTime = 0
+    self.startedMusicTime = false
     self.strumYPosition = Settings.scrollDirection == "Down" and Inits.GameHeight or 0
     self.inputMode = self.inputMode or "4K"
 
@@ -48,7 +48,6 @@ function PlayState:enter()
 
     PlayState:initSVMarks()
     PlayState:initNotePositions()
-    doScreenWipe("rightOut")
 
 end
 
@@ -60,20 +59,32 @@ function PlayState:initObjects()
     Objects.Game.Judgement:new()
     Objects.Game.HUD:new()
     Objects.Game.Background:new(background)
-    Objects.Game.Background:setDimness(Settings.backgroundDim/100, true)
     Objects.Game.ComboAlert:new()
     Objects.Game.Combo:new()
     Objects.Game.HitErrorMeter:new()
     Objects.Game.HealthBar:new()
+    Timer.after(0.4, function()
+        Objects.Game.Background:setDimness(Settings.backgroundDim/100, true)
+
+        for i, Receptor in ipairs(Receptors) do
+            Timer.after(0.1*Receptor.lane, function() Receptor:appear() end)
+        end
+     end)
+
 end
 
 function PlayState:update(dt)
+    if not self.startedMusicTime then
+        self.startedMusicTime = true
+        MusicTime = -3000
+        doScreenWipe("rightOut")  -- so that it always does the transition no matter song loading time  -- except this DOESNT WORK
+    end
     if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
     
     ---@diagnostic disable-next-line: deprecated
-    performance = metaData.difficulty * math.pow(accuracy/198, 6)
+    performance = metaData.difficulty * math.pow(accuracy/198, 6)     -- guglio where did you get 198
 
     updateMusicTimeFunction()
     self:updateTime()
