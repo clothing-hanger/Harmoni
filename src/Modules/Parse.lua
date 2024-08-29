@@ -1,6 +1,6 @@
 
 ---@param file string
----@return boolean passed If wether or not, the parser failed whilst loading the chart
+---@return boolean passed If whether or not, the parser failed whilst loading the chart
 function quaverParse(file)
     print("quaverParse(" .. file .. ")")
     if not file then State.switch(States.SongSelectState) end
@@ -123,7 +123,7 @@ function quaverParse(file)
     currentBpm = metaData.bpm
    -- calculateBeatLength(currentBPM)
     print(currentBPM)
-    print("WHY")
+    print(bpm)
     metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
 
     return true

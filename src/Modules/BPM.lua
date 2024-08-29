@@ -1,5 +1,6 @@
 local BPMTimer = 0
 local beatInterval = 0
+local frame
 
 
 function calculateBeatLength(bpm)
@@ -9,6 +10,7 @@ function calculateBeatLength(bpm)
 end
 
 function updateBPM()
+    frame = plusEq(frame)
     local previousFrameTime
     BPMTimer = BPMTimer + (love.timer.getTime() * 1000) - (previousFrameTime or (love.timer.getTime()*1000))
     previousFrameTime = love.timer.getTime() * 1000
