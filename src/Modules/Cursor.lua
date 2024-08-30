@@ -14,5 +14,6 @@ function cursorTextDraw()
     love.graphics.setColor(1,1,1)
 
     local mx, my = love.mouse.getPosition() -- cant use our converted position
-    love.graphics.borderPrint(cursorText, mx+15, my)
+    local limit = Inits.WindowWidth - mx - 15
+    love.graphics.borderPrintf(cursorText, mx+15, my, limit)
 end

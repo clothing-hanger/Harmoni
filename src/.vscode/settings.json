@@ -5,7 +5,8 @@
     "Lua.diagnostics.disable": [
         "undefined-global",
         "lowercase-global",
-        "assign-type-mismatch"
+        "assign-type-mismatch",
+        "param-type-mismatch"
     ],
     "Lua.runtime.version": "LuaJIT",
     "Lua.workspace.library": [".vscode/love"]
