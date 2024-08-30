@@ -4,7 +4,7 @@ local mt = {}
 local restricted = {
     States = setmetatable({}, {
         __index = function() print("Not allowed.") end,
-        __newindex = function() print("Now allowed.") end
+        __newindex = function() print("Not allowed.") end
     }),
     os = {
         time = os.time,
