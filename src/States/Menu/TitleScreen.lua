@@ -5,6 +5,9 @@ local logo
 local buttons
 
 function TitleScreen:enter()
+    self.switchSong = States.Menu.SongSelect.switchSong
+    self.setupDifficultyList = States.Menu.SongSelect.setupDifficultyList
+    
     SelectedSong = 1
     SelectedDifficulty = 1
     selection = 1
@@ -32,10 +35,9 @@ function TitleScreen:enter()
             end,     
         },
     }
-
 end
 
-function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
+--[[ function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
     TitleScreen:setupDifficultyList()
 
     print("Switch Song")
@@ -57,9 +59,10 @@ function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i 
             print(metaData.difficulties[SelectedDifficulty].background)
         end
     end
-end
+end ]]
 
-function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
+
+--[[ function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
     DifficultyButtons = {}
     DifficultyList = {}
     local SongContents = love.filesystem.getDirectoryItems("Music/" .. SongList[SelectedSong])
@@ -74,7 +77,7 @@ function TitleScreen:setupDifficultyList()  -- same comment here as in the funct
             end
         end
     end
-end
+end ]]
 
 function TitleScreen:update()
 

@@ -65,7 +65,7 @@ function quaverParse(file)
         table.insert(timingPoints, {startTime, bpm})
 
         if i == 1 then
-            metaData.bpm = timingPoint.Bpm
+            metaData.bpm = bpm
         end
     end
 
@@ -120,8 +120,8 @@ function quaverParse(file)
     metaData.songLengthToLastNote = metaData.lastNoteTime/1000
     BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
     InitializeJudgments()
-    currentBpm = metaData.bpm
-   -- calculateBeatLength(currentBPM)
+    currentBPM = metaData.bpm
+    calculateBeatLength(currentBPM)
     print(currentBPM)
     print(bpm)
     metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)

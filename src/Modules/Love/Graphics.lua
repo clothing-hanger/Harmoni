@@ -1,11 +1,24 @@
 ---@diagnostic disable: duplicate-set-field
 local o_loveGraphicsRectangle = love.graphics.rectangle
+local o_loveGraphicsGetStats = love.graphics.getStats
 
-rectangleCallCount = 0
+local rectangleCallCount = 0
 function love.graphics.rectangle(...)
     rectangleCallCount = plusEq(rectangleCallCount)
 
     o_loveGraphicsRectangle(...)
+end
+
+local o_loveUpdate = love.update
+function love.update(dt)
+    o_loveUpdate(dt)
+    rectangleCallCount = 0
+end
+
+function love.graphics.getStats()
+    local stats = o_loveGraphicsGetStats()
+    stats.rectCalls = rectangleCallCount
+    return stats
 end
 
 ---See [love.graphics.print](lua://love.graphics.print)

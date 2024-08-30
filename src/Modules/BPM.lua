@@ -1,10 +1,10 @@
 local BPMTimer = 0
 local beatInterval = 0
-local frame
+local frame = 1
 
-
+---@param bpm number
 function calculateBeatLength(bpm)
-    print("Calculate Beat Length " .. bpm)
+    print(bpm)
     beatInterval = 60000/bpm
     onBeat = false
 end
@@ -20,10 +20,7 @@ function updateBPM()
         frame = 1 
     end
 
-
     if frame == 2 and onBeat then onBeat = false end
-
-  --  print(tostring(onBeat))
 end
 
 function beat()

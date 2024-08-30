@@ -199,6 +199,7 @@ function __updateDebugStats()
     debugStats.graphicsMem = mFloor(graphicsStats.texturememory / 1024 / 1024)
     debugStats.drawCalls = graphicsStats.drawcalls
     debugStats.frameTime = string.format("%.2f", love.timer.getDelta())
+    debugStats.rectCalls = graphicsStats.rectCalls
 end
 
 function debugUpdate(dt)
@@ -226,12 +227,11 @@ function debugDraw()
         "FPS: " .. debugStats.fps .. 
         "\nLua Memory (KB): " .. debugStats.memUsage ..
         "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
-        "\nMusic Time (MS): " .. MusicTime ..
+        "\nMusic Time (MS): " .. string.format("%.3f", MusicTime) ..
         "\nDraw Calls: " .. debugStats.drawCalls ..
         "\nFrame Time (MS): " .. debugStats.frameTime ..
-        "\nRectangle Calls: " .. rectangleCallCount
+        "\nRectangle Calls: " .. debugStats.rectCalls
     )
-    rectangleCallCount = 0
 
     love.graphics.pop()
 

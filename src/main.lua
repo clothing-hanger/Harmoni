@@ -3,9 +3,6 @@ utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 
-require("Modules.Love")
-require("Modules.Lua")
-
 love.audio.setVolume(0.15)
 
 function toGameScreen(x, y)
@@ -21,19 +18,21 @@ end
 
 function love.load()
 
-    love.graphics.setDefaultFilter("nearest")
+    love.graphics.setDefaultFilter("linear")
     -- Setup Libraries
     require("Modules.Controls") -- this goes with other libs since it inits a lib
     Class = require("Libraries.Class")
     State = require("Libraries.State")
     Tinyyaml = require("Libraries.Tinyyaml")
     Timer = require("Libraries.Timer")
-    GameScreen = love.graphics.newCanvas(Inits.GameWidth, Inits.GameHeight)
 
     -- Initialize Game
+    GameScreen = love.graphics.newCanvas(Inits.GameWidth, Inits.GameHeight)
     States = require("Modules.States")
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
+    require("Modules.Love")
+    require("Modules.Lua")
     require("Modules.Constants")
     require("Modules.RGB")
     require("Modules.MusicTime")
@@ -59,7 +58,6 @@ function love.load()
 
     --shaders
     riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")  --👅👅👅
-
 end
 
 function love.update(dt)
@@ -78,10 +76,10 @@ function love.update(dt)
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
 end
 
-function love.wheelmoved(x,y)
+function love.wheelmoved(_, y)
     if love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt") then
         volumeScroll(y)
-        return 
+        return
     end
     State.wheelmoved(y)
 end
@@ -143,7 +141,6 @@ end
 function love.resize(w, h)
     Inits.WindowWidth = w
     Inits.WindowHeight = h
-  
 end
 
 function love.quit()
