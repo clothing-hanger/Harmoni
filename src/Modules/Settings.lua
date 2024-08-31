@@ -2,7 +2,8 @@ function loadSettings()
     settingsFile = love.filesystem.load("Settings/Settings.lua")
 
     if not settingsFile then
-        States.Menu.SettingsMenu:saveSettings()  -- sets up default settings
+        States.Menu.SettingsMenu:saveSettings()  -- sets up default 
+        settingsFile = love.filesystem.load("Settings/Settings.lua")
     end
         
     -- check for missing settings
