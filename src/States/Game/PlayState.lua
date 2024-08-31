@@ -236,6 +236,7 @@ function PlayState:checkInput()
     for i, Lane in ipairs(lanes) do
         -- PRESSED INPUT
         if Input:pressed("lane" .. i .. self.inputMode) then
+            table.insert(NPSData.HPS, 1000)
             for q, Note in ipairs(Lane) do
                 local NoteTime = (MusicTime - Note.StartTime)
                 local ConvertedNoteTime = math.abs(NoteTime)
