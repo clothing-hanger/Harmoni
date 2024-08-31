@@ -74,13 +74,13 @@ function SettingsMenu:setupSettingsTab(tabname)
         if tabs[Tab].tab == tabName then
             for Setting = 1, #tabs[Tab] do
                 if tabs[Tab][Setting].type == "number" then
-                    sliders[tabs[Tab][Setting].key] = Objects.UI.Slider(380, (60*Setting), settingWidth, tabs[Tab][Setting].min, tabs[Tab][Setting].max, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
+                    sliders[tabs[Tab][Setting].key] = Objects.UI.Slider(380, (60*Setting), settingWidth, tabs[Tab][Setting].min, tabs[Tab][Setting].max, Settings[tabs[Tab][Setting].key] or tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 elseif tabs[Tab][Setting].type == "toggle" then
-                    toggles[tabs[Tab][Setting].key] = Objects.UI.Toggle(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
+                    toggles[tabs[Tab][Setting].key] = Objects.UI.Toggle(380, (60*Setting), settingWidth, settingHeight, Settings[tabs[Tab][Setting].key] or tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 elseif tabs[Tab][Setting].type == "select" then
-                    selects[tabs[Tab][Setting].key] = Objects.UI.Select(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].options, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
+                    selects[tabs[Tab][Setting].key] = Objects.UI.Select(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].options, Settings[tabs[Tab][Setting].key] or tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 elseif tabs[Tab][Setting].type == "text" then
-                    textBoxes[tabs[Tab][Setting].key] = Objects.UI.TextBox(380, (60*Setting), settingWidth, settingHeight, tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
+                    textBoxes[tabs[Tab][Setting].key] = Objects.UI.TextBox(380, (60*Setting), settingWidth, settingHeight, Settings[tabs[Tab][Setting].key] or tabs[Tab][Setting].value, tabs[Tab][Setting].name, tabs[Tab][Setting].description)
                 end
             end
         end
