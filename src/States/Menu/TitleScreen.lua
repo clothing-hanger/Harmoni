@@ -3,16 +3,23 @@ local TitleScreen = State()
 local selection
 local logo
 local buttons
+local logoSize
 
 function TitleScreen:enter()
-    self.switchSong = States.Menu.SongSelect.switchSong
-    self.setupDifficultyList = States.Menu.SongSelect.setupDifficultyList
+    Objects.Menu.ModifiersMenu:new()
+
+    --self.switchSong = States.Menu.SongSelect.switchSong     -- gonna switch to this but temp im not using it
+    --self.setupDifficultyList = States.Menu.SongSelect.setupDifficultyList
     
-    SelectedSong = 1
+    SelectedSong = love.math.random(1,#SongList)
     SelectedDifficulty = 1
     selection = 1
-    TitleScreen:switchSong()
-    
+
+    logoSize = {x = 1, y = 1, r = 1}
+    if not Song or (Song and not Song:isPlaying()) then 
+        TitleScreen:switchSong()
+    end
+
     buttons = {    -- time to make yet another completely different button format because i cant code consistently
         {
             text = "Play", 
@@ -37,7 +44,7 @@ function TitleScreen:enter()
     }
 end
 
---[[ function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
+ function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
     TitleScreen:setupDifficultyList()
 
     print("Switch Song")
@@ -59,10 +66,17 @@ end
             print(metaData.difficulties[SelectedDifficulty].background)
         end
     end
-end ]]
+    Objects.Menu.ModifiersMenu:configureMods()
+
+    quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty])
+    if Song and Song:isPlaying() then
+        Song:stop()
+    end
+    Song:play()
+end
 
 
---[[ function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
+ function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
     DifficultyButtons = {}
     DifficultyList = {}
     local SongContents = love.filesystem.getDirectoryItems("Music/" .. SongList[SelectedSong])
@@ -77,11 +91,17 @@ end ]]
             end
         end
     end
-end ]]
+end 
+
+function TitleScreen:logoBump()
+    logoSize = {x = 1.05, y = 1.1, r = 0}
+    Timer.tween(0.25, logoSize, {x = 1., y = 1}, "out-quad")
+end
 
 function TitleScreen:update()
 
     updateBPM()
+    if onBeat then TitleScreen:logoBump() end
     
     if Input:pressed("menuUp") then
         selection = minusEq(selection)
@@ -107,7 +127,7 @@ end
 
 function TitleScreen:draw()
     if background then love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2,   0, (Inits.GameWidth/background:getWidth()), (Inits.GameHeight/background:getHeight()), background:getWidth()/2, background:getHeight()/2) end
-    love.graphics.draw(Skin.Menu["Main Logo"], Inits.GameWidth/2, Inits.GameHeight/2-250, 0, 1, 1, Skin.Menu["Main Logo"]:getWidth()/2, Skin.Menu["Main Logo"]:getHeight()/2)
+    love.graphics.draw(Skin.Menu["Main Logo"], Inits.GameWidth/2, Inits.GameHeight/2-250, 0, logoSize.x, logoSize.y, Skin.Menu["Main Logo"]:getWidth()/2, Skin.Menu["Main Logo"]:getHeight()/2)
     love.graphics.setFont(Skin.Fonts["Menu Small"])
     for _, Button in pairs(buttons) do
         love.graphics.setColor(0,0,0,0.8)

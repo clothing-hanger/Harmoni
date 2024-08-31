@@ -88,8 +88,12 @@ function PlayState:update(dt)
 
     updateMusicTimeFunction()
     self:updateTime()
+
+    updateBPM()
+    
     if Song and (MusicTime >= 0 and not Song:isPlaying()) then -- to make sure it doesnt restart
         Song:setPitch(Mods.songRate)
+
         Song:play()
     end
     for i, Lane in ipairs(lanes) do
@@ -194,7 +198,8 @@ function PlayState:gameOver()
 
     doScreenWipe("leftIn", function() 
         if Song then Song:stop() end
-        Song:release()
+        --Song:release() 
+        Song = nil
         State.switch(States.Menu.SongSelect) 
     end)
 end

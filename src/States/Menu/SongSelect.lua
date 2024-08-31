@@ -24,7 +24,7 @@ function SongSelect:initObjects()
     Objects.Menu.ListMenu:new()
 
     for i = 1,10 do
-        Objects.Menu.ListMenu:addItem({text = "PLACEHOLDER .. " .. i})
+        Objects.Menu.ListMenu:addItem({text = "PLACEHOLDER .. " .. i})     -- TEMPORARY LIST MENU TEST
     end
 end
 
@@ -140,6 +140,7 @@ function SongSelect:switchSong()
     SongSelect:setupDifficultyList()
 
     print("Switch Song")
+    
     local metaData = love.filesystem.load("Music/"..SongList[SelectedSong].."/meta.lua")()
     background = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background
     for i, difficulty in ipairs(metaData.difficulties) do
@@ -158,6 +159,10 @@ function SongSelect:switchSong()
             print(metaData.difficulties[SelectedDifficulty].background)
         end
     end
+
+    quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty], "no lanes")
+
+    if Song then Song:play() end
 end
 
 
