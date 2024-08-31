@@ -31,6 +31,7 @@ function love.load()
     States = require("Modules.States")
     Shaders = require("Modules.Shaders")
     Objects = require("Modules.Objects")
+    Threads = require("Modules.Threads")
     require("Modules.Love")
     require("Modules.Lua")
     require("Modules.Constants")
@@ -63,6 +64,7 @@ function love.load()
     riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")  --👅👅👅
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
     cursorText = nil
     if not console.isOpen then Input:update() end

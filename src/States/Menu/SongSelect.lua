@@ -137,6 +137,7 @@ function SongSelect:update(dt)
 end
 
 function SongSelect:switchSong()
+    if Song then Song:stop(); Song:release() end
     SongSelect:setupDifficultyList()
 
     print("Switch Song")
@@ -146,7 +147,6 @@ function SongSelect:switchSong()
     for i, difficulty in ipairs(metaData.difficulties) do
         print(tostring(DifficultyList[SelectedDifficulty]))
         if tostring(DifficultyList[SelectedDifficulty]) == difficulty.fileName then
-            print("diff")
             if love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background) and
                 love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background).type == "file" then
                     
@@ -154,13 +154,20 @@ function SongSelect:switchSong()
             else
                 background = nil
             end
+            if love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].audio) and
+                love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].audio).type == "file" then
+                    
+                Song = love.audio.newSource("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].audio, "stream")
+            else
+                Song = nil
+            end
             songName = metaData.songName
             difficultyName = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].diffName
             print(metaData.difficulties[SelectedDifficulty].background)
         end
     end
 
-    quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty], "no lanes")
+    --[[ quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty], "no lanes") ]]
 
     if Song then Song:play() end
 end
