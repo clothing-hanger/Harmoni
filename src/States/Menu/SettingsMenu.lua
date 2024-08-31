@@ -62,7 +62,6 @@ function SettingsMenu:enter()
     end
 
     self:checkForMissingSettings()
-
 end
 function SettingsMenu:setupSettingsTab(tabname)
     sliders = {}
@@ -90,30 +89,15 @@ end
 function SettingsMenu:checkForMissingSettings()
     local isMissing = false
     print("Check for missing settings")
-    for key, _ in pairs(Settings) do
-        local found = false
-        --[[
-        for _, tab in ipairs(tabs) do
-            for _, option in ipairs(tab) do
-                if type(option) == "table" then
-                    if option.key == key then
-                        found = true
-                    end
+
+    for _, tab in ipairs(tabs) do
+        for _, option in ipairs(tab) do
+            if type(option) == "table" then
+                if not Settings[option.key] then
+                    Settings[option.key] = option.value
+                    isMissing = true
                 end
             end
-        end
---]]
-
-        for _, tab in ipairs(tabs) do
-            for _, setting in ipairs(tab) do
-                if type(setting) == "table" then
-                    print(setting.key)
-                end
-            end
-        end
-
-        if not found then
-            isMissing = true
         end
     end
 
@@ -137,14 +121,6 @@ end
 
 
 function SettingsMenu:saveSettings()
-    Settings = {}
-    for Tab = 1,#tabs do
-        for Setting = 1,#tabs[Tab] do
-            Settings[tabs[Tab][Setting].key] = tabs[Tab][Setting].value
-            print(tabs[Tab][Setting].key .. ": " .. tostring(tabs[Tab][Setting].value))
-        end
-    end
-    
     savedSettings = "return {\n"
     for Key, Value in pairs(Settings) do
         local settingValue = ""

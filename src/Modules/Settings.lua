@@ -8,10 +8,10 @@ function loadSettings()
         
     -- check for missing settings
     Settings = settingsFile()
-   -- local hasMissing = States.Menu.SettingsMenu:checkForMissingSettings()
-    print(tostring(hasMissing))
+    local hasMissing = States.Menu.SettingsMenu:checkForMissingSettings()
+    
     if hasMissing then
-    --    States.Menu.SettingsMenu:saveSettings()
+        States.Menu.SettingsMenu:saveSettings()
     end
     
     LanesPositions = {
