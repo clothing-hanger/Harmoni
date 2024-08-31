@@ -1,7 +1,11 @@
 
 ---@param file string
 ---@return boolean passed If whether or not, the parser failed whilst loading the chart
-function quaverParse(file)
+function quaverParse(file, argument)
+    local noLane = false
+    if argument == "no lanes" then
+        noLane = true
+    end
     print("quaverParse(" .. file .. ")")
     if not file then State.switch(States.SongSelectState) end
     if not love.filesystem.getInfo(file, "file") then
@@ -42,6 +46,10 @@ function quaverParse(file)
         table.insert(lanes, {})
     end
     States.Game.PlayState.inputMode = #lanes .. "K"
+
+    if Song and Song:isPlaying() then
+        Song:stop()
+    end
     
     if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
         Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
@@ -58,73 +66,76 @@ function quaverParse(file)
         print("Background File Not Found For Song " .. SelectedSong)
     end
 
-    for i = 1,#chart.TimingPoints do
-        local timingPoint = chart.TimingPoints[i]
-        local startTime = timingPoint.StartTime
-        local bpm = (timingPoint.Bpm or 0)
-        table.insert(timingPoints, {startTime, bpm})
+    if not noLane then
+        for i = 1,#chart.TimingPoints do
+            local timingPoint = chart.TimingPoints[i]
+            local startTime = timingPoint.StartTime
+            local bpm = (timingPoint.Bpm or 0)
+            table.insert(timingPoints, {startTime, bpm})
 
-        if i == 1 then
-            metaData.bpm = bpm
-        end
-    end
-
-    for i = 1,#chart.HitObjects do
-        local hitObject = chart.HitObjects[i]
-        local startTime = (hitObject.StartTime or 0) / Mods.songRate
-        if not startTime then goto continue end
-        local endTime = hitObject.EndTime or 0
-        local lane = hitObject.Lane
-
-        metaData.noteCount = metaData.noteCount + 1
-        if endTime > 0 then
-            metaData.holdNoteCount = metaData.holdNoteCount + 1
-        end
-        
-        if Mods.mirror then
-            local mirrorMap4 = {4,3,2,1}
-            local mirrorMap7 = {7,6,5,4,3,2,1}
-            
-            if metaData.inputMode == "4" then
-                lane = mirrorMap4[lane]
-            elseif metaData.inputMode == "7" then
-                lane = mirrorMap7[lane]
+            if i == 1 then
+                metaData.bpm = bpm
             end
         end
 
-        local note = Objects.Game.Note(lane, startTime, endTime)
-        table.insert(lanes[lane], note)
-        
-        if not metaData.firstNoteTime and startTime then
-            metaData.firstNoteTime = math.floor(startTime/1000)
+        for i = 1,#chart.HitObjects do
+            local hitObject = chart.HitObjects[i]
+            local startTime = (hitObject.StartTime or 0) / Mods.songRate
+            if not startTime then goto continue end
+            local endTime = hitObject.EndTime or 0
+            local lane = hitObject.Lane
+
+            metaData.noteCount = metaData.noteCount + 1
+            if endTime > 0 then
+                metaData.holdNoteCount = metaData.holdNoteCount + 1
+            end
+            
+            if Mods.mirror then
+                local mirrorMap4 = {4,3,2,1}
+                local mirrorMap7 = {7,6,5,4,3,2,1}
+                
+                if metaData.inputMode == "4" then
+                    lane = mirrorMap4[lane]
+                elseif metaData.inputMode == "7" then
+                    lane = mirrorMap7[lane]
+                end
+            end
+
+            local note = Objects.Game.Note(lane, startTime, endTime)
+            table.insert(lanes[lane], note)
+            
+            if not metaData.firstNoteTime and startTime then
+                metaData.firstNoteTime = math.floor(startTime/1000)
+            end
+            if not metaData.lastNoteTime then
+                metaData.lastNoteTime = startTime -- this should work because the last time its run will be the last note   
+            end   
+            ::continue::
         end
-        if not metaData.lastNoteTime then
-            metaData.lastNoteTime = startTime -- this should work because the last time its run will be the last note   
-        end   
-        ::continue::
+
+        for i = 1, #chart.SliderVelocities do
+            local velocity = chart.SliderVelocities[i]
+            local startTime = (velocity.StartTime or 0)
+            local velocityChange = velocity.Multiplier
+
+            table.insert(scrollVelocities, Objects.Game.ScrollVelocity(startTime, velocityChange))
+        end
+
+        for i = 1, #lanes do
+            table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
+        end
+        metaData.songLengthToLastNote = metaData.lastNoteTime/1000
+        BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+        metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
+
     end
-
-    for i = 1, #chart.SliderVelocities do
-        local velocity = chart.SliderVelocities[i]
-        local startTime = (velocity.StartTime or 0)
-        local velocityChange = velocity.Multiplier
-
-        table.insert(scrollVelocities, Objects.Game.ScrollVelocity(startTime, velocityChange))
-    end
-
-    for i = 1, #lanes do
-        table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
-    end
-
     metaData.songLength = Song:getDuration()
-    metaData.songLengthToLastNote = metaData.lastNoteTime/1000
-    BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])
+
     InitializeJudgments()
     currentBPM = metaData.bpm
     calculateBeatLength(currentBPM)
     print(currentBPM)
     print(bpm)
-    metaData.difficulty = calculateDifficulty(lanes, metaData.songLengthToLastNote)
 
     return true
 end

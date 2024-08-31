@@ -228,6 +228,7 @@ function debugDraw()
         "\nLua Memory (KB): " .. debugStats.memUsage ..
         "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
         "\nMusic Time (MS): " .. string.format("%.3f", MusicTime) ..
+        "\nBeat Time (MS): " .. string.format("%.3f", debugBeatTime) .. 
         "\nDraw Calls: " .. debugStats.drawCalls ..
         "\nFrame Time (MS): " .. debugStats.frameTime ..
         "\nRectangle Calls: " .. debugStats.rectCalls
