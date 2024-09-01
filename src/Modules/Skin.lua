@@ -20,7 +20,7 @@ local restricted = {
                 return love.graphics.newImage(SkinFolder .. path)
             end,
             newFont = function(path, size)
-                return love.graphics.newFont(SkinFolder .. path)
+                return love.graphics.newFont(SkinFolder .. path, size)
             end
         },
         audio = {

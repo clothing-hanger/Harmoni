@@ -66,7 +66,7 @@ function PlayState:initObjects()
         Objects.Game.Background:setDimness(Settings.backgroundDim/100, true)
 
         for i, Receptor in ipairs(Receptors) do
-            Timer.after(0.1*Receptor.lane, function() Receptor:appear() end)
+            Timer.after(0.075*Receptor.lane, function() Receptor:appear() end)
         end
      end)
 

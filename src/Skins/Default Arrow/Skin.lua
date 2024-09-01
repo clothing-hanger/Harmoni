@@ -12,7 +12,7 @@ Skin.Params = {
     ["Hit Error Meter Y"] = 0,                    -- also same, but for hit error graph
     ["Hit Error Meter X"] = 0,                    -- you get it by now
     ["Hit Error Meter Height"] = 15,              -- how tall the hit error graph is
-    ["Hit Error Meter Width"] = 150,               -- how wide the hit error graph is
+    ["Hit Error Meter Width"] = 150,              -- how wide the hit error graph is
     ["Hit Error Meter Solid"] = false,            -- if true, the graph will be made of colored rectangles to show where the judgment windows are, hits will be black, if false, the only visible part of the graph will be the hits, and they will be colored as the color of the judgmement they are
     ["Hit Error Meter Fade"] = 1000,              -- how long in milliseconds a hit will take to fade from the hit error graph
     ["Health Bar X"] = 350,                       -- X position of the health bar
@@ -20,12 +20,12 @@ Skin.Params = {
     ["Health Bar Height"] = 700,                  -- Height of the health bar
     ["Health Bar Width"] = 15,                    -- Width of the health bar
     ["Health Bar Direction"] = "vertical",        -- Direction of the health bar (vertical, horizontal)
-    ["Marvelous Color"] = rgb({0, 213, 255}),     -- color of marvelous (used for judgment display and hit error graph)
-    ["Perfect Color"] = rgb({0,  0, 225}),        -- color of perfect
-    ["Great Color"] = rgb({0, 255, 81}),          -- color of great
-    ["Good Color"] = rgb({0, 153, 81}),           -- color of good
-    ["Okay Color"] = rgb({210, 13, 81}),          -- color of okay
-    ["Miss Color"] = rgb({209, 0, 0}),            -- color of miss
+    ["Marvelous Color"] = rgb {0, 213, 255},      -- color of marvelous (used for judgment display and hit error graph)
+    ["Perfect Color"] = rgb {0,  0, 225},         -- color of perfect
+    ["Great Color"] = rgb {0, 255, 81},           -- color of great
+    ["Good Color"] = rgb {0, 153, 81},            -- color of good
+    ["Okay Color"] = rgb {210, 13, 81},           -- color of okay
+    ["Miss Color"] = rgb {209, 0, 0},             -- color of miss
 }
 
 Skin.Fonts = {
