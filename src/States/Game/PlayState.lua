@@ -48,7 +48,6 @@ function PlayState:enter()
 
     PlayState:initSVMarks()
     PlayState:initNotePositions()
-
 end
 
 function PlayState:initModifiers()
@@ -96,21 +95,27 @@ function PlayState:update(dt)
 
         Song:play()
     end
-    for i, Lane in ipairs(lanes) do
-        for q, Note in ipairs(Lane) do
+    for _, Lane in ipairs(lanes) do
+        for _, Note in ipairs(Lane) do
             if Note.StartTime - MusicTime > 15000 then 
                 break
-           end
+            end
             Note:update(dt)
         end
     end
 
-    for i, Receptor in ipairs(Receptors) do
+    for _, Receptor in ipairs(Receptors) do
         Receptor:update(dt)
     end
 
     if Mods.suddenDeath and Judgements["Miss"].Count > 0 then
         PlayState:gameOver()
+    end
+
+    if MusicTime > metaData.lastNoteTime then
+        doScreenWipe("leftOut", function()
+            State.switch(States.Menu.SongSelect)
+        end)
     end
 
     if Mods.waves then
@@ -125,6 +130,7 @@ function PlayState:update(dt)
     end
 end
 
+---Initializes the sv markers
 function PlayState:initSVMarks()
     if #scrollVelocities < 1 then
         return
@@ -144,6 +150,7 @@ function PlayState:initSVMarks()
     end
 end
 
+---Initializes the noes sv positions
 function PlayState:initNotePositions()
     for _, lane in ipairs(lanes) do
         for _, note in ipairs(lane) do
@@ -153,6 +160,10 @@ function PlayState:initNotePositions()
     end
 end
 
+---Gets a y position based off the sv position of the note
+---@param time number
+---@param index? number
+---@return number pos y position
 function PlayState:getPositionFromTime(time, index)
     local index = index or -1
 
@@ -167,7 +178,6 @@ function PlayState:getPositionFromTime(time, index)
         end
     end
 
-    
     local previous = scrollVelocities[index-1] or Objects.Game.ScrollVelocity(0, 1)
 
     local pos = self.ScrollVelocityMarks[index-1] or 0
@@ -204,6 +214,8 @@ function PlayState:gameOver()
     end)
 end
 
+---@param noteTime number
+---Gives a judgement based off the hit notetime
 function PlayState:judge(noteTime)
     local ConvertedNoteTime = math.abs(noteTime)
     for Judgement = 1, #JudgementNames do
@@ -225,6 +237,7 @@ function PlayState:judge(noteTime)
     return
 end
 
+---Calculates the accuracy 0%-100%
 function PlayState:calculateAccuracy()
     allHits = (allHits or 0)
     allHits = plusEq(allHits)
@@ -237,7 +250,7 @@ function PlayState:checkInput()
         -- PRESSED INPUT
         if Input:pressed("lane" .. i .. self.inputMode) then
             table.insert(NPSData.HPS, 1000)
-            for q, Note in ipairs(Lane) do
+            for _, Note in ipairs(Lane) do
                 local NoteTime = (MusicTime - Note.StartTime)
                 local ConvertedNoteTime = math.abs(NoteTime)
                 if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
@@ -266,7 +279,10 @@ function PlayState:checkInput()
         end
 
         -- MISS CHECKER
-        for q, Note in ipairs(Lane) do
+        for _, Note in ipairs(Lane) do
+            if Note.StartTime - MusicTime > 15000 then 
+                break
+            end
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
@@ -282,7 +298,7 @@ end
 
 function PlayState:checkBotInput()
     for i, Lane in ipairs(lanes) do
-        for q, Note in ipairs(Lane) do
+        for _, Note in ipairs(Lane) do
             local NoteTime = (MusicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if Note.Lane == i and NoteTime > 1 and not Note.wasHit then
@@ -309,11 +325,11 @@ function PlayState:draw()
     love.graphics.push()
     love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
     
-    for i, Receptor in ipairs(Receptors) do
+    for _, Receptor in ipairs(Receptors) do
         Receptor:draw()
     end
-    for i, Lane in ipairs(lanes) do
-        for q, Note in ipairs(Lane) do
+    for _, Lane in ipairs(lanes) do
+        for _, Note in ipairs(Lane) do
             Note:draw()
         end
     end

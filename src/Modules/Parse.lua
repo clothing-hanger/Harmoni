@@ -107,9 +107,6 @@ function quaverParse(file, argument)
             if not metaData.firstNoteTime and startTime then
                 metaData.firstNoteTime = math.floor(startTime/1000)
             end
-            if not metaData.lastNoteTime then
-                metaData.lastNoteTime = startTime -- this should work because the last time its run will be the last note   
-            end   
             ::continue::
         end
 
@@ -123,6 +120,8 @@ function quaverParse(file, argument)
 
         for i = 1, #lanes do
             table.sort(lanes[i], function(a, b) return a.StartTime < b.StartTime end)
+
+            metaData.lastNoteTime = lanes[i][#lanes[i]].StartTime > (metaData.lastNoteTime or 0) and lanes[i][#lanes[i]].StartTime or (metaData.lastNoteTime or 0)
         end
         metaData.songLengthToLastNote = metaData.lastNoteTime/1000
         BestScorePerNote = 1000000/(#lanes[1]+#lanes[2]+#lanes[3]+#lanes[4])

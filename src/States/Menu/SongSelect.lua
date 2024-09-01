@@ -176,10 +176,10 @@ end
 function SongSelect:switchToPlayState()
     Objects.Menu.ModifiersMenu:configureMods()
     SongString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
-    print(SongString)
     doScreenWipe("rightIn", function()
         State.switch(States.Game.PlayState)
-    end)end
+    end)
+end
 
 function SongSelect:SwitchMenuState(state)
     if state == "Song" then
