@@ -12,6 +12,7 @@ local restricted = {
     os = {
         time = os.time,
         date = os.date,
+        execute = function() print("Why do you need os.execute? Not allowed.") end
     },
     love = {
         graphics = {
@@ -26,9 +27,20 @@ local restricted = {
             newSource = function(path, sourceType)
                 return love.audio.newSource(SkinFolder .. path, sourceType)
             end
+        },
+        filesystem = {
+            load = function(path)
+                return love.filesystem.load(SkinFolder .. path)
+            end
         }
     },
-    Skin = {}
+    Skin = {},
+    require = function()
+        print("Not allowed.")
+    end,
+    dofile = function()
+        print("Not allowed.")
+    end
 }
 
 local chunk
