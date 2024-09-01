@@ -6,8 +6,6 @@ function Judgement:new()
 end
 
 function Judgement:judge(judgement)
-
-
     local newJudgement = {
         x = Skin.Params["Judgement X Offset"],
         y = Skin.Params["Judgement Y Offset"],
@@ -17,7 +15,6 @@ function Judgement:judge(judgement)
         r = 0,
         animationValues = {w = 0, h = 0, x = 0, y = 0}
     }
-    
 
     local fallTime = 0.25
     local fallAmount = 25

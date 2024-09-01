@@ -9,21 +9,21 @@ function notificationUpdate(dt)
         Notification.y = Key*Notification.height+10 -- add 10 for the space between the notifs
         Notification.time = Notification.time-1000*dt
         if Notification.time <= 0 then Notification.alive = false end
-      --  if Notification.alive then Notification.x = math.max(Notification.x - 10*dt, 0) end
-      if Notification.alive then 
-        Notification.x = math.max(Notification.x - 2000*dt, 0)
-      else
-        Notification.x = Notification.x + 2000*dt
-      end
+        --  if Notification.alive then Notification.x = math.max(Notification.x - 10*dt, 0) end
+        if Notification.alive then 
+            Notification.x = math.max(Notification.x - 2000*dt, 0)
+        else
+            Notification.x = Notification.x + 2000*dt
+        end
 
-      if Notification.x > 250 then table.remove(notifications, Key) end
+        if Notification.x > 250 then table.remove(notifications, Key) end
         
     end
 end
 
 function notificationDraw()
     love.graphics.setFont(Skin.Fonts["Menu Small"])
-    for Key, Notification in pairs(notifications) do
+    for _, Notification in pairs(notifications) do
         love.graphics.setColor(0,0,0,0.8)
         love.graphics.rectangle("fill", Notification.x+Inits.GameWidth-(Notification.width+10), Notification.y, Notification.width, Notification.height)
         love.graphics.setColor(1,1,1)

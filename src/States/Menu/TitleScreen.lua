@@ -44,7 +44,7 @@ function TitleScreen:enter()
     }
 end
 
- function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
+function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
     TitleScreen:setupDifficultyList()
 
     print("Switch Song")
@@ -76,7 +76,7 @@ end
 end
 
 
- function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
+function TitleScreen:setupDifficultyList()  -- same comment here as in the function above :(
     DifficultyButtons = {}
     DifficultyList = {}
     local SongContents = love.filesystem.getDirectoryItems("Music/" .. SongList[SelectedSong])

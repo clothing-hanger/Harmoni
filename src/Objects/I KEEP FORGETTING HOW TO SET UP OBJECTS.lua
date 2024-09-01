@@ -1,3 +1,4 @@
+---@unused
 local Player = Class:extend()
 
 function Player:new()

@@ -63,6 +63,8 @@ function SettingsMenu:enter()
 
     self:checkForMissingSettings()
 end
+
+---@param tabname string The tab to setup
 function SettingsMenu:setupSettingsTab(tabname)
     sliders = {}
     toggles = {}
@@ -116,7 +118,7 @@ function SettingsMenu:update(dt)
         State.switch(States.Menu.TitleScreen)
     end
 
-    SettingsMenu:updateObjects(dt)
+    SettingsMenu:updateObjects()
 end
 
 
@@ -141,7 +143,7 @@ function SettingsMenu:saveSettings()
     love.filesystem.write("Settings/Settings.lua", savedSettings)
 end
 
-function SettingsMenu:updateObjects(dt)
+function SettingsMenu:updateObjects()
     for key, Slider in pairs(sliders) do
         Slider:update()
         for Tab = 1, #tabs do
@@ -188,6 +190,7 @@ function SettingsMenu:updateObjects(dt)
 
 end
 
+---@param TabButton string The tab to draw
 function SettingsMenu:TabButtonDraw(TabButton)
     -- not gonna use actual objects for this because this is good enough, 
     -- even if it makes this menu's code a bit less clean (but it already sucks anyway so who cares)

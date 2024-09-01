@@ -181,6 +181,7 @@ function SongSelect:switchToPlayState()
     end)
 end
 
+---@param state string The state name to switch to
 function SongSelect:SwitchMenuState(state)
     if state == "Song" then
         MenuState = "Song"
@@ -190,8 +191,6 @@ function SongSelect:SwitchMenuState(state)
         SelectedDifficulty = 1
     end
 end
-
-
 
 function SongSelect:setupDifficultyList()
     DifficultyButtons = {}

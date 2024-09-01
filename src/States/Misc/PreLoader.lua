@@ -9,7 +9,7 @@ local diffName
 local frame
 local metaString
 
-local curMetaVersion = 2
+local curMetaVersion = 2.1
 
 function PreLoader:enter()
     SongList = love.filesystem.getDirectoryItems("Music")
@@ -33,7 +33,6 @@ function PreLoader:update(dt)
             else
                 foundMeta = false
             end
-
         end
     end
     if not foundMeta then
@@ -43,13 +42,14 @@ function PreLoader:update(dt)
                 metaString = string.format("return {\nsongName = \"%s\",\nversion = %d,\ndifficulties = {\n", chart.Title, curMetaVersion)
             end 
             metaString = metaString .. string.format(
-                "{fileName = \"%s\", diffName = \"%s\", artistName = \"%s\", charterName = \"%s\", background = \"%s\", audio = \"%s\"},\n", 
-                DifficultyList[i], 
-                chart.DifficultyName, 
-                chart.Artist, 
-                chart.Creator, 
+                "{fileName = \"%s\", diffName = \"%s\", artistName = \"%s\", charterName = \"%s\", background = \"%s\", audio = \"%s\", format = \"%s\"},\n", 
+                DifficultyList[i],
+                chart.DifficultyName,
+                chart.Artist,
+                chart.Creator,
                 chart.BackgroundFile,
-                chart.AudioFile            
+                chart.AudioFile,
+                "Quaver"
             )
             if i == #DifficultyList then
                 metaString = metaString .. "metaVersion = 1\n},\n}\n"
@@ -62,7 +62,6 @@ function PreLoader:update(dt)
     end
     if frame == #SongList then State.switch(States.Menu.TitleScreen) end
 end
-
 
 function PreLoader:draw()
 end

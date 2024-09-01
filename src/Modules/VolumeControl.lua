@@ -53,7 +53,7 @@ end
 function volumeUpdate(dt)
     if love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt") then
 
-        for wheel, setting in pairs(wheelSettings) do
+        for _, setting in pairs(wheelSettings) do
             applyMomentum(setting, dt)
         end
 
@@ -66,7 +66,6 @@ function volumeUpdate(dt)
     end
 
     alpha = clamp(alpha, 0, 1)
-    
 end
 
 function volumeControlDraw()
