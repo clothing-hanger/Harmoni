@@ -113,9 +113,7 @@ function PlayState:update(dt)
     end
 
     if MusicTime > metaData.lastNoteTime then
-        doScreenWipe("leftOut", function()
-            State.switch(States.Menu.SongSelect)
-        end)
+        State.switch(States.Menu.SongSelect)
     end
 
     if Mods.waves then
