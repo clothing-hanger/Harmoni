@@ -4,18 +4,40 @@ local selection
 local logo
 local buttons
 local logoSize
+local menuState
+
+firstTimeOnTitle = true
+
 
 function TitleScreen:enter()
     Objects.Menu.ModifiersMenu:new()
 
-    --self.switchSong = States.Menu.SongSelect.switchSong     -- gonna switch to this but temp im not using it
-    --self.setupDifficultyList = States.Menu.SongSelect.setupDifficultyList
+    debugHY = Inits.GameHeight/2
+    debugHX = Inits.GameWidth/2
+    if firstTimeOnTitle then   -- so we only start on the H on first time seeing the title screen
+        menuState = "H"
+        firstTimeOnTitle = false
+        menuSlide = {Inits.GameHeight}
+
+        logoSize = {x = 1, y = 1, r = 1}
+        logoPosition = {x = 0, y = Inits.GameHeight/2}
+        hSize = {x = 2,y = 2}
+        hPosition = {x = Inits.GameWidth/2, y = Inits.GameHeight/2}
+
+    else
+        menuState = "title"
+        menuSlide = {0}
+        logoSize = {x = 1, y = 1, r = 1}
+        logoPosition = {x = Inits.GameWidth/2, y = Inits.GameHeight/2-250}
+        hSize = {x = 1,y = 1}
+        hPosition = {x = 478, y = Inits.GameHeight/2-250}
+
+    end
+
     
     SelectedSong = love.math.random(1,#SongList)
     SelectedDifficulty = 1
-    selection = 1
 
-    logoSize = {x = 1, y = 1, r = 1}
     if not Song or (Song and not Song:isPlaying()) then 
         TitleScreen:switchSong()
     end
@@ -44,7 +66,7 @@ function TitleScreen:enter()
     }
 end
 
-function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this exact code is in 2 places in the game)
+function TitleScreen:switchSong()   -- icky disgusting code copy but its fine i guess (this almost exact code is in 2 places in the game)
     TitleScreen:setupDifficultyList()
 
     print("Switch Song")
@@ -95,39 +117,87 @@ end
 
 function TitleScreen:logoBump()
     logoSize = {x = 1.05, y = 1.1, r = 0}
+    
     Timer.tween(0.25, logoSize, {x = 1., y = 1}, "out-quad")
 end
 
+function TitleScreen:switchState(state)       -- THIS FUNCTION LOOKS LIKE OLD HARMONI CODE 😭😭😭😭 i dont like it
+    if not state then print("dumbass you gotta put a state in there") return end
+    if state == "title" then -- this one has the buttons and shit
+        menuState = "title"
+        local speed = 0.5
+        local tweenType = "out-expo"
+
+        Timer.tween(speed, hSize, {x = 1, y = 1}, tweenType)
+        Timer.tween(speed, hPosition, {x = 478, y = Inits.GameHeight/2-250}, tweenType) -- icky ass numbers (especially 478)
+        Timer.tween(speed, logoPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2-250}, tweenType)
+        Timer.tween(speed, menuSlide, {0}, tweenType)
+    elseif state == "H" then  -- this one is just the H.. thats why its called H.... kinda self explanitory i think
+        menuState = "H"
+        local speed = 2
+        local tweenType = "out-expo"
+
+        Timer.tween(speed, hSize, {x = 2, y = 2}, tweenType)
+        Timer.tween(speed, hPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2}, tweenType)
+        Timer.tween(speed, logoPosition, {x = 0, y = Inits.GameHeight/2}, tweenType)
+        Timer.tween(speed, menuSlide, {Inits.GameHeight}, tweenType)
+    end
+end
+
+local returnToHTimer -- Declare the timer outside any function to make it accessible
+
+function TitleScreen:doReturnToHTimer()
+    if not returnToHTTimer then
+        returnToHTTimer = Timer.after(5, function() 
+            TitleScreen:switchState("H")
+            returnToHTTimer = nil
+        end)
+    end
+
+    if mouseMoved and returnToHTTimer then
+        Timer.cancel(returnToHTTimer)
+        returnToHTTimer = nil
+    end
+end
 function TitleScreen:update()
 
     updateBPM()
     if onBeat then TitleScreen:logoBump() end
     
-    if Input:pressed("menuUp") then
-        selection = minusEq(selection)
-    elseif Input:pressed("menuDown") then
-        selection = plusEq(selection)
-    elseif Input:pressed("menuConfirm") then
-        if selection == 1 then
-            State.switch(States.Menu.TitleScreen)
-        elseif selection == 2 then
-            State.switch(States.Menu.SettingsMenu)
-        end
-    end
 
-
-    if Input:pressed("menuClickLeft") then
-        for _, Button in pairs(buttons) do
-            if cursorX >= Button.x and cursorX <= Button.x+Button.width and cursorY >= Button.y and cursorY <= Button.y + Button.height then
-                Button.func()
+    if menuState == "title" then
+        TitleScreen:doReturnToHTimer()
+        if Input:pressed("menuClickLeft") then
+            for _, Button in pairs(buttons) do
+                if cursorX >= Button.x and cursorX <= Button.x+Button.width and cursorY >= Button.y and cursorY <= Button.y + Button.height then
+                    Button.func()
+                end
             end
+        end
+    elseif menuState == "H" then
+        if Input:pressed("menuClickLeft") or Input:pressed("menuConfirm") then
+            TitleScreen:switchState("title")
         end
     end
 end
-
 function TitleScreen:draw()
-    if background then love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2,   0, (Inits.GameWidth/background:getWidth()), (Inits.GameHeight/background:getHeight()), background:getWidth()/2, background:getHeight()/2) end
-    love.graphics.draw(Skin.Menu["Main Logo"], Inits.GameWidth/2, Inits.GameHeight/2-250, 0, logoSize.x, logoSize.y, Skin.Menu["Main Logo"]:getWidth()/2, Skin.Menu["Main Logo"]:getHeight()/2)
+    if background then 
+        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, 0, (Inits.GameWidth/background:getWidth()), (Inits.GameHeight/background:getHeight()), background:getWidth()/2, background:getHeight()/2) 
+    end
+
+
+    local hWidth = Skin.Menu["H"]:getWidth() * hSize.x  -- set the scissor 
+    local hHeight = Skin.Menu["H"]:getHeight() * hSize.y
+    love.graphics.setScissor(hPosition.x+25, hPosition.y-1000, 100000, 100000)
+
+    
+    love.graphics.draw(Skin.Menu["Main Logo"], logoPosition.x, logoPosition.y,  0, logoSize.x, logoSize.y, Skin.Menu["Main Logo"]:getWidth()/2, Skin.Menu["Main Logo"]:getHeight()/2)
+    
+    love.graphics.setScissor()  -- unset the scissor
+    love.graphics.draw(Skin.Menu["H"], hPosition.x, hPosition.y, 0, hSize.x+(logoSize.x-1), hSize.y+(logoSize.y-1), Skin.Menu["H"]:getWidth()/2, Skin.Menu["H"]:getHeight()/2)
+   
+   
+    love.graphics.translate(0, menuSlide[1])    -- translate stuff for the slide thingy 
     love.graphics.setFont(Skin.Fonts["Menu Small"])
     for _, Button in pairs(buttons) do
         love.graphics.setColor(0,0,0,0.8)
@@ -136,9 +206,7 @@ function TitleScreen:draw()
         love.graphics.rectangle("line", Button.x, Button.y, Button.width, Button.height)
         love.graphics.printf(Button.text, Button.x, Button.y+10, Button.width, "center")
     end
-    love.graphics.print("Selection:  " .. selection)
-    love.graphics.print("Really good title screen", Inits.GameWidth/2, 150)
-    
 end
+
 
 return TitleScreen

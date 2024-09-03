@@ -41,8 +41,10 @@ function PlayState:enter()
     if fuck then updateMusicTime = false end   -- for trying to debug songs not resetting
     
     Receptors = {}
+    Splashes = {}
     for i = 1, #lanes do
         table.insert(Receptors, Objects.Game.Receptor(i))
+        table.insert(Splashes, Objects.Game.Splash(i))
     end
     PlayState:initObjects()
 
@@ -102,10 +104,6 @@ function PlayState:update(dt)
             end
             Note:update(dt)
         end
-    end
-
-    for _, Receptor in ipairs(Receptors) do
-        Receptor:update(dt)
     end
 
     if Mods.suddenDeath and Judgements["Miss"].Count > 0 then
@@ -196,6 +194,12 @@ function PlayState:updateObjects(dt)
     Objects.Game.HUD:update(dt)
     Objects.Game.HitErrorMeter:update(dt)
     Objects.Game.HealthBar:update(dt)
+    for _, Receptor in ipairs(Receptors) do
+        Receptor:update(dt)
+    end
+    for _, Splash in ipairs(Splashes) do
+        Splash:update(dt)
+    end
 end
 
 function PlayState:gameOver()
@@ -254,6 +258,11 @@ function PlayState:checkInput()
                 if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
                     PlayState:judge(ConvertedNoteTime)
                     Note:hit(ConvertedNoteTime)
+                    for _, Splash in ipairs(Splashes) do
+                        if Splash.lane == Note.Lane then
+                            Splash:emit(ConvertedNoteTime)
+                        end
+                    end
                     Objects.Game.HitErrorMeter:addHit(NoteTime)
                     if ConvertedNoteTime < Judgements["Okay"].Timing then  -- to figure out whether or not to reset the combo
                         Objects.Game.Combo:incrementCombo(false)  -- false means we dont reset it
@@ -322,15 +331,19 @@ function PlayState:draw()
     Objects.Game.Background:draw() 
     love.graphics.push()
     love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
-    
+    for _, Splash in ipairs(Splashes) do
+        Splash:draw()
+    end
     for _, Receptor in ipairs(Receptors) do
         Receptor:draw()
     end
+
     for _, Lane in ipairs(lanes) do
         for _, Note in ipairs(Lane) do
             Note:draw()
         end
     end
+    
     love.graphics.pop()
     Objects.Game.Judgement:draw()
     Objects.Game.HUD:draw()

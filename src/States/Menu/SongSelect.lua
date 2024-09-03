@@ -31,7 +31,7 @@ end
 function SongSelect:updateObjects(dt)
     Objects.Menu.ModifiersMenu:update()
     Objects.Menu.ListMenu:update(dt)
-end
+end 
 
 function SongSelect:setupSongButtons()
     for i = 1,#SongList do

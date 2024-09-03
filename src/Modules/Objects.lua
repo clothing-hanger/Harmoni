@@ -10,6 +10,7 @@ return {
         Combo = require("Objects.Game.Combo"),
         HitErrorMeter = require("Objects.Game.HitErrorMeter"),
         HealthBar = require("Objects.Game.HealthBar"),
+        Splash = require("Objects/Game/Splash"),
     },
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),

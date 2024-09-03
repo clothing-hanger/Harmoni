@@ -138,8 +138,13 @@ Skin.Judgements = {
     ["Miss"] = love.graphics.newImage("JUDGEMENTS/Miss.png"),
 }
 
+Skin.Particles = {
+    ["Note Splash"] = love.graphics.newImage("PARTICLES/circle.png"),
+}
+
 Skin.Menu = {
     ["Main Logo"] = love.graphics.newImage("Menu/main logo.png"),
+    ["H"] = love.graphics.newImage("Menu/H.png"),
     ["Icon Logo"]  = love.graphics.newImage("Menu/logoH.png"),
     ["Loading Spinner"] = love.graphics.newImage("MENU/logoH.png"),
 }
@@ -151,3 +156,4 @@ Skin.Sounds = {
     ["Hit Sound"] = nil,   -- sound for hitting notes
     ["Tap Sound"] = nil,   -- sound for tapping keys, but not hitting notes
 }
+
