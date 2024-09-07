@@ -76,7 +76,7 @@ function love.update(dt)
     notificationUpdate(dt)
     volumeUpdate(dt)
 
-    updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
+   -- updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
     mouseMoved = false
@@ -125,6 +125,8 @@ function love.draw()
             love.graphics.clear(0,0,0,1)
             State.draw()
             screenWipeDraw()
+            notificationDraw()
+            volumeControlDraw()
         love.graphics.setCanvas()
     love.graphics.pop()
 

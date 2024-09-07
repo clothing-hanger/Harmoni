@@ -69,6 +69,9 @@ function PreLoader:update(dt)
                 safeAudio,
                 "Quaver"
             )
+            if i == #DifficultyList then 
+                metaString = metaString .. "}}"
+            end
 
         end
         

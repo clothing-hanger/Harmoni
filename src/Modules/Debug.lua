@@ -18,6 +18,22 @@ commands = {
         end
     },
     {
+        name = "saveFolder",
+        help = "Opens the save directory in explorer",
+        func = function()
+            local saveDir = love.filesystem.getSaveDirectory()
+            if love.system.getOS() == "Windows" then
+                os.execute('start "" "' .. saveDir .. '"')
+            elseif love.system.getOS() == "Linux" then
+                os.execute('xdg-open "' .. saveDir .. '"')
+            elseif love.system.getOS() == "OS X" then
+                os.execute('open "' .. saveDir .. '"')
+            else
+                print("Unsupported operating system.")
+            end
+        end
+    },
+    {
         name = "clear",
         help = "clears the console history",
         func = function()

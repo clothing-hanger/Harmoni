@@ -124,7 +124,6 @@ function SongSelect:update(dt)
                 SongSelect:SwitchMenuState("Difficulty")
             end
         elseif MenuState == "Difficulty" then
-            MusicTime = -100000
             SongSelect:switchToPlayState()
         end
     elseif Input:pressed("menuBack") then
@@ -136,6 +135,9 @@ function SongSelect:update(dt)
     end
 end
 
+
+
+
 function SongSelect:switchSong()
     if Song then Song:stop(); Song:release() end
     SongSelect:setupDifficultyList()
@@ -143,7 +145,11 @@ function SongSelect:switchSong()
     print("Switch Song")
     
     local metaData = love.filesystem.load("Music/"..SongList[SelectedSong].."/meta.lua")()
-    background = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background
+    if love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background, "file") then
+        background = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background
+    else
+        notification("Background File not loaded!", "error")
+    end
     for i, difficulty in ipairs(metaData.difficulties) do
         print(tostring(DifficultyList[SelectedDifficulty]))
         if tostring(DifficultyList[SelectedDifficulty]) == difficulty.fileName then
@@ -174,6 +180,7 @@ end
 
 
 function SongSelect:switchToPlayState()
+    MusicTime = -2000
     Objects.Menu.ModifiersMenu:configureMods()
     SongString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
     doScreenWipe("rightIn", function()
