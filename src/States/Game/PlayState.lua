@@ -50,6 +50,14 @@ function PlayState:enter()
 
     PlayState:initSVMarks()
     PlayState:initNotePositions()
+
+    Timer.after(0.1, function()
+        if not self.startedMusicTime then
+            self.startedMusicTime = true
+            MusicTime = -3000
+            doScreenWipe("rightOut")  -- so that it always does the transition no matter song loading time  -- except this DOESNT WORK
+        end
+    end)
 end
 
 function PlayState:initModifiers()
@@ -75,11 +83,6 @@ function PlayState:initObjects()
 end
 
 function PlayState:update(dt)
-    if not self.startedMusicTime then
-        self.startedMusicTime = true
-        MusicTime = -3000
-        doScreenWipe("rightOut")  -- so that it always does the transition no matter song loading time  -- except this DOESNT WORK
-    end
     if Mods.botPlay then PlayState:checkBotInput() else PlayState:checkInput() end
 
     PlayState:updateObjects(dt)
