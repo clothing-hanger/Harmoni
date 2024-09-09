@@ -11,6 +11,7 @@ firstTimeOnTitle = true
 
 function TitleScreen:enter()
     Objects.Menu.ModifiersMenu:new()
+    Objects.Menu.Visualizer:new()
 
     debugHY = Inits.GameHeight/2
     debugHX = Inits.GameWidth/2
@@ -35,12 +36,18 @@ function TitleScreen:enter()
     end
 
     
-    SelectedSong = love.math.random(1,#SongList)
     SelectedDifficulty = 1
+    if not SelectedSong then SelectedSong = love.math.random(1,#SongList) end
+
 
     if not Song or (Song and not Song:isPlaying()) then 
         TitleScreen:switchSong()
+        SelectedSong = love.math.random(1,#SongList)
+
+    else
+        TitleScreen:switchSong()
     end
+
 
     buttons = {    -- time to make yet another completely different button format because i cant code consistently
         {
@@ -116,35 +123,47 @@ function TitleScreen:setupDifficultyList()  -- same comment here as in the funct
 end 
 
 function TitleScreen:logoBump()
-    logoSize = {x = 1.05, y = 1.1, r = 0}
+    local visualizerBump = (Objects.Menu.Visualizer:getAverageBarLength() or 0)/2
+    logoSize = {x = 1+visualizerBump, y = 1+visualizerBump, r = 0}
     
-    Timer.tween(0.25, logoSize, {x = 1., y = 1}, "out-quad")
+    Timer.tween(0.25, logoSize, {x = 1, y = 1}, "out-quad")
 end
 
-function TitleScreen:switchState(state)       -- THIS FUNCTION LOOKS LIKE OLD HARMONI CODE 😭😭😭😭 i dont like it
-    if not state then print("dumbass you gotta put a state in there") return end
-    if state == "title" then -- this one has the buttons and shit
+function TitleScreen:switchState(state)
+    if not state then 
+        print("dumbass you gotta put a state in there") 
+        return 
+    end
+    local speed, tweenType
+    if tweens then
+        for i = 1, #tweens do
+            if tweens[i] then Timer.cancel(tweens[i]) end
+        end
+    end
+    tweens = {}
+    if state == "title" then
         menuState = "title"
-        local speed = 0.5
-        local tweenType = "out-expo"
-
-        Timer.tween(speed, hSize, {x = 1, y = 1}, tweenType)
-        Timer.tween(speed, hPosition, {x = 478, y = Inits.GameHeight/2-250}, tweenType) -- icky ass numbers (especially 478)
-        Timer.tween(speed, logoPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2-250}, tweenType)
-        Timer.tween(speed, menuSlide, {0}, tweenType)
-    elseif state == "H" then  -- this one is just the H.. thats why its called H.... kinda self explanitory i think
+        speed = 0.5
+        tweenType = "out-expo"
+        tweens = {
+            Timer.tween(speed, hSize, {x = 1, y = 1}, tweenType),
+            Timer.tween(speed, hPosition, {x = 478, y = Inits.GameHeight/2-250}, tweenType),
+            Timer.tween(speed, logoPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2-250}, tweenType),
+            Timer.tween(speed, menuSlide, {0}, tweenType),
+        }
+    elseif state == "H" then
         menuState = "H"
-        local speed = 2
-        local tweenType = "out-expo"
-
-        Timer.tween(speed, hSize, {x = 2, y = 2}, tweenType)
-        Timer.tween(speed, hPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2}, tweenType)
-        Timer.tween(speed, logoPosition, {x = 0, y = Inits.GameHeight/2}, tweenType)
-        Timer.tween(speed, menuSlide, {Inits.GameHeight}, tweenType)
+        speed = 2
+        tweenType = "out-expo"
+        tweens = {
+            Timer.tween(speed, hSize, {x = 2, y = 2}, tweenType),
+            Timer.tween(speed, hPosition, {x = Inits.GameWidth/2, y = Inits.GameHeight/2}, tweenType),
+            Timer.tween(speed, logoPosition, {x = 0, y = Inits.GameHeight/2}, tweenType),
+            Timer.tween(speed, menuSlide, {Inits.GameHeight}, tweenType),
+        }
     end
 end
 
-local returnToHTimer -- Declare the timer outside any function to make it accessible
 
 function TitleScreen:doReturnToHTimer()
     if not returnToHTTimer then
@@ -159,10 +178,13 @@ function TitleScreen:doReturnToHTimer()
         returnToHTTimer = nil
     end
 end
-function TitleScreen:update()
+function TitleScreen:update(dt)
 
     updateBPM()
     if onBeat then TitleScreen:logoBump() end
+    if Song and Song:isPlaying() then
+        Objects.Menu.Visualizer:update(dt)
+    end
     
 
     if menuState == "title" then
@@ -185,17 +207,25 @@ function TitleScreen:draw()
         love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, 0, (Inits.GameWidth/background:getWidth()), (Inits.GameHeight/background:getHeight()), background:getWidth()/2, background:getHeight()/2) 
     end
 
+    Objects.Menu.Visualizer:draw()
 
     local hWidth = Skin.Menu["H"]:getWidth() * hSize.x  -- set the scissor 
     local hHeight = Skin.Menu["H"]:getHeight() * hSize.y
     love.graphics.setScissor(hPosition.x+25, hPosition.y-1000, 100000, 100000)
-
+    if menuState == "title" and hPosition.x < 479 then
+        love.graphics.setScissor()  -- unset the scissor
+    end 
     
     love.graphics.draw(Skin.Menu["Main Logo"], logoPosition.x, logoPosition.y,  0, logoSize.x, logoSize.y, Skin.Menu["Main Logo"]:getWidth()/2, Skin.Menu["Main Logo"]:getHeight()/2)
     
     love.graphics.setScissor()  -- unset the scissor
+    if menuState == "title" and hPosition.x < 479 then
+        love.graphics.setColor(1,1,1,0)
+    else                                  -- only draw the H when its not displaying the entire logo
+        love.graphics.setColor(1,1,1,1)
+    end
     love.graphics.draw(Skin.Menu["H"], hPosition.x, hPosition.y, 0, hSize.x+(logoSize.x-1), hSize.y+(logoSize.y-1), Skin.Menu["H"]:getWidth()/2, Skin.Menu["H"]:getHeight()/2)
-   
+   love.graphics.setColor(1,1,1)
    
     love.graphics.translate(0, menuSlide[1])    -- translate stuff for the slide thingy 
     love.graphics.setFont(Skin.Fonts["Menu Small"])

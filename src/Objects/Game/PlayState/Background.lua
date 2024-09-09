@@ -31,7 +31,7 @@ function Background:setDimness(dimness, tween, time, tweenType)
 end
 
 function Background:draw()
-    love.graphics.push()
+   -- love.graphics.push()
     if not (self.image and type(self.image) == "userdata") then return end
     love.graphics.translate(Inits.GameWidth/2, Inits.GameHeight/2)
 
@@ -46,7 +46,9 @@ function Background:draw()
     love.graphics.rectangle("fill", 0-Inits.GameWidth/2, 0-Inits.GameHeight/2, Inits.GameWidth, Inits.GameHeight)
 
     love.graphics.setColor(1,1,1,1)
-    love.graphics.pop()
+    love.graphics.translate(-Inits.GameWidth/2, -Inits.GameHeight/2)
+
+   -- love.graphics.pop()
 end
 
 function Background:release()

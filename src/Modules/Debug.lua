@@ -44,7 +44,7 @@ commands = {
         name = "skipToEnd",
         help = "is SUPPOSED to skip to 5 seconds before the last note BUT IT DOESNT FUCKING WORK",
         func = function()
-           -- MusicTime = (metaData.songLengthToLastNote - 5)*1000
+           -- musicTime = (metaData.songLengthToLastNote - 5)*1000
           --  Song:seek(metaData.songLengthToLastNote)
         end
     },
@@ -243,7 +243,7 @@ function debugDraw()
         "FPS: " .. debugStats.fps .. 
         "\nLua Memory (KB): " .. debugStats.memUsage ..
         "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
-        "\nMusic Time (MS): " .. string.format("%.3f", MusicTime) ..
+        "\nMusic Time (MS): " .. string.format("%.3f", musicTime) ..
         "\nBeat Time (MS): " .. string.format("%.3f", debugBeatTime) .. 
         "\nDraw Calls: " .. debugStats.drawCalls ..
         "\nFrame Time (MS): " .. debugStats.frameTime ..

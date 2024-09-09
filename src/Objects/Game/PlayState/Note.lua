@@ -104,10 +104,12 @@ end
 
 ---@param noteTime number The time the note was hit
 ---@param wasMiss boolean If the note was a miss
-function Note:hit(noteTime, wasMiss)
+function Note:hit(noteTime, unconvertedNoteTime, wasMiss)
     self.visible = wasMiss
     self.wasHit = true
     self.tooLate = wasMiss
+    table.insert(noteHits, {noteTime = unconvertedNoteTime, musicTime = musicTime, wasMiss = wasMiss})  -- prob will edit this later, idk
+
 end
 
 function Note:draw()

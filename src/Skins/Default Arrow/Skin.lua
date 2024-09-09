@@ -140,6 +140,7 @@ Skin.Judgements = {
 
 Skin.Particles = {
     ["Note Splash"] = love.graphics.newImage("PARTICLES/circle.png"),
+    ["Combo Alert"] = love.graphics.newImage("PARTICLES/eclipse.png"),
 }
 
 Skin.Menu = {

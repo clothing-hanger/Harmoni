@@ -180,7 +180,7 @@ end
 
 
 function SongSelect:switchToPlayState()
-    MusicTime = -2000
+    musicTime = -2000
     Objects.Menu.ModifiersMenu:configureMods()
     SongString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
     doScreenWipe("rightIn", function()

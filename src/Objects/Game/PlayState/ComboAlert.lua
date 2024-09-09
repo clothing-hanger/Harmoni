@@ -16,6 +16,7 @@ end
 ---@param num number The combo to display
 ---Does the combo alert with the given combo
 function ComboAlert:doComboAlert(num)
+    Objects.Game.ComboAlertParticle:emit()
     self.text = tostring(num) .. " Combo!"
     self.color[4] = 1
     self.x, self.y = {Inits.GameWidth+150}, {Inits.GameHeight/2}

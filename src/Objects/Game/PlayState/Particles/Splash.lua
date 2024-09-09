@@ -2,7 +2,7 @@ local Splash = Class:extend()
 
 function Splash:new(lane)
     self.particleSystem = love.graphics.newParticleSystem(Skin.Particles["Note Splash"])
-    local gravity = 600
+    local gravity = 200
 
     self:setupColors(1)
     self.X = LanesPositions[States.Game.PlayState.inputMode][lane]

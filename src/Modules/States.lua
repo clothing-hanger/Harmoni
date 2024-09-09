@@ -1,6 +1,7 @@
 return {
     Game = {
         PlayState = require("States.Game.Playstate"),
+        Results = require("States.Game.Results"),
     },
     Menu = {
         SongSelect = require("States.Menu.SongSelect"),

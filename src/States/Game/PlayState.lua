@@ -11,14 +11,14 @@ local Directions = {
 local Receptors = {}
 
 function PlayState:enter()
-    MusicTime = -99999999 -- just a super low number, musicTime will get actually initialized on frame 2  (THIS IS TEMPORARY) ((which means permamnent probably))
+    musicTime = -99999999 -- just a super low number, musicTime will get actually initialized slightly later
     quaverParse(SongString)
     --Init self variables
     self.myBalls = math.huge
     self.ScrollVelocityMarks = {}
     self.SvIndex = 1
     self.CurrentTime = 0
-    self.startedMusicTime = false
+    self.startedmusicTime = false
     self.strumYPosition = Settings.scrollDirection == "Down" and Inits.GameHeight or 0
     self.inputMode = self.inputMode or "4K"
 
@@ -28,6 +28,7 @@ function PlayState:enter()
     accuracy = 0
     gameOver = false
     grade = "-"
+    noteHits = {}
     performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
     health = 1
@@ -36,9 +37,6 @@ function PlayState:enter()
     waveTime = 1
     rampTime = 0.8
     
-    updateMusicTime = true
-
-    if fuck then updateMusicTime = false end   -- for trying to debug songs not resetting
     
     Receptors = {}
     Splashes = {}
@@ -52,10 +50,11 @@ function PlayState:enter()
     PlayState:initNotePositions()
 
     Timer.after(0.1, function()
-        if not self.startedMusicTime then
-            self.startedMusicTime = true
-            MusicTime = -3000
-            doScreenWipe("rightOut")  -- so that it always does the transition no matter song loading time  -- except this DOESNT WORK
+        if not self.startedmusicTime then -- is self.startedmusicTime needed anymore?
+            self.startedmusicTime = true
+            updatemusicTime = true
+            musicTime = -3000
+            doScreenWipe("rightOut")  -- so that it always does the transition no matter song loading time
         end
     end)
 end
@@ -69,6 +68,7 @@ function PlayState:initObjects()
     Objects.Game.HUD:new()
     Objects.Game.Background:new(background)
     Objects.Game.ComboAlert:new()
+    Objects.Game.ComboAlertParticle:new(Inits.GameWidth+15, Inits.GameHeight/2+50)
     Objects.Game.Combo:new()
     Objects.Game.HitErrorMeter:new()
     Objects.Game.HealthBar:new()
@@ -90,19 +90,19 @@ function PlayState:update(dt)
     ---@diagnostic disable-next-line: deprecated
     performance = metaData.difficulty * math.pow(accuracy/198, 6)     -- guglio where did you get 198
 
-    updateMusicTimeFunction()
+    updatemusicTimeFunction()
     self:updateTime()
 
     updateBPM()
     
-    if Song and (MusicTime >= 0 and not Song:isPlaying()) then -- to make sure it doesnt restart
+    if Song and (musicTime >= 0 and not Song:isPlaying()) then -- to make sure it doesnt restart
         Song:setPitch(Mods.songRate)
 
         Song:play()
     end
     for _, Lane in ipairs(lanes) do
         for _, Note in ipairs(Lane) do
-            if Note.StartTime - MusicTime > 15000 then 
+            if Note.StartTime - musicTime > 15000 then 
                 break
             end
             Note:update(dt)
@@ -113,8 +113,8 @@ function PlayState:update(dt)
         PlayState:gameOver()
     end
 
-    if MusicTime > metaData.lastNoteTime then
-        State.switch(States.Menu.SongSelect)
+    if musicTime > metaData.lastNoteTime then
+        State.switch(States.Game.Results)
     end
 
     if Mods.waves then
@@ -186,17 +186,19 @@ function PlayState:getPositionFromTime(time, index)
 end
 
 function PlayState:updateTime()
-    while (self.SvIndex <= #scrollVelocities and scrollVelocities[self.SvIndex].StartTime <= (MusicTime)) do
+    while (self.SvIndex <= #scrollVelocities and scrollVelocities[self.SvIndex].StartTime <= (musicTime)) do
         self.SvIndex = plusEq(self.SvIndex)
     end
 
-    self.CurrentTime = self:getPositionFromTime(MusicTime, self.SvIndex)
+    self.CurrentTime = self:getPositionFromTime(musicTime, self.SvIndex)
 end
 
 function PlayState:updateObjects(dt)
     Objects.Game.HUD:update(dt)
     Objects.Game.HitErrorMeter:update(dt)
     Objects.Game.HealthBar:update(dt)
+    Objects.Game.ComboAlertParticle:update(dt)
+
     for _, Receptor in ipairs(Receptors) do
         Receptor:update(dt)
     end
@@ -211,11 +213,11 @@ function PlayState:gameOver()
     print("fucking loser")
     gameOver = true
 
-    doScreenWipe("leftIn", function() 
+    doScreenWipe("rightIn", function() 
         if Song then Song:stop() end
         --Song:release() 
         Song = nil
-        State.switch(States.Menu.SongSelect) 
+        State.switch(States.Game.Results) 
     end)
 end
 
@@ -256,11 +258,11 @@ function PlayState:checkInput()
         if Input:pressed("lane" .. i .. self.inputMode) then
             table.insert(NPSData.HPS, 1000)
             for _, Note in ipairs(Lane) do
-                local NoteTime = (MusicTime - Note.StartTime)
+                local NoteTime = (musicTime - Note.StartTime)
                 local ConvertedNoteTime = math.abs(NoteTime)
                 if Note.Lane == i and ConvertedNoteTime < Judgements["Miss"].Timing and not Note.wasHit then
                     PlayState:judge(ConvertedNoteTime)
-                    Note:hit(ConvertedNoteTime)
+                    Note:hit(ConvertedNoteTime, NoteTime)
                     for _, Splash in ipairs(Splashes) do
                         if Splash.lane == Note.Lane then
                             Splash:emit(ConvertedNoteTime)
@@ -290,14 +292,14 @@ function PlayState:checkInput()
 
         -- MISS CHECKER
         for _, Note in ipairs(Lane) do
-            if Note.StartTime - MusicTime > 15000 then 
+            if Note.StartTime - musicTime > 15000 then 
                 break
             end
-            local NoteTime = (MusicTime - Note.StartTime)
+            local NoteTime = (musicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime)
-                Note:hit(ConvertedNoteTime, true)
+                Note:hit(ConvertedNoteTime, NoteTime, true)
                 Objects.Game.Combo:incrementCombo(true)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)
                 break
@@ -309,11 +311,11 @@ end
 function PlayState:checkBotInput()
     for i, Lane in ipairs(lanes) do
         for _, Note in ipairs(Lane) do
-            local NoteTime = (MusicTime - Note.StartTime)
+            local NoteTime = (musicTime - Note.StartTime)
             local ConvertedNoteTime = math.abs(NoteTime)
             if Note.Lane == i and NoteTime > 1 and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime)
-                Note:hit(ConvertedNoteTime)
+                Note:hit(ConvertedNoteTime, NoteTime)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)           
                 table.insert(NPSData.NPS, 1000)
                 break
@@ -321,7 +323,7 @@ function PlayState:checkBotInput()
 
             if NoteTime > Judgements["Miss"].Timing and not Note.wasHit then
                 PlayState:judge(ConvertedNoteTime)
-                Note:hit(ConvertedNoteTime, true)
+                Note:hit(ConvertedNoteTime, NoteTime, true)
                 Objects.Game.Combo:incrementCombo(true)
                 Objects.Game.HitErrorMeter:addHit(NoteTime)
                 break
@@ -350,6 +352,7 @@ function PlayState:draw()
     love.graphics.pop()
     Objects.Game.Judgement:draw()
     Objects.Game.HUD:draw()
+    Objects.Game.ComboAlertParticle:draw()
     Objects.Game.ComboAlert:draw()
     Objects.Game.Combo:draw()
     Objects.Game.HitErrorMeter:draw()

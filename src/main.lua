@@ -36,10 +36,11 @@ function love.load()
     require("Modules.Lua")
     require("Modules.Constants")
     require("Modules.RGB")
-    require("Modules.MusicTime")
+    require("Modules.musicTime")
     require("Modules.TableToFile")
     require("Modules.Skin")
     require("Modules.Settings")
+    require("Modules.Gradient")
     require("Modules.Parse")
     require("Modules.Debug")
     require("Modules.BPM")
@@ -76,7 +77,7 @@ function love.update(dt)
     notificationUpdate(dt)
     volumeUpdate(dt)
 
-   -- updateMusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
+   -- updatemusicTimeFunction()   -- TEMPORARY FIX FOR SONGS NOT RESETTING
 
     mouseTimer = (mouseTimer and mouseTimer - 1000*dt) or 1000
     mouseMoved = false

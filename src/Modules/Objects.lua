@@ -1,22 +1,31 @@
 return {
     Game = {
-        Note = require("Objects.Game.Note"),
-        Receptor = require("Objects.Game.Receptor"),
-        ScrollVelocity = require("Objects.Game.ScrollVelocity"),
-        Judgement = require("Objects.Game.Judgement"),
-        Background = require("Objects.Game.Background"),
-        HUD = require("Objects.Game.HUD"),
-        ComboAlert = require("Objects.Game.ComboAlert"),
-        Combo = require("Objects.Game.Combo"),
-        HitErrorMeter = require("Objects.Game.HitErrorMeter"),
-        HealthBar = require("Objects.Game.HealthBar"),
-        Splash = require("Objects/Game/Splash"),
+        --PlayState
+        Note = require("Objects.Game.PlayState.Note"),
+        Receptor = require("Objects.Game.PlayState.Receptor"),
+        ScrollVelocity = require("Objects.Game.PlayState.ScrollVelocity"),
+        Judgement = require("Objects.Game.PlayState.Judgement"),
+        Background = require("Objects.Game.PlayState.Background"),
+        HUD = require("Objects.Game.PlayState.HUD"),
+        ComboAlert = require("Objects.Game.PlayState.ComboAlert"),
+        Combo = require("Objects.Game.PlayState.Combo"),
+        HitErrorMeter = require("Objects.Game.PlayState.HitErrorMeter"),
+        HealthBar = require("Objects.Game.PlayState.HealthBar"),
+        --particles
+        Splash = require("Objects.Game.PlayState.Particles.Splash"),
+        ComboAlertParticle = require("Objects.Game.PlayState.Particles.ComboAlert"),
+
+        --Results
+        NoteHitPlot = require("Objects.Game.Results.NoteHitPlot"),
+        JudgementBarGraph = require("Objects.Game.Results.JudgementBarGraph"),
+
     },
     Menu = {
         SongButton = require("Objects.Menu.SongButton"),
         DifficultyButton = require("Objects.Menu.DifficultyButton"),
         ModifiersMenu = require("Objects.Menu.ModifiersMenu"),
         ListMenu = require("Objects.Menu.ListMenu"),
+        Visualizer = require("Objects.Menu.Visualizer"),
     },
     Misc = {
         -- imagine being the Objects.Misc table lmao stupid ass empty useless fuck
