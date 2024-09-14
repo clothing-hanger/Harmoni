@@ -6,7 +6,9 @@ function quaverParse(file, argument)
     if argument == "no lanes" then
         noLane = true
     end
+    doScript = false
     print("quaverParse(" .. file .. ")")
+    songFolder = ""
     if not file then State.switch(States.SongSelectState) end
     if not love.filesystem.getInfo(file, "file") then
         State.switch(States.SongSelectState)
@@ -42,6 +44,8 @@ function quaverParse(file, argument)
         inputMode = chart.Mode:gsub("Keys", ""),  -- will be used to make sure its 4 key
     }
 
+    songFolder = "Music/" .. SongList[SelectedSong] -- make this used more here instead of repeating the path over and over  (this was added with scripts in mind)
+
     for i = 1, tonumber(metaData.inputMode) do
         table.insert(lanes, {})
     end
@@ -51,7 +55,7 @@ function quaverParse(file, argument)
         Song:stop()
     end
     
-    if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then
+    if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "file") then        --look for song file and try to load it
         Song = love.audio.newSource("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song, "static")
         SongData = love.sound.newSoundData("Music/" .. SongList[SelectedSong] .. "/" .. metaData.song)
     else
@@ -60,12 +64,19 @@ function quaverParse(file, argument)
         return false
     end
 
-    if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.background, "file") then
+    if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. metaData.background, "file") then     --look for background file and try to load it
         background = love.graphics.newImage("Music/" .. SongList[SelectedSong] .. "/" .. metaData.background)
     else
         print("Background Failed to Load! Incorrect Background Will be Displayed.", notifErrorIcon)
         print("Background File Not Found For Song " .. SelectedSong)
+    end 
+
+
+    if love.filesystem.getInfo("Music/" .. SongList[SelectedSong] .. "/" .. "script.lua", "file") then      -- look for script file and try to load it
+        doScript = true
+        love.filesystem.load("Music/" .. SongList[SelectedSong] .. "/" .. "script.lua")()
     end
+
 
     if not noLane then
         for i = 1,#chart.TimingPoints do

@@ -123,16 +123,21 @@ function TitleScreen:setupDifficultyList()  -- same comment here as in the funct
 end 
 
 function TitleScreen:logoBump()
-    local visualizerBump = (Objects.Menu.Visualizer:getAverageBarLength() or 0)/2
+    local visualizerBump = (Objects.Menu.Visualizer:getAverageBarLength() or 0)
+    if menuState == "title" then
+        visualizerBump = visualizerBump/2   
+    elseif menuState == "H" then            -- bump twice as strong when on H screen
+        visualizerBump = visualizerBump*2
+    end
     logoSize = {x = 1+visualizerBump, y = 1+visualizerBump, r = 0}
     
-    Timer.tween(0.25, logoSize, {x = 1, y = 1}, "out-quad")
+    Timer.tween(0.25, logoSize, {x = 1, y = 1}, "out-expo")
 end
 
 function TitleScreen:switchState(state)
     if not state then 
         print("dumbass you gotta put a state in there") 
-        return 
+        return
     end
     local speed, tweenType
     if tweens then

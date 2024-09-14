@@ -110,6 +110,18 @@ function Note:hit(noteTime, unconvertedNoteTime, wasMiss)
     self.tooLate = wasMiss
     table.insert(noteHits, {noteTime = unconvertedNoteTime, musicTime = musicTime, wasMiss = wasMiss})  -- prob will edit this later, idk
 
+    if doScript then
+        if wasMiss then
+            if scriptOnNoteMiss then
+                scriptOnNoteMiss()
+            end
+        else
+            if scriptOnNoteHit then
+                scriptOnNoteHit()
+            end
+        end
+    end
+
 end
 
 function Note:draw()

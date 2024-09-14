@@ -49,6 +49,12 @@ function PlayState:enter()
     PlayState:initSVMarks()
     PlayState:initNotePositions()
 
+    if doScript then
+        if initScript then
+            initScript()
+        end
+    end
+
     Timer.after(0.1, function()
         if not self.startedmusicTime then -- is self.startedmusicTime needed anymore?
             self.startedmusicTime = true
@@ -78,7 +84,7 @@ function PlayState:initObjects()
         for i, Receptor in ipairs(Receptors) do
             Timer.after(0.075*Receptor.lane, function() Receptor:appear() end)
         end
-     end)
+    end)
 
 end
 
@@ -125,6 +131,12 @@ function PlayState:update(dt)
 
     if Mods.rampUp then
         if Mods.rampUp  then
+        end
+    end
+
+    if doScript then
+        if updateScript then
+            updateScript(dt)
         end
     end
 end
@@ -334,6 +346,11 @@ end
 
 function PlayState:draw()
     Objects.Game.Background:draw() 
+    if doScript then
+        if drawScriptLayer1 then
+            drawScriptLayer1()
+        end
+    end
     love.graphics.push()
     love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
     for _, Splash in ipairs(Splashes) do
@@ -350,6 +367,11 @@ function PlayState:draw()
     end
     
     love.graphics.pop()
+    if doScript then
+        if drawScriptLayer2 then
+            drawScriptLayer2()
+        end
+    end
     Objects.Game.Judgement:draw()
     Objects.Game.HUD:draw()
     Objects.Game.ComboAlertParticle:draw()
@@ -357,6 +379,11 @@ function PlayState:draw()
     Objects.Game.Combo:draw()
     Objects.Game.HitErrorMeter:draw()
     Objects.Game.HealthBar:draw()
+    if doScript then
+        if drawScriptLayer3 then
+            drawScriptLayer3()
+        end
+    end
 end
 
 return PlayState

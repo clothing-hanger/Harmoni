@@ -29,10 +29,10 @@ Skin.Params = {
 }
 
 Skin.Fonts = {
-    ["HUD Large"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 65),
-    ["HUD Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 15),
-    ["HUD Extra Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 12),
-    ["Combo"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 35),
+    ["HUD Large"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 65),
+    ["HUD Small"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 15),
+    ["HUD Extra Small"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 12),
+    ["Combo"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 35),
     ["Menu Large"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 25),
     ["Menu Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 15),
     ["Menu Extra Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 12),
