@@ -101,7 +101,7 @@ function Note:update(dt)
         end
     end
 end
-
+ 
 ---@param noteTime number The time the note was hit
 ---@param wasMiss boolean If the note was a miss
 function Note:hit(noteTime, unconvertedNoteTime, wasMiss)
