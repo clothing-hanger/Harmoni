@@ -125,6 +125,7 @@ end
 function SettingsMenu:saveSettings()
     savedSettings = "return {\n"
     for Key, Value in pairs(Settings) do
+        print(Key .. " - " .. tostring(Value))
         local settingValue = ""
         if type(Value) == "string" then
             settingValue = "\"" .. Value .. "\""
@@ -136,7 +137,7 @@ function SettingsMenu:saveSettings()
         savedSettings = savedSettings .. "    " .. Key .. " = " .. settingValue .. ",\n"
     end
     savedSettings = savedSettings .. "}\n"
-
+    print("saveSettings()")
     print(savedSettings)
     
     -- Saving the settings to a file
@@ -146,10 +147,12 @@ end
 function SettingsMenu:updateObjects()
     for key, Slider in pairs(sliders) do
         Slider:update()
+        local value = Slider:giveValue()
+        Settings[key] = value -- Update Settings with the new value
         for Tab = 1, #tabs do
             for Setting = 1, #tabs[Tab] do
                 if tabs[Tab][Setting].key == key then
-                    tabs[Tab][Setting].value = Slider:giveValue()
+                    tabs[Tab][Setting].value = value
                 end
             end
         end
@@ -157,10 +160,12 @@ function SettingsMenu:updateObjects()
 
     for key, Toggle in pairs(toggles) do
         Toggle:update()
+        local value = Toggle:giveValue()
+        Settings[key] = value -- Update Settings with the new value
         for Tab = 1, #tabs do
             for Setting = 1, #tabs[Tab] do
                 if tabs[Tab][Setting].key == key then
-                    tabs[Tab][Setting].value = Toggle:giveValue()
+                    tabs[Tab][Setting].value = value
                 end
             end
         end
@@ -168,10 +173,12 @@ function SettingsMenu:updateObjects()
 
     for key, Select in pairs(selects) do
         Select:update()
+        local value = Select:giveValue()
+        Settings[key] = value -- Update Settings with the new value
         for Tab = 1, #tabs do
             for Setting = 1, #tabs[Tab] do
                 if tabs[Tab][Setting].key == key then
-                    tabs[Tab][Setting].value = Select:giveValue()
+                    tabs[Tab][Setting].value = value
                 end
             end
         end
@@ -179,16 +186,18 @@ function SettingsMenu:updateObjects()
 
     for key, TextBox in pairs(textBoxes) do
         TextBox:update()
+        local value = TextBox:giveValue()
+        Settings[key] = value -- Update Settings with the new value
         for Tab = 1, #tabs do
             for Setting = 1, #tabs[Tab] do
                 if tabs[Tab][Setting].key == key then
-                    tabs[Tab][Setting].value = TextBox:giveValue()
+                    tabs[Tab][Setting].value = value
                 end
             end
         end
     end
-
 end
+
 
 ---@param TabButton string The tab to draw
 function SettingsMenu:TabButtonDraw(TabButton)

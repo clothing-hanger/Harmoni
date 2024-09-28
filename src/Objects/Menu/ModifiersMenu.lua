@@ -120,7 +120,6 @@ function ModifiersMenu:configureMods()
     for Key, Tab in pairs(self.tabs) do
         for Key1, Modifier in pairs(Tab) do
             if Key1 ~= "id" then
-                print(Key1 .. ": " .. tostring(Modifier.value))
                 Mods[Key1] = Modifier.value
             end
         end
