@@ -145,6 +145,14 @@ function SongSelect:switchSong()
     print("Switch Song")
     
     local metaData = love.filesystem.load("Music/"..SongList[SelectedSong].."/meta.lua")()
+    if not SongList[SelectedSong] then
+        notification("Selected Song does not exist!", "error")
+        return
+    end
+    if not metaData.difficulties[SelectedDifficulty] then
+        notification("Selected Difficulty does not exist!", "error")
+        return
+    end
     if love.filesystem.getInfo("Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background, "file") then
         background = "Music/"..SongList[SelectedSong].."/"..metaData.difficulties[SelectedDifficulty].background
     else

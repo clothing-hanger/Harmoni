@@ -184,7 +184,6 @@ function TitleScreen:doReturnToHTimer()
     end
 end
 function TitleScreen:update(dt)
-
     updateBPM()
     if onBeat then TitleScreen:logoBump() end
     if Song and Song:isPlaying() then

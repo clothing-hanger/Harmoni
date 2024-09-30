@@ -15,6 +15,7 @@ Skin.Params = {
     ["Hit Error Meter Width"] = 150,              -- how wide the hit error graph is
     ["Hit Error Meter Solid"] = false,            -- if true, the graph will be made of colored rectangles to show where the judgment windows are, hits will be black, if false, the only visible part of the graph will be the hits, and they will be colored as the color of the judgmement they are
     ["Hit Error Meter Fade"] = 1000,              -- how long in milliseconds a hit will take to fade from the hit error graph
+    ["Note Underlay Color"] = rgb {0, 0, 0},
     ["Health Bar X"] = 350,                       -- X position of the health bar
     ["Health Bar Y"] = 300,                       -- Y position of the health bar
     ["Health Bar Height"] = 700,                  -- Height of the health bar

@@ -11,6 +11,8 @@ return {
         Combo = require("Objects.Game.PlayState.Combo"),
         HitErrorMeter = require("Objects.Game.PlayState.HitErrorMeter"),
         HealthBar = require("Objects.Game.PlayState.HealthBar"),
+        NoteUnderlay = require("Objects.Game.PlayState.NoteUnderlay"),
+
         --particles
         Splash = require("Objects.Game.PlayState.Particles.Splash"),
         ComboAlertParticle = require("Objects.Game.PlayState.Particles.ComboAlert"),

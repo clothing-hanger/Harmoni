@@ -78,6 +78,7 @@ function PlayState:initObjects()
     Objects.Game.Combo:new()
     Objects.Game.HitErrorMeter:new()
     Objects.Game.HealthBar:new()
+    Objects.Game.NoteUnderlay:new(#lanes)
     Timer.after(0.4, function()
         Objects.Game.Background:setDimness(Settings.backgroundDim/100, true)
 
@@ -351,6 +352,7 @@ function PlayState:draw()
             drawScriptLayer1()
         end
     end
+    Objects.Game.NoteUnderlay:draw()
     love.graphics.push()
     love.graphics.translate(0, (Settings.scrollDirection == "Down" and -Settings.laneHeight) or Settings.laneHeight)
     for _, Splash in ipairs(Splashes) do

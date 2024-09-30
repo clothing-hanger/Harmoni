@@ -18,6 +18,7 @@ local tabs = {
         {key = "backgroundRed", name = "Low Health Background Redness", type = "toggle", value = true, description = "Turn the background red when you're about to fail"},
         {key = "laneWidth", name = "Lane Width", type = "number", value = 120, min = 50, max = 500, description = "The space between the note lanes"},
         {key = "laneHeight", name = "Lane Height", type = "number", value = 120, min = 50, max = 500, description = "The space between the edge of the screen and the receptors"},
+        {key = "noteUnderlay", name = "Note Underlay", type = "number", value = 80, min = 0, max = 100, description = "How dim the playfield is"},
         {key = "backgroundBump", name = "Background Bumping", type = "select", value = "NPS Based", options = {"NPS Based", "BPM Only", "Off"}, description = "(NOT ADDED) Background bumps to the BPM, NPS Based makes it bump more or less depending on the current NPS"},
     },
     {
