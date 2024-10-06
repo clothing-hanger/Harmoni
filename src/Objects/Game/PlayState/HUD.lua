@@ -37,12 +37,34 @@ function HUD:update(dt)
 end
 
 function HUD:draw()
-    love.graphics.setColor(1,1,1,1)
     love.graphics.setFont(Skin.Fonts["HUD Large"])
-    love.graphics.printf(math.ceil(self.printableScore[1]) .. "\n" .. string.format("%.2f", self.printableAccuracy[1]) .. "%", 0, 0, Inits.GameWidth, "left")
-  --    love.graphics.printf(score .. "\n" .. accuracy .. "%", 0, 0, Inits.GameWidth, "left")
+    
 
-    love.graphics.printf(string.format("%.2f", self.printablePerformance[1]) .. " | " .. grade .. "\n" .. #NPSData.NPS .. "/" .. #NPSData.HPS .. "\n", 0, 0, Inits.GameWidth, "right")
+    local leftText = math.ceil(self.printableScore[1]) .. "\n" .. string.format("%.2f", self.printableAccuracy[1]) .. "%"
+    local leftTextWidth = Skin.Fonts["HUD Large"]:getWidth(leftText)
+    local leftTextHeight = Skin.Fonts["HUD Large"]:getHeight() * 2
+
+
+    love.graphics.setColor(0, 0, 0, 0.8)
+    love.graphics.rectangle("fill", 0, 0, leftTextWidth+15, leftTextHeight)
+    gradient(0, leftTextHeight, leftTextWidth+15, 15, {0,0,0,0.8}, {0,0,0,0}, "vertical")
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(leftText, 0, 0, Inits.GameWidth, "left")
+
+    local rightText = string.format("%.2f", self.printablePerformance[1]) .. " | " .. grade .. "\n" .. #NPSData.NPS .. "/" .. #NPSData.HPS
+    local rightTextWidth = Skin.Fonts["HUD Large"]:getWidth(rightText)
+    local rightTextHeight = Skin.Fonts["HUD Large"]:getHeight() * 2
+
+    local rightAlignX = Inits.GameWidth - rightTextWidth
+
+    love.graphics.setColor(0, 0, 0, 0.8)
+    love.graphics.rectangle("fill", rightAlignX-15, 0, rightTextWidth+15, rightTextHeight)
+    gradient(rightAlignX-15, rightTextHeight, rightTextWidth+15, 15, {0,0,0,0.8}, {0,0,0,0}, "vertical")
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(rightText, 0, 0, Inits.GameWidth, "right")
+
     love.graphics.setFont(defaultFont)
 end
 

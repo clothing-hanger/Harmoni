@@ -2,6 +2,7 @@ Inits = require("inits")
 utf8 = require("utf8")
 love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
+love.filesystem.createDirectory("Logs")
 
 love.audio.setVolume(0.15)
 
@@ -35,6 +36,7 @@ function love.load()
     require("Modules.Love")
     require("Modules.Lua")
     require("Modules.Constants")
+    require("Modules.Logs")
     require("Modules.RGB")
     require("Modules.musicTime")
     require("Modules.TableToFile")
@@ -48,10 +50,13 @@ function love.load()
     require("Modules.Notifications")
     require("Modules.Judgements")
     require("Modules.Grades")
+    require("Modules.StylizedRectangles")
     require("Modules.DifficultyCalculator")
     require("Modules.Cursor")
     require("Modules.VolumeControl")
 
+    Log = ""
+    
     Skin:loadSkin()
 
     loadSettings()
@@ -63,6 +68,7 @@ function love.load()
 
     --shaders
     riodejanerio = love.graphics.newShader("Shaders/rio-de-janerio.glsl")  --👅👅👅
+   --error("test")
 end
 
 ---@diagnostic disable-next-line: duplicate-set-field

@@ -141,7 +141,8 @@ Skin.Judgements = {
 
 Skin.Particles = {
     ["Note Splash"] = love.graphics.newImage("PARTICLES/circle.png"),
-    ["Combo Alert"] = love.graphics.newImage("PARTICLES/eclipse.png"),
+    ["Combo Alert"] = love.graphics.newImage("PARTICLES/the  o r b.png"),
+    ["Health Particle"] = love.graphics.newImage("PARTICLES/lightDot.png"),
 }
 
 Skin.Menu = {
@@ -157,5 +158,35 @@ Skin.Sounds = {
     ["Menu Scroll"] = nil, --sound for scrolling (you should use a quick click for this)
     ["Hit Sound"] = nil,   -- sound for hitting notes
     ["Tap Sound"] = nil,   -- sound for tapping keys, but not hitting notes
+}
+
+Skin.Colors = {
+    ["Song Button Fill"] =  {0, 0, 0, 0.7},
+    ["Song Button Line"] =  {0.8, 0.8, 0.8, 1},          --remember to add back  thingy here later
+    ["Song Button Text"] =  {1, 1, 1, 1},
+
+    ["Difficulty Button Fill"] =  {0, 0, 0, 0.7},
+    ["Difficulty Button Line"] =  {0.8, 0.8, 0.8, 1},
+    ["Difficulty Button Text"] =  {1, 1, 1, 1},
+
+    ["Song Info Box Fill"] =  {0, 0, 0, 0.7},
+    ["Song Info Box Line"] =  {0.8, 0.8, 0.8, 1},
+    ["Song Info Box Text"] =  {1, 1, 1, 1},
+
+    ["List Menu Backing Fill"] =  {0, 0, 0, 0.7},
+    ["List Menu Backing Line"] =  {0.8, 0.8, 0.8, 1},
+    ["List Menu Button Fill"] =  {0, 0, 0, 0.7},
+    ["List Menu Button Line"] =  {0.8, 0.8, 0.8, 1},
+    ["List Menu Text"] =  {1, 1, 1, 1},
+
+    ["Modifiers Menu Backing Fill"] =  {0, 0, 0, 0.7},
+    ["Modifiers Menu Backing Line"] =  {0.8, 0.8, 0.8, 1},
+    ["Modifiers Menu Button Fill"] =  {0, 0, 0, 0.7},
+    ["Modifiers Menu Button Line"] =  {0.8, 0.8, 0.8, 1},
+    ["Modifiers Menu Text"] =  {1, 1, 1, 1},
+
+    ["Song Select Tabs Fill"] =  {0, 0, 0, 0.7},
+    ["Song Select Tabs Line"] =  {0.8, 0.8, 0.8, 1},
+    ["Song Select Tabs Text"] =  {1, 1, 1, 1},
 }
 

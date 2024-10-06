@@ -31,3 +31,6 @@ function scaledSineWave(t)
     local scaledValue = 1 + 0.2 * sineValue
     return scaledValue
 end
+function lerp(a, b, t)
+    return (1 - t) * a + t * b
+end

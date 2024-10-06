@@ -90,6 +90,8 @@ function PreLoader:update(dt)
 end
 
 function PreLoader:draw()
+
+    love.graphics.rectangle("fill", 0, Inits.GameHeight-100,Inits.GameWidth*(frame/#SongList), 20)
 end
 
 return PreLoader

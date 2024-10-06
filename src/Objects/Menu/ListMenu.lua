@@ -45,8 +45,11 @@ function ListMenu:wheelmoved(y)
 end
 
 function ListMenu:draw()
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(Skin.Colors["List Menu Backing Fill"])
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+    love.graphics.setColor(Skin.Colors["List Menu Backing Line"])
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 
     -- Set the scissor to the visible area
     local scissorX = self.x
@@ -59,7 +62,10 @@ function ListMenu:draw()
     for _, item in ipairs(self.items) do
         local itemY = item.y - self.scrollOffset
         if itemY + item.height > scissorY and itemY < scissorY + scissorHeight then
-            love.graphics.setColor(0, 0, 0)
+            love.graphics.setColor(Skin.Colors["List Menu Button Fill"])
+            love.graphics.rectangle("fill", self.x + 15, itemY, self.width - 30, item.height)
+
+            love.graphics.setColor(Skin.Colors["List Menu Button Line"])
             love.graphics.rectangle("line", self.x + 15, itemY, self.width - 30, item.height)
         end
     end

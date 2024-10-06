@@ -16,6 +16,7 @@ return {
         --particles
         Splash = require("Objects.Game.PlayState.Particles.Splash"),
         ComboAlertParticle = require("Objects.Game.PlayState.Particles.ComboAlert"),
+        HealthParticle = require("Objects.Game.PlayState.Particles.HealthParticle"),
 
         --Results
         NoteHitPlot = require("Objects.Game.Results.NoteHitPlot"),

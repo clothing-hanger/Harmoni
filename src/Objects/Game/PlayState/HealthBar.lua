@@ -23,6 +23,10 @@ function HealthBar:update(dt)
     if printableHealth[1] <= 0 then
         States.Game.PlayState:gameOver()
     end
+
+    if health >= 0.9 then
+        Objects.Game.HealthParticle:emit()
+    end
 end
 
 function  HealthBar:draw()

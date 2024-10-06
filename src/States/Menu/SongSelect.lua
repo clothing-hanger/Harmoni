@@ -3,6 +3,13 @@ SongList = love.filesystem.getDirectoryItems("Music")
 local MenuState
 local selectedSongHeight = Inits.GameHeight/2
 local hovered
+local songListX = Inits.GameWidth/2
+local tabs
+local scoreMenuX = Inits.GameWidth-470
+local scoreMenuY = 210
+local scoreMenuWidth = 470
+local scoreMenuHeight = 730
+local curTab
 
 function SongSelect:enter()
     doScreenWipe("leftOut")
@@ -15,13 +22,21 @@ function SongSelect:enter()
     DifficultyButtons = {}
     SongSelect:setupSongButtons()
     SongSelect:switchSong()
-
+    curTab = "Modifiers" -- always start in mods menu because preview is slow
     SongSelect:initObjects()
+
+
+    tabs = {
+        {text = "Modifiers", x = 500, y = 0, width = 120, height = 25},     -- this is fucking awful
+        {text = "Preview Chart", x = 625, y = 0, width = 120, height = 25},
+    }
+
+
 end
 
 function SongSelect:initObjects()
     Objects.Menu.ModifiersMenu:new()
-    Objects.Menu.ListMenu:new()
+    Objects.Menu.ListMenu:new(scoreMenuX, scoreMenuY, scoreMenuWidth, scoreMenuHeight)
 
     for i = 1,10 do
         Objects.Menu.ListMenu:addItem({text = "PLACEHOLDER .. " .. i})     -- TEMPORARY LIST MENU TEST
@@ -36,7 +51,7 @@ end
 function SongSelect:setupSongButtons()
     for i = 1,#SongList do
         local metaData = love.filesystem.load("Music/"..SongList[i].."/meta.lua")()
-        table.insert(SongButtons, Objects.Menu.SongButton(metaData.songName, "PLACEHOLDER", "PLACEHOLDER", i))
+        table.insert(SongButtons, Objects.Menu.SongButton(metaData.songName, "PLACEHOLDER", "PLACEHOLDER", i, Inits.GameWidth/2, 0, 200, 40))
     end
 end
 
@@ -44,14 +59,24 @@ end
 function SongSelect:updateButtons(dt)
     local speed = 15
     local offsetX = 45
+    local selectedSongButtonWidth, selectedSongButtonHeight = 500, 100
+    local nonSelectedSongButtonWidth, nonSelectedSongButtonHeight = 350, 50
     if MenuState == "Song" then
         for i, SongButton in ipairs(SongButtons) do
             local offsetFromSelected = math.abs(i - SelectedSong)
-            local targetX = offsetFromSelected * offsetX
+            local targetX = (SelectedSong == i and songListX - (selectedSongButtonWidth - nonSelectedSongButtonWidth)) or songListX
             local targetY = selectedSongHeight + (i - SelectedSong) * (SongButton.height + 10)
+            local targetWidth = (SelectedSong == i and selectedSongButtonWidth) or nonSelectedSongButtonWidth
+            local targetHeight = (SelectedSong == i and selectedSongButtonHeight) or nonSelectedSongButtonHeight
+            if i > SelectedSong then
+                targetY = targetY + (selectedSongButtonHeight/2)  -- move the rest of the list down below the selected song button
+            end
             SongButton:update()
             SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
-            SongButton.x = SongButton.x + (targetX - SongButton.x + 1200) * speed * dt
+            SongButton.x = SongButton.x + (targetX - SongButton.x) * speed * dt
+
+            SongButton.width = SongButton.width + (targetWidth - SongButton.width) * speed * dt  
+            SongButton.height = SongButton.height + (targetHeight - SongButton.height) * speed * dt 
         end
     elseif MenuState == "Difficulty" then
         for i, DifficultyButton in ipairs(DifficultyButtons) do
@@ -60,18 +85,27 @@ function SongSelect:updateButtons(dt)
             DifficultyButton.y = DifficultyButton.y + (targetY - DifficultyButton.y) * speed * dt
         end
     end
-
     hovered = cursorX > Inits.GameWidth/2
 
-    
     if DifficultyButtons[SelectedDifficulty] then
         DifficultyButtons[SelectedDifficulty].selected = true
     else
-        if not SongButtons[SelectedSong].corrupt then notification("Selected Song is corrupt! (Case 1)") end
-        SongButtons[SelectedSong].corrupt = true
+        if not SongButtons[SelectedSong].corrupt then 
+            notification("Selected Song is corrupt! (Case 1)")
+            SongButtons[SelectedSong].corrupt = true
+        end
     end
-    
+end
 
+
+function SongSelect:updateTabs()
+    for i, Tab in ipairs(tabs) do
+        if (cursorX > tabs[i].x and cursorX < tabs[i].x + tabs[i].width) and (cursorY > tabs[i].y and cursorY < tabs[i].y + tabs[i].height) then
+            if Input:pressed("menuClickLeft") then
+                print(tabs[i].text)
+            end
+        end
+    end
 end
 
 function SongSelect:wheelmoved(y)
@@ -102,6 +136,7 @@ end
 function SongSelect:update(dt)
     SongSelect:updateButtons(dt)
     SongSelect:updateObjects(dt)
+    SongSelect:updateTabs(dt)
 
     if Input:pressed("menuDown") then
         if MenuState == "Song" then SelectedSong = (SelectedSong % #SongList) + 1
@@ -137,9 +172,20 @@ end
 
 
 
+function SongSelect:switchTab(tab)
+    if tab == curTab then return end -- dont wanna do anything if the user clicks the tab they are already on
+    
+    curTab = tab  -- set curTab to the tab clicked
+
+
+    -- there will be tweening shit here later i just too lazy for now
+end
 
 function SongSelect:switchSong()
-    if Song then Song:stop(); Song:release() end
+    if Song then 
+        Song:stop() 
+        Song = nil
+    end
     SongSelect:setupDifficultyList()
 
     print("Switch Song")
@@ -239,14 +285,28 @@ function SongSelect:draw()
             DifficultyButton:draw()
         end
     end
-    love.graphics.setColor(0,0,0,0.7)
-    love.graphics.rectangle("fill", 0, 0, 900, 220)
-    love.graphics.setColor(1,1,1)
-    love.graphics.setFont(Skin.Fonts["Menu Large"])
-    love.graphics.printf(songName, 30, 30, 800, "left")
 
-    Objects.Menu.ModifiersMenu:draw()
-    --Objects.Menu.ListMenu:draw()
+    -- tabs
+
+    for i, Tab in ipairs(tabs) do
+        love.graphics.rectangle("line", tabs[i].x, tabs[i].y, tabs[i].width, tabs[i].height)
+        love.graphics.print(tabs[i].text, tabs[i].x, tabs[i].y)
+    end
+
+
+    -- top right song info box
+    local topRightInfoBoxWidth = 470
+    local topRightInfoBoxHeight = 200
+    love.graphics.rectangle("fill", Inits.GameWidth-topRightInfoBoxWidth, 0, topRightInfoBoxWidth, topRightInfoBoxHeight)
+
+    --score menu thingy idfk
+    Objects.Menu.ListMenu:draw()
+
+    -- modifiers menu
+    if curTab == "Modifiers" then Objects.Menu.ModifiersMenu:draw() end
+
+    -- song preview
+    -- gugo help :(
 end
 
 function SongSelect:debug()

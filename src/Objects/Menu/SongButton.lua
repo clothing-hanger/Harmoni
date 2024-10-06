@@ -5,9 +5,9 @@ local SongButton = Class:extend()
 ---@param charterName string The name of the charter
 ---@param artistName string  The name of the song artist
 ---@param id number The id of the song
-function SongButton:new(songName, charterName, artistName, id)
-    self.x, self.y = 0, 0
-    self.width, self.height = 1000, 50
+function SongButton:new(songName, charterName, artistName, id, x, y, width, height)
+    self.x, self.y = x, y
+    self.width, self.height = width, height
     self.songName = songName or "Song Name not found!"
     self.charterName = charterName or ""  -- no need for error text for these since they arent that important
     self.artistName = artistName or ""
@@ -36,12 +36,17 @@ function SongButton:click()
 end
 
 function SongButton:draw()
-    if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
-    if self.corrupt then love.graphics.setColor(1,0,0) end
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    --if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
+    --if self.corrupt then love.graphics.setColor(1,0,0) end
 
+    love.graphics.setColor(Skin.Colors["Song Button Fill"])
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+  
+    love.graphics.setColor(Skin.Colors["Song Button Line"])
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
-    love.graphics.setColor(0,0,0)
+
+    --beveledRectangle(self.width, self.height, self.x, self.y, 20, 20, 1, {0,1,1}, {0,1,1}, {0,0,0}, {0,0,0}, false, false, true, nil, 8)
+    love.graphics.setColor(Skin.Colors["Song Button Text"])
     love.graphics.print(self.songName, self.x, self.y)
     love.graphics.setColor(1,1,1)
 end

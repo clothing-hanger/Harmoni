@@ -129,11 +129,20 @@ end
 
 
 function ModifiersMenu:draw()
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setColor(Skin.Colors["Modifiers Menu Backing Fill"])
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-    love.graphics.setColor(0, 0, 0)
+
+    love.graphics.setColor(Skin.Colors["Modifiers Menu Backing Line"])
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+
     for i = 1, #self.tabButtons do
+        love.graphics.setColor(Skin.Colors["Modifiers Menu Button Fill"])
+        love.graphics.rectangle("fill", self.tabButtons[i][2], self.tabButtons[i][3], self.tabWidth, self.tabHeight)
+
+        love.graphics.setColor(Skin.Colors["Modifiers Menu Button Line"])
         love.graphics.rectangle("line", self.tabButtons[i][2], self.tabButtons[i][3], self.tabWidth, self.tabHeight)
+
+        love.graphics.setColor(Skin.Colors["Modifiers Menu Text"])
         love.graphics.printf(self.tabNames[i], self.tabButtons[i][2], self.tabButtons[i][3], self.tabWidth, "center")
     end
     for i, Slider in pairs(self.sliders) do

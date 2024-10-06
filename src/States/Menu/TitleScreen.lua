@@ -35,6 +35,7 @@ function TitleScreen:enter()
 
     end
 
+
     
     SelectedDifficulty = 1
     if not SelectedSong then SelectedSong = love.math.random(1,#SongList) end
@@ -131,7 +132,7 @@ function TitleScreen:logoBump()
     end
     logoSize = {x = 1+visualizerBump, y = 1+visualizerBump, r = 0}
     
-    Timer.tween(0.25, logoSize, {x = 1, y = 1}, "out-expo")
+    Timer.tween(0.5, logoSize, {x = 1, y = 1}, "in-out-bounce")
 end
 
 function TitleScreen:switchState(state)
@@ -206,10 +207,22 @@ function TitleScreen:update(dt)
         end
     end
 end
+
 function TitleScreen:draw()
-    if background then 
-        love.graphics.draw(background, Inits.GameWidth/2, Inits.GameHeight/2, 0, (Inits.GameWidth/background:getWidth()), (Inits.GameHeight/background:getHeight()), background:getWidth()/2, background:getHeight()/2) 
-    end
+    local parallaxStrength, speed, growScale, normalScale = 0.05, 0.01, 1.1, 1.0 
+    local targetOffsetX, targetOffsetY = (cursorX - Inits.GameWidth / 2) * parallaxStrength, (cursorY - Inits.GameHeight / 2) * parallaxStrength 
+    if menuState == "title" then 
+        self.parallaxOffsetX = lerp(self.parallaxOffsetX or 0, targetOffsetX, speed)
+        self.parallaxOffsetY = lerp(self.parallaxOffsetY or 0, targetOffsetY, speed)
+        self.scale = lerp(self.scale or normalScale, growScale, speed)
+    else 
+        self.parallaxOffsetX = lerp(self.parallaxOffsetX or 0, 0, speed)
+        self.parallaxOffsetY = lerp(self.parallaxOffsetY or 0, 0, speed)
+        self.scale = lerp(self.scale or growScale, normalScale, speed)
+    end 
+    if background then love.graphics.draw(background, Inits.GameWidth / 2 - (self.parallaxOffsetX or 0), Inits.GameHeight / 2 - (self.parallaxOffsetY or 0), 0, (Inits.GameWidth / background:getWidth()) * (self.scale or 1), (Inits.GameHeight / background:getHeight()) * (self.scale or 1), background:getWidth() / 2, background:getHeight() / 2) end 
+
+
 
     Objects.Menu.Visualizer:draw()
 
@@ -229,6 +242,7 @@ function TitleScreen:draw()
         love.graphics.setColor(1,1,1,1)
     end
     love.graphics.draw(Skin.Menu["H"], hPosition.x, hPosition.y, 0, hSize.x+(logoSize.x-1), hSize.y+(logoSize.y-1), Skin.Menu["H"]:getWidth()/2, Skin.Menu["H"]:getHeight()/2)
+    
    love.graphics.setColor(1,1,1)
    
     love.graphics.translate(0, menuSlide[1])    -- translate stuff for the slide thingy 
