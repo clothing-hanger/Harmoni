@@ -42,6 +42,17 @@ local restricted = {
         print("Not allowed.")
     end
 }
+local skinEnv = {
+    newImage = function(path)
+        return love.graphics.newImage(SkinFolder .. path)
+    end,
+    newFont = function(path, size)
+        return love.graphics.newFont(SkinFolder .. path, size)
+    end,
+    newAudioSource = function(path, sourceType)
+        return love.audio.newSource(SkinFolder .. path, sourceType)
+    end
+}
 
 local chunk
 
@@ -53,6 +64,9 @@ function Skin:loadSkin(path)
     chunk = love.filesystem.load(path)
     for k, v in pairs(_G) do
         mt[k] = restricted[k] or v
+    end
+    for k, v in pairs(skinEnv) do
+        mt[k] = v
     end
     setfenv(chunk, mt)
     chunk()

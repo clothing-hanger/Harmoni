@@ -5,7 +5,7 @@ function Splash:new(x,y)
     self.particleSystem = love.graphics.newParticleSystem(Skin.Particles["Combo Alert"], 41)   -- made with hot particles, translated to my particle format thingy by chatgpt lmfao
     
     -- Setting up default particle properties
-    self.particleSystem:setColors(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0)
+    self.particleSystem:setColors(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.5)
     self.particleSystem:setDirection(3.1416)
     self.particleSystem:setEmissionArea("borderrectangle", 59.28, 12.78, 0, false)
     self.particleSystem:setEmissionRate(0)
