@@ -10,6 +10,8 @@ local scoreMenuY = 210
 local scoreMenuWidth = 470
 local scoreMenuHeight = 730
 local curTab
+local tabSwitchTranslate = {0}
+local doingTabSwitch = false
 
 function SongSelect:enter()
     doScreenWipe("leftOut")
@@ -24,6 +26,7 @@ function SongSelect:enter()
     SongSelect:switchSong()
     curTab = "Modifiers" -- always start in mods menu because preview is slow
     SongSelect:initObjects()
+    tabSwitchTranslate = 0
 
 
     tabs = {
@@ -102,7 +105,7 @@ function SongSelect:updateTabs()
     for i, Tab in ipairs(tabs) do
         if (cursorX > tabs[i].x and cursorX < tabs[i].x + tabs[i].width) and (cursorY > tabs[i].y and cursorY < tabs[i].y + tabs[i].height) then
             if Input:pressed("menuClickLeft") then
-                print(tabs[i].text)
+                SongSelect:switchTab(tabs[i].text)
             end
         end
     end
@@ -173,10 +176,18 @@ end
 
 
 function SongSelect:switchTab(tab)
+    print(curTab)
     if tab == curTab then return end -- dont wanna do anything if the user clicks the tab they are already on
     
-    curTab = tab  -- set curTab to the tab clicked
 
+    doingTabSwitch = true
+    Timer.tween(0.15, tabSwitchTranslate, {-200}, "out-quad", function()
+        Timer.tween(0.15, tabSwitchTranslate, {0}, "out-quad", function()
+            doingTabSwitch = false
+            curTab = tab  -- set curTab to the tab clicked
+            print(curTab)
+        end)
+    end)
 
     -- there will be tweening shit here later i just too lazy for now
 end
@@ -303,6 +314,9 @@ function SongSelect:draw()
     Objects.Menu.ListMenu:draw()
 
     -- modifiers menu
+
+
+    love.graphics.translate(tabSwitchTranslate, 0)
     if curTab == "Modifiers" then Objects.Menu.ModifiersMenu:draw() end
 
     -- song preview

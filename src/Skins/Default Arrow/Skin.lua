@@ -162,7 +162,7 @@ Skin.Sounds = {
 
 Skin.Colors = {
     ["Song Button Fill"] =  {0, 0, 0, 0.7},
-    ["Song Button Line"] =  {0.8, 0.8, 0.8, 1},          --remember to add back  thingy here later
+    ["Song Button Line"] =  {0.8, 0.8, 0.8, 1},          --remember to add back rgb thingy here later
     ["Song Button Text"] =  {1, 1, 1, 1},
 
     ["Difficulty Button Fill"] =  {0, 0, 0, 0.7},
