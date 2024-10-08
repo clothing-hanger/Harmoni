@@ -1,7 +1,7 @@
 ---@class ModifiersMenu
 local ModifiersMenu = Class:extend()
 
-function ModifiersMenu:new()
+function ModifiersMenu:new(width, height, x, y)
     self.width = 500
     self.height = Inits.GameHeight - 250
     self.x = 0
@@ -40,6 +40,8 @@ function ModifiersMenu:new()
             accRate = {isSetting = false, type = "toggle", value = false, name = "Accuracy Rate", description = "The song rate is whatever the accuracy is"},
         },
     }
+
+  
 
     
 
