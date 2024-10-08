@@ -10,8 +10,6 @@ local scoreMenuY = 210
 local scoreMenuWidth = 470
 local scoreMenuHeight = 730
 local curTab
-local tabSwitchTranslate = {0}
-local doingTabSwitch = false
 local tabOffset = {0}
 
 function SongSelect:enter()
@@ -27,7 +25,6 @@ function SongSelect:enter()
     SongSelect:switchSong()
     curTab = "Modifiers" -- always start in mods menu because preview is slow
     SongSelect:initObjects()
-    tabSwitchTranslate = 0
 
 
     tabs = {
@@ -204,24 +201,6 @@ function SongSelect:update(dt)
 end
 
 
-
-function SongSelect:switchTab(tab)
-    print(curTab)
-    if tab == curTab then return end -- dont wanna do anything if the user clicks the tab they are already on
-    
-
-    doingTabSwitch = true
-    Timer.tween(0.15, tabSwitchTranslate, {-200}, "out-quad", function()
-        Timer.tween(0.15, tabSwitchTranslate, {0}, "out-quad", function()
-            doingTabSwitch = false
-            curTab = tab  -- set curTab to the tab clicked
-            print(curTab)
-        end)
-    end)
-
-    -- there will be tweening shit here later i just too lazy for now
-end
-
 function SongSelect:switchSong()
     if Song then 
         Song:stop() 
@@ -346,7 +325,9 @@ function SongSelect:draw()
 
     love.graphics.translate(tabOffset[1], 0 )
     -- modifiers menu
-    if curTab == "Modifiers" then Objects.Menu.ModifiersMenu:draw() end
+    if curTab == "Modifiers" then 
+        Objects.Menu.ModifiersMenu:draw() 
+    end
 
     -- song preview
     if curTab == "Preview Chart" then
