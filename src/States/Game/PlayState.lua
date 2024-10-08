@@ -9,6 +9,7 @@ local Directions = {
 }
 
 local Receptors = {}
+local allHits
 
 function PlayState:enter()
     musicTime = -99999999 -- just a super low number, musicTime will get actually initialized slightly later
@@ -32,6 +33,7 @@ function PlayState:enter()
     performance = metaData.difficulty*(accuracy/100)
     NPSData = {NPS = {}, HPS = {}}
     health = 1
+    allHits = 0
 
     -- Modifier stuff
     waveTime = 1

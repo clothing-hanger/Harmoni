@@ -10,6 +10,7 @@ local scoreMenuY = 210
 local scoreMenuWidth = 470
 local scoreMenuHeight = 730
 local curTab
+local tabOffset = {0}
 
 function SongSelect:enter()
     doScreenWipe("leftOut")
@@ -103,10 +104,39 @@ function SongSelect:updateTabs()
         if (cursorX > tabs[i].x and cursorX < tabs[i].x + tabs[i].width) and (cursorY > tabs[i].y and cursorY < tabs[i].y + tabs[i].height) then
             if Input:pressed("menuClickLeft") then
                 print(tabs[i].text)
+                SongSelect:switchTab(Tab.text)
             end
         end
     end
 end
+
+
+
+function SongSelect:switchTab(tab)
+    local tweenAmount = -(Objects.Menu.ModifiersMenu.width+10)
+    print("tabOffset before switch" .. tabOffset[1])
+    
+    if tab == curTab then return end  -- dont do anything if tab clicked is already curTab
+    local validTab = false
+    for i, Tab in ipairs(tabs) do
+        if tab == Tab.text then validTab = true end    -- check to make sure tab is valid
+    end
+    if not tab then error("No tab") end
+    if not validTab then error("Invalid tab") end
+
+    doingTabSwitch = true
+    Timer.tween(0.1, tabOffset, {tweenAmount}, "out-quad", function() 
+        curTab = tab
+        Timer.tween(0.08, tabOffset, {0}, "out-quad", function()
+             doingTabSwitch = false 
+             print("tabOffset after switch" .. tabOffset[1])
+
+            end)
+    end)
+
+end
+
+
 
 function SongSelect:wheelmoved(y)
 
@@ -170,16 +200,6 @@ function SongSelect:update(dt)
     end
 end
 
-
-
-function SongSelect:switchTab(tab)
-    if tab == curTab then return end -- dont wanna do anything if the user clicks the tab they are already on
-    
-    curTab = tab  -- set curTab to the tab clicked
-
-
-    -- there will be tweening shit here later i just too lazy for now
-end
 
 function SongSelect:switchSong()
     if Song then 
@@ -302,10 +322,17 @@ function SongSelect:draw()
     --score menu thingy idfk
     Objects.Menu.ListMenu:draw()
 
+
+    love.graphics.translate(tabOffset[1], 0 )
     -- modifiers menu
-    if curTab == "Modifiers" then Objects.Menu.ModifiersMenu:draw() end
+    if curTab == "Modifiers" then 
+        Objects.Menu.ModifiersMenu:draw() 
+    end
 
     -- song preview
+    if curTab == "Preview Chart" then
+        love.graphics.rectangle("fill", 0, 0, 500, 1000)
+    end
     -- gugo help :(
 end
 
