@@ -1,9 +1,12 @@
 local Visualizer = Class:extend()
 
-function Visualizer:new()
-    self.barCount = 150 -- how many bars (pretty obvious)
-    self.smoothing = 0.03 -- lower is smoother, higher is rougher, until you reach 1
-    self.samplesPerBar = 5  -- number of samples checked for each bar
+---@param barCount? number
+---@param smoothing? number
+---@param samplesPerBar? number
+function Visualizer:new(barCount, smoothing, samplesPerBar)
+    self.barCount = barCount or 150 -- how many bars (pretty obvious)
+    self.smoothing = smoothing or 0.03 -- lower is smoother, higher is rougher, until you reach 1
+    self.samplesPerBar = samplesPerBar or 5  -- number of samples checked for each bar
 
     self.barHeights = {}
     self.averageBarLength = 0
@@ -16,6 +19,7 @@ function Visualizer:new()
 end
 
 function Visualizer:update()
+    ---@diagnostic disable-next-line: undefined-field
     local curSample = math.floor(Song:tell("samples"))
     local totalSamples = SongData:getSampleCount()
     local count = 0
