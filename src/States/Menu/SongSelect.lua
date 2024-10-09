@@ -114,7 +114,6 @@ end
 
 function SongSelect:switchTab(tab)
     local tweenAmount = -(Objects.Menu.ModifiersMenu.width+10)
-    print("tabOffset before switch" .. tabOffset[1])
     
     if tab == curTab then return end  -- dont do anything if tab clicked is already curTab
     local validTab = false
@@ -127,16 +126,16 @@ function SongSelect:switchTab(tab)
     doingTabSwitch = true
     Timer.tween(0.1, tabOffset, {tweenAmount}, "out-quad", function() 
         curTab = tab
-        Timer.tween(0.08, tabOffset, {0}, "out-quad", function()
-             doingTabSwitch = false 
-             print("tabOffset after switch" .. tabOffset[1])
-
-            end)
+        Timer.tween(0.08, tabOffset, {0}, "out-quad", function() doingTabSwitch = false; if curTab == "Preview Chart" then SongSelect:setupPreview() end end)
     end)
 
 end
 
+function SongSelect:setupPreview()
+    local songString = "Music/" .. SongList[SelectedSong] .. "/" .. DifficultyList[SelectedDifficulty]
 
+    Objects.Menu.SongPreview:new(nil, nil, nil, nil, songString)
+end
 
 function SongSelect:wheelmoved(y)
 
@@ -167,6 +166,11 @@ function SongSelect:update(dt)
     SongSelect:updateButtons(dt)
     SongSelect:updateObjects(dt)
     SongSelect:updateTabs(dt)
+
+    if curTab == "Preview Chart" and previewingSong then
+        --love.graphics.rectangle("fill", 0, 0, 500, 1000)
+        Objects.Menu.SongPreview:update()
+    end
 
     if Input:pressed("menuDown") then
         if MenuState == "Song" then SelectedSong = (SelectedSong % #SongList) + 1
@@ -330,9 +334,12 @@ function SongSelect:draw()
     end
 
     -- song preview
-    if curTab == "Preview Chart" then
-        love.graphics.rectangle("fill", 0, 0, 500, 1000)
+    if curTab == "Preview Chart" and previewingSong then
+        --love.graphics.rectangle("fill", 0, 0, 500, 1000)
+        Objects.Menu.SongPreview:draw()
     end
+
+
     -- gugo help :(
 end
 

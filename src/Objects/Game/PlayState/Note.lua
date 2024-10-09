@@ -53,13 +53,23 @@ end
 ---@return number the position of the Note
 ---Returns the converted pixel position of the note
 function Note:getNotePosition(time)
+    local strumYPosition
+    local currentTime
+    if State.current() ~= States.Game.PlayState then -- must not be in playstate, so this needs to use the variables from the chart previewer
+        strumYPosition = Objects.Menu.SongPreview.strumYPosition
+        currentTime = Objects.Menu.SongPreview.CurrentTime
+    else
+        strumYPosition = States.Game.PlayState.strumYPosition
+        currentTime = States.Game.PlayState.CurrentTime
+    end
+    
     if not self.moveWithScroll then
-        return States.Game.PlayState.strumYPosition
+        return strumYPosition
     end
     if Settings.scrollDirection == "Down" then
-        return States.Game.PlayState.strumYPosition + (States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return strumYPosition + (currentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     else
-        return States.Game.PlayState.strumYPosition - (States.Game.PlayState.CurrentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
+        return strumYPosition - (currentTime - time) * convertScrollSpeed(Settings.scrollSpeed)
     end
 end
 

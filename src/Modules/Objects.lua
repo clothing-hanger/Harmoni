@@ -29,6 +29,7 @@ return {
         ModifiersMenu = require("Objects.Menu.ModifiersMenu"),
         ListMenu = require("Objects.Menu.ListMenu"),
         Visualizer = require("Objects.Menu.Visualizer"),
+        SongPreview = require("Objects.Menu.SongPreview"),
     },
     Misc = {
         -- imagine being the Objects.Misc table lmao stupid ass empty useless fuck
