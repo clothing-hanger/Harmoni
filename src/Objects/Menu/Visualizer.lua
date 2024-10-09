@@ -20,16 +20,23 @@ function Visualizer:update()
     local totalSamples = SongData:getSampleCount()
     local count = 0
     self.averageBarLengthCounter = 0
+    local samplesPerBarInv = 1 / self.samplesPerBar
 
     for i = 1,self.barCount do
         local averageAmplitude = 0
+        local baseSampleNumber = curSample + i * self.samplesPerBar
+
         for j = 1,self.samplesPerBar do
-            local sampleNumber = (curSample + i * self.samplesPerBar + j) % totalSamples
-            local sampleLeft = SongData:getSample(sampleNumber * 2) or 0
-            local sampleRight = SongData:getSample(sampleNumber * 2 + 1) or 0
-            averageAmplitude = averageAmplitude + (math.abs(sampleLeft) + math.abs(sampleRight)) / 2
+            local sampleNumber = (baseSampleNumber + j) % totalSamples
+            local sampleIndex = sampleNumber * 2
+
+            local sampleLeft = SongData:getSample(sampleIndex) or 0
+            local sampleRight = SongData:getSample(sampleIndex + 1) or 0
+
+            averageAmplitude = averageAmplitude + (math.abs(sampleLeft + sampleRight)) * 0.5
         end
-        averageAmplitude = averageAmplitude / self.samplesPerBar
+
+        averageAmplitude = averageAmplitude * samplesPerBarInv
         self.barHeights[i] = (self.barHeights[i] + self.smoothing * (averageAmplitude - self.barHeights[i]))
 
         local barHeight = self.barHeights[i]
@@ -37,7 +44,7 @@ function Visualizer:update()
         self.averageBarLengthCounter = self.averageBarLengthCounter + barHeight
     end
 
-    self.visualizerAverageBarLength = self.averageBarLengthCounter/count
+    self.visualizerAverageBarLength = self.averageBarLengthCounter / count
 
     if onBeat then Visualizer:bump() end
 end
