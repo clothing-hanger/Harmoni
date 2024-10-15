@@ -17,6 +17,12 @@ local wheelSettings = {
     musicVolume = "musicVolume",
 }
 
+volume = {
+    master = 0,
+    effect = 0,
+    music = 0
+}
+
 ---@param wheel string The key for the momentum
 ---@param y number The momentum to increase
 local function updateMomentum(wheel, y)
@@ -64,6 +70,7 @@ function volumeUpdate(dt)
             momentum[key] = 0
         end
     end
+
 
     alpha = clamp(alpha, 0, 1)
 end
