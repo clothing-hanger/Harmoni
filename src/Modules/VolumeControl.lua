@@ -12,9 +12,9 @@ local wheelPositions = {
 }
 
 local wheelSettings = {
-    masterVolume = "masterVolume",
-    effectVolume = "effectVolume",
-    musicVolume = "musicVolume",
+    "masterVolume",
+    "effectVolume",
+    "musicVolume",
 }
 
 volume = {
@@ -59,7 +59,7 @@ end
 function volumeUpdate(dt)
     if love.keyboard.isDown("ralt") or love.keyboard.isDown("lalt") then
 
-        for _, setting in pairs(wheelSettings) do
+        for _, setting in ipairs(wheelSettings) do
             applyMomentum(setting, dt)
         end
 
