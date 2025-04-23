@@ -50,16 +50,17 @@ function SongButton:loadImage()
     else
         notification("Failed to find valid image for button", "error")
     end
-    self.imageLoaded = true
     --]]
-    self.imageFailedToLoad = true
+   -- self.imageLoaded = true
+    
+   -- self.imageFailedToLoad = true
 end
 
 function SongButton:draw()
-    --if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
-    --if self.corrupt then love.graphics.setColor(1,0,0) end
+    if self.id == SelectedSong then love.graphics.setColor(0,1,1) end
+    if self.corrupt then love.graphics.setColor(1,0,0) end
 
-    if SelectedSong == self.id and self.imageLoaded then love.graphics.draw(self.banner, self.x, self.y, nil, 0.1, 0.1) end
+   -- if SelectedSong == self.id and self.imageLoaded then love.graphics.draw(self.banner, self.x, self.y, nil, 0.1, 0.1) end
     love.graphics.setColor(Skin.Colors["Song Button Fill"])
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
   

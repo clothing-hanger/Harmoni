@@ -92,6 +92,18 @@ end
 function SettingsMenu:checkForMissingSettings()
     local isMissing = false
     print("Check for missing settings")
+    if Settings.keyBinds4k then
+        if #Settings.keyBinds4k ~= 4 then print("WHAT"); notification("4K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds4k = "dfjk" end
+        keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+    else
+        Settings.keyBinds4k = splitIntoLetters("dfjk")
+    end
+    if Settings.keyBinds7k then
+        if #Settings.keyBinds7k ~= 7 then notification("7K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds7k = "sdf jkl" end
+        keyBinds7k = splitIntoLetters(Settings.keyBinds7k)
+    else
+        keyBinds7k = splitIntoLetters("sdf jkl")
+    end
 
     for _, tab in ipairs(tabs) do
         for _, option in ipairs(tab) do
@@ -143,6 +155,8 @@ function SettingsMenu:saveSettings()
     
     -- Saving the settings to a file
     love.filesystem.write("Settings/Settings.lua", savedSettings)
+
+    loadSettings()
 end
 
 function SettingsMenu:updateObjects()

@@ -21,7 +21,7 @@ end
 
 ---@param dir string The direction of the tween
 ---| "rightIn" # Tweens in the right
----| "rightOut" # Tweens out the right
+---| "rightOut" # Tweens out the right   yeah its fuckin obvious
 ---| "leftIn" # Tweens in the left
 ---| "leftOut" # Tweens out the left
 ---@param func? function The callback function

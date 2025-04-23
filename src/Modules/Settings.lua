@@ -34,11 +34,13 @@ function loadSettings()
     }
 
     if Settings.keyBinds4k then
+        if #Settings.keyBinds4k ~= 4 then print("WHAT"); notification("4K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds4k = "dfjk" end
         keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
     else
         Settings.keyBinds4k = splitIntoLetters("dfjk")
     end
     if Settings.keyBinds7k then
+        if #Settings.keyBinds7k ~= 7 then notification("7K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds7k = "sdf jkl" end
         keyBinds7k = splitIntoLetters(Settings.keyBinds7k)
     else
         keyBinds7k = splitIntoLetters("sdf jkl")

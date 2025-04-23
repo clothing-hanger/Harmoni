@@ -177,8 +177,11 @@ function debug.printInfo()
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, 200, 200)
     love.graphics.setColor(1,1,1)
+    print("f"
+    )
     love.graphics.print(
-        "FPS: " .. tostring(love.timer.getFPS()) .. 
+        "DPS: " .. tostring(love.timer.getDrawFPS()) .. 
+        "\nUPS: " .. tostring(love.timer.getFPS()) ..
         "\nLua Memory (KB): " .. tostring(math.floor(collectgarbage("count"))) ..
         "\nGraphics Memory (MB): " .. tostring(math.floor(love.graphics.getStats().texturememory/1024/1024)) ..
         stateString
@@ -208,7 +211,8 @@ local mFloor = math.floor
 local statsUpdateTime, statsUpdateTimeMax = 0, 1
 
 function __updateDebugStats()
-    debugStats.fps = love.timer.getFPS()
+    debugStats.ups = love.timer.getFPS()
+    debugStats.dps = love.timer.getDrawFPS()
     debugStats.memUsage = mFloor(collectgarbage("count"))
 
     local graphicsStats = love.graphics.getStats()
@@ -240,7 +244,8 @@ function debugDraw()
     
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(
-        "FPS: " .. debugStats.fps .. 
+        "DPS: " .. debugStats.dps .. 
+        "\nUPS: " .. debugStats.ups .. 
         "\nLua Memory (KB): " .. debugStats.memUsage ..
         "\nGraphics Memory (MB): " .. debugStats.graphicsMem .. 
         "\nMusic Time (MS): " .. string.format("%.3f", musicTime) ..

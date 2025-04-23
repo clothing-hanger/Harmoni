@@ -133,9 +133,9 @@ function PreLoader:update(dt)
     end
     
     if frame == #SongList and deleteMetaFiles then 
-        love.event.quit()  -- Close the game once all meta files have been deleted
+        love.event.quit()  --  Close the game once all meta files have been deleted
     elseif frame == #SongList then
-        State.switch(States.Menu.Intro) 
+        State.switch(States.Menu.Intro)
         preloaderFont = nil
     end
 
