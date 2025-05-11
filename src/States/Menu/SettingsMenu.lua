@@ -140,12 +140,20 @@ function SettingsMenu:saveSettings()
     for Key, Value in pairs(Settings) do
         print(Key .. " - " .. tostring(Value))
         local settingValue = ""
-        if type(Value) == "string" then
-            settingValue = "\"" .. Value .. "\""
-        elseif type(Value) == "boolean" then
-            settingValue = tostring(Value)
+        if Key ~= "keyBinds4k" then
+            if type(Value) == "string" then
+                settingValue = "\"" .. Value .. "\""
+            elseif type(Value) == "boolean" then
+                settingValue = tostring(Value)
+            else
+                settingValue = Value
+            end
         else
-            settingValue = Value
+            if keyBinds4k then
+                settingValue = keyBinds4k[1] .. keyBinds4k[2] .. keyBinds4k[3] .. keyBinds4k[4]
+            else
+                settingValue = "\"dfjk\""
+            end
         end
         savedSettings = savedSettings .. "    " .. Key .. " = " .. settingValue .. ",\n"
     end
