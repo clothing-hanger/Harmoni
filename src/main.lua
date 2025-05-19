@@ -5,6 +5,7 @@ love.filesystem.createDirectory("Music")
 love.filesystem.createDirectory("Settings")
 love.filesystem.createDirectory("Logs")
 
+
 love._framerate = 1025 -- Due to frametime differences, this lets it sit at the 1000fps mark
 
 

@@ -48,7 +48,7 @@ function JudgementCounter:draw()
     else                              -- counter is on right (fucking obviously if its not on the left its on the right)
         align = "right"
     end
-    love.graphics.setFont(Skin.Fonts["Judgement Counter"])
+    --love.graphics.setFont(Skin.Fonts["Judgement Counter"])
     for i = 1,#JudgementNames do
         local spacing = self.spacing
         local x = self.x

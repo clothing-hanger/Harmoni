@@ -276,7 +276,7 @@ function SongSelect:switchSong()
         end
     end
 
-    --[[ quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty], "no lanes") ]]
+    --quaverParse("Music/"..SongList[SelectedSong].."/"..DifficultyList[SelectedDifficulty], "no lanes")
 
     Objects.Menu.NowPlaying:new(metaData.songName, metaData.artist, metaData.charter)
 

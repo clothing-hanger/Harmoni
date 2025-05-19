@@ -123,6 +123,7 @@ function Note:hit(noteTime, unconvertedNoteTime, wasMiss)
     self.tooLate = wasMiss
     table.insert(noteHits, {noteTime = unconvertedNoteTime, musicTime = musicTime, wasMiss = wasMiss})  -- prob will edit this later, idk
     for _, Splash in ipairs(Splashes) do
+        print(Note.X)
         if Splash.lane == Note.Lane then
             Splash:emit(ConvertedNoteTime)
         end

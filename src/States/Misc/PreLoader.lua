@@ -113,7 +113,7 @@ function PreLoader:update(dt)
                 safeBackground,
                 safeBanner,
                 safeAudio,
-                safeDifficulty, -- Added here  (what the fuck does this comment mean)
+                safeDifficulty,
                 "Quaver"
             )
 

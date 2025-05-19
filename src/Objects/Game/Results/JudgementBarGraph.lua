@@ -21,7 +21,6 @@ function judgementBarGraph:update()
         self.y = self.y + 1
     end
 
-    print(self.y .. " " .. self.x)
 
 end
 function judgementBarGraph:draw()

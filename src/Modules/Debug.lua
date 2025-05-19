@@ -29,7 +29,7 @@ commands = {
             elseif love.system.getOS() == "OS X" then
                 os.execute('open "' .. saveDir .. '"')
             else
-                print("Unsupported operating system.")
+                consoleWriteLine("Unsupported operating system.")
             end
         end
     },

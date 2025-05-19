@@ -40,7 +40,7 @@ repeat v = channel.active:pop()
         end
 
         v = clock - prev
-        s = s + v
+        s = s + l
         channel.tick:clear()
         channel.tick:push(s)
 

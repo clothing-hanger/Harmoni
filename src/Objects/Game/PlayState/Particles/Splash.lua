@@ -4,7 +4,9 @@ function Splash:new(lane)
     self.particleSystem = love.graphics.newParticleSystem(Skin.Particles["Note Splash"])
     local gravity = 200
 
-    self:setupColors(1)
+   -- self:setupColors(1)
+               self.particleSystem:setColors(1,1,1,1)
+
     self.X = LanesPositions[States.Game.PlayState.inputMode][lane]
     self.Y = States.Game.PlayState.strumYPosition + 20
     self.lane = lane
@@ -16,6 +18,8 @@ function Splash:new(lane)
     self.min = 1
     self.max = 3
     self.particleSystem:setSizes(0.3, 0.25)
+    --self.particleSystem:setSizes(100000000,10000000)
+
 end
 
 function Splash:setupColors(noteTime)
