@@ -94,7 +94,15 @@ function SettingsMenu:checkForMissingSettings()
     print("Check for missing settings")
     if Settings.keyBinds4k then
         if #Settings.keyBinds4k ~= 4 then print("WHAT"); notification("4K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds4k = "dfjk" end
-        keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+        --[[ keyBinds4k = splitIntoLetters(Settings.keyBinds4k) ]]
+        if type(Settings.keyBinds4k) == "string" then
+            keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+        elseif type(Settings.keyBinds4k) == "table" then
+            keyBinds4k = Settings.keyBinds4k
+        else
+            notification("4K Keybinds corrupted! Keybinds reset", "error")
+            Settings.keyBinds4k = splitIntoLetters("dfjk")
+        end
     else
         Settings.keyBinds4k = splitIntoLetters("dfjk")
     end
@@ -140,12 +148,20 @@ function SettingsMenu:saveSettings()
     for Key, Value in pairs(Settings) do
         print(Key .. " - " .. tostring(Value))
         local settingValue = ""
-        if type(Value) == "string" then
-            settingValue = "\"" .. Value .. "\""
-        elseif type(Value) == "boolean" then
-            settingValue = tostring(Value)
+        if Key ~= "keyBinds4k" then
+            if type(Value) == "string" then
+                settingValue = "\"" .. Value .. "\""
+            elseif type(Value) == "boolean" then
+                settingValue = tostring(Value)
+            else
+                settingValue = Value
+            end
         else
-            settingValue = Value
+            if keyBinds4k then
+                settingValue = keyBinds4k[1] .. keyBinds4k[2] .. keyBinds4k[3] .. keyBinds4k[4]
+            else
+                settingValue = "\"dfjk\""
+            end
         end
         savedSettings = savedSettings .. "    " .. Key .. " = " .. settingValue .. ",\n"
     end

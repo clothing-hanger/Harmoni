@@ -35,7 +35,15 @@ function loadSettings()
 
     if Settings.keyBinds4k then
         if #Settings.keyBinds4k ~= 4 then print("WHAT"); notification("4K Keybinds corrupted! Keybinds reset", "error"); Settings.keyBinds4k = "dfjk" end
-        keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+        --[[ keyBinds4k = splitIntoLetters(Settings.keyBinds4k) ]]
+        if type(Settings.keyBinds4k) == "string" then
+            keyBinds4k = splitIntoLetters(Settings.keyBinds4k)
+        elseif type(Settings.keyBinds4k) == "table" then
+            keyBinds4k = Settings.keyBinds4k
+        else
+            notification("4K Keybinds corrupted! Keybinds reset", "error")
+            Settings.keyBinds4k = splitIntoLetters("dfjk")
+        end
     else
         Settings.keyBinds4k = splitIntoLetters("dfjk")
     end
