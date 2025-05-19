@@ -1,9 +1,12 @@
 
 function love.load()
+    require("TEMP")
     CHE = require("engine.CHE")
     CHE:init()
 
-    State.switch(States.testState)
+    require("modules.gamemodes")
+
+    State.switch(States.menu.titleScreen)
 end
 
 function love.update(dt)

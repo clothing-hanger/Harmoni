@@ -16,15 +16,20 @@ function CHE:init()
     CHECanvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setDefaultFilter("linear")
 
+    require("modules.controls")
 
+    Input = setupControls()
     Class = require("engine.class.class")
     State = require("engine.state.State")
 
     States = require("modules.states")
+    require("modules.objects")
 
 end
 
 function CHE:update(dt)
+    State.update(dt)
+    Input:update()
 end
 
 function CHE:draw()
