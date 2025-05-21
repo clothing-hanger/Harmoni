@@ -1,13 +1,13 @@
 -- Short and sweet state library for LÖVE. States and substates supported! (Substate draws above the state)
--- GuglioIsStupid - 2023
--- Version: 1.1.1
+-- GuglioIsStupid - 2025
+-- Version: 1.2.0
 --[[
 
 The MIT License (MIT)
 
 =====================
 
-Copyright © 2023 GuglioIsStupid
+Copyright © 2025 GuglioIsStupid
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
 and associated documentation files (the “Software”), to deal in the Software without 
@@ -25,6 +25,8 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ]]
+
+-- Modified for use with Rit
 
 ---@alias State table
 ---@class state
@@ -48,7 +50,7 @@ state.inSubstate = false -- If we are in a substate
 ---@param ... any
 ---@return State
 local function switch(newstate, ...)
-    if current and current.exit then current:exit() end 
+    if current and current.exit then current:exit() end
     last = current
     current = newstate
     if current.enter then current:enter(last, ...) end
@@ -119,12 +121,11 @@ function state.killSubstate(...)
     substate = nil
     state.inSubstate = false
     if current.substateReturn then current:substateReturn(...) end
-end 
+end
 
 ---Returns the current substate
 ---@return State
 function state.currentSubstate() return substate end
-
 
 ---Returns to the last state, returns the new state
 ---@return State
@@ -140,28 +141,53 @@ end
 ---@return State
 function state.substate(newstate, ...)
     assert(newstate, "Called state.substate with no state")
-    assert(type(newstate) == "table", "Called state.substate with invalid state") 
+    assert(type(newstate) == "table", "Called state.substate with invalid state")
     substate = newstate -- Set the substate
     state.inSubstate = true
     if substate.enter then substate:enter(...) end
     return substate
 end
 
----Creates a new state object (table)
+---Creates a new state object (table). Only to be used locally. Please use state() instead.
 local function new(name)
-    local name = name or ("State." .. string.format("%x", math.random(0, 0xFFFFFFFF)))
-    return setmetatable({}, {
-        __tostring = function() 
+    name = name or ("State." .. string.format("%x", math.random(0, 0xFFFFFFFF)))
+    return setmetatable({
+        members = {},
+        add = function(self, obj)
+            table.insert(self.members, obj)
+        end,
+        remove = function(self, obj)
+            for i, v in ipairs(self.members) do
+                if v == obj then
+                    table.remove(self.members, i)
+                    break
+                end
+            end
+        end,
+        removeAll = function(self)
+            self.members = {}
+        end,
+        _update = function(self, ...)
+            for _, v in ipairs(self.members) do
+                if v.update then v:update(...) end
+            end
+        end,
+        _draw = function(self, ...)
+            for _, v in ipairs(self.members) do
+                if v.draw then v:draw(...) end
+            end
+        end,
+        __name = name
+    }, {
+        __tostring = function()
             return name
         end,
         __call = function(_, ...)
             return state.switch(_, ...)
-        end,
-        __name = name
+        end
     })
 end
 
----@diagnostic disable-next-line: deprecated
 local unpack = table.unpack or unpack
 setmetatable(state, { -- Allows you to call state functions as if they were global
     __index = function(_, func)
@@ -170,6 +196,14 @@ setmetatable(state, { -- Allows you to call state functions as if they were glob
         return function(...)
             local args = {...} -- Allows us to pass arguments to the function
             local function f() -- Allows us to call both current and substate
+                if func == "draw" then
+                    if current and current._draw then current:_draw(unpack(args)) end
+                    if substate and substate._draw then substate:_draw(unpack(args)) end
+                elseif func == "update" then
+                    if current and current._update then current:_update(unpack(args)) end
+                    if substate and substate._update then substate:_update(unpack(args)) end
+                end
+
                 if current and current[func] then current[func](current, unpack(args)) end -- Call current state
                 if substate and substate[func] then substate[func](substate, unpack(args)) end -- Call substate
             end
@@ -178,7 +212,7 @@ setmetatable(state, { -- Allows you to call state functions as if they were glob
     end,
 
     -- when state is called as a function, return new, just makes the state definition look nicer
-    __call = function(name) return new(name) end
+    __call = function(_, name) return new(name) end
 })
 
 return state

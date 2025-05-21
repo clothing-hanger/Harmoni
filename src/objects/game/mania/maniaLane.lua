@@ -12,7 +12,6 @@ function maniaLane:update(dt)
 end
 
 function maniaLane:draw()
-    print("test")
     love.graphics.circle("line", self.x, self.y, maniaNoteSize)
 end
 

@@ -1,6 +1,7 @@
 local gameModeManager = State()
 
 function gameModeManager:enter(mode)
+    print(mode)
     self.gameMode = {mania()}
 end
 
