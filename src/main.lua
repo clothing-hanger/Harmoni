@@ -5,6 +5,7 @@ function love.load()
     CHE:init()
 
     require("modules.gamemodes")
+    require("modules.chartParse.harmc")
 
     State.switch(States.menu.titleScreen)
 end

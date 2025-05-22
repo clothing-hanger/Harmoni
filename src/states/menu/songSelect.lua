@@ -5,7 +5,7 @@ end
 
 function songSelect:update(dt)
     if Input:pressed("menuConfirm") then
-        State.switch(States.game.gameModeManager, "mania")
+        State.switch(States.game.gameModeManager, "mania", "test.harmc")
     end
 end
 

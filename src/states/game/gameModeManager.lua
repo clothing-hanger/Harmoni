@@ -1,8 +1,10 @@
 local gameModeManager = State()
 
-function gameModeManager:enter(mode)
-    print(mode)
-    self.gameMode = {mania()}
+function gameModeManager:enter(s,mode,chart)
+    if mode == "mania" then
+        self.gameMode = {mania(chart)}
+
+    end
 end
 
 function gameModeManager:update(dt)
