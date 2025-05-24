@@ -10,7 +10,7 @@ function songSelect:update(dt)
 end
 
 function songSelect:draw()
-    love.graphics.print("select your song,, oh wait you CANT theres not menu yet lol (y'all are NOT getting this game)")
+    love.graphics.print("select your song,, oh wait you CANT theres no menu yet lol (y'all are NOT getting this game)")
 
 end
 

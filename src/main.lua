@@ -1,11 +1,13 @@
 
 function love.load()
+    love.filesystem.createDirectory("Music")
     require("TEMP")
     CHE = require("engine.CHE")
     CHE:init()
 
     require("modules.gamemodes")
     require("modules.chartParse.harmc")
+    require("modules.musicTime")
 
     State.switch(States.menu.titleScreen)
 end
