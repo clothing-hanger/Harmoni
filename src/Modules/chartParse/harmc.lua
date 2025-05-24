@@ -29,26 +29,6 @@ function harmcParse(harmc)
     end
     
 
-    --[[ Helper function to print tables recursively
-    local function printTable(tbl, indent)
-        indent = indent or 0
-        local prefix = string.rep("  ", indent)
-        for k, v in pairs(tbl) do
-
-            if type(v) == "table" then
-                print(prefix .. tostring(k) .. " = {")
-                printTable(v, indent + 1)
-                print(prefix .. "}")
-            else
-                print(prefix .. tostring(k) .. " = " .. tostring(v))
-            end
-        end
-    end
-
-    print("== Parsed Chart Table ==")
-    --]]
-   -- printTable(chart)
-
     return chart
 end
 
