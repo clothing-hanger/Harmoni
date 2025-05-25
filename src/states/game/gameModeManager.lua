@@ -14,7 +14,7 @@ function gameModeManager:initializeSong()
 end
 
 function gameModeManager:update(dt)
-    MusicTime = updateMusicTime(MusicTime, dt)
+    MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
     for i, gameMode in ipairs(self.gameMode) do
         gameMode:update(dt)
     end

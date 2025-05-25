@@ -21,7 +21,7 @@ function mania:new(chart)
 end
 
 function mania:setUpChart(chart)
-    local chart = harmcParse(chart)
+    local chart = ChartParse.harmc(chart)
     local maniaChart = {}
     maniaChart.meta = {}
     maniaChart.hitObjects = {}

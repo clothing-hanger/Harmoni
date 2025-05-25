@@ -1,4 +1,5 @@
 local screenMiddle = love.graphics.getWidth() / 2
+musicPath = "Music/"
 maniaNoteSize = 30
 maninaLaneGap = 30
 maniaScrollSpeed = 3

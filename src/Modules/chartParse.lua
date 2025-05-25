@@ -1,4 +1,6 @@
-function harmcParse(harmc)
+local ChartParse = {}
+
+function ChartParse.harmc(harmc)
     local chart = {}
     local section
 
@@ -32,3 +34,4 @@ function harmcParse(harmc)
     return chart
 end
 
+return ChartParse

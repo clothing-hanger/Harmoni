@@ -5,7 +5,7 @@ function maniaNote:new(startTime, holdLength, lane)
     self.holdLength = holdLength
     print(lane)
     self.lane = lane
-
+    print(MusicTime)
     self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
 end
 
