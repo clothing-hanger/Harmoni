@@ -1,70 +1,33 @@
-local songSelect = State()
+local songSelect = State("songSelect")
 local songList = {}
-local selectedSong = 1
-local menuState = "song"
-local difficultyList = {}
-
-function songSelect:enter(test)
-    self:setUpSongList()
+local songButtons = {}
+function songSelect:enter()
+    self:setupSongList()
 end
 
-function songSelect:setUpSongList()
+function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
-end
+    for i = 1,#songList do
+        local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
 
-function songSelect:setUpDifficultyList()
-    print(musicPath .. songList[selectedSong])
-    difficultyList = SongListManager.getDifficultyList(musicPath .. songList[selectedSong])
+    end
 end
-
 
 function songSelect:update(dt)
-    if menuState == "song" then
-        self:menuStateSongUpdate(dt)
-    elseif menuState == "difficulty" then
-        self:menuStateDifficultyUpdate(dt)
-    end
-end
-
-function songSelect:menuStateSongUpdate(dt)
-    if Input:pressed("menuConfirm") then
-        menuState = "difficulty"
-        self:setUpDifficultyList()
-    elseif Input:pressed("menuDown") then
-        selectedSong = selectedSong+1
-    elseif Input:pressed("menuUp") then
-        selectedSong = selectedSong-1
-    end
-end
-
-function songSelect:menuStateDifficultyUpdate(dt)
-    
 end
 
 function songSelect:draw()
-    if menuState == "song" then
-        self:menuStateSongDraw()
-    elseif menuState == "difficulty" then
-        self:menuStateDifficultyDraw()
-    end
-end
-
-function songSelect:menuStateSongDraw()
-    for i = 1,#songList do
-        local color = ((selectedSong == i) and {1,0,0}) or {1,1,1}
-        love.graphics.setColor(color)
-        love.graphics.print(songList[i], 100, 100+(10*i))
-        love.graphics.setColor(1,1,1)
-    end
-end
-
-function songSelect:menuStateDifficultyDraw()
-    for i = 1,#difficultyList do
-        local color = ((selectedSong == i) and {1,0,0}) or {1,1,1}
-        love.graphics.setColor(color)
-        love.graphics.print(difficultyList[i], 100, 100+(10*i))
-        love.graphics.setColor(1,1,1)
+    for i, SongButton in ipairs(songButtons) do
+        SongButton:draw()
     end
 end
 
 return songSelect
+
+--[[
+        for j = 1,#difficultyList do
+            local songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[j])
+            table.insert(songButtons, menuSongButton(100,50,songInfo.meta.title, songInfo.meta.artist, songInfo.meta.charter, songInfo.meta.bpm, songInfo.meta.bannerFile, true))
+           -- table.insert(songButtons, menuSongButton(songInfo.meta.title, songInfo.meta.artist, songInfo.meta.charter, songInfo.meta.bpm, musicPath .. songList[i] .. "/" .. difficultyList[j] .. "/cover.png", true))
+        end
+        --]]

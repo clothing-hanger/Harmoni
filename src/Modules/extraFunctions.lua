@@ -1,4 +1,4 @@
 function getFileExtension(fileName)
     print(fileName)
-    return filename:match("%.([^%.]+)$")
+    return fileName:match("%.([^%.]+)$")
 end

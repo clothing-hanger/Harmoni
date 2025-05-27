@@ -1,4 +1,4 @@
-local titleScreen = State()
+local titleScreen = State("titleScreen")
 
 function titleScreen:enter()
 
