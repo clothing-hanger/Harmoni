@@ -1,6 +1,7 @@
 local songSelect = State("songSelect")
 local songList = {}
 local songButtons = {}
+local difficultyButtons = {}
 function songSelect:enter()
     self:setupSongList()
 end
@@ -9,7 +10,8 @@ function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
     for i = 1,#songList do
         local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
-
+        local songInfo = ChartParse.harmc(musicPath .. songList[i] .. difficultyList[1])
+        if songInfo then table.insert(songButtons, menuSongButton(100,50,songInfo.title)) end
     end
 end
 
