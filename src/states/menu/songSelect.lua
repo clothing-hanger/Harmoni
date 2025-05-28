@@ -16,6 +16,21 @@ function songSelect:setupSongList()
 end
 
 function songSelect:update(dt)
+    self:checkForSongButtonClicks()
+end
+
+function songSelect:checkForSongButtonClicks()
+    local buttonInfo = false
+    for i, SongButton in ipairs(songButtons) do
+        if mouseOver(SongButton) then
+            if Input:pressed("clickLeft") then
+                buttonInfo = SongButton:onClick()
+            end
+        end
+    end
+    if buttonInfo then
+        if buttonInfo.loadSong then State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+    end
 end
 
 function songSelect:draw()

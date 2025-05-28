@@ -1,5 +1,10 @@
 local CHE = {}
+Mouse = {}
 
+
+function mouseOver(object)
+    return Mouse.x >= object.x and Mouse.x <= object.x + object.width and Mouse.y >= object.y and Mouse.y <= object.y + object.height
+end
 
 function toGameScreen(x, y)
     local ratio = 1
@@ -30,6 +35,7 @@ end
 function CHE:update(dt)
     State.update(dt)
     Input:update()
+    Mouse.x, Mouse.y = love.mouse.getPosition()
 end
 
 function CHE:draw()
