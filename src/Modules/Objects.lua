@@ -6,3 +6,6 @@
 
     --menu
     menuSongButton = require("objects.menu.songButton")
+
+    --UI
+    UIsquiglyLine = require("objects.UI.UIsquiglyLine")

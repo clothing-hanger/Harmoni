@@ -7,6 +7,7 @@ function ChartParse.harmc(harmc)
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then   -- obviously if the file is either not real or not a file, thats a bad error lmfao, so dont try to parse it
+        print("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
         return false
     end
 
@@ -14,6 +15,7 @@ function ChartParse.harmc(harmc)
         if Line:match("^%[.*%]$") then 
             section = Line:sub(2, -2)
             if not section then  -- this is bad, dont parse the chart
+                print("ERROR: ChartParse.harmc(): oopsies :3,,, a section was not found when parsing: "  .. harmc)
                 return false
             end
             chart[section] = {}

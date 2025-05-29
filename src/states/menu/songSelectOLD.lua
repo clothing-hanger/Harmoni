@@ -14,7 +14,7 @@ function songSelect:setUpSongList()
 end
 
 function songSelect:setUpDifficultyList()
-    print(musicPath .. songList[selectedSong])
+  --  print(musicPath .. songList[selectedSong])
     difficultyList = SongListManager.getDifficultyList(musicPath .. songList[selectedSong])
 end
 

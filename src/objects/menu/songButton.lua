@@ -9,7 +9,7 @@ function menuSongButton:new(width, height, name, artist, charter, bpm, image, is
     self.x = 10
     self.y = 10
 
-    self.gameMode = gamemode or "???" -- would be bad if this isnt valid but we will figure that out later
+    self.mode = gameMode or "???" -- would be bad if this isnt valid but we will figure that out later
     
     self.name = name or "???"
     self.artist = artist or "???"
@@ -21,7 +21,7 @@ function menuSongButton:new(width, height, name, artist, charter, bpm, image, is
 end
 
 function menuSongButton:onClick()
-    if isDifficultyButton then
+    if self.isDifficultyButton then
         --open the selected song and difficulty
         return {loadSong = true, mode = self.mode, path = self.path}
     else -- must just be a song button
@@ -33,7 +33,7 @@ function menuSongButton:update(dt)
 end
 
 function menuSongButton:draw()
-    love.graphics.rectangle("line", self.width, self.height, self.x, self.y)
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
     love.graphics.printf(self.name, self.x + 10, self.y + 10, self.width-10, "left")
 end
 
