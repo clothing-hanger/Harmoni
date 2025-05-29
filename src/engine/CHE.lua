@@ -1,7 +1,7 @@
 local CHE = {}
 Mouse = {}
 
-
+print(love._version)
 function mouseOver(object)
     return Mouse.x >= object.x and Mouse.x <= object.x + object.width and Mouse.y >= object.y and Mouse.y <= object.y + object.height
 end
@@ -17,8 +17,10 @@ end
 
 function CHE:init()
     baseScreenRatio = {}
-    baseScreenRatio.x, baseScreenRatio.y = love.graphics.getWidth(), love.graphics.getHeight()
+    baseScreenRatio.x, baseScreenRatio.y = 1280, 720 --love.graphics.getWidth(), love.graphics.getHeight()
+
     CHECanvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
+
     love.graphics.setDefaultFilter("linear")
 
     require("modules.controls")
@@ -26,6 +28,7 @@ function CHE:init()
     Input = setupControls()
     Class = require("engine.class.class")
     State = require("engine.state.State")
+
 
     States = require("modules.states")
     require("modules.objects")
@@ -40,7 +43,7 @@ end
 
 function CHE:draw()
     love.graphics.push()
-    love.graphics.setCanvas(CHECanvas)
+    love.graphics.setCanvas({CHECanvas, stencil = true})
     love.graphics.clear(0,0,0,1)
     State.draw()
     love.graphics.setCanvas()
@@ -49,6 +52,10 @@ function CHE:draw()
     local ratio = 1
     ratio = math.min(love.graphics.getWidth()/baseScreenRatio.x, love.graphics.getHeight()/baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth()/2, love.graphics.getHeight()/2, 0, ratio, ratio, baseScreenRatio.x/2, baseScreenRatio.y/2)
+end
+
+function love.resize(w,h)
+    CHECanvas = love.graphics.newCanvas(w,h)
 end
 
 return CHE

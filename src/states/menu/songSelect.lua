@@ -3,9 +3,11 @@ local songList = {}
 local songButtons = {}
 local difficultyButtons = {}
 local difficultyList = {}
-local songButtonSpacing = 60
+local songButtonWidth = 400
+local songButtonHeight = 50
+local songButtonSpacing = 10
 local selectedSong = 1
-
+local songButtonX = 20
 function songSelect:enter()
     self:setupSongList()
 end
@@ -15,20 +17,24 @@ function songSelect:setupSongList()
     for i = 1,#songList do
         local songInfo = false
         local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
+        if not songList[i] or not difficultyList[1] or not love.filesystem.getInfo(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/", "file") then goto continue end
         songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
-
+        if not songInfo.meta.backgroundFile then songInfo.meta.backgroundFile = "???" end
 
         if songInfo then table.insert(songButtons, menuSongButton(
-                                                                    1000,50,
+                                                                    songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
                                                                     songInfo.meta.title,
                                                                     songInfo.meta.artist,
                                                                     songInfo.meta.charter,
                                                                     songInfo.meta.bpm,
-                                                                    songInfo.meta.image,
+                                                                    musicPath .. songList[i] .. "/" .. songInfo.meta.backgroundFile,
                                                                     false,
                                                                     songInfo.meta.gameMode,
                                                                     musicPath .. songList[i] .. "/"
                                                                     )) end
+            ::continue::
+
+                                                                    
     end
 end
 
@@ -51,17 +57,39 @@ function songSelect:setupDifficultyList()
     end
 end
 
+function songSelect:loadSongButtonImages()
+    self.framesPassed = (self.framesPassed or 0) + 1 -- has to be self and not local to the function so it doesnt reset every time the func is called (every frame)
+    local framesBetweenLoads = 1
+
+    if self.framesPassed >= framesBetweenLoads then
+        for i, SongButton in ipairs(songButtons) do
+            if not SongButton.imageLoaded and SongButton.y <= love.graphics.getHeight() then
+                SongButton:loadImage()
+                SongButton.imageLoaded = true
+                self.framesPassed = 0
+                break
+            end
+        end
+    end
+end
+
+
 function songSelect:update(dt)
     self:checkForSongButtonClicks()
     self:updateSongButtons(dt)
-
+    self:loadSongButtonImages()
 end
 
+function songSelect:scroll(s)
+    for i, SongButton in ipairs(songButtons) do
+        SongButton.y = SongButton.y-s*100
+    end
+end
 
 function songSelect:updateSongButtons(dt)
     for i, SongButton in ipairs(songButtons) do
         SongButton:update(dt)
-        SongButton.x, SongButton.y = 100, i*songButtonSpacing
+        --SongButton.x, SongButton.y = 100, i*(songButtonHeight+songButtonSpacing)
     end
 end
 
@@ -99,11 +127,3 @@ function songSelect:draw()
 end
 
 return songSelect
-
---[[
-        for j = 1,#difficultyList do
-            local songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[j])
-            table.insert(songButtons, menuSongButton(100,50,songInfo.meta.title, songInfo.meta.artist, songInfo.meta.charter, songInfo.meta.bpm, songInfo.meta.bannerFile, true))
-           -- table.insert(songButtons, menuSongButton(songInfo.meta.title, songInfo.meta.artist, songInfo.meta.charter, songInfo.meta.bpm, musicPath .. songList[i] .. "/" .. difficultyList[j] .. "/cover.png", true))
-        end
-        --]]

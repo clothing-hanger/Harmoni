@@ -1,5 +1,6 @@
 
 function love.load()
+    love.graphics.setDefaultFilter("linear","linear")
     require("modules.extraFunctions")
     love.filesystem.createDirectory("Music")
     require("TEMP")
@@ -17,6 +18,10 @@ end
 
 function love.update(dt)
     CHE:update(dt)
+end
+
+function love.wheelmoved(x,y)
+    if State.current():scroll(y) then State.current():scroll(y) end
 end
 
 function love.draw()  --if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
