@@ -40,7 +40,8 @@ function menuSongButton:onClick()
 end
 
 function menuSongButton:loadImage()
-    if not self.image then return end
+    self.attemptedToLoadImage = true -- this is fucking awful
+    if not self.image then self.failedToLoadImage = true; return end
     if love.filesystem.getInfo(self.image, "file") then
         local imgData = love.image.newImageData(self.image)
         self.color = getAverageColor(imgData)

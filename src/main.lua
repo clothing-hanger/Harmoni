@@ -1,5 +1,6 @@
-
+require("love.error")
 function love.load()
+    GPUInfo = {test = "HI"}
     love.graphics.setDefaultFilter("linear","linear")
     require("modules.extraFunctions")
     love.filesystem.createDirectory("Music")

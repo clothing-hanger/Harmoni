@@ -7,6 +7,9 @@ local songButtonWidth = 400
 local songButtonHeight = 50
 local songButtonSpacing = 10
 local selectedSong = 1
+local hoveredSong = 1
+
+local songButtonScrollTarget = 0 -- ew
 local songButtonX = 20
 function songSelect:enter()
     self:setupSongList()
@@ -53,18 +56,20 @@ function songSelect:setupDifficultyList()
                                                                         true,
                                                                         songInfo.meta.gameMode,
                                                                         musicPath .. songList[selectedSong] .. "/" .. difficultyList[i] .. "/"
-                                                                        )) end
+                                                                        ))
+
+        end
     end
 end
 
 function songSelect:loadSongButtonImages()
     self.framesPassed = (self.framesPassed or 0) + 1 -- has to be self and not local to the function so it doesnt reset every time the func is called (every frame)
-    local framesBetweenLoads = 10
+    local framesBetweenLoads = 1
 
-    if self.framesPassed >= framesBetweenLoads then
+    if self.framesPassed > framesBetweenLoads then
         for i, SongButton in ipairs(songButtons) do
 
-            if not SongButton.imageLoaded  then
+            if not (SongButton.imageLoaded or SongButton.failedToLoadImage or SongButton.attemptedToLoadImage) and SongButton.y > 0 and SongButton.y < love.graphics.getHeight() then
                 SongButton:loadImage()
                 self.framesPassed = 0
                 break
@@ -78,18 +83,41 @@ function songSelect:update(dt)
     self:checkForSongButtonClicks()
     self:updateSongButtons(dt)
     self:loadSongButtonImages()
+    self:handleInputs()
+end
+
+function songSelect:handleInputs()
+    if Input:pressed("menuUp") then
+        selectedSong = selectedSong - 1
+    elseif Input:pressed("menuDown") then
+        selectedSong = selectedSong + 1
+    elseif Input:pressed("menuConfirm") then
+    end
 end
 
 function songSelect:scroll(s)
-    for i, SongButton in ipairs(songButtons) do
-        SongButton.y = SongButton.y-s*100
-    end
+    hoveredSong = hoveredSong + s
 end
+
 
 function songSelect:updateSongButtons(dt)
     for i, SongButton in ipairs(songButtons) do
         SongButton:update(dt)
-        --SongButton.x, SongButton.y = 100, i*(songButtonHeight+songButtonSpacing)
+        local speed = 1000
+        local scrollOffset = hoveredSong*i*(songButtonHeight + songButtonSpacing)
+
+        SongButton.y = SongButton.y + (scrollOffset - SongButton.y) * speed * dt
+
+        end
+end
+
+function songSelect:updateSongButtons(dt)
+    local speed = 10 -- smoothing speed (tweak this)
+    for i, SongButton in ipairs(songButtons) do
+        local targetY = (i + hoveredSong) * (songButtonHeight + songButtonSpacing)
+        SongButton.y = SongButton.y or targetY  -- initialize first time
+        SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        SongButton:update(dt)
     end
 end
 
@@ -116,6 +144,14 @@ function songSelect:checkForSongButtonClicks()
 end
 
 function songSelect:draw()
+
+    -- draw background from selected song button
+    for i, SongButton in ipairs(songButtons) do
+        if i == selectedSong then
+            if SongButton.imageLoaded then love.graphics.draw(SongButton.image) end
+                
+        end 
+    end
     for i, SongButton in ipairs(songButtons) do
         SongButton:draw()
     end

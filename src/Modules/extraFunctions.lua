@@ -68,3 +68,7 @@ function getTextColor(r, g, b)    -- also stolen lol
         return {1, 1, 1}  -- white
     end
 end
+
+lerp = function(a, b, t)
+    return a + (b - a) * t
+end
