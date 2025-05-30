@@ -4,13 +4,11 @@ local menuSongButton = Class:extend("songButton")
 ---@param width, height, name, artist, charter, bpm, image, isDifficultyButton
 ---Makes a new song button
 function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius)
-        print(width, height, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path)
 
     self.width = width or 10
     self.height = height or 10
     self.x = x or 10
     self.y = y or 10
-    print(self.width, self.height)
 
     self.mode = gameMode or "???" -- would be bad if this isnt valid but we will figure that out later
     
@@ -46,7 +44,6 @@ function menuSongButton:loadImage()
         local imgData = love.image.newImageData(self.image)
         self.color = getAverageColor(imgData)
         self.image = love.graphics.newImage(imgData)
-        print(self.color[1], self.color[2], self.color[3])
         self.imageLoaded = true
 
     end

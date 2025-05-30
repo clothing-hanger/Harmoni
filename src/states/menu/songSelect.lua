@@ -8,9 +8,11 @@ local songButtonHeight = 75
 local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 1
+local buttonAngle = 5
 
 local songButtonScrollTarget = 0 -- ew
 local songButtonX = 20
+
 function songSelect:enter()
     self:setupSongList()
 end
@@ -100,23 +102,19 @@ function songSelect:scroll(s)
 end
 
 
-function songSelect:updateSongButtons(dt)
-    for i, SongButton in ipairs(songButtons) do
-        SongButton:update(dt)
-        local speed = 1000
-        local scrollOffset = hoveredSong*i*(songButtonHeight + songButtonSpacing)
-
-        SongButton.y = SongButton.y + (scrollOffset - SongButton.y) * speed * dt
-
-        end
-end
 
 function songSelect:updateSongButtons(dt)
-    local speed = 10 -- smoothing speed (tweak this)
+    local speed = 10
+    local slope = math.rad(buttonAngle)
+    local baseX = -10
+    local baseY = 0
+
     for i, SongButton in ipairs(songButtons) do
         local targetY = (i + hoveredSong) * (songButtonHeight + songButtonSpacing)
-        SongButton.y = SongButton.y or targetY  -- initialize first time
+        SongButton.y = SongButton.y or targetY
         SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        SongButton.x = baseX + slope * (SongButton.y - baseY)
+
         SongButton:update(dt)
     end
 end
@@ -144,14 +142,15 @@ function songSelect:checkForSongButtonClicks()
 end
 
 function songSelect:draw()
-
     -- draw background from selected song button
     for i, SongButton in ipairs(songButtons) do
         if i == selectedSong then
             if SongButton.imageLoaded then love.graphics.draw(SongButton.image) end
                 
         end 
-    end
+    end   
+    self:drawGradients()
+
     for i, SongButton in ipairs(songButtons) do
         SongButton:draw()
     end
@@ -161,5 +160,30 @@ function songSelect:draw()
     end
 
 end
+
+
+function songSelect:drawGradients()  -- the code here is so bad 😭😭😭😭
+    local colors = {
+        light = {0,0,0,0},
+        dark = {0,0,0,0.95}
+    }
+    --left side
+    love.graphics.push()
+    love.graphics.rotate(math.rad(-buttonAngle))
+    love.graphics.setColor(colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4])
+    love.graphics.rectangle("fill",50,0,-1000,1280)
+    drawGradientRect(50,-200,700,1080+400,{colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]}, {colors.light[1], colors.light[2], colors.light[3], colors.light[4]})
+    love.graphics.pop()
+
+    --right side
+    love.graphics.push()
+    love.graphics.rotate(math.rad(-buttonAngle))
+    love.graphics.setColor(colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4])
+    love.graphics.rectangle("fill",1920+950,0,-1000,1280)
+    drawGradientRect(1920-750,-200,700,1080+400,{colors.light[1], colors.light[2], colors.light[3], colors.light[4]}, {colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]})
+    love.graphics.pop()
+
+end
+
 
 return songSelect

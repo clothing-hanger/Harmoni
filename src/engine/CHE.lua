@@ -1,23 +1,22 @@
 local CHE = {}
 Mouse = {}
 
-print(love._version)
 function mouseOver(object)
     return Mouse.x >= object.x and Mouse.x <= object.x + object.width and Mouse.y >= object.y and Mouse.y <= object.y + object.height
 end
 
 function toGameScreen(x, y)
     local ratio = 1
-    ratio = math.min(Inits.WindowWidth/Inits.GameWidth, Inits.WindowHeight/Inits.GameHeight)
-    local x, y = x - Inits.WindowWidth/2, y - Inits.WindowHeight/2
+    ratio = math.min(baseScreenRatio.x/love.graphics.getWidth(), baseScreenRatio.y/love.graphics.getHeight())
+    local x, y = x - love.graphics.getWidth()/2, y - love.graphics.getHeight()/2
     x, y = x / ratio, y / ratio
-    x, y = x + Inits.GameWidth/2, y + Inits.GameHeight/2
+    x, y = x + love.graphics.getWidth()/2, y + love.graphics.getHeight()/2
     return x, y
 end
 
 function CHE:init()
     baseScreenRatio = {}
-    baseScreenRatio.x, baseScreenRatio.y = 1920, 1080 --love.graphics.getWidth(), love.graphics.getHeight()
+    baseScreenRatio.x, baseScreenRatio.y = 1920, 1080
 
     CHECanvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
 
