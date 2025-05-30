@@ -10,7 +10,7 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.height = height or 10
     self.x = x or 10
     self.y = y or 10
-
+    print(self.width, self.height)
 
     self.mode = gameMode or "???" -- would be bad if this isnt valid but we will figure that out later
     
@@ -23,8 +23,8 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.isDifficultyButton = isDifficultyButton or false
     self.color = {1,1,1}
     self.cornerRadius = cornerRadius or 7
-    self.fontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 20)
-    self.fontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 12)
+    self.fontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 30)
+    self.fontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 18)
 
 
 

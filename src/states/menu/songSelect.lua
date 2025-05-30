@@ -3,9 +3,9 @@ local songList = {}
 local songButtons = {}
 local difficultyButtons = {}
 local difficultyList = {}
-local songButtonWidth = 400
-local songButtonHeight = 50
-local songButtonSpacing = 10
+local songButtonWidth = 600
+local songButtonHeight = 75
+local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 1
 
@@ -47,7 +47,7 @@ function songSelect:setupDifficultyList()
     for i = 1,#difficultyList do
         local songInfo = false
         songInfo = ChartParse.harmc(musicPath .. songList[selectedSong] .. "/" .. difficultyList[i] .. "/")
-        if songInfo then table.insert(songButtons, menuSongButton(1000,50,
+        if songInfo then table.insert(songButtons, menuSongButton(2000,100,
                                                                         songInfo.meta.difficultyName,
                                                                         nil,
                                                                         songInfo.meta.charter,

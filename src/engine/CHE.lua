@@ -17,7 +17,7 @@ end
 
 function CHE:init()
     baseScreenRatio = {}
-    baseScreenRatio.x, baseScreenRatio.y = 1280, 720 --love.graphics.getWidth(), love.graphics.getHeight()
+    baseScreenRatio.x, baseScreenRatio.y = 1920, 1080 --love.graphics.getWidth(), love.graphics.getHeight()
 
     CHECanvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
 
@@ -55,7 +55,7 @@ function CHE:draw()
 end
 
 function love.resize(w,h)
-    CHECanvas = love.graphics.newCanvas(w,h)
+    
 end
 
 return CHE

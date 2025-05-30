@@ -63,7 +63,7 @@ function love.errorhandler(msg)
 	if love.audio then love.audio.stop() end
 
 	love.graphics.reset()
-	local font = love.graphics.setNewFont(14)
+	local font = love.graphics.setNewFont(21)
     local logo = love.graphics.newImage("images/error/logo.png")
 
 	love.graphics.setColor(1, 1, 1)
