@@ -18,7 +18,7 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.artist = artist or "???"
     self.charter = charter or "???"
     self.bpm = bpm or "???"
-    self.image = image or "???"
+    self.image = image or nil
     self.path = path or "???" -- would be bad if this path doesnt exist so we need to add a check for this later
     self.isDifficultyButton = isDifficultyButton or false
     self.color = {1,1,1}
@@ -40,12 +40,14 @@ function menuSongButton:onClick()
 end
 
 function menuSongButton:loadImage()
+    if not self.image then return end
     if love.filesystem.getInfo(self.image, "file") then
         local imgData = love.image.newImageData(self.image)
         self.color = getAverageColor(imgData)
         self.image = love.graphics.newImage(imgData)
         print(self.color[1], self.color[2], self.color[3])
-        --print("Image Loaded! " .. self.name )
+        self.imageLoaded = true
+
     end
 end
 

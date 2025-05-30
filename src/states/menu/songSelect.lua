@@ -59,13 +59,13 @@ end
 
 function songSelect:loadSongButtonImages()
     self.framesPassed = (self.framesPassed or 0) + 1 -- has to be self and not local to the function so it doesnt reset every time the func is called (every frame)
-    local framesBetweenLoads = 1
+    local framesBetweenLoads = 10
 
     if self.framesPassed >= framesBetweenLoads then
         for i, SongButton in ipairs(songButtons) do
-            if not SongButton.imageLoaded and SongButton.y <= love.graphics.getHeight() then
+
+            if not SongButton.imageLoaded  then
                 SongButton:loadImage()
-                SongButton.imageLoaded = true
                 self.framesPassed = 0
                 break
             end
