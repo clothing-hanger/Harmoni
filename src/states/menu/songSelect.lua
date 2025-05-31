@@ -11,8 +11,10 @@ local selectedSong = 1
 local hoveredSong = 1
 local buttonAngle = 5
 
-local songButtonScrollTarget = 0 -- ew
+
 local songButtonX = 20
+
+local difficultyButtonX = songButtonX + songButtonWidth + 30
 
 function songSelect:enter()
     self:setupSongList()
@@ -23,7 +25,6 @@ function songSelect:setupSongList()
     for i = 1,#songList do
         local songInfo = false
         if not songList[i] then table.remove(songList, i); goto continue end
-        print("HI")
         local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
         if not difficultyList[1] then table.remove(songList, i); goto continue end
         if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. difficultyList[1], "file") then table.remove(songList, i); goto continue end
@@ -47,23 +48,50 @@ function songSelect:setupSongList()
     end
 end
 
-function songSelect:setupDifficultyList(path)
+function songSelect:setupDifficultyList(path,color)
     difficultyList = SongListManager.getDifficultyList(path)
     difficultyButtons = {}
-    for i = 1,#difficultyList do
+
+    local difficultyListBoxHeight = #difficultyList*(songButtonHeight+songButtonSpacing)
+
+    -- Slope values to match song buttons
+    local slope = math.rad(buttonAngle)
+    local baseX = -10
+    local baseY = 0
+
+    for i = 1, #difficultyList do
         local songInfo = false
         songInfo = ChartParse.harmc(path .. "/" .. difficultyList[i] .. "/")
-        if songInfo then table.insert(difficultyButtons, menuSongButton(songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
-                                                                        songInfo.meta.difficultyName,
-                                                                        nil,
-                                                                        songInfo.meta.charter,
-                                                                        nil,
-                                                                        nil,
-                                                                        true,
-                                                                        songInfo.meta.gameMode,
-                                                                        path .. "/" .. difficultyList[i] .. "/"
-                                                                        ))
 
+        if songInfo then
+            local y = i * (songButtonHeight + songButtonSpacing)
+            local x = difficultyButtonX + baseX + slope * (y - baseY)
+            print(songInfo.image)
+            table.insert(difficultyButtons,
+                menuSongButton(
+                    songButtonWidth,
+                    songButtonHeight,
+                    x,
+                    y,
+                    songInfo.meta.difficultyName,
+                    nil,
+                    songInfo.meta.charter,
+                    nil,
+                    nil,
+                    true,
+                    songInfo.meta.gameMode,
+                    path .. "/" .. difficultyList[i] .. "/",
+                    7,
+                    color
+                )
+            )
+        end
+    end
+
+    function songSelect:difficultyListDraw()
+       -- love.graphics.rectangle("fill", difficultyButtonX, songButtonHeight, songButtonWidth, difficultyListBoxHeight)
+        for i, DifficultyButton in ipairs(difficultyButtons) do
+            DifficultyButton:draw()
         end
     end
 end
@@ -75,7 +103,7 @@ function songSelect:loadSongButtonImages()
     if self.framesPassed > framesBetweenLoads then
         for i, SongButton in ipairs(songButtons) do
 
-            if not (SongButton.imageLoaded or SongButton.failedToLoadImage or SongButton.attemptedToLoadImage) and SongButton.y > 0 and SongButton.y < love.graphics.getHeight() then
+            if not (SongButton.imageLoaded or SongButton.failedToLoadImage or SongButton.attemptedToLoadImage) and SongButton.y > 0 and SongButton.y < baseScreenRatio.y then
                 SongButton:loadImage()
                 self.framesPassed = 0
                 break
@@ -135,7 +163,7 @@ function songSelect:checkForSongButtonClicks()
                     State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
                 else
                     print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
-                    self:setupDifficultyList(buttonInfo.path)
+                    self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
                 end
             end
         end
@@ -149,8 +177,14 @@ function songSelect:draw()
     -- draw background from selected song button
     for i, SongButton in ipairs(songButtons) do
         if i == selectedSong then
-            if SongButton.imageLoaded then love.graphics.draw(SongButton.image) end
-                
+            local image = false
+            local imageWidth, imageHeight
+            if SongButton.imageLoaded then image = SongButton.image end
+            if image then 
+                imageWidth = baseScreenRatio.x/image:getWidth()
+                imageHeight = baseScreenRatio.y/image:getHeight()
+                love.graphics.draw(image,0,0, nil, imageWidth, imageHeight)     
+            end   
         end 
     end   
     self:drawGradients()
@@ -159,35 +193,53 @@ function songSelect:draw()
         SongButton:draw()
     end
 
-    for i, DifficultyButton in ipairs(difficultyButtons) do
-        DifficultyButton:draw()
-    end
-
+    if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
+    songSelect:drawSongInfo()
+    songSelect:drawSongInfo()
 end
 
 
 function songSelect:drawGradients()  -- the code here is so bad 😭😭😭😭
+    local screen = {}
+    screen.width, screen.height = baseScreenRatio.x, baseScreenRatio.y+500 -- account for the tilt
+    local gradientWidth = 5
     local colors = {
         light = {0,0,0,0},
-        dark = {0,0,0,0.95}
+        dark = {0,0,0,0.8}
     }
+
+    love.graphics.push()
+
+    love.graphics.rotate(math.rad(-buttonAngle))
+
     --left side
-    love.graphics.push()
-    love.graphics.rotate(math.rad(-buttonAngle))
+    local leftRectEdge = songButtonWidth
     love.graphics.setColor(colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4])
-    love.graphics.rectangle("fill",50,0,-1000,1280)
-    drawGradientRect(50,-200,700,1080+400,{colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]}, {colors.light[1], colors.light[2], colors.light[3], colors.light[4]})
-    love.graphics.pop()
+    love.graphics.rectangle("fill", -500,0,leftRectEdge+500,screen.height)
 
-    --right side
-    love.graphics.push()
-    love.graphics.rotate(math.rad(-buttonAngle))
-    love.graphics.setColor(colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4])
-    love.graphics.rectangle("fill",1920+950,0,-1000,1280)
-    drawGradientRect(1920-750,-200,700,1080+400,{colors.light[1], colors.light[2], colors.light[3], colors.light[4]}, {colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]})
+    drawGradientRect(leftRectEdge, 0, gradientWidth, screen.height,{colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]}, {colors.light[1], colors.light[2], colors.light[3], colors.light[4]})
     love.graphics.pop()
-
 end
+
+
+function songSelect:drawSongInfo()
+    --get song info 
+    local box = {}
+    box.height,box.width = 250,700
+    local songInfo = {}
+    for i, SongButton in ipairs(songButtons) do
+        if i == selectedSong then
+            songInfo = SongButton:returnInfo()
+        end
+    end
+    print(songInfo)
+    local color = {songInfo.color[1]-0.1,songInfo.color[2]-0.1,songInfo.color[3]-0.1,0.75}
+
+    love.graphics.setColor(color or {1,1,1})
+    love.graphics.rectangle("fill", baseScreenRatio.x - box.width, baseScreenRatio.y - box.height, box.width, box.height)
+    love.graphics.setColor(1,1,1)
+end
+
 
 
 return songSelect

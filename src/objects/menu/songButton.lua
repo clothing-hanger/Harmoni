@@ -3,7 +3,7 @@ local menuSongButton = Class:extend("songButton")
 ---@oaram function menuSongButton
 ---@param width, height, name, artist, charter, bpm, image, isDifficultyButton
 ---Makes a new song button
-function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius)
+function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
 
     self.width = width or 10
     self.height = height or 10
@@ -19,7 +19,7 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.image = image or nil
     self.path = path or "???" -- would be bad if this path doesnt exist so we need to add a check for this later
     self.isDifficultyButton = isDifficultyButton or false
-    self.color = {1,1,1}
+    self.color = color or {1,1,1}
     self.cornerRadius = cornerRadius or 7
     self.fontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 30)
     self.fontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 18)
@@ -29,13 +29,27 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
 end
 
 function menuSongButton:onClick()
-    print("WHat",self.path, self.name)
     if self.isDifficultyButton then
         --open the selected song and difficulty
         return {loadSong = true, mode = self.mode, path = self.path}
     else -- must just be a song button
-        return {loadSong = false, mode = self.mode, path = self.path} -- might not even use all these values 
+        return {loadSong = false, mode = self.mode, path = self.path, color = self.color} -- might not even use all these values 
     end
+end
+
+function menuSongButton:returnInfo()
+    local info = {
+        mode = self.mode,
+        name = self.name,
+        artist = self.artist,
+        charter = self.charter,
+        bpm = self.bpm,
+        image = self.image,
+        path = self.path,
+        isDifficultyButton = self.isDifficultyButton,
+        color = self.color
+    }
+    return info
 end
 
 function menuSongButton:loadImage()
