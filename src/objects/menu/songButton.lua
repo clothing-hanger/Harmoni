@@ -29,6 +29,7 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
 end
 
 function menuSongButton:onClick()
+    print("WHat",self.path, self.name)
     if self.isDifficultyButton then
         --open the selected song and difficulty
         return {loadSong = true, mode = self.mode, path = self.path}
@@ -50,6 +51,7 @@ function menuSongButton:loadImage()
 end
 
 function menuSongButton:update(dt)
+    self.hovered = mouseOver(self)
 end
 
 function menuSongButton:draw()
@@ -82,6 +84,10 @@ function menuSongButton:draw()
     love.graphics.setFont(self.fontSmall)
     love.graphics.print("By: " .. self.artist .. "Charted by: " .. self.charter .. "BPM: " .. self.bpm, self.x+3, self.y + self.height/2)
 
+    if self.hovered then
+        love.graphics.setColor(1,0,0)
+        love.graphics.rectangle("fill",self.x, self.y, self.width/7, self.height)
+    end
 
     love.graphics.setColor(1,1,1)
     love.graphics.setStencilTest()

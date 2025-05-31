@@ -2,7 +2,8 @@ local CHE = {}
 Mouse = {}
 
 function mouseOver(object)
-    return Mouse.x >= object.x and Mouse.x <= object.x + object.width and Mouse.y >= object.y and Mouse.y <= object.y + object.height
+    local ox, oy = toGameScreen(object.x, object.y)
+    return Mouse.x >= ox and Mouse.x <= ox + object.width and Mouse.y >= oy and Mouse.y <= oy + object.height
 end
 
 function toGameScreen(x, y)
@@ -51,6 +52,7 @@ function CHE:draw()
     local ratio = 1
     ratio = math.min(love.graphics.getWidth()/baseScreenRatio.x, love.graphics.getHeight()/baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth()/2, love.graphics.getHeight()/2, 0, ratio, ratio, baseScreenRatio.x/2, baseScreenRatio.y/2)
+    love.graphics.circle("fill", Mouse.x, Mouse.y, 5)
 end
 
 function love.resize(w,h)

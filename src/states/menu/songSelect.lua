@@ -1,5 +1,6 @@
 local songSelect = State("songSelect")
 local songList = {}
+local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
 local difficultyButtons = {}
 local difficultyList = {}
@@ -21,8 +22,11 @@ function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
     for i = 1,#songList do
         local songInfo = false
+        if not songList[i] then table.remove(songList, i); goto continue end
+        print("HI")
         local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
-        if not songList[i] or not difficultyList[1] or not love.filesystem.getInfo(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/", "file") then goto continue end
+        if not difficultyList[1] then table.remove(songList, i); goto continue end
+        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. difficultyList[1], "file") then table.remove(songList, i); goto continue end
         songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
         if not songInfo.meta.backgroundFile then songInfo.meta.backgroundFile = "???" end
 
@@ -43,13 +47,13 @@ function songSelect:setupSongList()
     end
 end
 
-function songSelect:setupDifficultyList()
-    difficultyList = SongListManager.getDifficultyList(musicPath .. songList[selectedSong] .. "/")
-    songButtons = {}
+function songSelect:setupDifficultyList(path)
+    difficultyList = SongListManager.getDifficultyList(path)
+    difficultyButtons = {}
     for i = 1,#difficultyList do
         local songInfo = false
-        songInfo = ChartParse.harmc(musicPath .. songList[selectedSong] .. "/" .. difficultyList[i] .. "/")
-        if songInfo then table.insert(songButtons, menuSongButton(2000,100,
+        songInfo = ChartParse.harmc(path .. "/" .. difficultyList[i] .. "/")
+        if songInfo then table.insert(difficultyButtons, menuSongButton(songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
                                                                         songInfo.meta.difficultyName,
                                                                         nil,
                                                                         songInfo.meta.charter,
@@ -57,7 +61,7 @@ function songSelect:setupDifficultyList()
                                                                         nil,
                                                                         true,
                                                                         songInfo.meta.gameMode,
-                                                                        musicPath .. songList[selectedSong] .. "/" .. difficultyList[i] .. "/"
+                                                                        path .. "/" .. difficultyList[i] .. "/"
                                                                         ))
 
         end
@@ -131,7 +135,7 @@ function songSelect:checkForSongButtonClicks()
                     State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
                 else
                     print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
-                    self:setupDifficultyList()
+                    self:setupDifficultyList(buttonInfo.path)
                 end
             end
         end
