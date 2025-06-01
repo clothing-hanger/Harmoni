@@ -51,7 +51,9 @@ local function getAverageColor(imageData)
 end
 
 local path, image
+local loaded = false
 while true do
+    loaded = false
     path = channel:demand()
     if not path then goto continue end
 
@@ -67,10 +69,12 @@ while true do
         averageColor = getAverageColor(image)
     })
     
-    print("Loaded image: " .. path)
+    loaded = true
 
     ::continue::
-    love.timer.sleep(0.1)
+    if not loaded then
+        love.timer.sleep(0.1)
+    end
 end
 ]]
     self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
