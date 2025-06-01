@@ -3,8 +3,8 @@ local menuSongButton = Class:extend("songButton")
 ---@oaram function menuSongButton
 ---@param width, height, name, artist, charter, bpm, image, isDifficultyButton
 ---Makes a new song button
-function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
-
+function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
+    self.instance = instance
     self.width = width or 10
     self.height = height or 10
     self.x = x or 10
@@ -17,6 +17,8 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.charter = charter or "???"
     self.bpm = bpm or "???"
     self.image = image or nil
+    self.imagePath = image or nil
+    self.instance.bannerInputChannel:push(self.imagePath)
     self.path = path or "???" -- would be bad if this path doesnt exist so we need to add a check for this later
     self.isDifficultyButton = isDifficultyButton or false
     self.color = color or {1,1,1}
@@ -53,7 +55,7 @@ function menuSongButton:returnInfo()
 end
 
 function menuSongButton:loadImage()
-    self.attemptedToLoadImage = true -- this is fucking awful
+    --[[ self.attemptedToLoadImage = true -- this is fucking awful
     if not self.image then self.failedToLoadImage = true; return end
     if love.filesystem.getInfo(self.image, "file") then
         local imgData = love.image.newImageData(self.image)
@@ -61,7 +63,7 @@ function menuSongButton:loadImage()
         self.image = love.graphics.newImage(imgData)
         self.imageLoaded = true
 
-    end
+    end ]]
 end
 
 function menuSongButton:update(dt)
@@ -83,7 +85,6 @@ function menuSongButton:draw()
         imageScale = self.width /self.image:getWidth()
     end
     if self.imageLoaded then love.graphics.draw(self.image, self.x, self.y-(self.image:getHeight()*imageScale)/2, nil, imageScale, imageScale) end
-
 
     -- draw gradient and filler rectangle
     love.graphics.setColor(self.color)

@@ -17,12 +17,68 @@ local songButtonX = 20
 local difficultyButtonX = songButtonX + songButtonWidth + 30
 
 function songSelect:enter()
-    self:setupSongList()
-
     self.colors = {
         light = {0, 0, 0, 0},
         dark = {0, 0, 0, 0.8}
     }
+
+    self.bannerThread = love.thread.newThread [[
+require("love.timer")
+require("love.image")
+
+local channel = love.thread.getChannel("thread.bannerLoader")
+local outChannel = love.thread.getChannel("thread.bannerLoader.out")
+
+local function getAverageColor(imageData)
+    local r, g, b = 0, 0, 0
+    local width, height = imageData:getDimensions()
+    local totalPixels = width * height
+
+    for y = 0, height - 1 do
+        for x = 0, width - 1 do
+            local pr, pg, pb = imageData:getPixel(x, y)
+            r = r + pr
+            g = g + pg
+            b = b + pb
+        end
+    end
+
+    r = r / totalPixels
+    g = g / totalPixels
+    b = b / totalPixels
+
+    return {r, g, b}
+end
+
+local path, image
+while true do
+    path = channel:demand()
+    if not path then goto continue end
+
+    if path == "exit" then
+        break
+    end
+
+    image = love.image.newImageData(path)
+
+    outChannel:push({
+        path = path,
+        image = image,
+        averageColor = getAverageColor(image)
+    })
+    
+    print("Loaded image: " .. path)
+
+    ::continue::
+    love.timer.sleep(0.1)
+end
+]]
+    self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
+    self.bannerChannel = love.thread.getChannel("thread.bannerLoader.out")
+
+    self.bannerThread:start()
+
+    self:setupSongList()
 end
 
 function songSelect:setupSongList()
@@ -36,20 +92,21 @@ function songSelect:setupSongList()
         songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
         if not songInfo.meta.backgroundFile then songInfo.meta.backgroundFile = "???" end
 
-        if songInfo then table.insert(songButtons, menuSongButton(
-                                                                    songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
-                                                                    songInfo.meta.title,
-                                                                    songInfo.meta.artist,
-                                                                    songInfo.meta.charter,
-                                                                    songInfo.meta.bpm,
-                                                                    musicPath .. songList[i] .. "/" .. songInfo.meta.backgroundFile,
-                                                                    false,
-                                                                    songInfo.meta.gameMode,
-                                                                    musicPath .. songList[i] .. "/"
-                                                                    )) end
-            ::continue::
-
-                                                                    
+        if songInfo then
+            table.insert(songButtons, menuSongButton(
+                self,
+                songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
+                songInfo.meta.title,
+                songInfo.meta.artist,
+                songInfo.meta.charter,
+                songInfo.meta.bpm,
+                musicPath .. songList[i] .. "/" .. songInfo.meta.backgroundFile,
+                false,
+                songInfo.meta.gameMode,
+                musicPath .. songList[i] .. "/"
+            ))
+        end
+        ::continue::
     end
 end
 
@@ -102,16 +159,16 @@ function songSelect:setupDifficultyList(path,color)
 end
 
 function songSelect:loadSongButtonImages()
-    self.framesPassed = (self.framesPassed or 0) + 1 -- has to be self and not local to the function so it doesnt reset every time the func is called (every frame)
-    local framesBetweenLoads = 1
-
-    if self.framesPassed > framesBetweenLoads then
-        for i, SongButton in ipairs(songButtons) do
-
-            if not (SongButton.imageLoaded or SongButton.failedToLoadImage or SongButton.attemptedToLoadImage) and SongButton.y > 0 and SongButton.y < baseScreenRatio.y then
-                SongButton:loadImage()
-                self.framesPassed = 0
-                break
+    if self.bannerChannel:peek() then
+        local data = self.bannerChannel:pop()
+        if data then
+            for i, SongButton in ipairs(songButtons) do
+                if SongButton.imagePath == data.path then
+                    SongButton.image = love.graphics.newImage(data.image)
+                    SongButton.imageLoaded = true
+                    SongButton.color = data.averageColor
+                    break
+                end
             end
         end
     end
