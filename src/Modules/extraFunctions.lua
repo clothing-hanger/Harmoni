@@ -40,7 +40,8 @@ function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- sto
             {x, y + height,         0, 0, color1[1], color1[2], color1[3], color1[4] or 1},
         }
     end
-        love.graphics.setColor(1,1,1)
+    
+    love.graphics.setColor(1,1,1)
 
     local mesh = love.graphics.newMesh(vertices, "fan", "static")
     love.graphics.draw(mesh)
@@ -69,6 +70,6 @@ function getTextColor(r, g, b)    -- also stolen lol
     end
 end
 
-lerp = function(a, b, t)
+function lerp(a, b, t)
     return a + (b - a) * t
 end

@@ -18,6 +18,11 @@ local difficultyButtonX = songButtonX + songButtonWidth + 30
 
 function songSelect:enter()
     self:setupSongList()
+
+    self.colors = {
+        light = {0, 0, 0, 0},
+        dark = {0, 0, 0, 0.8}
+    }
 end
 
 function songSelect:setupSongList()
@@ -196,28 +201,23 @@ function songSelect:draw()
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
     songSelect:drawSongInfo()
     songSelect:drawSongInfo()
-endx
+end
 
 
 function songSelect:drawGradients()  -- the code here is so bad 😭😭😭😭
-    local screen = {}
-    screen.width, screen.height = baseScreenRatio.x, baseScreenRatio.y+500 -- account for the tilt
+    local sw, sh = baseScreenRatio.x, baseScreenRatio.y+500
     local gradientWidth = 5
-    local colors = {
-        light = {0,0,0,0},
-        dark = {0,0,0,0.8}
-    }
 
     love.graphics.push()
+        love.graphics.rotate(math.rad(-buttonAngle))
 
-    love.graphics.rotate(math.rad(-buttonAngle))
+        -- left side
+        local leftRectEdge = songButtonWidth
 
-    --left side
-    local leftRectEdge = songButtonWidth
-    love.graphics.setColor(colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4])
-    love.graphics.rectangle("fill", -500,0,leftRectEdge+500,screen.height)
+        love.graphics.setColor(self.colors.dark)
+        love.graphics.rectangle("fill", -500,0,leftRectEdge+500,sh)
 
-    drawGradientRect(leftRectEdge, 0, gradientWidth, screen.height,{colors.dark[1], colors.dark[2], colors.dark[3], colors.dark[4]}, {colors.light[1], colors.light[2], colors.light[3], colors.light[4]})
+        drawGradientRect(leftRectEdge, 0, gradientWidth, sh, self.colors.dark, self.colors.light)
     love.graphics.pop()
 end
 
@@ -233,6 +233,12 @@ function songSelect:drawSongInfo()
         if i == selectedSong then
             songInfo = SongButton:returnInfo()
         end
+    end
+    if not songInfo or not songInfo.name then
+        love.graphics.setColor(1,1,1)
+        love.graphics.setFont(songSelectSongInfoFontLarge)
+        love.graphics.print("No song selected", x+10, y+10)
+        return
     end
     local color = {songInfo.color[1]-0.1,songInfo.color[2]-0.1,songInfo.color[3]-0.1,0.75}
     local textColor = getTextColor(color[1], color[2], color[3])
