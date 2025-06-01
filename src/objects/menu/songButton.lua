@@ -28,7 +28,6 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.fontLarge = songButtonFontLarge
     self.fontSmall = songButtonFontSmall
 
-    print(y)
 
 end
 

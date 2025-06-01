@@ -2,6 +2,7 @@
     --mania
     maniaLane = require("objects.game.mania.maniaLane")
     maniaNote = require("objects.game.mania.maniaNote")
+    maniaPlayField = require("objects.game.mania.maniaPlayField")
 
 
     --menu

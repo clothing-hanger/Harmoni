@@ -9,14 +9,13 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects)
 
     self:setUpHitObjects(self.hitObjects)
 
-    print(self.maniaLane, #self.notes)
 
 
     self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
 end
 
 function maniaLane:setUpHitObjects(hitObjects)
-    print(#hitObjects)
+    --print(#hitObjects)
     for i, HitObject in ipairs(hitObjects) do
         if HitObject.type == "note" then
             table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane))

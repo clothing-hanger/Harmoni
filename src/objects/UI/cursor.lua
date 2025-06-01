@@ -4,7 +4,7 @@ function cursor:new()
     self.x,self.y = love.mouse.getPosition()
     self.prevX,self.prevY = self.x,self.y
     self.angle = 0
-    self.rotationSpeed = 5
+    self.rotationSpeed = 7
     self.targetAngle = 0
     self.size = 0.5
     OSCursorVisible = false
@@ -42,7 +42,7 @@ function cursor:draw()
    -- love.graphics.rotate(self.angle)
     love.graphics.setColor(self.color,self.color,self.color)
 
-
+    self.angle = math.rad(45*5) -- the rotation looks ass
     love.graphics.draw(self.image, self.x, self.y, self.angle, self.size, self.size, self.image:getWidth(), self.image:getHeight()/2)
     love.graphics.setColor(1,1,1)
     love.graphics.pop()

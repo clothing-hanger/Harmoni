@@ -181,6 +181,7 @@ end
 
 function songSelect:update(dt)
     self:checkForSongButtonClicks()
+    self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
     self:loadSongButtonImages()
     self:handleInputs()
@@ -220,6 +221,27 @@ end
 function songSelect:checkForSongButtonClicks()
     local buttonInfo = false
     for i, SongButton in ipairs(songButtons) do
+        if mouseOver(SongButton) then
+            if Input:pressed("menuClickLeft") then
+                selectedSong = i
+                buttonInfo = SongButton:onClick()
+                if buttonInfo.loadSong then
+                    print("Switching to gameModeManager: ", buttonInfo.mode, buttonInfo.path)
+                    State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+                else
+                    print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
+                    self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
+                end
+            end
+        end
+    end
+    if buttonInfo then
+        if buttonInfo.loadSong then State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path) end
+    end
+end
+function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code 🤢🤢🤢🤢🤢
+    local buttonInfo = false
+    for i, SongButton in ipairs(difficultyButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
                 selectedSong = i

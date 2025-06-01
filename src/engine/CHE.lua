@@ -31,6 +31,34 @@ function CHE:init()
     require("modules.objects")
 
     cursor = cursor()
+
+
+
+
+
+
+    local screenMiddle = baseScreenRatio.x / 2         --TEMP SHIT 
+    musicPath = "Music/"
+    maniaNoteSize = 100
+    maninaLaneGap = 110
+    maniaScrollSpeed = 2
+    maniaLaneYOffset = 100
+
+    defaultFont = love.graphics.newFont(12)
+
+    songButtonFontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 35)
+    songButtonFontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 25)
+
+    songSelectSongInfoFontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 35)
+    songSelectSongInfoFontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 25)
+
+    maniaLanePositions = {
+        screenMiddle - (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
+        screenMiddle - (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
+        screenMiddle + (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
+        screenMiddle + (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
+    }
+
 end
 
 function CHE:update(dt)
