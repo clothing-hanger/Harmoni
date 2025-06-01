@@ -48,12 +48,13 @@ function CHE:draw()
     local ratio = math.min(love.graphics.getWidth() / baseScreenRatio.x, love.graphics.getHeight() / baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, ratio, ratio, baseScreenRatio.x / 2, baseScreenRatio.y / 2)
 
-    -- Optional: draw mouse dot for debugging
     love.graphics.circle("fill", Mouse.x, Mouse.y, 5)
 end
 
 function love.resize(w, h)
-    -- Optional: Add resize logic if needed
+end
+
+function CHE:exit()
 end
 
 return CHE

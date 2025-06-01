@@ -151,7 +151,6 @@ function songSelect:setupDifficultyList(path,color)
     end
 
     function songSelect:difficultyListDraw()
-       -- love.graphics.rectangle("fill", difficultyButtonX, songButtonHeight, songButtonWidth, difficultyListBoxHeight)
         for i, DifficultyButton in ipairs(difficultyButtons) do
             DifficultyButton:draw()
         end
@@ -242,13 +241,13 @@ function songSelect:draw()
             local image = false
             local imageWidth, imageHeight
             if SongButton.imageLoaded then image = SongButton.image end
-            if image then 
+            if image then
                 imageWidth = baseScreenRatio.x/image:getWidth()
                 imageHeight = baseScreenRatio.y/image:getHeight()
                 love.graphics.draw(image,0,0, nil, imageWidth, imageHeight)     
-            end   
-        end 
-    end   
+            end
+        end
+    end
     self:drawGradients()
 
     for i, SongButton in ipairs(songButtons) do
@@ -313,10 +312,19 @@ function songSelect:drawSongInfo()
                         "Note Count: " .. "PLACEHOLDER" .. "\n" ..
                         "Long Note Percent: " .. "PLACEHOLDER" .. "\n",
                         x+10,y+45,box.width,"left")
-    
+
     love.graphics.setColor(1,1,1)
 end
 
-
+function songSelect:leave()
+    self.bannerThread:wait()
+    self.bannerThread:release()
+    self.bannerInputChannel:clear()
+    self.bannerChannel:clear()
+    songButtons = {}
+    difficultyButtons = {}
+    songList = {}
+    difficultyList = {}
+end
 
 return songSelect
