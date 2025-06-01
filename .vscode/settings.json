@@ -1,0 +1,6 @@
+{
+    "Lua.diagnostics.disable": [
+        "undefined-field"
+    ],
+    "pixelbyte.love2d.srcDir": "./src/"
+}

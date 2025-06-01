@@ -37,11 +37,11 @@ function CHE:update(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
 end
 
-function CHE:draw()
+function CHE:draw(dt)
     love.graphics.push()
     love.graphics.setCanvas({CHECanvas, stencil = true})
     love.graphics.clear(0, 0, 0, 1)
-    State.draw()
+    State.draw(dt)
     love.graphics.setCanvas()
     love.graphics.pop()
 

@@ -7,5 +7,5 @@ function love.conf(t)
     t.window.resizable = true
     t.window.highdpi = true
     t.window.msaa = 1
-
+    t.window.vsync = 0
 end

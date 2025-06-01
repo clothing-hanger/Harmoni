@@ -71,6 +71,12 @@ function menuSongButton:update(dt)
 end
 
 function menuSongButton:draw()
+    -- if not on screen, dont draw
+    if self.x + self.width < 0 or self.x > baseScreenRatio.x or
+        self.y + self.height < 0 or self.y > baseScreenRatio.y then
+
+        return
+    end
 
     -- set up stencil 
     local function stencilShape()
