@@ -135,7 +135,7 @@ function songSelect:setupDifficultyList(path,color)
 
             table.insert(difficultyButtons,
                 menuSongButton(
-                    nil,  -- what even is this
+                    self,  -- what even is this
                     songButtonWidth,
                     songButtonHeight,
                     x,
