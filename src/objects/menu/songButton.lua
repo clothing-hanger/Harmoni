@@ -21,9 +21,9 @@ function menuSongButton:new(width, height, x, y, name, artist, charter, bpm, ima
     self.isDifficultyButton = isDifficultyButton or false
     self.color = color or {1,1,1}
     self.cornerRadius = cornerRadius or 7
-    self.fontLarge = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 30)
-    self.fontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 18)
 
+    self.fontLarge = songButtonFontLarge
+    self.fontSmall = songButtonFontSmall
 
 
 end
@@ -102,6 +102,10 @@ function menuSongButton:draw()
         love.graphics.setColor(1,0,0)
         love.graphics.rectangle("fill",self.x, self.y, self.width/7, self.height)
     end
+
+    love.graphics.setColor(textColor) -- draw an outline around the button if its a difficulty button cuz its super hard to see them tbh 
+    love.graphics.setLineWidth(5)
+    if self.isDifficultyButton then love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius) end
 
     love.graphics.setColor(1,1,1)
     love.graphics.setStencilTest()

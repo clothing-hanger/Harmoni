@@ -196,7 +196,7 @@ function songSelect:draw()
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
     songSelect:drawSongInfo()
     songSelect:drawSongInfo()
-end
+endx
 
 
 function songSelect:drawGradients()  -- the code here is so bad 😭😭😭😭
@@ -226,17 +226,31 @@ function songSelect:drawSongInfo()
     --get song info 
     local box = {}
     box.height,box.width = 250,700
+    local x, y = baseScreenRatio.x - box.width, baseScreenRatio.y - box.height
+
     local songInfo = {}
     for i, SongButton in ipairs(songButtons) do
         if i == selectedSong then
             songInfo = SongButton:returnInfo()
         end
     end
-    print(songInfo)
     local color = {songInfo.color[1]-0.1,songInfo.color[2]-0.1,songInfo.color[3]-0.1,0.75}
+    local textColor = getTextColor(color[1], color[2], color[3])
 
     love.graphics.setColor(color or {1,1,1})
-    love.graphics.rectangle("fill", baseScreenRatio.x - box.width, baseScreenRatio.y - box.height, box.width, box.height)
+    love.graphics.rectangle("fill", x, y, box.width+10, box.height+10, 7,7)  -- add 10 to width and height to move rounded corners off screen
+    love.graphics.setFont(songSelectSongInfoFontLarge)
+    love.graphics.setColor(textColor)
+    love.graphics.print(songInfo.name, x+10,y+10)
+    love.graphics.setFont(songSelectSongInfoFontSmall)
+    love.graphics.printf("By: " .. songInfo.artist .. "\n" ..
+                        "Charted by: " .. songInfo.charter .. "\n" ..
+                        "BPM: " .. songInfo.bpm .. "\n" ..
+                        "Gamemode: " .. songInfo.mode .. "\n" ..
+                        "Note Count: " .. "PLACEHOLDER" .. "\n" ..
+                        "Long Note Percent: " .. "PLACEHOLDER" .. "\n",
+                        x+10,y+45,box.width,"left")
+    
     love.graphics.setColor(1,1,1)
 end
 
