@@ -9,3 +9,4 @@
 
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")
+    cursor = require("objects.UI.cursor")

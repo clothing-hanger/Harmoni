@@ -61,7 +61,7 @@ while true do
         break
     end
 
-    image = love.image.newImageData(path)
+    if not love.filesystem.getInfo(path, "file") then goto continue else image = love.image.newImageData(path) end
 
     outChannel:push({
         path = path,
@@ -132,9 +132,10 @@ function songSelect:setupDifficultyList(path,color)
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
             local x = difficultyButtonX + baseX + slope * (y - baseY)
-            print(songInfo.image)
+
             table.insert(difficultyButtons,
                 menuSongButton(
+                    nil,  -- what even is this
                     songButtonWidth,
                     songButtonHeight,
                     x,
@@ -166,7 +167,7 @@ function songSelect:loadSongButtonImages()
         local data = self.bannerChannel:pop()
         if data then
             for i, SongButton in ipairs(songButtons) do
-                if SongButton.imagePath == data.path then
+                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then 
                     SongButton.image = love.graphics.newImage(data.image)
                     SongButton.imageLoaded = true
                     SongButton.color = data.averageColor

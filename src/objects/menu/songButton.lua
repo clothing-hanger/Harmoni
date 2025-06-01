@@ -4,6 +4,8 @@ local menuSongButton = Class:extend("songButton")
 ---@param width, height, name, artist, charter, bpm, image, isDifficultyButton
 ---Makes a new song button
 function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
+        self.isDifficultyButton = isDifficultyButton or false
+
     self.instance = instance
     self.width = width or 10
     self.height = height or 10
@@ -18,15 +20,15 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.bpm = bpm or "???"
     self.image = image or nil
     self.imagePath = image or nil
-    self.instance.bannerInputChannel:push(self.imagePath)
+    if not self.isDifficultyButton then self.instance.bannerInputChannel:push(self.imagePath) end
     self.path = path or "???" -- would be bad if this path doesnt exist so we need to add a check for this later
-    self.isDifficultyButton = isDifficultyButton or false
     self.color = color or {1,1,1}
     self.cornerRadius = cornerRadius or 7
 
     self.fontLarge = songButtonFontLarge
     self.fontSmall = songButtonFontSmall
 
+    print(y)
 
 end
 

@@ -29,12 +29,16 @@ function CHE:init()
     State = require("engine.state.State")
     States = require("modules.states")
     require("modules.objects")
+
+    cursor = cursor()
 end
 
 function CHE:update(dt)
     State.update(dt)
     Input:update()
     Mouse.x, Mouse.y = love.mouse.getPosition()
+    cursor:update(dt)
+    love.mouse.setVisible(false)
 end
 
 function CHE:draw(dt)
@@ -48,7 +52,8 @@ function CHE:draw(dt)
     local ratio = math.min(love.graphics.getWidth() / baseScreenRatio.x, love.graphics.getHeight() / baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, ratio, ratio, baseScreenRatio.x / 2, baseScreenRatio.y / 2)
 
-    love.graphics.circle("fill", Mouse.x, Mouse.y, 5)
+  --  love.graphics.circle("fill", Mouse.x, Mouse.y, 5
+    cursor:draw()
 end
 
 function love.resize(w, h)
