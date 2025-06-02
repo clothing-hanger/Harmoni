@@ -5,4 +5,4 @@ return {
     ["Alright"] = {name = "Alright", timing = 106},  
     ["Awful"] = {name = "Awful", timing = 127},
     ["Miss"] = {name = "Miss", timing = 164},
-}         
+}
