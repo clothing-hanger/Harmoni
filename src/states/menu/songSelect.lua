@@ -61,7 +61,11 @@ while true do
         break
     end
 
-    if not love.filesystem.getInfo(path, "file") then goto continue else image = love.image.newImageData(path) end
+    if not love.filesystem.getInfo(path, "file") then 
+        goto continue 
+    else 
+        image = love.image.newImageData(path) 
+    end
 
     outChannel:push({
         path = path,
@@ -135,7 +139,7 @@ function songSelect:setupDifficultyList(path,color)
 
             table.insert(difficultyButtons,
                 menuSongButton(
-                    self,  -- what even is this
+                    self,
                     songButtonWidth,
                     songButtonHeight,
                     x,

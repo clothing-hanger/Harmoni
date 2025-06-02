@@ -69,11 +69,27 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
 end
 
+function CHE:mousepressed(x, y, b)
+    Mouse.x, Mouse.y = love.mouse.getPosition()
+    cursor:mousepressed(Mouse.x, Mouse.y, b)
+end
+
+function CHE:mousereleased(x, y, b)
+    Mouse.x, Mouse.y = love.mouse.getPosition()
+    cursor:mousereleased(Mouse.x, Mouse.y, b)
+end
+
 function CHE:draw(dt)
     love.graphics.push()
     love.graphics.setCanvas({CHECanvas, stencil = true})
     love.graphics.clear(0, 0, 0, 1)
+    local startFont = love.graphics.getFont()
+    local lastLineWidth = love.graphics.getLineWidth()
+    local lastColor = {love.graphics.getColor()}
     State.draw(dt)
+    love.graphics.setFont(startFont)
+    love.graphics.setLineWidth(lastLineWidth)
+    love.graphics.setColor(lastColor)
     love.graphics.setCanvas()
     love.graphics.pop()
 

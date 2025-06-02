@@ -22,6 +22,14 @@ function love.update(dt)
     CHE:update(dt)
 end
 
+function love.mousepressed(x, y, b)
+    CHE:mousepressed(x, y, b)
+end
+
+function love.mousereleased(x, y, b)
+    CHE:mousereleased(x, y, b)
+end
+
 function love.wheelmoved(x,y)
     State.scroll(y)
 end
