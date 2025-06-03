@@ -14,7 +14,7 @@ function mania:new(chart)
     self.playField = {maniaPlayField(self.chart)}
     
 
-
+    self.judgements = require("Modules.maniaJudgements")
 end
 
 function mania:setUpChart(chart)
@@ -52,7 +52,14 @@ function mania:input()
         for l,Lane in ipairs(PlayField.lanes) do
             for h,HitObject in ipairs(Lane.hitObjects) do
                 if Input:pressed(allInputs[l]) then
-                    
+                    for j,Judgement in ipairs(self.judgements) do
+                        print(Judgement.timing)
+                        if math.abs(HitObject.startTime - MusicTime) > Judgement.timing then
+                           -- HitObject:hit()
+                            --table.remove(Lane.hitObjects, h)
+                            break
+                        end
+                    end
                 end
             end
         end

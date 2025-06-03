@@ -1,8 +1,8 @@
 return {
-    ["Perfect"] = {name = "Perfect", timing = 18},
-    ["Great"] = {name = "Great", timing = 43},    
-    ["Good"] = {name = "Good", timing = 76},
-    ["Alright"] = {name = "Alright", timing = 106},  
-    ["Awful"] = {name = "Awful", timing = 127},
-    ["Miss"] = {name = "Miss", timing = 164},
+    {name = "Perfect", timing = 18},
+    {name = "Great", timing = 43},    
+    {name = "Good", timing = 76},
+    {name = "Alright", timing = 106},  
+    {name = "Awful", timing = 127},
+    {name = "Miss", timing = 164},
 }

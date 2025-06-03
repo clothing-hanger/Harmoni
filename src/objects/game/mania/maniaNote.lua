@@ -22,6 +22,10 @@ function maniaNote:updatePosition()
     self.y = (self.startTime - (MusicTime or 0))*maniaScrollSpeed
 end
 
+function maniaNote:hit()
+    print("hit i guess idk")
+end
+
 function maniaNote:draw()
     if not self.visible then return end
     love.graphics.circle("line", self.x, self.y, self.size)
