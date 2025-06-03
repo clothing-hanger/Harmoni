@@ -1,16 +1,16 @@
 local gameModeManager = State()
 
 function gameModeManager:enter(s,mode,chart)
+    self.gameMode = {} -- i hate that this has to be a table 😭😭
     if mode == "mania" then
         self.gameMode = {mania(chart)}
-
     end
     
     gameModeManager:initializeSong()
 
 end
 function gameModeManager:initializeSong()
-    MusicTime = -2000
+    MusicTime = -2000 -- should this be moved to the gamemode itself? maybe.. idk 
 end
 
 function gameModeManager:update(dt)

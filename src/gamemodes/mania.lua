@@ -1,23 +1,20 @@
 local mania = Class:extend("mania")
 
+local allInputs = {
+    "lane14K",
+    "lane24K",
+    "lane34K",
+    "lane44K",
+}
+
 function mania:new(chart)
     self.chart = mania:setUpChart(chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
-    self.lanes = {}
-    for i = 1, self.chart.meta.laneCount do
-        local hitObjects = {}
-        for j, HitObject in ipairs(self.chart.hitObjects) do
-            if i == HitObject.lane then
-                table.insert(hitObjects, {
-                    type = HitObject.type,
-                    startTime = HitObject.startTime,
-                    length = HitObject.length
-                })
-            end
-        end
-        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects))
-    end
+    self.playField = {maniaPlayField(self.chart)}
+    
+
+    self.judgements = require("Modules.maniaJudgements")
 end
 
 function mania:setUpChart(chart)
@@ -50,15 +47,36 @@ function mania:setUpChart(chart)
     return maniaChart
 end
 
-function mania:update(dt)
-    for i,Lane in ipairs(self.lanes) do
-        Lane:update(dt)
+function mania:input()
+    for p,PlayField in ipairs(self.playField) do
+        for l,Lane in ipairs(PlayField.lanes) do
+            for h,HitObject in ipairs(Lane.hitObjects) do
+                if Input:pressed(allInputs[l]) then
+                    for j,Judgement in ipairs(self.judgements) do
+                        print(Judgement.timing)
+                        if math.abs(HitObject.startTime - MusicTime) > Judgement.timing then
+                           -- HitObject:hit()
+                            --table.remove(Lane.hitObjects, h)
+                            break
+                        end
+                    end
+                end
+            end
+        end
     end
 end
 
+function mania:update(dt)
+    for i,PlayFeild in ipairs(self.playField) do
+        PlayFeild:update(dt)
+    end
+
+    self:input()
+end
+
 function mania:draw()
-    for i,Lane in ipairs(self.lanes) do
-        Lane:draw()
+    for i,PlayFeild in ipairs(self.playField) do
+        PlayFeild:draw()
     end
 end
 
