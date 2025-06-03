@@ -23,6 +23,14 @@ local baton = {
 	]]
 }
 
+local function warn(msg, args)
+	if args then
+		msg = string.format(msg, unpack(args))
+	end
+
+	print("[BATON.LUA] " .. msg)
+end
+
 -- string parsing functions --
 
 -- splits a source definition into type and value
@@ -164,7 +172,8 @@ function Player:_initControls()
 	end
 end
 
-function Player:rebindControl(name, control)
+-- rebinds a control to a new source
+function Player:rebindControls(name, control)
 	self.config.controls[name] = control
 	self:_initControls()
 end
@@ -438,18 +447,6 @@ function Player:bindControlRelease(name, bind)
 	end
 end
 
--- unbind control releases callback
-function Player:unbindControlPressed(name, bind)
-	if self._controls[name] then
-		local i = table.find(self._controls[name].releaseBinds, bind)
-		if i then
-			table.remove(self._controls[name].releaseBinds, i)
-		end
-	else
-		error('No control with name "' .. name .. '" defined', 3)
-	end
-end
-
 -- gets the controls from key
 function Player:getControlsFromSource(source)
 	local type, value = parseSource(source)
@@ -463,7 +460,8 @@ function Player:getRaw(name)
 	elseif self._controls[name] then
 		return self._controls[name].rawValue
 	else
-		error('No control with name "' .. name .. '" defined', 3)
+		warn('No control with name "%s" defined', {name})
+		return 0, 0
 	end
 end
 
@@ -474,7 +472,8 @@ function Player:get(name)
 	elseif self._controls[name] then
 		return self._controls[name].value
 	else
-		error('No control with name "' .. name .. '" defined', 3)
+		warn('No control with name "%s" defined', {name})
+		return 0, 0
 	end
 end
 
@@ -485,7 +484,8 @@ function Player:down(name)
 	elseif self._controls[name] then
 		return self._controls[name].down
 	else
-		error('No control with name "' .. name .. '" defined', 3)
+		warn('No control with name "%s" defined', {name})
+		return false
 	end
 end
 
@@ -496,7 +496,8 @@ function Player:pressed(name)
 	elseif self._controls[name] then
 		return self._controls[name].pressed
 	else
-		error('No control with name "' .. name .. '" defined', 3)
+		warn('No control with name "%s" defined', {name})
+		return false
 	end
 end
 
@@ -507,7 +508,8 @@ function Player:released(name)
 	elseif self._controls[name] then
 		return self._controls[name].released
 	else
-		error('No control with name "' .. name .. '" defined', 3)
+		warn('No control with name "%s" defined', {name})
+		return false
 	end
 end
 
