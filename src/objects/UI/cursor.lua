@@ -12,8 +12,13 @@ function cursor:new()
 
     self.angle = 0
     self.targetAngle = 0
+    self.angularVelocity = 0
+    self.angularAcceleration = 0
 
-    self.rotateSpeed = 1000
+    self.rotateSpeed = 900
+    self.damping = 30
+    self.followSpeed = 10
+
     self.visible = true
     self.scale = 0.5
     self.tgtScale = 0.5
@@ -23,7 +28,7 @@ function cursor:new()
     self.weight = 5
     self.weightAngle = 0
 
-    self.debug = false
+    self.debug = true
 end
 
 function cursor:update(dt)
@@ -41,21 +46,35 @@ function cursor:update(dt)
         if self.rotating then
             local angle = math.deg(math.atan2(-dx, dy)) + 24.3
 
-            local delta = (angle - self.angle) % 360
-            if delta < -180 then delta = delta + 360 end
-            if delta > 180 then delta = delta - 360 end
+            local diff = (angle - self.angle + 180) % 360 - 180
 
-            angle = self.angle + delta
-            self.targetAngle = angle
+
+            self.targetAngle = self.angle + diff
+
+            local t = math.min(dt * self.followSpeed, 1)
+            self.angle = self.angle + diff * t
+
+            self.angularVelocity = 0
+            self.angularAcceleration = 0
+        else
+            self.angularVelocity = 0
+            self.angularAcceleration = 0
         end
-    end
-
-    local delta = self.targetAngle - self.angle
-    if math.abs(delta) > 0.01 then
-        local t = math.min(dt * self.rotateSpeed / 150, 1)
-        self.angle = self.angle + delta * t
     else
-        self.angle = self.targetAngle
+        local diff = (0 - self.angle)
+
+        self.angularAcceleration = self.rotateSpeed * diff
+
+        self.angularVelocity = self.angularVelocity + self.angularAcceleration * dt
+        self.angularVelocity = self.angularVelocity * (1 - self.damping * dt)
+
+        self.angle = self.angle + self.angularVelocity * dt
+
+        if math.abs(diff) < 0.5 and math.abs(self.angularVelocity) < 0.5 then
+            self.angle = 0
+            self.angularVelocity = 0
+            self.angularAcceleration = 0
+        end
     end
 
     if self.tgtScale ~= self.scale then
@@ -73,11 +92,13 @@ function cursor:update(dt)
 
     local weightDelta = (self.x - self.prevX) * 0.08
     self.weightAngle = self.weightAngle + weightDelta
+
     if self.weightAngle > 360 then
         self.weightAngle = self.weightAngle - 360
     elseif self.weightAngle < 0 then
         self.weightAngle = self.weightAngle + 360
     end
+
     if self.weightAngle > 180 then
         self.weightAngle = self.weightAngle - 360
     elseif self.weightAngle < -180 then
@@ -100,6 +121,7 @@ function cursor:update(dt)
 
     self.prevX, self.prevY = self.x, self.y
 end
+
 
 function cursor:draw()
     if not self.visible then return end
