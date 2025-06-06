@@ -1,6 +1,6 @@
 local ChartParse = {}
 ---@oaram function ChartParse.harmc Parses .HARMC files
----@return ChartParse
+---@return table|boolean
 ---returns a table with the chart data, or false if there was an error
 function ChartParse.harmc(harmc)
     local chart = {}
@@ -16,6 +16,7 @@ function ChartParse.harmc(harmc)
             section = Line:sub(2, -2)
             if not section then  -- this is bad, dont parse the chart
                 print("ERROR: ChartParse.harmc(): oopsies :3,,, a section was not found when parsing: "  .. harmc)
+                --                                ^ CH this is why you're gay
                 return false
             end
             chart[section] = {}
@@ -27,7 +28,7 @@ function ChartParse.harmc(harmc)
         elseif section == "bpm" then   
             local key, startTime, bpm = Line:match("^(%a+):(%d+):(%d+)$")  
             if key == "bpm" and startTime and bpm then  -- not a bad error, just skip this one
-                table.insert(chart[section], {startTime = tonumber(startTime), bpm = tonumber(bpm)})  
+                table.insert(chart[section], {startTime = tonumber(startTime), bpm = tonumber(bpm)})
             end
         elseif section == "sliderVelocities" then
             local key, startTime, multiplier = Line:match("^(%a+):([%d%.]+):([%d%.]+)$")

@@ -40,7 +40,7 @@ function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- sto
             {x, y + height,         0, 0, color1[1], color1[2], color1[3], color1[4] or 1},
         }
     end
-    
+
     love.graphics.setColor(1,1,1)
 
     local mesh = love.graphics.newMesh(vertices, "fan", "static")
@@ -74,7 +74,7 @@ function lerp(a, b, t)
     return a + (b - a) * t
 end
 
-function lerpAngle(a, b, t) 
+function lerpAngle(a, b, t)
     local diff = (b - a + math.pi) % (2 * math.pi) - math.pi
     return a + diff * t
 end

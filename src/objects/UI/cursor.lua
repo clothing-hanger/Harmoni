@@ -45,10 +45,7 @@ function cursor:update(dt)
 
         if self.rotating then
             local angle = math.deg(math.atan2(-dx, dy)) + 24.3
-
             local diff = (angle - self.angle + 180) % 360 - 180
-
-
             self.targetAngle = self.angle + diff
 
             local t = math.min(dt * self.followSpeed, 1)

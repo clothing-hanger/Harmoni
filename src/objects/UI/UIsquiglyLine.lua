@@ -41,17 +41,14 @@ function UISquiglyLine:draw()
 
         table.insert(points, px + ox)
         table.insert(points, py + oy)
-
-
     end
 
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.line(points)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.line(points)
 
-        love.graphics.setColor(1, 0, 0)
-        love.graphics.circle("fill", self.x1, self.y1, 5)
-        love.graphics.circle("fill", self.x2, self.y2, 5)
-
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.circle("fill", self.x1, self.y1, 5)
+    love.graphics.circle("fill", self.x2, self.y2, 5)
 end
 
 return UISquiglyLine

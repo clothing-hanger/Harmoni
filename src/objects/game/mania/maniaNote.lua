@@ -12,7 +12,6 @@ function maniaNote:new(startTime, holdLength, lane)
 end
 
 function maniaNote:update(dt)
-
     self:updatePosition()
 
     self.visible = self.y < baseScreenRatio.y + self.size and self.y > 0 - self.size

@@ -2,6 +2,7 @@ local gameModeManager = State()
 
 function gameModeManager:enter(s,mode,chart)
     self.gameMode = {} -- i hate that this has to be a table 😭😭
+                       -- Literally why does it have to be a table?
     if mode == "mania" then
         self.gameMode = {mania(chart)}
     end

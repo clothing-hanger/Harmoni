@@ -1,11 +1,17 @@
 local menuSongButton = Class:extend("songButton")
 
----@oaram function menuSongButton
----@param width, height, name, artist, charter, bpm, image, isDifficultyButton
----Makes a new song button
+--- @param instance table -- The instance of the menu
+--- @param width number
+--- @param height number
+--- @param name string
+--- @param artist string
+--- @param charter string
+--- @param bpm number
+--- @param image string
+--- @param isDifficultyButton boolean
+--- Makes a new song button
 function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
-        self.isDifficultyButton = isDifficultyButton or false
-
+    self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
     self.width = width or 10
     self.height = height or 10
@@ -13,7 +19,7 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.y = y or 10
 
     self.mode = gameMode or "???" -- would be bad if this isnt valid but we will figure that out later
-    
+
     self.name = name or "???"
     self.artist = artist or "???"
     self.charter = charter or "???"
@@ -27,13 +33,11 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     self.fontLarge = songButtonFontLarge
     self.fontSmall = songButtonFontSmall
-
-
 end
 
 function menuSongButton:onClick()
     if self.isDifficultyButton then
-        --open the selected song and difficulty
+        -- open the selected song and difficulty
         return {loadSong = true, mode = self.mode, path = self.path}
     else -- must just be a song button
         return {loadSong = false, mode = self.mode, path = self.path, color = self.color} -- might not even use all these values 
@@ -55,18 +59,6 @@ function menuSongButton:returnInfo()
     return info
 end
 
-function menuSongButton:loadImage()
-    --[[ self.attemptedToLoadImage = true -- this is fucking awful
-    if not self.image then self.failedToLoadImage = true; return end
-    if love.filesystem.getInfo(self.image, "file") then
-        local imgData = love.image.newImageData(self.image)
-        self.color = getAverageColor(imgData)
-        self.image = love.graphics.newImage(imgData)
-        self.imageLoaded = true
-
-    end ]]
-end
-
 function menuSongButton:update(dt)
     self.hovered = mouseOver(self)
 end
@@ -86,10 +78,9 @@ function menuSongButton:draw()
     love.graphics.stencil(stencilShape, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
 
-    -- draw image (if its loaded)
     local imageScale
-    if self.imageLoaded then 
-        imageScale = self.width /self.image:getWidth()
+    if self.imageLoaded then
+        imageScale = self.width/self.image:getWidth()
     end
     if self.imageLoaded then love.graphics.draw(self.image, self.x, self.y-(self.image:getHeight()*imageScale)/2, nil, imageScale, imageScale) end
 

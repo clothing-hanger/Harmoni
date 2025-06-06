@@ -26,6 +26,10 @@ function love.mousepressed(x, y, b)
     CHE:mousepressed(x, y, b)
 end
 
+function love.mousemoved(x, y, dx, dy)
+    CHE:mousemoved(x, y, dx, dy)
+end
+
 function love.mousereleased(x, y, b)
     CHE:mousereleased(x, y, b)
 end

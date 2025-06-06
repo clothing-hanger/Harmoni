@@ -17,8 +17,6 @@ function maniaPlayField:new(chart)
         end
         table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects))
     end
-
-    
 end
 
 function maniaPlayField:update(dt)

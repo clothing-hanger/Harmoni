@@ -171,7 +171,7 @@ function songSelect:loadSongButtonImages()
         local data = self.bannerChannel:pop()
         if data then
             for i, SongButton in ipairs(songButtons) do
-                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then 
+                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
                     SongButton.image = love.graphics.newImage(data.image)
                     SongButton.imageLoaded = true
                     SongButton.color = data.averageColor
@@ -203,8 +203,6 @@ end
 function songSelect:scroll(s)
     hoveredSong = hoveredSong + s
 end
-
-
 
 function songSelect:updateSongButtons(dt)
     local speed = 10
