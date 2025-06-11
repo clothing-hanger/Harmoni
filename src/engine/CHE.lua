@@ -28,6 +28,7 @@ function CHE:init()
     Class = require("engine.class.class")
     State = require("engine.state.State")
     States = require("modules.states")
+    Console = require("engine.modules.console")
     require("modules.objects")
 
     cursor = cursor()
@@ -79,6 +80,14 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
 end
 
+function CHE:keypressed(k)
+    Console.keypressed(k)
+end
+
+function CHE:textinput(t)
+    Console.textinput(t)
+end
+
 function CHE:mousepressed(x, y, b)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:mousepressed(Mouse.x, Mouse.y, b)
@@ -111,7 +120,14 @@ function CHE:draw(dt)
     local ratio = math.min(love.graphics.getWidth() / baseScreenRatio.x, love.graphics.getHeight() / baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, ratio, ratio, baseScreenRatio.x / 2, baseScreenRatio.y / 2)
 
-  --  love.graphics.circle("fill", Mouse.x, Mouse.y, 5
+    -- Draw the consolke
+    if Console.isVisible then
+        love.graphics.setColor(0, 0, 0, 0.5) -- Semi-transparent background
+        love.graphics.rectangle("fill", 0, 0, Console.width, Console.height)
+        Console.draw()
+    end
+
+    -- Draw the cursor
     cursor:draw()
 end
 

@@ -46,6 +46,14 @@ function love.mousereleased(x, y, b)
     CHE:mousereleased(x, y, b)
 end
 
+function love.keypressed(key, scancode, isrepeat)
+    CHE:keypressed(key, scancode, isrepeat)
+end
+
+function love.textinput(text)
+    CHE:textinput(text)
+end
+
 function love.wheelmoved(x,y)
     State.scroll(y)
 end

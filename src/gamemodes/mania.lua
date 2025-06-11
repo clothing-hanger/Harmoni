@@ -1,6 +1,5 @@
 local mania = Class:extend("mania")
 
-
 function mania:new(chart)
     self.chartPath = getDirectory(chart)
     print("with file", chart, "without file", self.chartPath)
@@ -9,7 +8,7 @@ function mania:new(chart)
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart)}
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile,"stream")
-    
+
     mania.judgements = require("Modules.maniaJudgements")
     self.judgements = mania.judgements
 end
@@ -17,13 +16,9 @@ end
 function mania:setUpChart(chart)
     local chart = ChartParse.harmc(chart)
     local maniaChart = {}
-    maniaChart.meta = {}
+    maniaChart.meta = chart.meta
     maniaChart.hitObjects = {}
 
-    for i, Data in pairs(chart.meta) do
-        maniaChart.meta[i] = Data
-       -- print(i, Data)
-    end
     for i, BpmChange in ipairs(chart.bpm) do
         
        -- print(i, BpmChange.startTime, BpmChange.bpm)
@@ -39,7 +34,6 @@ function mania:setUpChart(chart)
             length = HitObject.length,
             lane = HitObject.lane
         })
-        
     end
     return maniaChart
 end
