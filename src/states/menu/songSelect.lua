@@ -97,20 +97,20 @@ function songSelect:setupSongList()
         local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
         if not difficultyList[1] then table.remove(songList, i); goto continue end
         if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. difficultyList[1], "file") then table.remove(songList, i); goto continue end
-        songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
-        if not songInfo.meta.backgroundFile then songInfo.meta.backgroundFile = "???" end
+        songInfo = ChartParse.harmcMeta(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
+        if not songInfo.backgroundFile then songInfo.backgroundFile = "???" end
 
         if songInfo then
             table.insert(songButtons, menuSongButton(
                 self,
                 songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
-                songInfo.meta.title,
-                songInfo.meta.artist,
-                songInfo.meta.charter,
-                songInfo.meta.bpm,
-                musicPath .. songList[i] .. "/" .. songInfo.meta.backgroundFile,
+                songInfo.title,
+                songInfo.artist,
+                songInfo.charter,
+                songInfo.bpm,
+                musicPath .. songList[i] .. "/" .. songInfo.backgroundFile,
                 false,
-                songInfo.meta.gameMode,
+                songInfo.gameMode,
                 musicPath .. songList[i] .. "/"
             ))
             print(musicPath .. songList[i])
@@ -132,7 +132,7 @@ function songSelect:setupDifficultyList(path,color)
 
     for i = 1, #difficultyList do
         local songInfo = false
-        songInfo = ChartParse.harmc(path .. "/" .. difficultyList[i] .. "/")
+        songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/")
 
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
@@ -145,13 +145,13 @@ function songSelect:setupDifficultyList(path,color)
                     songButtonHeight,
                     x,
                     y,
-                    songInfo.meta.difficultyName,
+                    songInfo.difficultyName,
                     nil,
-                    songInfo.meta.charter,
+                    songInfo.charter,
                     nil,
                     nil,
                     true,
-                    songInfo.meta.gameMode,
+                    songInfo.gameMode,
                     path .. "/" .. difficultyList[i],
                     7,
                     color
