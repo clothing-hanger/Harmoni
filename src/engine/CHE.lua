@@ -41,7 +41,7 @@ function CHE:init()
     musicPath = "Music/"
     maniaNoteSize = 95
     maninaLaneGap = 110
-    maniaScrollSpeed = 2.65
+    maniaScrollSpeed = 2.75
     maniaLaneYOffset = 100
     if DOWNSCROLL_ENABLED then
         maniaLaneYOffset = baseScreenRatio.y - 100

@@ -15,9 +15,9 @@ function cursor:new()
     self.angularVelocity = 0
     self.angularAcceleration = 0
 
-    self.rotateSpeed = 900
-    self.damping = 30
-    self.followSpeed = 10
+    self.rotateSpeed = 15
+    self.damping = 7
+    self.followSpeed = 60
 
     self.visible = true
     self.scale = 0.5
@@ -25,7 +25,7 @@ function cursor:new()
 
     self.image = love.graphics.newImage("images/UI/cursor.png")
 
-    self.weight = 5
+    self.weight = 100
     self.weightAngle = 0
 
     self.debug = true

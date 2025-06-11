@@ -8,7 +8,7 @@ local function table_find(t, value)
     end
     return nil
 end
-DOWNSCROLL_ENABLED = false
+DOWNSCROLL_ENABLED = true
 function love.load(args)
     if table_find(args, "--downscroll") then
         DOWNSCROLL_ENABLED = true
