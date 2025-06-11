@@ -27,7 +27,7 @@ end
 
 function maniaNote:draw()
     if not self.visible then return end
-    love.graphics.circle("line", self.x, self.y, self.size)
+    love.graphics.circle("fill", self.x, self.y, self.size)
 end
 
 return maniaNote

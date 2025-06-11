@@ -41,7 +41,7 @@ function CHE:init()
     musicPath = "Music/"
     maniaNoteSize = 100
     maninaLaneGap = 110
-    maniaScrollSpeed = 2
+    maniaScrollSpeed = 3
     maniaLaneYOffset = 100
 
     defaultFont = love.graphics.newFont(12)
@@ -58,6 +58,13 @@ function CHE:init()
         screenMiddle + (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
         screenMiddle + (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
     }
+
+    maniaInputs = {
+    "lane14K",
+    "lane24K",
+    "lane34K",
+    "lane44K",
+}
 
 end
 

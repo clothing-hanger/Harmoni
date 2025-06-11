@@ -5,6 +5,7 @@ function maniaPlayField:new(chart)
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
     for i = 1, self.chart.meta.laneCount do
+        print(self.chart.meta.laneCount)
         local hitObjects = {}
         for j, HitObject in ipairs(self.chart.hitObjects) do
             if i == HitObject.lane then

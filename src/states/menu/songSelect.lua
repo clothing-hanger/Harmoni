@@ -113,6 +113,7 @@ function songSelect:setupSongList()
                 songInfo.meta.gameMode,
                 musicPath .. songList[i] .. "/"
             ))
+            print(musicPath .. songList[i])
         end
         ::continue::
     end
@@ -151,7 +152,7 @@ function songSelect:setupDifficultyList(path,color)
                     nil,
                     true,
                     songInfo.meta.gameMode,
-                    path .. "/" .. difficultyList[i] .. "/",
+                    path .. "/" .. difficultyList[i],
                     7,
                     color
                 )
