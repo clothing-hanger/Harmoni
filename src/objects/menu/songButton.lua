@@ -35,6 +35,8 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     self.fontLarge = songButtonFontLarge
     self.fontSmall = songButtonFontSmall
+
+    self.borderHoverAlpha = 0
 end
 
 function menuSongButton:onClick()
@@ -65,6 +67,10 @@ function menuSongButton:update(dt)
     self.hovered = mouseOver(self)
 end
 
+local function remap(value, oldMin, oldMax, newMin, newMax)
+    return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin
+end
+
 function menuSongButton:draw()
     -- if not on screen, dont draw
     if self.x + self.width < 0 or self.x > baseScreenRatio.x or
@@ -91,6 +97,29 @@ function menuSongButton:draw()
     love.graphics.rectangle("fill",self.x, self.y, self.width/7, self.height)
     drawGradientRect(self.x+self.width/7, self.y, self.width, self.height, {self.color[1], self.color[2], self.color[3], 1}, {self.color[1], self.color[2], self.color[3], 0}, false)
 
+    love.graphics.setColor(1,1,1)
+    if self.hovered then
+        local mouseX = toCanvasCoords(love.mouse.getPosition())
+        local remappedX = remap(mouseX, self.x, self.x + self.width, 0, 1)
+
+        -- draw a gradient at the remapped x position. CENTERED
+        local gradientWidth = self.width
+        local gradientX = self.x + (remappedX * self.width) - (gradientWidth / 2)
+        drawMultiGradientRect(gradientX, self.y,
+            gradientWidth, self.height,
+            {{self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0},
+            {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 1},
+            {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0}}
+        )
+
+        self.borderHoverAlpha = math.min(self.borderHoverAlpha + 10 * love.timer.getDrawDelta(), 1)
+    else
+        self.borderHoverAlpha = math.max(self.borderHoverAlpha - 10 * love.timer.getDrawDelta(), 0)
+    end
+
+    love.graphics.setColor(1, 1, 1, self.borderHoverAlpha)
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+
     -- draw song info
     love.graphics.setFont(self.fontLarge)
     local textColor = getTextColor(self.color[1], self.color[2], self.color[3])
@@ -99,12 +128,7 @@ function menuSongButton:draw()
     love.graphics.setFont(self.fontSmall)
     love.graphics.print("By: " .. self.artist .. "Charted by: " .. self.charter .. "BPM: " .. self.bpm, self.x+3, self.y + self.height/2)
 
-    if self.hovered then
-        love.graphics.setColor(1,0,0)
-        love.graphics.rectangle("fill",self.x, self.y, self.width/7, self.height)
-    end
-
-    love.graphics.setColor(textColor) -- draw an outline around the button if its a difficulty button cuz its super hard to see them tbh 
+    love.graphics.setColor(textColor)
     love.graphics.setLineWidth(5)
     if self.isDifficultyButton then love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius) end
 

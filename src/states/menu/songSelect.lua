@@ -340,6 +340,9 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                     self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
                 end
             end
+
+            -- why go through the rest? we already have a match so just break
+            break
         end
     end
     if buttonInfo then

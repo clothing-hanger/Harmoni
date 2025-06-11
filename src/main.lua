@@ -55,7 +55,7 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
     CHE:draw(dt)
 
     love.graphics.setFont(baseFont)
-    local UPS, DPS = love.timer.getFPS()
+    local DPS, UPS = love.timer.getFPS()
     love.graphics.printf(string.format("UPS: %d, DPS: %d", UPS, DPS), 0, 0, love.graphics.getWidth(), "right")
 end
 
