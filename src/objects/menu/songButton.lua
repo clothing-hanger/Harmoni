@@ -26,7 +26,9 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.bpm = bpm or "???"
     self.image = image or nil
     self.imagePath = image or nil
-    if not self.isDifficultyButton then self.instance.bannerInputChannel:push(self.imagePath) end
+    if not self.isDifficultyButton then 
+        self.instance.bannerInputChannel:push(self.imagePath) 
+    end
     self.path = path or "???" -- would be bad if this path doesnt exist so we need to add a check for this later
     self.color = color or {1,1,1}
     self.cornerRadius = cornerRadius or 7

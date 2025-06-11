@@ -22,6 +22,67 @@ function songSelect:enter()
         dark = {0, 0, 0, 0.8}
     }
 
+    self.songThread = love.thread.newThread [[
+require("love.timer")
+require("love.filesystem")
+
+local chartParse = require("modules.chartParse")
+
+local channel = love.thread.getChannel("thread.songLoader")
+local outChannel = love.thread.getChannel("thread.songLoader.out")
+
+-- we're just loading metadata here, so we use chartParse.harmcMeta
+local function loadSongMetadata(path)
+    local songInfo = chartParse.harmcMeta(path)
+    return songInfo
+end
+
+local path, songInfo, folderPath, ok, err
+local loaded = false
+while true do
+    loaded = false
+    path = channel:demand()
+    if not path then goto continue end
+
+    if path == "exit" then
+        break
+    end
+
+    if not love.filesystem.getInfo(path, "file") then 
+        goto continue 
+    else 
+        --songInfo = loadSongMetadata(path) 
+        ok, err = pcall(function() songInfo = loadSongMetadata(path) end)
+        if not ok then
+            print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
+            goto continue
+        end
+    end
+
+    -- get folder path
+    -- e.g.  Music/33409 - 179/143301.qua.harmc/ -> Music/33409 - 179/
+    if string.sub(path, -1) == "/" then
+        path = string.sub(path, 1, -2)  -- remove trailing slash if it exists
+    end
+    -- if path starts with "Music/" then remove it
+    path = string.gsub(path, "^Music/", "")  -- remove "Music/" from the start of the path
+    folderPath = (path:match("(.+)/[^/]+$") or "") .. "/"  -- get everything before the last slash, or return empty string if no slashes found
+
+    outChannel:push({
+        path = path,
+        folderPath = folderPath,
+        songInfo = songInfo
+    })
+    
+    loaded = true
+
+    ::continue::
+    --if not loaded then
+        love.timer.sleep(0.03)
+    --end
+end
+]]
+
     self.bannerThread = love.thread.newThread [[
 require("love.timer")
 require("love.image")
@@ -84,37 +145,34 @@ end
     self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
     self.bannerChannel = love.thread.getChannel("thread.bannerLoader.out")
 
+    self.songInputChannel = love.thread.getChannel("thread.songLoader")
+    self.songChannel = love.thread.getChannel("thread.songLoader.out")
+
     self.bannerThread:start()
+    self.songThread:start()
 
     self:setupSongList()
 end
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
-    for i = 1,#songList do
-        local songInfo = false
-        if not songList[i] then table.remove(songList, i); goto continue end
-        local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
-        if not difficultyList[1] then table.remove(songList, i); goto continue end
-        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. difficultyList[1], "file") then table.remove(songList, i); goto continue end
-        songInfo = ChartParse.harmcMeta(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
-        if not songInfo.backgroundFile then songInfo.backgroundFile = "???" end
 
-        if songInfo then
-            table.insert(songButtons, menuSongButton(
-                self,
-                songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
-                songInfo.title,
-                songInfo.artist,
-                songInfo.charter,
-                songInfo.bpm,
-                musicPath .. songList[i] .. "/" .. songInfo.backgroundFile,
-                false,
-                songInfo.gameMode,
-                musicPath .. songList[i] .. "/"
-            ))
-            print(musicPath .. songList[i])
+    for i = 1, #songList do
+        if not songList[i] then
+            table.remove(songList, i)
+            goto continue
         end
+        local diffList = SongListManager.getDifficultyList(musicPath .. songList[i])
+        if not diffList[1] then
+            if not diffList[1] then table.remove(songList, i) end
+            goto continue
+        end
+        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. diffList[1], "file") then
+            table.remove(songList, i)
+            goto continue
+        end
+        self.songInputChannel:push(musicPath .. songList[i] .. "/" .. diffList[1] .. "/")
+
         ::continue::
     end
 end
@@ -167,6 +225,30 @@ function songSelect:setupDifficultyList(path,color)
     end
 end
 
+function songSelect:loadSongs()
+    if self.songChannel:peek() then
+        local data = self.songChannel:pop()
+        if data then
+            -- add to songButtons
+            local songInfo = data.songInfo
+            if songInfo then
+                table.insert(songButtons, menuSongButton(
+                   self,
+                    songButtonWidth,songButtonHeight,songButtonX,(#songButtons+1)*(songButtonHeight+songButtonSpacing),
+                    songInfo.title,
+                    songInfo.artist,
+                    songInfo.charter,
+                    songInfo.bpm,
+                    musicPath .. data.folderPath .. songInfo.backgroundFile,
+                    false,
+                    songInfo.gameMode,
+                    musicPath .. data.folderPath
+                ))
+            end
+        end
+    end
+end
+
 function songSelect:loadSongButtonImages()
     if self.bannerChannel:peek() then
         local data = self.bannerChannel:pop()
@@ -188,6 +270,7 @@ function songSelect:update(dt)
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
+    self:loadSongs()
     self:loadSongButtonImages()
     self:handleInputs()
 end
@@ -351,6 +434,11 @@ function songSelect:leave()
     self.bannerThread:release()
     self.bannerInputChannel:clear()
     self.bannerChannel:clear()
+
+    self.songThread:wait()
+    self.songThread:release()
+    self.songInputChannel:clear()
+    self.songChannel:clear()
     songButtons = {}
     difficultyButtons = {}
     songList = {}
