@@ -64,11 +64,11 @@ function CHE:init()
     }
 
     maniaInputs = {
-    "lane14K",
-    "lane24K",
-    "lane34K",
-    "lane44K",
-}
+        "lane14K",
+        "lane24K",
+        "lane34K",
+        "lane44K",
+    }
 
 end
 

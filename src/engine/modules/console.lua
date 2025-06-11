@@ -11,13 +11,16 @@ console.height = 0
 -- calculate height with padding
 
 local function printToConsole(text, wasCommand, showTimestamp)
-    showTimestamp = showTimestamp ~= nil and showTimestamp or true 
+    if #console.history >= console.maxHistory then
+        table.remove(console.history, 1)
+    end
+    showTimestamp = showTimestamp ~= nil and showTimestamp or true
     if not wasCommand then
         table.insert(console.history, {text = text, timestamp = os.date("%Y-%m-%d %H:%M:%S", os.time()), wasCommand = false, showTimestamp = showTimestamp})
     else
         if showTimestamp then
             table.insert(console.history, {
-                text = string.format("[%.19s]: >> %s", os.date("%Y-%m-%d %H:%M:%S", os.time()), text),
+                text = text,
                 timestamp = os.date("%Y-%m-%d %H:%M:%S", os.time()),
                 wasCommand = true,
                 showTimestamp = showTimestamp
@@ -78,56 +81,62 @@ console.commands = {
             printToConsole("Console cleared.")
         end
     },
+    lua = {
+        name = "Lua",
+        description = "Runs a Lua command.",
+        usage = "lua <code>",
+        callback = function(args)
+            if #args == 0 then
+                printToConsole("Usage: lua <code>")
+                return
+            end
+            local code = table.concat(args, " ")
+            local func, err = load(code)
+            if not func then
+                printToConsole("Error: " .. err)
+                return
+            end
+            local success, result = pcall(func)
+            if not success then
+                printToConsole("Error: " .. result)
+            else
+                if tostring(result) ~= "nil" then
+                    printToConsole(tostring(result))
+                end
+            end
+        end
+    }
 }
 
--- the console runs lua code, so you can use it to run any lua code
 function console.runCommand(command)
     local args = command:split(" ")
     local name = args[1]
     local cmd = console.commands[name]
 
-    if not cmd then
-        local func, err = load(command)
-        if not func then
-            printToConsole("Error: " .. err)
-            return
-        end
-        local success, result = pcall(func)
-        if not success then
-            printToConsole("Error: " .. result)
+    if cmd then
+        table.remove(args, 1) -- remove the command name
+        if cmd.callback then
+            cmd.callback(args)
         else
-            --[[ printToConsole(result) ]]
-            if tostring(result) ~= "nil" then
-                printToConsole(tostring(result))
-            end
+            printToConsole("Command '" .. name .. "' has no callback function.", false, false)
         end
-        return
     else
-        local success, result = pcall(cmd.callback, {select(2, unpack(args))})
-        if not success then
-            printToConsole("Error: " .. result)
-        else
-            if tostring(result) ~= "nil" then
-                printToConsole(tostring(result))
-            end
-        end
+        printToConsole("Unknown command: " .. name, false, false)
     end
 end
 
 function console.draw()
+    love.graphics.setColor(0.25, 0.25, 0.25, 0.8)
+    love.graphics.rectangle("fill", 0, 0, console.width, #console.history * 20 + 20)
+    love.graphics.setFont(console.font)
     love.graphics.setColor(1, 1, 1)
     local y = 0
     for i = 1, #console.history do
         local entry = console.history[i]
-        --[[ if entry.wasCommand then
-            love.graphics.print(entry.text, 10, y)
-        else
-            love.graphics.print({{0.9, 0.9, 0.9}, "[", {0.7, 0.7, 0.7}, entry.timestamp, {0.9, 0.9, 0.9}, "]: ", {1, 1, 1}, entry.text}, 10, y)
-        end ]]
         if entry.showTimestamp then
             love.graphics.print({{0.9, 0.9, 0.9}, "[", {0.7, 0.7, 0.7}, entry.timestamp, {0.9, 0.9, 0.9}, "]: ", {1, 1, 1}, entry.text}, 10, y)
         else
-            love.graphics.print({{1, 1, 1}, entry.text}, 10, y)
+            love.graphics.print(entry.text, 10, y)
         end
         y = y + 20
         if y > love.graphics.getHeight() - 20 then
