@@ -17,11 +17,13 @@ function cursor:new()
 
     self.rotateSpeed = 15
     self.damping = 7
-    self.followSpeed = 60
+    self.followSpeed = 10
 
     self.visible = true
     self.scale = 0.5
     self.tgtScale = 0.5
+
+    self.mouseDownFloatSpeed = 5
 
     self.image = love.graphics.newImage("images/UI/cursor.png")
 
@@ -57,6 +59,9 @@ function cursor:update(dt)
             self.angularVelocity = 0
             self.angularAcceleration = 0
         end
+
+        self.mouseDownX = lerp(self.mouseDownX, self.x, dt * self.mouseDownFloatSpeed)
+        self.mouseDownY = lerp(self.mouseDownY, self.y, dt * self.mouseDownFloatSpeed)
     else
         local diff = (0 - self.angle)
 
