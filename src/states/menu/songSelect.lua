@@ -4,13 +4,12 @@ local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
 local difficultyButtons = {}
 local difficultyList = {}
-local songButtonWidth = 600
-local songButtonHeight = 75
+local songButtonWidth = 600 * 1.3
+local songButtonHeight = 75 * 1.3
 local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 1
 local buttonAngle = 5
-
 
 local songButtonX = 20
 
@@ -233,7 +232,7 @@ function songSelect:loadSongs()
             local songInfo = data.songInfo
             if songInfo then
                 table.insert(songButtons, menuSongButton(
-                   self,
+                    self,
                     songButtonWidth,songButtonHeight,songButtonX,(#songButtons+1)*(songButtonHeight+songButtonSpacing),
                     songInfo.title,
                     songInfo.artist,
