@@ -9,24 +9,22 @@ function maniaNote:new(startTime, holdLength, lane, parent)
 
     self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
 
-    self.visible = false
+    self.visible = true
 end
 
 function maniaNote:update(dt)
     self:updatePosition()
-
-    if not DOWNSCROLL_ENABLED then
-        self.visible = self.y < baseScreenRatio.y + self.size and self.y > 0 - self.size
-    else
-        self.visible = self.y > 0 - self.size and self.y < baseScreenRatio.y + self.size
-    end
 end
 
 function maniaNote:updatePosition()
+    self.y = self:getNotePosition(self.startTime, true)
+end
+
+function maniaNote:getNotePosition(time, moveWithScroll) -- moveWithScroll is unused until hold notes are implemented
     if not DOWNSCROLL_ENABLED then
-        self.y = self.parent.y - (MusicTime - self.startTime) * maniaScrollSpeed
+        return self.parent.y - (MusicTime - time) * maniaScrollSpeed
     else
-        self.y = self.parent.y + (MusicTime - self.startTime) * maniaScrollSpeed
+        return self.parent.y + (MusicTime - time) * maniaScrollSpeed
     end
 end
 

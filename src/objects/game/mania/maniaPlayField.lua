@@ -16,8 +16,14 @@ function maniaPlayField:new(chart)
                 })
             end
         end
-        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects))
+        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects, self))
     end
+end
+
+function maniaPlayField:getPositionFromTime(time, index)
+    index = index or -1
+
+    return time -- TODO: Implement SV's
 end
 
 function maniaPlayField:update(dt)
