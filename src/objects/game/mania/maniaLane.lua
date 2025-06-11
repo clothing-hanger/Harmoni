@@ -16,7 +16,7 @@ end
 function maniaLane:setUpHitObjects(hitObjects)
     for i, HitObject in ipairs(hitObjects) do
         if HitObject.type == "note" then
-            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane))
+            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, self))
         end
     end
 end

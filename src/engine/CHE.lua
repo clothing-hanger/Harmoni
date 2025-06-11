@@ -43,6 +43,9 @@ function CHE:init()
     maninaLaneGap = 110
     maniaScrollSpeed = 3
     maniaLaneYOffset = 100
+    if DOWNSCROLL_ENABLED then
+        maniaLaneYOffset = baseScreenRatio.y - 100
+    end
 
     defaultFont = love.graphics.newFont(12)
 

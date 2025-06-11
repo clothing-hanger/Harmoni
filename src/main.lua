@@ -1,6 +1,18 @@
 require("love.error")
 require("love.run")
-function love.load()
+local function table_find(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            return i
+        end
+    end
+    return nil
+end
+DOWNSCROLL_ENABLED = false
+function love.load(args)
+    if table_find(args, "--downscroll") then
+        DOWNSCROLL_ENABLED = true
+    end
     GPUInfo = {test = "HI"}
     love.graphics.setDefaultFilter("linear","linear")
     require("modules.extraFunctions")
