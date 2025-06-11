@@ -18,7 +18,7 @@ function maniaNote:update(dt)
 end
 
 function maniaNote:updatePosition()
-    self.y = (self.startTime - (MusicTime or 0))*maniaScrollSpeed
+    self.y = ((self.startTime - (MusicTime or 0))*maniaScrollSpeed)+maniaLaneYOffset
 end
 
 function maniaNote:hit()
