@@ -1,10 +1,11 @@
 local maniaNote = Class:extend("maniaNote")
 
-function maniaNote:new(startTime, holdLength, lane)
+function maniaNote:new(startTime, holdLength, lane, parent)
     self.size = maniaNoteSize
     self.startTime = startTime
     self.holdLength = holdLength
     self.lane = lane
+    self.parent = parent
 
     self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
 
@@ -14,11 +15,19 @@ end
 function maniaNote:update(dt)
     self:updatePosition()
 
-    self.visible = self.y < baseScreenRatio.y + self.size and self.y > 0 - self.size
+    if not DOWNSCROLL_ENABLED then
+        self.visible = self.y < baseScreenRatio.y + self.size and self.y > 0 - self.size
+    else
+        self.visible = self.y > 0 - self.size and self.y < baseScreenRatio.y + self.size
+    end
 end
 
 function maniaNote:updatePosition()
-    self.y = ((self.startTime - (MusicTime or 0))*maniaScrollSpeed)+maniaLaneYOffset
+    if not DOWNSCROLL_ENABLED then
+        self.y = self.parent.y - (MusicTime - self.startTime) * maniaScrollSpeed
+    else
+        self.y = self.parent.y + (MusicTime - self.startTime) * maniaScrollSpeed
+    end
 end
 
 function maniaNote:hit()
