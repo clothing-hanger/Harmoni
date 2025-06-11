@@ -39,9 +39,9 @@ function CHE:init()
 
     local screenMiddle = baseScreenRatio.x / 2         --TEMP SHIT 
     musicPath = "Music/"
-    maniaNoteSize = 85
+    maniaNoteSize = 95
     maninaLaneGap = 110
-    maniaScrollSpeed = 3
+    maniaScrollSpeed = 2.65
     maniaLaneYOffset = 100
     if DOWNSCROLL_ENABLED then
         maniaLaneYOffset = baseScreenRatio.y - 100
