@@ -39,6 +39,7 @@ function love.mousepressed(x, y, b)
 end
 
 function love.mousemoved(x, y, dx, dy)
+    cursor.dx, cursor.dy = toCanvasCoords(dx, dy)
     CHE:mousemoved(x, y, dx, dy)
 end
 

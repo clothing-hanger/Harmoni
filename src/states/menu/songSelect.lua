@@ -8,7 +8,7 @@ local songButtonWidth = 600 * 1.3
 local songButtonHeight = 75 * 1.3
 local songButtonSpacing = 15
 local selectedSong = 1
-local hoveredSong = 1
+local hoveredSong = 0
 local buttonAngle = 5
 
 local songButtonX = 20
@@ -273,6 +273,15 @@ function songSelect:update(dt)
     self:loadSongs()
     self:loadSongButtonImages()
     self:handleInputs()
+    self.ignoreInterpolation = false
+end
+
+function songSelect:mousemoved()
+    local mx, my, dx, dy = cursor:getPosition()
+    if cursor:isMouseDown() then
+        hoveredSong = hoveredSong + dy
+        self.ignoreInterpolation = true
+    end
 end
 
 function songSelect:handleInputs()
@@ -285,7 +294,7 @@ function songSelect:handleInputs()
 end
 
 function songSelect:scroll(s)
-    hoveredSong = hoveredSong + s
+    hoveredSong = hoveredSong + (songButtonHeight + songButtonSpacing) * s
 end
 
 function songSelect:updateSongButtons(dt)
@@ -295,14 +304,18 @@ function songSelect:updateSongButtons(dt)
     local baseY = 0
 
     for i, SongButton in ipairs(songButtons) do
-        local targetY = (i + hoveredSong) * (songButtonHeight + songButtonSpacing)
-        SongButton.y = SongButton.y or targetY
-        SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
+        if self.ignoreInterpolation then
+            SongButton.y = targetY
+        else
+            SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        end
         SongButton.x = baseX + slope * (SongButton.y - baseY)
 
         SongButton:update(dt)
     end
 end
+
 
 function songSelect:checkForSongButtonClicks()
     local buttonInfo = false

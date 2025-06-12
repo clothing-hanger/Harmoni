@@ -91,6 +91,8 @@ end
 function CHE:mousepressed(x, y, b)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:mousepressed(Mouse.x, Mouse.y, b)
+
+    State.mousepressed(Mouse.x, Mouse.y, b)
 end
 
 function CHE:mousemoved(x, y, dx, dy)
@@ -101,6 +103,7 @@ end
 function CHE:mousereleased(x, y, b)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:mousereleased(Mouse.x, Mouse.y, b)
+    State.mousereleased(Mouse.x, Mouse.y, b)
 end
 
 function CHE:draw(dt)

@@ -88,11 +88,12 @@ function cursor:update(dt)
         end
     end
 
+    local weightDelta = (self.x - self.prevX) * 0.08
+    self.prevX, self.prevY = self.x, self.y
     if self.mouseDownX then
         return
     end
 
-    local weightDelta = (self.x - self.prevX) * 0.08
     self.weightAngle = self.weightAngle + weightDelta
 
     if self.weightAngle > 360 then
@@ -120,10 +121,31 @@ function cursor:update(dt)
             self.weightAngle = self.weightAngle + 360
         end
     end
-
-    self.prevX, self.prevY = self.x, self.y
 end
 
+function cursor:getPosition()
+    local cx, cy = toCanvasCoords(self.x, self.y)
+    return cx, cy, (self.dx or 0), (self.dy or 0)
+end
+
+function cursor:isMouseDown()
+    return self.mouseDownX ~= nil
+end
+
+function cursor:getYDirection()
+    if not self:isMouseDown() then
+        return 0
+    end
+
+    local dy = self.y - self.mouseDownY
+    if dy > 0 then
+        return 1
+    elseif dy < 0 then
+        return -1
+    else
+        return 0
+    end
+end
 
 function cursor:draw()
     if not self.visible then return end
