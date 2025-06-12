@@ -4,7 +4,6 @@
     maniaNote = require("objects.game.mania.maniaNote")
     maniaPlayField = require("objects.game.mania.maniaPlayField")
 
-
     --menu
     menuSongButton = require("objects.menu.songButton")
 

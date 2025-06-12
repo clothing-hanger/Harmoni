@@ -16,7 +16,7 @@ function cursor:new()
     self.angularAcceleration = 0
 
     self.rotateSpeed = 15
-    self.damping = 7
+    self.damping = 6
     self.followSpeed = 10
 
     self.visible = true

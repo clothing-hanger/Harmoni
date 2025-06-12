@@ -141,6 +141,7 @@ while true do
     end
 end
 ]]
+
     self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
     self.bannerChannel = love.thread.getChannel("thread.bannerLoader.out")
 
