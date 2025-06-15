@@ -239,7 +239,7 @@ function songSelect:loadSongs()
                     songInfo.artist,
                     songInfo.charter,
                     songInfo.bpm,
-                    musicPath .. data.folderPath .. songInfo.backgroundFile,
+                    musicPath .. data.folderPath .. (songInfo.backgroundFile or ""),
                     false,
                     songInfo.gameMode,
                     musicPath .. data.folderPath

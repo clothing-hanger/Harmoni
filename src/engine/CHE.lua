@@ -40,12 +40,12 @@ function CHE:init()
 
     local screenMiddle = baseScreenRatio.x / 2         --TEMP SHIT 
     musicPath = "Music/"
-    maniaNoteSize = 95
+    maniaNoteSize = 180
     maninaLaneGap = 110
-    maniaScrollSpeed = 2.75
-    maniaLaneYOffset = 100
+    maniaScrollSpeed = 2.85
+    maniaLaneYOffset = 110
     if DOWNSCROLL_ENABLED then
-        maniaLaneYOffset = baseScreenRatio.y - 100
+        maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
     end
 
     defaultFont = love.graphics.newFont(12)
@@ -69,6 +69,9 @@ function CHE:init()
         "lane34K",
         "lane44K",
     }
+
+
+    Skin = SkinHandler:loadSkin("Default Arrow")
 
 end
 

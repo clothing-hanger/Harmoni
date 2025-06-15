@@ -8,7 +8,7 @@ local function table_find(t, value)
     end
     return nil
 end
-DOWNSCROLL_ENABLED = true
+DOWNSCROLL_ENABLED = false
 function love.load(args)
     if table_find(args, "--downscroll") then
         DOWNSCROLL_ENABLED = true
@@ -18,7 +18,11 @@ function love.load(args)
     require("modules.extraFunctions")
     love.filesystem.createDirectory("Music")
     require("TEMP")
+
+    SkinHandler = require("modules.skinHandler")
+
     CHE = require("engine.CHE")
+
     CHE:init()
 
     require("modules.gamemodes")
