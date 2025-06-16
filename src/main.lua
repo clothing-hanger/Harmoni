@@ -1,6 +1,18 @@
 require("love.error")
 require("love.run")
-function love.load()
+local function table_find(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            return i
+        end
+    end
+    return nil
+end
+DOWNSCROLL_ENABLED = true
+function love.load(args)
+    if table_find(args, "--downscroll") then
+        DOWNSCROLL_ENABLED = true
+    end
     GPUInfo = {test = "HI"}
     love.graphics.setDefaultFilter("linear","linear")
     require("modules.extraFunctions")
@@ -26,8 +38,21 @@ function love.mousepressed(x, y, b)
     CHE:mousepressed(x, y, b)
 end
 
+function love.mousemoved(x, y, dx, dy)
+    cursor.dx, cursor.dy = toCanvasCoords(dx, dy)
+    CHE:mousemoved(x, y, dx, dy)
+end
+
 function love.mousereleased(x, y, b)
     CHE:mousereleased(x, y, b)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    CHE:keypressed(key, scancode, isrepeat)
+end
+
+function love.textinput(text)
+    CHE:textinput(text)
 end
 
 function love.wheelmoved(x,y)
@@ -39,7 +64,7 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
     CHE:draw(dt)
 
     love.graphics.setFont(baseFont)
-    local UPS, DPS = love.timer.getFPS()
+    local DPS, UPS = love.timer.getFPS()
     love.graphics.printf(string.format("UPS: %d, DPS: %d", UPS, DPS), 0, 0, love.graphics.getWidth(), "right")
 end
 

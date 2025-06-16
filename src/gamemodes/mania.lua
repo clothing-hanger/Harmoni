@@ -1,32 +1,24 @@
 local mania = Class:extend("mania")
 
-local allInputs = {
-    "lane14K",
-    "lane24K",
-    "lane34K",
-    "lane44K",
-}
-
 function mania:new(chart)
+    self.chartPath = getDirectory(chart)
+    print("with file", chart, "without file", self.chartPath)
     self.chart = mania:setUpChart(chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart)}
-    
+    self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile,"stream")
 
-    self.judgements = require("Modules.maniaJudgements")
+    mania.judgements = require("Modules.maniaJudgements")
+    self.judgements = mania.judgements
 end
 
 function mania:setUpChart(chart)
     local chart = ChartParse.harmc(chart)
     local maniaChart = {}
-    maniaChart.meta = {}
+    maniaChart.meta = chart.meta
     maniaChart.hitObjects = {}
 
-    for i, Data in pairs(chart.meta) do
-        maniaChart.meta[i] = Data
-       -- print(i, Data)
-    end
     for i, BpmChange in ipairs(chart.bpm) do
         
        -- print(i, BpmChange.startTime, BpmChange.bpm)
@@ -42,11 +34,11 @@ function mania:setUpChart(chart)
             length = HitObject.length,
             lane = HitObject.lane
         })
-        
     end
     return maniaChart
 end
 
+--[[
 function mania:input()
     for p,PlayField in ipairs(self.playField) do
         for l,Lane in ipairs(PlayField.lanes) do
@@ -65,19 +57,23 @@ function mania:input()
         end
     end
 end
+--]]
 
 function mania:update(dt)
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:update(dt)
     end
-
-    self:input()
+    if MusicTime >=0 and not self.song:isPlaying() then self.song:play() end
 end
 
 function mania:draw()
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:draw()
     end
+
+    --TEMP
+    love.graphics.setFont(songButtonFontLarge)
+    love.graphics.printf(mania.currentTEMPJudgement or "i dont fucking know yet", baseScreenRatio.x/2-1000, baseScreenRatio.y/2, 1000, "center")
 end
 
 return mania

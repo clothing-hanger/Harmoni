@@ -4,13 +4,12 @@ local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
 local difficultyButtons = {}
 local difficultyList = {}
-local songButtonWidth = 600
-local songButtonHeight = 75
+local songButtonWidth = 600 * 1.3
+local songButtonHeight = 75 * 1.3
 local songButtonSpacing = 15
 local selectedSong = 1
-local hoveredSong = 1
+local hoveredSong = 0
 local buttonAngle = 5
-
 
 local songButtonX = 20
 
@@ -21,6 +20,67 @@ function songSelect:enter()
         light = {0, 0, 0, 0},
         dark = {0, 0, 0, 0.8}
     }
+
+    self.songThread = love.thread.newThread [[
+require("love.timer")
+require("love.filesystem")
+
+local chartParse = require("modules.chartParse")
+
+local channel = love.thread.getChannel("thread.songLoader")
+local outChannel = love.thread.getChannel("thread.songLoader.out")
+
+-- we're just loading metadata here, so we use chartParse.harmcMeta
+local function loadSongMetadata(path)
+    local songInfo = chartParse.harmcMeta(path)
+    return songInfo
+end
+
+local path, songInfo, folderPath, ok, err
+local loaded = false
+while true do
+    loaded = false
+    path = channel:demand()
+    if not path then goto continue end
+
+    if path == "exit" then
+        break
+    end
+
+    if not love.filesystem.getInfo(path, "file") then 
+        goto continue 
+    else 
+        --songInfo = loadSongMetadata(path) 
+        ok, err = pcall(function() songInfo = loadSongMetadata(path) end)
+        if not ok then
+            print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
+            goto continue
+        end
+    end
+
+    -- get folder path
+    -- e.g.  Music/33409 - 179/143301.qua.harmc/ -> Music/33409 - 179/
+    if string.sub(path, -1) == "/" then
+        path = string.sub(path, 1, -2)  -- remove trailing slash if it exists
+    end
+    -- if path starts with "Music/" then remove it
+    path = string.gsub(path, "^Music/", "")  -- remove "Music/" from the start of the path
+    folderPath = (path:match("(.+)/[^/]+$") or "") .. "/"  -- get everything before the last slash, or return empty string if no slashes found
+
+    outChannel:push({
+        path = path,
+        folderPath = folderPath,
+        songInfo = songInfo
+    })
+    
+    loaded = true
+
+    ::continue::
+    --if not loaded then
+        love.timer.sleep(0.03)
+    --end
+end
+]]
 
     self.bannerThread = love.thread.newThread [[
 require("love.timer")
@@ -81,39 +141,38 @@ while true do
     end
 end
 ]]
+
     self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
     self.bannerChannel = love.thread.getChannel("thread.bannerLoader.out")
 
+    self.songInputChannel = love.thread.getChannel("thread.songLoader")
+    self.songChannel = love.thread.getChannel("thread.songLoader.out")
+
     self.bannerThread:start()
+    self.songThread:start()
 
     self:setupSongList()
 end
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
-    for i = 1,#songList do
-        local songInfo = false
-        if not songList[i] then table.remove(songList, i); goto continue end
-        local difficultyList = SongListManager.getDifficultyList(musicPath .. songList[i])
-        if not difficultyList[1] then table.remove(songList, i); goto continue end
-        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. difficultyList[1], "file") then table.remove(songList, i); goto continue end
-        songInfo = ChartParse.harmc(musicPath .. songList[i] .. "/" .. difficultyList[1] .. "/")
-        if not songInfo.meta.backgroundFile then songInfo.meta.backgroundFile = "???" end
 
-        if songInfo then
-            table.insert(songButtons, menuSongButton(
-                self,
-                songButtonWidth,songButtonHeight,songButtonX,i*(songButtonHeight+songButtonSpacing),
-                songInfo.meta.title,
-                songInfo.meta.artist,
-                songInfo.meta.charter,
-                songInfo.meta.bpm,
-                musicPath .. songList[i] .. "/" .. songInfo.meta.backgroundFile,
-                false,
-                songInfo.meta.gameMode,
-                musicPath .. songList[i] .. "/"
-            ))
+    for i = 1, #songList do
+        if not songList[i] then
+            table.remove(songList, i)
+            goto continue
         end
+        local diffList = SongListManager.getDifficultyList(musicPath .. songList[i])
+        if not diffList[1] then
+            if not diffList[1] then table.remove(songList, i) end
+            goto continue
+        end
+        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. diffList[1], "file") then
+            table.remove(songList, i)
+            goto continue
+        end
+        self.songInputChannel:push(musicPath .. songList[i] .. "/" .. diffList[1] .. "/")
+
         ::continue::
     end
 end
@@ -131,7 +190,7 @@ function songSelect:setupDifficultyList(path,color)
 
     for i = 1, #difficultyList do
         local songInfo = false
-        songInfo = ChartParse.harmc(path .. "/" .. difficultyList[i] .. "/")
+        songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/")
 
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
@@ -144,14 +203,14 @@ function songSelect:setupDifficultyList(path,color)
                     songButtonHeight,
                     x,
                     y,
-                    songInfo.meta.difficultyName,
+                    songInfo.difficultyName,
                     nil,
-                    songInfo.meta.charter,
+                    songInfo.charter,
                     nil,
                     nil,
                     true,
-                    songInfo.meta.gameMode,
-                    path .. "/" .. difficultyList[i] .. "/",
+                    songInfo.gameMode,
+                    path .. "/" .. difficultyList[i],
                     7,
                     color
                 )
@@ -166,12 +225,36 @@ function songSelect:setupDifficultyList(path,color)
     end
 end
 
+function songSelect:loadSongs()
+    if self.songChannel:peek() then
+        local data = self.songChannel:pop()
+        if data then
+            -- add to songButtons
+            local songInfo = data.songInfo
+            if songInfo then
+                table.insert(songButtons, menuSongButton(
+                    self,
+                    songButtonWidth,songButtonHeight,songButtonX,(#songButtons+1)*(songButtonHeight+songButtonSpacing),
+                    songInfo.title,
+                    songInfo.artist,
+                    songInfo.charter,
+                    songInfo.bpm,
+                    musicPath .. data.folderPath .. (songInfo.backgroundFile or ""),
+                    false,
+                    songInfo.gameMode,
+                    musicPath .. data.folderPath
+                ))
+            end
+        end
+    end
+end
+
 function songSelect:loadSongButtonImages()
     if self.bannerChannel:peek() then
         local data = self.bannerChannel:pop()
         if data then
             for i, SongButton in ipairs(songButtons) do
-                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then 
+                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
                     SongButton.image = love.graphics.newImage(data.image)
                     SongButton.imageLoaded = true
                     SongButton.color = data.averageColor
@@ -187,8 +270,18 @@ function songSelect:update(dt)
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
+    self:loadSongs()
     self:loadSongButtonImages()
     self:handleInputs()
+    self.ignoreInterpolation = false
+end
+
+function songSelect:mousemoved()
+    local mx, my, dx, dy = cursor:getPosition()
+    if cursor:isMouseDown() then
+        hoveredSong = hoveredSong + dy
+        self.ignoreInterpolation = true
+    end
 end
 
 function songSelect:handleInputs()
@@ -201,10 +294,8 @@ function songSelect:handleInputs()
 end
 
 function songSelect:scroll(s)
-    hoveredSong = hoveredSong + s
+    hoveredSong = hoveredSong + (songButtonHeight + songButtonSpacing) * s
 end
-
-
 
 function songSelect:updateSongButtons(dt)
     local speed = 10
@@ -213,14 +304,18 @@ function songSelect:updateSongButtons(dt)
     local baseY = 0
 
     for i, SongButton in ipairs(songButtons) do
-        local targetY = (i + hoveredSong) * (songButtonHeight + songButtonSpacing)
-        SongButton.y = SongButton.y or targetY
-        SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
+        if self.ignoreInterpolation then
+            SongButton.y = targetY
+        else
+            SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
+        end
         SongButton.x = baseX + slope * (SongButton.y - baseY)
 
         SongButton:update(dt)
     end
 end
+
 
 function songSelect:checkForSongButtonClicks()
     local buttonInfo = false
@@ -258,6 +353,9 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                     self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
                 end
             end
+
+            -- why go through the rest? we already have a match so just break
+            break
         end
     end
     if buttonInfo then
@@ -352,6 +450,11 @@ function songSelect:leave()
     self.bannerThread:release()
     self.bannerInputChannel:clear()
     self.bannerChannel:clear()
+
+    self.songThread:wait()
+    self.songThread:release()
+    self.songInputChannel:clear()
+    self.songChannel:clear()
     songButtons = {}
     difficultyButtons = {}
     songList = {}

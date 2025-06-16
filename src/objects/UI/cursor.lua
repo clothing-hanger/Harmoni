@@ -15,17 +15,19 @@ function cursor:new()
     self.angularVelocity = 0
     self.angularAcceleration = 0
 
-    self.rotateSpeed = 900
-    self.damping = 30
+    self.rotateSpeed = 15
+    self.damping = 6
     self.followSpeed = 10
 
     self.visible = true
     self.scale = 0.5
     self.tgtScale = 0.5
 
+    self.mouseDownFloatSpeed = 5
+
     self.image = love.graphics.newImage("images/UI/cursor.png")
 
-    self.weight = 5
+    self.weight = 100
     self.weightAngle = 0
 
     self.debug = true
@@ -45,10 +47,7 @@ function cursor:update(dt)
 
         if self.rotating then
             local angle = math.deg(math.atan2(-dx, dy)) + 24.3
-
             local diff = (angle - self.angle + 180) % 360 - 180
-
-
             self.targetAngle = self.angle + diff
 
             local t = math.min(dt * self.followSpeed, 1)
@@ -60,6 +59,9 @@ function cursor:update(dt)
             self.angularVelocity = 0
             self.angularAcceleration = 0
         end
+
+        self.mouseDownX = lerp(self.mouseDownX, self.x, dt * self.mouseDownFloatSpeed)
+        self.mouseDownY = lerp(self.mouseDownY, self.y, dt * self.mouseDownFloatSpeed)
     else
         local diff = (0 - self.angle)
 
@@ -86,11 +88,12 @@ function cursor:update(dt)
         end
     end
 
+    local weightDelta = (self.x - self.prevX) * 0.08
+    self.prevX, self.prevY = self.x, self.y
     if self.mouseDownX then
         return
     end
 
-    local weightDelta = (self.x - self.prevX) * 0.08
     self.weightAngle = self.weightAngle + weightDelta
 
     if self.weightAngle > 360 then
@@ -118,10 +121,31 @@ function cursor:update(dt)
             self.weightAngle = self.weightAngle + 360
         end
     end
-
-    self.prevX, self.prevY = self.x, self.y
 end
 
+function cursor:getPosition()
+    local cx, cy = toCanvasCoords(self.x, self.y)
+    return cx, cy, (self.dx or 0), (self.dy or 0)
+end
+
+function cursor:isMouseDown()
+    return self.mouseDownX ~= nil
+end
+
+function cursor:getYDirection()
+    if not self:isMouseDown() then
+        return 0
+    end
+
+    local dy = self.y - self.mouseDownY
+    if dy > 0 then
+        return 1
+    elseif dy < 0 then
+        return -1
+    else
+        return 0
+    end
+end
 
 function cursor:draw()
     if not self.visible then return end

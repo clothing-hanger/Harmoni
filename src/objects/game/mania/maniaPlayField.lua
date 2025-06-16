@@ -5,6 +5,7 @@ function maniaPlayField:new(chart)
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
     for i = 1, self.chart.meta.laneCount do
+        print(self.chart.meta.laneCount)
         local hitObjects = {}
         for j, HitObject in ipairs(self.chart.hitObjects) do
             if i == HitObject.lane then
@@ -15,10 +16,14 @@ function maniaPlayField:new(chart)
                 })
             end
         end
-        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects))
+        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects, self))
     end
+end
 
-    
+function maniaPlayField:getPositionFromTime(time, index)
+    index = index or -1
+
+    return time -- TODO: Implement SV's
 end
 
 function maniaPlayField:update(dt)

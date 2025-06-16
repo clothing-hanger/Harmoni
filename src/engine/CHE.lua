@@ -28,6 +28,7 @@ function CHE:init()
     Class = require("engine.class.class")
     State = require("engine.state.State")
     States = require("modules.states")
+    Console = require("engine.modules.console")
     require("modules.objects")
 
     cursor = cursor()
@@ -39,10 +40,13 @@ function CHE:init()
 
     local screenMiddle = baseScreenRatio.x / 2         --TEMP SHIT 
     musicPath = "Music/"
-    maniaNoteSize = 100
+    maniaNoteSize = 95
     maninaLaneGap = 110
-    maniaScrollSpeed = 2
+    maniaScrollSpeed = 2.75
     maniaLaneYOffset = 100
+    if DOWNSCROLL_ENABLED then
+        maniaLaneYOffset = baseScreenRatio.y - 100
+    end
 
     defaultFont = love.graphics.newFont(12)
 
@@ -59,6 +63,13 @@ function CHE:init()
         screenMiddle + (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
     }
 
+    maniaInputs = {
+        "lane14K",
+        "lane24K",
+        "lane34K",
+        "lane44K",
+    }
+
 end
 
 function CHE:update(dt)
@@ -69,14 +80,30 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
 end
 
+function CHE:keypressed(k)
+    Console.keypressed(k)
+end
+
+function CHE:textinput(t)
+    Console.textinput(t)
+end
+
 function CHE:mousepressed(x, y, b)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:mousepressed(Mouse.x, Mouse.y, b)
+
+    State.mousepressed(Mouse.x, Mouse.y, b)
+end
+
+function CHE:mousemoved(x, y, dx, dy)
+    Mouse.x, Mouse.y = love.mouse.getPosition()
+    State.mousemoved(Mouse.x, Mouse.y, dx, dy)
 end
 
 function CHE:mousereleased(x, y, b)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:mousereleased(Mouse.x, Mouse.y, b)
+    State.mousereleased(Mouse.x, Mouse.y, b)
 end
 
 function CHE:draw(dt)
@@ -96,7 +123,14 @@ function CHE:draw(dt)
     local ratio = math.min(love.graphics.getWidth() / baseScreenRatio.x, love.graphics.getHeight() / baseScreenRatio.y)
     love.graphics.draw(CHECanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, ratio, ratio, baseScreenRatio.x / 2, baseScreenRatio.y / 2)
 
-  --  love.graphics.circle("fill", Mouse.x, Mouse.y, 5
+    -- Draw the consolke
+    if Console.isVisible then
+        love.graphics.setColor(0, 0, 0, 0.5) -- Semi-transparent background
+        love.graphics.rectangle("fill", 0, 0, Console.width, Console.height)
+        Console.draw()
+    end
+
+    -- Draw the cursor
     cursor:draw()
 end
 
