@@ -1,8 +1,0 @@
-{
-    "Lua.diagnostics.disable": [
-        "undefined-field",
-        "deprecated",
-        "param-type-mismatch"
-    ],
-    "pixelbyte.love2d.srcDir": "./src/"
-}

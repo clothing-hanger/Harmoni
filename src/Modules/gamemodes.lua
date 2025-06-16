@@ -1,1 +1,0 @@
-mania = require("gamemodes.mania")
