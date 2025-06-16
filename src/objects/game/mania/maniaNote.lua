@@ -22,7 +22,7 @@ function maniaNote:new(startTime, holdLength, lane, parent)
     self.visible = true
 end
 
-function maniaNote:getLaneString()
+function maniaNote:getLaneString()       --its crazy how bad this already is
     local string
 
     if tonumber(self.laneCount) == 4 then

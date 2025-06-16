@@ -11,8 +11,14 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
     self.drawableNotes = {}
 
     self:setUpHitObjects(self.hitObjects)
+    self:setUpReceptor()
     print("hi",maniaLanePositions[self.maniaLane])
     self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
+
+end
+
+function maniaLane:setUpReceptor()  -- does this really need to be a whole function lol
+    self.receptor = maniaReceptor:new(self.lane, self.inputBind, self)
 end
 
 function maniaLane:setUpHitObjects(hitObjects)
