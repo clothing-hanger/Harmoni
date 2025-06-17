@@ -11,14 +11,16 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
     self.drawableNotes = {}
 
     self:setUpHitObjects(self.hitObjects)
-    self:setUpReceptor()
     print("hi",maniaLanePositions[self.maniaLane])
     self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
+        self:setUpReceptor()
+
 
 end
 
 function maniaLane:setUpReceptor()  -- does this really need to be a whole function lol
-    self.receptor = maniaReceptor:new(self.lane, self.inputBind, self)
+    self.receptor = maniaReceptor(self.maniaLane, self.inputBind, self.x, self.y, self)
+
 end
 
 function maniaLane:setUpHitObjects(hitObjects)
@@ -37,6 +39,7 @@ function maniaLane:update(dt)
     for _, note in ipairs(self.drawableNotes) do
         note:update(dt)
     end
+    self.receptor:update(dt)
     self:input()
     self:checkForMisses()
 end
@@ -103,7 +106,11 @@ function maniaLane:checkForMisses()
 end
 
 function maniaLane:draw()
-    love.graphics.circle("line", self.x, self.y, maniaNoteSize)
+    --love.graphics.circle("line", self.x, self.y, maniaNoteSize)
+       -- for _, receptor in ipairs(self.receptor) do
+
+            self.receptor:draw()
+       -- end
     for i,Note in ipairs(self.drawableNotes) do
         Note:draw()
     end
