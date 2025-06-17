@@ -13,6 +13,7 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
     self.lane = lane
     self.inputBind = input
     self.laneCount = self.parent.parent.chart.meta.laneCount  -- horrid, awful, disgusting, terrible, gross, icky, bad, i ran out of synonyms but i hate this
+                                                                 -- theres really nothing wrong with this i just dont like how it looks
     self.laneString = self:getLaneString()
 
 
