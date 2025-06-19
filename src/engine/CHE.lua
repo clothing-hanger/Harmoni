@@ -28,6 +28,7 @@ function CHE:init()
     Class = require("engine.class.class")
     State = require("engine.state.State")
     States = require("modules.states")
+    Timer = require("engine.lib.Timer")
     Console = require("engine.modules.console")
     require("modules.objects")
 

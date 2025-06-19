@@ -152,6 +152,11 @@ end
     self.songThread:start()
 
     self:setupSongList()
+
+
+
+
+
 end
 
 function songSelect:setupSongList()
@@ -386,6 +391,7 @@ function songSelect:draw()
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
     songSelect:drawSongInfo()
     songSelect:drawSongInfo()
+
 end
 
 

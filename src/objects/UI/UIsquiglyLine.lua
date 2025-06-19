@@ -1,18 +1,19 @@
 local UISquiglyLine = Class:extend("UISquiglyLine")
 
-function UISquiglyLine:new(x1,y1,x2,y2,frequency,amplitude,segments,speed)
-    self.wave = {}
+function UISquiglyLine:new(x1,y1,x2,y2,frequency,amplitude,segments,speed,lineWidth)    -- i will not lie GPT saved me with this one this shit did NOT work before i asked GPT 
+    self.wave = {}                                                            --   usually it would just break things lol but no with this it actually made it work, it was just a straight line when i made it 😭
     self.x1, self.y1 = x1,y1
     self.x2, self.y2 = x2,y2
     self.frequency = frequency
     self.amplitude = amplitude
-    self.speed = speed or false
+    self.speed = speed or 1
     self.time = 0
     self.segments = segments
+    self.lineWidth = lineWidth or 1
 end
 
 function UISquiglyLine:update(dt)
-    self.time = self.time*dt
+    self.time = self.time + dt
 
 end
 
@@ -34,8 +35,7 @@ function UISquiglyLine:draw()
         local px = self.x1 + dx * t
         local py = self.y1 + dy * t
 
-        -- Apply sine offset perpendicular to the main line
-        local offset = math.sin(t * self.frequency * 2 * math.pi + self.time * self.speed) * self.amplitude
+        local offset = math.sin(t * self.frequency * 2 * math.pi - self.time * self.speed) * self.amplitude
         local ox = perp_x * offset
         local oy = perp_y * offset
 
@@ -44,6 +44,7 @@ function UISquiglyLine:draw()
     end
 
     love.graphics.setColor(1, 1, 1)
+    love.graphics.setLineWidth(self.lineWidth)
     love.graphics.line(points)
 
     love.graphics.setColor(1, 0, 0)

@@ -140,3 +140,7 @@ end
 function rgb(colors)  -- stolen from old harmoni cuz i hate the guy who made old harmoni so i steal from them 
     return {colors[1]/255, colors[2]/255, colors[3]/255}
 end
+
+function isEven(number)    -- borrring
+    return number % 2 == 0
+end

@@ -11,6 +11,15 @@ function mania:new(chart)
 
     mania.judgements = require("Modules.maniaJudgements")
     self.judgements = mania.judgements
+
+    self:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- i am never changing this name
+end
+
+function mania:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- do i even need to pass self into this?? 
+    
+    local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
+    self.background = sharedBackground(backgroundPath, 0, 1)
+
 end
 
 function mania:setUpChart(chart)

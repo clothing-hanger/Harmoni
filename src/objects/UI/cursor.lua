@@ -163,15 +163,15 @@ function cursor:draw()
     if self.debug then
         local lastColor = {love.graphics.getColor()}
         love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.circle("line", self.x, self.y, 5)
-        love.graphics.print(string.format("Angle: %.2f, WeightAngle: %.2f", self.angle, self.weightAngle), self.x + 10, self.y - 10)
-        love.graphics.print(string.format("Scale: %.2f", self.scale), self.x + 10, self.y + 10)
+     --   love.graphics.circle("line", self.x, self.y, 5)
+     --   love.graphics.print(string.format("Angle: %.2f, WeightAngle: %.2f", self.angle, self.weightAngle), self.x + 10, self.y - 10)
+      --  love.graphics.print(string.format("Scale: %.2f", self.scale), self.x + 10, self.y + 10)
 
         if self.mouseDownX then
-            love.graphics.print(string.format("Mouse Down: (%.2f, %.2f)", self.mouseDownX, self.mouseDownY), self.x + 10, self.y + 30)
-            love.graphics.setColor(0, 1, 0, 1)
-            love.graphics.line(self.mouseDownX, self.mouseDownY, self.x, self.y)
-            love.graphics.circle("line", self.mouseDownX, self.mouseDownY, 5)
+     --       love.graphics.print(string.format("Mouse Down: (%.2f, %.2f)", self.mouseDownX, self.mouseDownY), self.x + 10, self.y + 30)
+      --      love.graphics.setColor(0, 1, 0, 1)
+      --      love.graphics.line(self.mouseDownX, self.mouseDownY, self.x, self.y)
+     --       love.graphics.circle("line", self.mouseDownX, self.mouseDownY, 5)
         end
         love.graphics.setColor(lastColor)
     end
