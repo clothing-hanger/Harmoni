@@ -10,6 +10,9 @@ local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 0
 local buttonAngle = 5
+local BGAlpha = {1}
+local currentDisplayedBG
+local previousBG
 
 local songButtonX = 20
 
@@ -156,8 +159,18 @@ end
 
 
 
-
+    self:setUpThoseLinesThatIHate(8)
 end
+
+function songSelect:setUpThoseLinesThatIHate(numberOfLines)
+    self.squiglyLines = {}
+    for i = 1,numberOfLines do
+        local y = (baseScreenRatio.y/numberOfLines)*(i-1)
+        local x1,x2 = 0, baseScreenRatio.x
+        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
+    end
+end
+
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
@@ -272,6 +285,10 @@ end
 
 
 function songSelect:update(dt)
+    for i, squiglyLine in ipairs(self.squiglyLines) do
+            squiglyLine:update(dt)
+    end
+    self:updateBGImage()
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
@@ -321,6 +338,28 @@ function songSelect:updateSongButtons(dt)
     end
 end
 
+function songSelect:updateBGImage()
+
+    
+    local function fadeBG()
+        BGAlpha = {0}
+        if BGFade then Timer.cancel(BGFade) end 
+        local BGFade = Timer.tween(0.4, BGAlpha, {1})
+    end
+
+    for i, SongButton in ipairs(songButtons) do
+        if i == selectedSong then
+            if SongButton.imageLoaded then
+                if currentDisplayedBG ~= SongButton.image then -- its not the right image so we change it
+                    previousBG = currentDisplayedBG
+                    currentDisplayedBG = SongButton.image
+                    fadeBG()
+                end
+            end
+        end
+    end
+
+end
 
 function songSelect:checkForSongButtonClicks()
     local buttonInfo = false
@@ -370,17 +409,12 @@ end
 
 function songSelect:draw()
     -- draw background from selected song button
-    for i, SongButton in ipairs(songButtons) do
-        if i == selectedSong then
-            local image = false
-            local imageWidth, imageHeight
-            if SongButton.imageLoaded then image = SongButton.image end
-            if image then
-                imageWidth = baseScreenRatio.x/image:getWidth()
-                imageHeight = baseScreenRatio.y/image:getHeight()
-                love.graphics.draw(image,0,0, nil, imageWidth, imageHeight)     
-            end
-        end
+    if previousBG then love.graphics.draw(previousBG,0,0, nil, baseScreenRatio.x/previousBG:getWidth(), baseScreenRatio.y/previousBG:getHeight()) end 
+    love.graphics.setColor(1,1,1,BGAlpha[1])
+    if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
+    love.graphics.setColor(1,1,1,0.1)
+    for i, squiglyLine in ipairs(self.squiglyLines) do
+            squiglyLine:draw(dt)
     end
     self:drawGradients()
 

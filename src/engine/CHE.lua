@@ -79,6 +79,7 @@ end
 function CHE:update(dt)
     State.update(dt)
     Input:update()
+    Timer.update(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:update(dt)
     love.mouse.setVisible(false)
