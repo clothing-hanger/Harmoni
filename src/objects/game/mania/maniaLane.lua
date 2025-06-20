@@ -12,10 +12,10 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
 
     self:setUpHitObjects(self.hitObjects)
     print("hi",maniaLanePositions[self.maniaLane])
+
     self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
-        self:setUpReceptor()
 
-
+    self:setUpReceptor()
 end
 
 function maniaLane:setUpReceptor()  -- does this really need to be a whole function lol
@@ -68,22 +68,6 @@ function maniaLane:input()
     end
 end
 
-function maniaLane:checkForMisses() -- imagine 
--- get the miss timing
-    local timing
-    for i,Judgement in ipairs(mania.judgements) do
-        print(Judgement.name)
-        if Judgement.name == "Miss" then timing = Judgement.timing end
-    end
-
-    for i,Note in ipairs(self.drawableNotes) do
-        if MusicTime - Note.startTime > timing then 
-            table.remove(self.drawableNotes,i)
-            break
-        end
-    end
-end
-
 function maniaLane:checkForMisses()
     local timing
     local judgementName
@@ -108,12 +92,8 @@ function maniaLane:checkForMisses()
 end
 
 function maniaLane:draw()
-    --love.graphics.circle("line", self.x, self.y, maniaNoteSize)
-       -- for _, receptor in ipairs(self.receptor) do
-
-            self.receptor:draw()
-       -- end
-    for i,Note in ipairs(self.drawableNotes) do
+    self.receptor:draw()
+    for _, Note in ipairs(self.drawableNotes) do
         Note:draw()
     end
 end

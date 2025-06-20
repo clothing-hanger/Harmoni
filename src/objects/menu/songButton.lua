@@ -107,9 +107,11 @@ function menuSongButton:draw()
         local gradientX = self.x + (remappedX * self.width) - (gradientWidth / 2)
         drawMultiGradientRect(gradientX, self.y,
             gradientWidth, self.height,
-            {{self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0},
-            {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 1},
-            {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0}}
+            {
+                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0},
+                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 1},
+                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0}
+            }
         )
 
         self.borderHoverAlpha = math.min(self.borderHoverAlpha + 10 * love.timer.getDrawDelta(), 1)

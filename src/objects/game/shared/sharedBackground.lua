@@ -24,14 +24,13 @@ end
 
 function sharedBackground:bump(intensity, speed, tweenType)
     self.size = self.size + intensity
-    local speed = speed or 0.5
-    local tweenType = tweenType or "out-quad"
+    speed = speed or 0.5
+    tweenType = tweenType or "out-quad"
     if bumpTween then
         Timer.cancel(bumpTween)
     end
     bumpTween = Timer.tween(self, {size = self.originalSize}, speed, tweenType)
-end 
-
+end
 
 function sharedBackground:draw()
     love.graphics.setColor(1,1,1,1)

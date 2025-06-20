@@ -5,11 +5,15 @@ function gameModeManager:enter(s,mode,chart)
                        -- Literally why does it have to be a table?
                        -- because its FUNNY guglio,,,,, but you would never understand   -ch
                        -- stfu
-                       -- no lol     -ch
+                       -- no lol     -ch\
+                       -- kladsjhdsajklcxzkljmn
+    print("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
         self.gameMode = {mania(chart, self)}
     end
-    
+
+    cursor.fadeOutWhenIdle = true
+
     gameModeManager:initializeSong()
 
 end
@@ -20,9 +24,8 @@ function gameModeManager:initializeSong()
 end
 
 function gameModeManager:startSong(countdown)
-    MusicTime = 0 - (countdown or 0)*1000 
+    MusicTime = 0 - (countdown or 0)*1000
 end
-
 
 function gameModeManager:update(dt)
     MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
@@ -37,6 +40,10 @@ function gameModeManager:draw()
         love.graphics.print(MusicTime, 0, 0)
     end
 
+end
+
+function gameModeManager:leave()
+    cursor.fadeOutWhenIdle = false
 end
 
 return gameModeManager

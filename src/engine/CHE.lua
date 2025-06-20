@@ -85,7 +85,7 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
 end
 
-function CHE:keypressed(k)
+function CHE:keypressed(k, sc, isrepeat)
     Console.keypressed(k)
 end
 
@@ -113,6 +113,7 @@ end
 
 function CHE:draw(dt)
     love.graphics.push()
+    ---@diagnostic disable-next-line: missing-fields
     love.graphics.setCanvas({CHECanvas, stencil = true})
     love.graphics.clear(0, 0, 0, 1)
     local startFont = love.graphics.getFont()

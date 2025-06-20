@@ -8,7 +8,7 @@ function maniaPlayField:new(chart, parent)
     for i = 1, self.chart.meta.laneCount do
         print(self.chart.meta.laneCount)
         local hitObjects = {}
-        for j, HitObject in ipairs(self.chart.hitObjects) do
+        for _, HitObject in ipairs(self.chart.hitObjects) do
             if i == HitObject.lane then
                 table.insert(hitObjects, {
                     type = HitObject.type,
@@ -28,13 +28,13 @@ function maniaPlayField:getPositionFromTime(time, index)
 end
 
 function maniaPlayField:update(dt)
-    for i, Lane in ipairs(self.lanes) do
+    for _, Lane in ipairs(self.lanes) do
         Lane:update(dt)
     end
 end
 
 function maniaPlayField:draw()
-    for i, Lane in ipairs(self.lanes) do
+    for _, Lane in ipairs(self.lanes) do
         Lane:draw()
     end
 end

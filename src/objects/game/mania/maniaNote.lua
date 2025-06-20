@@ -56,7 +56,7 @@ end
 
 function maniaNote:draw()
     if not self.visible then return end
-   -- love.graphics.circle("fill", self.x, self.y, self.size)
+    
     love.graphics.draw(self.image, self.x, self.y, nil, self.size/self.image:getWidth(), self.size/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
 end
 
