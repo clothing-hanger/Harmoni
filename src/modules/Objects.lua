@@ -4,6 +4,7 @@
     maniaNote = require("objects.game.mania.maniaNote")
     maniaPlayField = require("objects.game.mania.maniaPlayField")
     maniaReceptor = require("objects.game.mania.maniaReceptor")
+    maniaJudgement = require("objects.game.mania.maniaJudgement")
 
     --shared game thingies
     sharedBackground = require("objects.game.shared.sharedBackground")

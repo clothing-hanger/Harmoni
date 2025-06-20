@@ -59,6 +59,8 @@ function maniaLane:input()
                 if math.abs(MusicTime - Note.startTime) <= Judgement.timing then
                     table.remove(self.drawableNotes, i)
                     mania.currentTEMPJudgement=   Judgement.name
+                    self.parent.parent.judgementObject:judge(Judgement.name)
+
                     break
                 end
             end

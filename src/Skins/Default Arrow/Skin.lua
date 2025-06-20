@@ -3,15 +3,15 @@ local function skin(path)
     return skinFolder .. "/" .. path
 end
 
-return {
+return {   -- i need to remove lots of these tbh..
     Params = {
         ["Note Size"] = 125,
         ["Hold Size"] = 125,
         ["HoldEnd Size"] = 125,
         ["Receptor Size"] = 125,
-        ["Judgement Size"] = 0.4,
-        ["Judgement Y Offset"] = -150,
-        ["Judgement X Offset"] = 0,
+        ["Judgement Size"] = 0.08,
+        ["Judgement Y Offset"] = baseScreenRatio.y/2,
+        ["Judgement X Offset"] = 400,
         ["Combo Y Offset"] = -120,
         ["Combo X Offset"] = 0,
         ["Hit Error Meter Y"] = 0,
@@ -21,7 +21,10 @@ return {
         ["Hit Error Meter Solid"] = false,
         ["Hit Error Meter Fade"] = 1000,
         ["Note Underlay Color"] = rgb {0, 0, 0},
-        ["Judgement Counter Bump Amount"] = 10,
+        ["Judgement Counter Bump Amount"] = 50,
+        ["Judgement Bump Amount"] = -70,
+        ["Judgement Bump Tween Type"] = "out-back",
+        ["Judgement Bump Time"] = 0.5,
         ["Judgement Counter Spacing"] = 60,
         ["Judgement Counter X"] = baseScreenRatio.x - 210,
         ["Judgement Counter Y"] = baseScreenRatio.y/2-150,
@@ -141,12 +144,12 @@ return {
     },
 
     Judgements = {
-        ["Marvelous"] = love.graphics.newImage(skin("JUDGEMENTS/Marvelous.png")),
-        ["Perfect"] = love.graphics.newImage(skin("JUDGEMENTS/Perfect.png")),
-        ["Great"] = love.graphics.newImage(skin("JUDGEMENTS/Great.png")),
-        ["Good"] = love.graphics.newImage(skin("JUDGEMENTS/Good.png")),
-        ["Okay"] = love.graphics.newImage(skin("JUDGEMENTS/Okay.png")),
-        ["Miss"] = love.graphics.newImage(skin("JUDGEMENTS/Miss.png")),
+        ["Perfect"] = love.graphics.newImage(skin("JUDGEMENTS/perfect.png")),
+        ["Great"] = love.graphics.newImage(skin("JUDGEMENTS/great.png")),
+        ["Good"] = love.graphics.newImage(skin("JUDGEMENTS/good.png")),
+        ["Alright"] = love.graphics.newImage(skin("JUDGEMENTS/alright.png")),
+        ["Awful"] = love.graphics.newImage(skin("JUDGEMENTS/awful.png")),
+        ["Miss"] = love.graphics.newImage(skin("JUDGEMENTS/miss.png")),
     },
 
     Particles = {

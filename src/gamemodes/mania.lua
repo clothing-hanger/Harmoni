@@ -1,20 +1,21 @@
 local mania = Class:extend("mania")
 
 function mania:new(chart, parent)
-    print("Hello from mania")
     self.parent = parent
     self.chartPath = getDirectory(chart)
     print("with file", chart, "without file", self.chartPath)
     self.chart = mania:setUpChart(chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
-    self.playField = {maniaPlayField(self.chart)}
+    self.playField = {maniaPlayField(self.chart, self)}
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile,"stream")
 
     mania.judgements = require("Modules.maniaJudgements")
-    self.judgements = mania.judgements
+    self.judgements = mania.judgementObject
 
-    self:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- i am never changing this name
+    self.judgements = require("Modules.maniaJudgements")
+
+    self:setUpObjects()
 
     local songCountDown = 2
 
@@ -25,10 +26,12 @@ function mania:startSong(countdown)
     self.parent:startSong(countdown)
 end
 
-function mania:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- do i even need to pass self into this?? 
+function mania:setUpObjects(guglio, i, hate, you)
     
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
-    self.background = sharedBackground(backgroundPath, 0, 1)
+    self.background = sharedBackground(backgroundPath, 0.8, 1)
+
+    self.judgementObject = maniaJudgement(Skin.Params["Judgement X Offset"], Skin.Params["Judgement Y Offset"], Skin.Params["Judgement Size"], self.judgements, self)
 
 end
 
@@ -79,19 +82,25 @@ end
 --]]
 
 function mania:update(dt)
+    self:updateObjects(dt)
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:update(dt)
     end
     if MusicTime >=0 and not self.song:isPlaying() then self.song:play() end
 end
 
+function mania:updateObjects(dt)
+    self.background:update(dt)
+    self.judgementObject:update(dt)
+end
+
 function mania:draw()
-        self.background:draw()
+    self.background:draw()
 
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:draw()
     end
-
+    self.judgementObject:draw()
     --TEMP
     love.graphics.setFont(songButtonFontLarge)
     love.graphics.printf(mania.currentTEMPJudgement or "i dont fucking know yet", baseScreenRatio.x/2-1000, baseScreenRatio.y/2, 1000, "center")

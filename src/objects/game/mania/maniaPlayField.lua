@@ -1,6 +1,7 @@
 local maniaPlayField = Class:extend("maniaPlayField")
 
-function maniaPlayField:new(chart)
+function maniaPlayField:new(chart, parent)
+    self.parent = parent
     self.chart = chart
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
