@@ -21,7 +21,7 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
 
     self.laneCountString = tostring(self.laneCount) .. "K"
 
-    print("HFHJDFD", self.laneCountString)
+    --print("HFHJDFD", self.laneCountString)
 
 
 
@@ -29,13 +29,13 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
         self.imageDown = Skin.Receptors.Down[self.laneCountString][self.laneString]
 
 
-    print("images:",self.imageUp,self.imageDown)
-    print("SKIN SHIT", self.laneString)
+    --print("images:",self.imageUp,self.imageDown)
+    --print("SKIN SHIT", self.laneString)
 
     self.size = maniaNoteSize
     self.held = false
 
-    print("JIIIIII?")
+    --print("JIIIIII?")
 end
 
 function maniaReceptor:getLaneString()
@@ -46,7 +46,7 @@ function maniaReceptor:getLaneString()
             string = laneStrings[i][self.lane]  -- remember to replace the version of this in maniaNote with this this is so much better
         end
     end
-    print("BROOO", string)
+    --print("BROOO", string)
     return string
 end
 

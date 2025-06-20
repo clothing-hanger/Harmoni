@@ -18,6 +18,8 @@ local songButtonX = 20
 
 local difficultyButtonX = songButtonX + songButtonWidth + 30
 
+local switchingState = false
+
 function songSelect:enter()
     self.colors = {
         light = {0, 0, 0, 0},
@@ -366,8 +368,9 @@ function songSelect:checkForSongButtonClicks()
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if buttonInfo.loadSong then
-                    print("Switching to gameModeManager: ", buttonInfo.mode, buttonInfo.path)
+                    if switchingState then return end
                     State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+                    switchingState = true
                 else
                     print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                     self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
@@ -376,7 +379,11 @@ function songSelect:checkForSongButtonClicks()
         end
     end
     if buttonInfo then
-        if buttonInfo.loadSong then State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path) end
+        if buttonInfo.loadSong then
+            if switchingState then return end
+            State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+            switchingState = true
+        end
     end
 end
 function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code 🤢🤢🤢🤢🤢
@@ -387,20 +394,26 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if buttonInfo.loadSong then
-                    print("Switching to gameModeManager: ", buttonInfo.mode, buttonInfo.path)
+                    if switchingState then return end
                     State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+                    switchingState = true
                 else
                     print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                     self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
                 end
             end
 
+
             -- why go through the rest? we already have a match so just break
             break
         end
     end
     if buttonInfo then
-        if buttonInfo.loadSong then State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path) end
+        if buttonInfo.loadSong then
+            if switchingState then return end
+            State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
+            switchingState = true
+        end
     end
 end
 

@@ -5,7 +5,8 @@ function gameModeManager:enter(s,mode,chart)
                        -- Literally why does it have to be a table?
                        -- because its FUNNY guglio,,,,, but you would never understand   -ch
                        -- stfu
-                       -- no lol     -ch
+                       -- no lol     -ch\
+    print("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
         self.gameMode = {mania(chart, self)}
     end
