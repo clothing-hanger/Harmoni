@@ -7,15 +7,22 @@ function gameModeManager:enter(s,mode,chart)
                        -- stfu
                        -- no lol     -ch
     if mode == "mania" then
-        self.gameMode = {mania(chart)}
+        self.gameMode = {mania(chart, self)}
     end
     
     gameModeManager:initializeSong()
 
 end
+
+
 function gameModeManager:initializeSong()
-    MusicTime = -2000 -- should this be moved to the gamemode itself? maybe.. idk      --ch
+    MusicTime = -100000 -- we set this to something wild just so that it wont somehow reach 0 before we want
 end
+
+function gameModeManager:startSong(countdown)
+    MusicTime = 0 - (countdown or 0)*1000 
+end
+
 
 function gameModeManager:update(dt)
     MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)

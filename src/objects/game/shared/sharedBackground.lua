@@ -8,6 +8,7 @@ function sharedBackground:new(imagePath, dimness, size)
     self.originalSize = self.size
     self.dimness = dimness or 1
     self.rotation = 0 -- might be useful later idk
+    self.x, self.y = baseScreenRatio.x / 2, baseScreenRatio.y / 2
 end
 
 function sharedBackground:update(dt)
@@ -34,9 +35,10 @@ end
 
 function sharedBackground:draw()
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.image, 0, 0, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2)
+    love.graphics.draw(self.image, self.x, self.y, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2)
     love.graphics.setColor(0,0,0,self.dimness)
     love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+    love.graphics.setColor(1,1,1,1)
 end
 
 return sharedBackground

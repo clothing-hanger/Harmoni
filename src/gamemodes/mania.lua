@@ -1,6 +1,8 @@
 local mania = Class:extend("mania")
 
-function mania:new(chart)
+function mania:new(chart, parent)
+    print("Hello from mania")
+    self.parent = parent
     self.chartPath = getDirectory(chart)
     print("with file", chart, "without file", self.chartPath)
     self.chart = mania:setUpChart(chart)
@@ -13,6 +15,14 @@ function mania:new(chart)
     self.judgements = mania.judgements
 
     self:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- i am never changing this name
+
+    local songCountDown = 2
+
+    Timer.after(0.15, function() self:startSong(songCountDown) end)
+end
+
+function mania:startSong(countdown)
+    self.parent:startSong(countdown)
 end
 
 function mania:setUpHudAndBackgroundandOtherShitTooProbablyIDontFuckingKnowYet()  -- do i even need to pass self into this?? 
@@ -76,6 +86,8 @@ function mania:update(dt)
 end
 
 function mania:draw()
+        self.background:draw()
+
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:draw()
     end

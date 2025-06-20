@@ -339,12 +339,10 @@ function songSelect:updateSongButtons(dt)
 end
 
 function songSelect:updateBGImage()
-
-    
     local function fadeBG()
         BGAlpha = {0}
         if BGFade then Timer.cancel(BGFade) end 
-        local BGFade = Timer.tween(0.4, BGAlpha, {1})
+        local BGFade = Timer.tween(0.25, BGAlpha, {1})
     end
 
     for i, SongButton in ipairs(songButtons) do
@@ -358,7 +356,6 @@ function songSelect:updateBGImage()
             end
         end
     end
-
 end
 
 function songSelect:checkForSongButtonClicks()
