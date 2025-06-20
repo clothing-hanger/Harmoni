@@ -44,9 +44,6 @@ function SMWCloudThingyAnimation:new(rows, width, height, x, y, rowMinWidth, row
         print(filled)
     end
 
-    
-
-
     -- now we do the connecting rows :(
 
     for i = 1,#self.rows do
@@ -63,12 +60,10 @@ function SMWCloudThingyAnimation:new(rows, width, height, x, y, rowMinWidth, row
     end
 end
 
-
-
 function SMWCloudThingyAnimation:update(dt)
 end
 
-function SMWCloudThingyAnimation:draw()
+function SMWCloudThingyAnimation:draw(dt)
     love.graphics.setColor(0,0,0)
 
     for i, Row in ipairs(self.rows) do
@@ -87,9 +82,9 @@ function SMWCloudThingyAnimation:draw()
         --draw the half on the right
         love.graphics.setColor(0,0,0)
         love.graphics.rectangle("fill", Row.center, (i-1) * Row.height, Row.width/2, Row.height)
-        -- and the right circle too
-                love.graphics.circle("fill", Row.center + (Row.width/2), (i-1) * Row.height+Row.height/2, Row.height/2)
 
+        -- and the right circle too
+        love.graphics.circle("fill", Row.center + (Row.width/2), (i-1) * Row.height+Row.height/2, Row.height/2)
 
         goto continue
 
@@ -98,32 +93,21 @@ function SMWCloudThingyAnimation:draw()
 
         -- this is gonna SUCK we have to make circles and shit and then mask them away or whatever its called I DONT FUCKING KNOW
 
-
         love.graphics.stencil(function()
             love.graphics.circle("fill", center-60, (i-1) * Row.height+Row.height/2, Row.height/2)
             --love.graphics.setColor(1,0,0)
             love.graphics.circle("fill", center+60, (i-1) * Row.height+Row.height/2, Row.height/2)
-        end, "replace", 1) 
+        end, "replace", 1)
 
-                love.graphics.setStencilTest("notequal", 1)
+        love.graphics.setStencilTest("notequal", 1)
         love.graphics.rectangle("fill", Row.center - 60, (i-1) * Row.height, 120, Row.height)
 
-love.graphics.setColor(1, 0, 0)
---love.graphics.circle("line", Row.center, (i-1) * Row.height + Row.height / 2, 5)
+        love.graphics.setColor(1, 0, 0)
+        --love.graphics.circle("line", Row.center, (i-1) * Row.height + Row.height / 2, 5)
         ::continue::
     end
 
     love.graphics.setColor(1,1,1)
-
-
-
-
 end
 
-
-
 return SMWCloudThingyAnimation
-
-
-
-

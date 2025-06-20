@@ -19,7 +19,7 @@ function UISquiglyLine:update(dt)
 end
 
 function UISquiglyLine:draw()
-  --  love.graphics.setColor(self.color)
+    local lastLineWidth = love.graphics.getLineWidth()
     local points = {}
 
     local dx = self.x2 - self.x1
@@ -50,6 +50,8 @@ function UISquiglyLine:draw()
 
     love.graphics.circle("fill", self.x1, self.y1, 5)
     love.graphics.circle("fill", self.x2, self.y2, 5)
+
+    love.graphics.setLineWidth(lastLineWidth)
 end
 
 return UISquiglyLine
