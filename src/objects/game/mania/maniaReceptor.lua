@@ -33,6 +33,11 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
     self.held = false
 
     --print("JIIIIII?")
+
+
+
+
+    self.debug = true
 end
 
 function maniaReceptor:getLaneString()
@@ -55,6 +60,15 @@ function maniaReceptor:draw()
    local drawnImage = (self.held and self.imageDown) or self.imageUp
 
    love.graphics.draw(drawnImage, self.x, self.y, nil, self.size/drawnImage:getWidth(), self.size/drawnImage:getHeight(), drawnImage:getWidth()/2, drawnImage:getHeight()/2)
+
+   if self.debug then
+    love.graphics.setColor(1,0,0)
+    love.graphics.setLineWidth(10)
+   love.graphics.line(self.x-200, self.y, self.x+200, self.y)
+   love.graphics.setColor(1,1,1)
+    love.graphics.setLineWidth(1)
+   end
+
 end
 
 return maniaReceptor

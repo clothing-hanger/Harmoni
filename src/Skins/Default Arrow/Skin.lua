@@ -9,7 +9,7 @@ return {   -- i need to remove lots of these tbh..
         ["Hold Size"] = 125,
         ["HoldEnd Size"] = 125,
         ["Receptor Size"] = 125,
-        ["Judgement Size"] = 0.08,
+        ["Judgement Size"] = 1,
         ["Judgement Y Offset"] = baseScreenRatio.y/2,
         ["Judgement X Offset"] = 400,
         ["Combo Y Offset"] = -120,

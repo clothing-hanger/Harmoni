@@ -48,10 +48,15 @@ function maniaJudgement:draw()
         local size = self.size
         
         local ox,oy = image:getWidth()/2, image:getHeight()/2
-        love.graphics.setColor(1,1,1,Judgement.timer/500)
-        if i > 1 then
-          --  love.graphics.setColor(0.5,0.5,0.5,Judgement.timer/500-100)
+        local alpha = Judgement.timer/500
+        if i == #self.judgements then
+                        love.graphics.setColor(1,1,1, alpha)
+
+        else
+                        love.graphics.setColor(0.5,0.5,0.5, alpha)
+
         end
+
         love.graphics.draw(Judgement.image, Judgement.x, Judgement.y, 0, size, size, ox, oy)
         ::continue::
     end

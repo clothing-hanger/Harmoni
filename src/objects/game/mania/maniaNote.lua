@@ -20,6 +20,10 @@ function maniaNote:new(startTime, holdLength, lane, parent)
     self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
 
     self.visible = true
+
+
+
+    self.debug = true
 end
 
 function maniaNote:getLaneString()       --its crazy how bad this already is
@@ -58,6 +62,15 @@ function maniaNote:draw()
     if not self.visible then return end
     
     love.graphics.draw(self.image, self.x, self.y, nil, self.size/self.image:getWidth(), self.size/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
+
+    if self.debug then 
+        love.graphics.setColor(1,0,0)
+        love.graphics.setLineWidth(10)
+        love.graphics.line(self.x-200, self.y, self.x+200, self.y)
+        love.graphics.setColor(1,1,1)
+        love.graphics.setLineWidth(1)
+    end
+    
 end
 
 return maniaNote
