@@ -85,6 +85,8 @@ function maniaLane:checkForMisses()
         local Note = self.drawableNotes[i]
         if MusicTime - Note.startTime > timing then
             mania.currentTEMPJudgement=   judgementName
+            self.parent.parent.judgementObject:judge(judgementName)
+
 
             table.remove(self.drawableNotes, i)
         end

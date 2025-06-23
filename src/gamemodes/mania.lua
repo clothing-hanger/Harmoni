@@ -30,6 +30,9 @@ function mania:setUpObjects(guglio, i, hate, you)
     
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, 0.8, 1)
+    local songLengthInSeconds = self.song:getDuration("seconds")
+
+    self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,10,-5,5,30)
 
     self.judgementObject = maniaJudgement(Skin.Params["Judgement X Offset"], Skin.Params["Judgement Y Offset"], Skin.Params["Judgement Size"], self.judgements, self)
 
@@ -92,6 +95,7 @@ end
 function mania:updateObjects(dt)
     self.background:update(dt)
     self.judgementObject:update(dt)
+    self.timeRemaingBar:update(dt)
 end
 
 function mania:draw()
@@ -104,6 +108,8 @@ function mania:draw()
     --TEMP
     love.graphics.setFont(songButtonFontLarge)
     love.graphics.printf(mania.currentTEMPJudgement or "i dont fucking know yet", baseScreenRatio.x/2-1000, baseScreenRatio.y/2, 1000, "center")
+
+    self.timeRemaingBar:draw()
 end
 
 return mania

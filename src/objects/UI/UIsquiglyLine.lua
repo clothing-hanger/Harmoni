@@ -48,8 +48,7 @@ function UISquiglyLine:draw()
     love.graphics.setLineWidth(self.lineWidth)
     love.graphics.line(points)
 
-    love.graphics.circle("fill", self.x1, self.y1, 5)
-    love.graphics.circle("fill", self.x2, self.y2, 5)
+
 
     love.graphics.setLineWidth(lastLineWidth)
 end

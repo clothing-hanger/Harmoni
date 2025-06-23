@@ -23,7 +23,7 @@ function maniaNote:new(startTime, holdLength, lane, parent)
 
 
 
-    self.debug = true
+    self.debug = false
 end
 
 function maniaNote:getLaneString()       --its crazy how bad this already is

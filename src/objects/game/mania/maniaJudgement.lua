@@ -13,7 +13,6 @@ function maniaJudgement:judge(judgement)
     local image
     for i = 1,#self.judgementsTable do
         if judgement == self.judgementsTable[i].name then
-            print(self.judgementsTable[i].image)
             image = self.judgementsTable[i].image
         end
     end
