@@ -32,6 +32,10 @@ function CHE:init()
     Console = require("engine.modules.console")
     require("modules.objects")
 
+    tryExcept(function() -- thank you guglio for the tryExcept function i like it 
+        DLL_Video = require("video")
+    end)
+
     cursor = cursor()
 
 

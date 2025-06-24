@@ -7,6 +7,8 @@ function maniaJudgement:new(x,y,size,judgementsTable,parent)
     self.size = size or 1
     self.judgementsTable = judgementsTable or (error("fucking dumbass how do you think the judgements object will work without judgements"))
     self.judgements = {}
+
+    self.noStacking = false
 end
 
 function maniaJudgement:judge(judgement)
@@ -16,7 +18,15 @@ function maniaJudgement:judge(judgement)
             image = self.judgementsTable[i].image
         end
     end
+
+    if self.noStacking then
+        self.judgements = {{image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false}}
+        return
+    end
+
     table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false})
+
+
 end
 
 function maniaJudgement:judgementAnimation()
@@ -49,10 +59,10 @@ function maniaJudgement:draw()
         local ox,oy = image:getWidth()/2, image:getHeight()/2
         local alpha = Judgement.timer/500
         if i == #self.judgements then
-                        love.graphics.setColor(1,1,1, alpha)
+            love.graphics.setColor(1,1,1, alpha)
 
         else
-                        love.graphics.setColor(0.5,0.5,0.5, alpha)
+            love.graphics.setColor(0.5,0.5,0.5, alpha)
 
         end
 

@@ -48,6 +48,7 @@ function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- sto
 end
 
 -- https://www.love2d.org/wiki/Gradients
+
 function drawMultiGradientRect(x, y, width, height, colors, vertical)
     -- colors: a table like { {r, g, b, a}, {r, g, b, a}, ... }
     if #colors < 2 then
@@ -147,6 +148,17 @@ function createMultiGradientRectMesh(x, y, width, height, colors, vertical)
     return love.graphics.newMesh(vertices, "triangles", "static")
 end
 
+function tryExcept(try, catch, finally)   -- thank you rit (i hate rit so MUCH I HATE RIT!!!!)
+    local status, exception = pcall(try)
+    if not status and catch then
+        catch(exception)
+    end
+    if finally then
+        finally()
+    end
+
+    return status, exception
+end
 
 
 function toLinear(c)   -- stolen too 
