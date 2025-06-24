@@ -27,7 +27,7 @@ function mania:startSong(countdown)
 end
 
 function mania:setUpObjects(guglio, i, hate, you)
-    
+
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, 0.8, 1)
     local songLengthInSeconds = self.song:getDuration("seconds")

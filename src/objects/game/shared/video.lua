@@ -1,10 +1,12 @@
 local video = Class:extend("video")
 
-function video:new(video,x,y,width,height)
+function video:new(video,x,y,width,height,fr)
     self.path = video
     self.visible = true
     self.x, self.y = x,y
     self.width, self.height = width,height
+    self.checkPerFrame = fr or 60 -- only <num> checks per second
+    self.checkTimer = 0
     if not DLL_Video then
         error("Video not supported on this platform") --temp until logging is added
 
@@ -30,9 +32,6 @@ function video:new(video,x,y,width,height)
     self.time = 0
     self.previousFrameTime = 0
 
-
-
-
     self.angle = 0  -- i guess this was handled by the sprite thingy in tit?? idk
     self.origin = {x = 0, y = 0}
     self.windowScale = {x = 1, y = 1}
@@ -48,17 +47,22 @@ end
 
 function video:update(dt)
     if self.playing and self.video then
-        self.time = self.time + dt
-        tryExcept(function()
-            while self.time >= self.video:tell() do
-                if not self.video:read(self.imageData:getPointer()) then
-                    self.playing = false
-                    break
+        self.checkTimer = self.checkTimer + dt
+        local interval = 1 / self.checkPerFrame
+        if self.checkTimer >= interval then
+            self.checkTimer = self.checkTimer - interval
+            tryExcept(function()
+                while self.time >= self.video:tell() do
+                    if not self.video:read(self.imageData:getPointer()) then
+                        self.playing = false
+                        break
+                    end
                 end
-            end
-            self.image:replacePixels(self.imageData)
-        end)
-        self.previousFrameTime = love.timer.getTime()
+                self.image:replacePixels(self.imageData)
+            end)
+            self.previousFrameTime = love.timer.getTime()
+        end
+        self.time = self.time + dt
     end
 end
 
@@ -86,6 +90,7 @@ end
 function video:draw()
     if not self.video then return end
     if not self.visible or not self.image then return end
+    
     love.graphics.push()
         love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)
         --love.graphics.setColor(self.colour[1], self.colour[2], self.colour[3], self.alpha)
