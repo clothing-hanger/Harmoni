@@ -81,6 +81,15 @@ console.commands = {
             printToConsole("Console cleared.")
         end
     },
+    saveFolder = {
+        name = "Save Folder",
+        description = "Opens the save directory.",
+        usage = "saveFolder",
+        callback = function(args)
+            local saveDir = love.filesystem.getSaveDirectory()
+            os.execute("start " .. "\"" .. saveDir .. "\"")
+        end
+    },
     lua = {
         name = "Lua",
         description = "Runs a Lua command.",

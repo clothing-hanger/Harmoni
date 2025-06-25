@@ -12,10 +12,10 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
 
     self:setUpHitObjects(self.hitObjects)
     print("hi",maniaLanePositions[self.maniaLane])
+
     self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
-        self:setUpReceptor()
 
-
+    self:setUpReceptor()
 end
 
 function maniaLane:setUpReceptor()  -- does this really need to be a whole function lol
@@ -26,7 +26,7 @@ end
 function maniaLane:setUpHitObjects(hitObjects)
     for i, HitObject in ipairs(hitObjects) do
         if HitObject.type == "note" then
-            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, self))
+            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, HitObject.initialSVTime, self))
         end
     end
 end
@@ -45,11 +45,7 @@ function maniaLane:update(dt)
 end
 
 function maniaLane:isOnScreen(note)
-    if DOWNSCROLL_ENABLED then
-        return note:getNotePosition(self.parent:getPositionFromTime(note.startTime), true) > -500
-    else
-        return note:getNotePosition(self.parent:getPositionFromTime(note.startTime), true) < baseScreenRatio.y + 500
-    end
+    return note.startTime - MusicTime <= 5000
 end
 
 function maniaLane:input()
@@ -59,25 +55,11 @@ function maniaLane:input()
                 if math.abs(MusicTime - Note.startTime) <= Judgement.timing then
                     table.remove(self.drawableNotes, i)
                     mania.currentTEMPJudgement=   Judgement.name
+                    self.parent.parent.judgementObject:judge(Judgement.name)
+
                     break
                 end
             end
-        end
-    end
-end
-
-function maniaLane:checkForMisses() -- imagine 
--- get the miss timing
-    local timing
-    for i,Judgement in ipairs(mania.judgements) do
-        print(Judgement.name)
-        if Judgement.name == "Miss" then timing = Judgement.timing end
-    end
-
-    for i,Note in ipairs(self.drawableNotes) do
-        if MusicTime - Note.startTime > timing then 
-            table.remove(self.drawableNotes,i)
-            break
         end
     end
 end
@@ -99,6 +81,8 @@ function maniaLane:checkForMisses()
         local Note = self.drawableNotes[i]
         if MusicTime - Note.startTime > timing then
             mania.currentTEMPJudgement=   judgementName
+            self.parent.parent.judgementObject:judge(judgementName)
+
 
             table.remove(self.drawableNotes, i)
         end
@@ -106,12 +90,8 @@ function maniaLane:checkForMisses()
 end
 
 function maniaLane:draw()
-    --love.graphics.circle("line", self.x, self.y, maniaNoteSize)
-       -- for _, receptor in ipairs(self.receptor) do
-
-            self.receptor:draw()
-       -- end
-    for i,Note in ipairs(self.drawableNotes) do
+    self.receptor:draw()
+    for _, Note in ipairs(self.drawableNotes) do
         Note:draw()
     end
 end

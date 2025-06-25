@@ -160,7 +160,7 @@ function love.run()
 
         love_update(dt)
         drawTmr = drawTmr + dt
-        
+
         if drawTmr >= capDT then
             if g_active() then
                 g_origin()

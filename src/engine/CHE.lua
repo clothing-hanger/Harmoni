@@ -28,8 +28,13 @@ function CHE:init()
     Class = require("engine.class.class")
     State = require("engine.state.State")
     States = require("modules.states")
+    Timer = require("engine.lib.Timer")
     Console = require("engine.modules.console")
     require("modules.objects")
+
+    tryExcept(function() -- thank you guglio for the tryExcept function i like it 
+        DLL_Video = require("video")
+    end)
 
     cursor = cursor()
 
@@ -78,12 +83,13 @@ end
 function CHE:update(dt)
     State.update(dt)
     Input:update()
+    Timer.update(dt)
     Mouse.x, Mouse.y = love.mouse.getPosition()
     cursor:update(dt)
     love.mouse.setVisible(false)
 end
 
-function CHE:keypressed(k)
+function CHE:keypressed(k, sc, isrepeat)
     Console.keypressed(k)
 end
 
@@ -111,6 +117,7 @@ end
 
 function CHE:draw(dt)
     love.graphics.push()
+    ---@diagnostic disable-next-line: missing-fields
     love.graphics.setCanvas({CHECanvas, stencil = true})
     love.graphics.clear(0, 0, 0, 1)
     local startFont = love.graphics.getFont()

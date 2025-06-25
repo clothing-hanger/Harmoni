@@ -8,7 +8,9 @@ local function table_find(t, value)
     end
     return nil
 end
+
 DOWNSCROLL_ENABLED = false
+
 function love.load(args)
     if table_find(args, "--downscroll") then
         DOWNSCROLL_ENABLED = true
@@ -22,7 +24,6 @@ function love.load(args)
     SkinHandler = require("modules.skinHandler")
 
     CHE = require("engine.CHE")
-
     CHE:init()
 
     require("modules.gamemodes")
@@ -69,6 +70,13 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
 
     love.graphics.setFont(baseFont)
     local DPS, UPS = love.timer.getFPS()
+    love.graphics.setColor(0, 0, 0)
+    for x = -1, 1 do
+        for y = -1, 1 do
+            love.graphics.printf(string.format("UPS: %d, DPS: %d", UPS, DPS), x, y, love.graphics.getWidth(), "right")
+        end
+    end
+    love.graphics.setColor(1, 1, 1)
     love.graphics.printf(string.format("UPS: %d, DPS: %d", UPS, DPS), 0, 0, love.graphics.getWidth(), "right")
 end
 

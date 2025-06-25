@@ -3,7 +3,7 @@ local maniaNote = Class:extend("maniaNote")
 local fourkLanes = {"Left", "Down", "Up", "Right"}
 local sevenkLanes = {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
 
-function maniaNote:new(startTime, holdLength, lane, parent)
+function maniaNote:new(startTime, holdLength, lane, initialSVTime, parent)
     self.size = maniaNoteSize
     self.startTime = startTime
     self.holdLength = holdLength
@@ -18,8 +18,13 @@ function maniaNote:new(startTime, holdLength, lane, parent)
     self.image = Skin.Notes[self.laneCountString][self.laneString]
 
     self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
+    self.initialSVTime = initialSVTime
 
     self.visible = true
+
+
+
+    self.debug = false
 end
 
 function maniaNote:getLaneString()       --its crazy how bad this already is
@@ -39,14 +44,14 @@ function maniaNote:update(dt)
 end
 
 function maniaNote:updatePosition()
-    self.y = self:getNotePosition(self.startTime, true)
+    self.y = self:getNotePosition(self.initialSVTime, true)
 end
 
 function maniaNote:getNotePosition(time, moveWithScroll) -- moveWithScroll is unused until hold notes are implemented
     if not DOWNSCROLL_ENABLED then
-        return self.parent.y - (MusicTime - time) * maniaScrollSpeed
+        return self.parent.y - (self.parent.parent.currentTime - time) * maniaScrollSpeed
     else
-        return self.parent.y + (MusicTime - time) * maniaScrollSpeed
+        return self.parent.y + (self.parent.parent.currentTime - time) * maniaScrollSpeed
     end
 end
 
@@ -56,8 +61,17 @@ end
 
 function maniaNote:draw()
     if not self.visible then return end
-   -- love.graphics.circle("fill", self.x, self.y, self.size)
+    
     love.graphics.draw(self.image, self.x, self.y, nil, self.size/self.image:getWidth(), self.size/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
+
+    if self.debug then 
+        love.graphics.setColor(1,0,0)
+        love.graphics.setLineWidth(10)
+        love.graphics.line(self.x-200, self.y, self.x+200, self.y)
+        love.graphics.setColor(1,1,1)
+        love.graphics.setLineWidth(1)
+    end
+    
 end
 
 return maniaNote

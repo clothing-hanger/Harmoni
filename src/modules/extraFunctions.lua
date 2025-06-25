@@ -48,6 +48,7 @@ function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- sto
 end
 
 -- https://www.love2d.org/wiki/Gradients
+
 function drawMultiGradientRect(x, y, width, height, colors, vertical)
     -- colors: a table like { {r, g, b, a}, {r, g, b, a}, ... }
     if #colors < 2 then
@@ -98,6 +99,67 @@ function drawMultiGradientRect(x, y, width, height, colors, vertical)
     love.graphics.draw(mesh)
 end
 
+function createMultiGradientRectMesh(x, y, width, height, colors, vertical)
+        -- colors: a table like { {r, g, b, a}, {r, g, b, a}, ... }
+    if #colors < 2 then
+        error("You need at least two colors for a gradient!")
+    end
+
+    love.graphics.setColor(1, 1, 1, 1) -- Reset color
+
+    -- Create the vertices
+    local vertices = {}
+    local steps = #colors - 1
+
+    for i = 1, steps do
+        local t0 = (i - 1) / steps
+        local t1 = i / steps
+
+        local c0 = colors[i]
+        local c1 = colors[i + 1]
+
+        if vertical then
+            local y0 = y + height * t0
+            local y1 = y + height * t1
+
+            -- Top quad
+            table.insert(vertices, { x,         y0, 0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+            table.insert(vertices, { x + width, y0, 0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+            table.insert(vertices, { x + width, y1, 0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+
+            table.insert(vertices, { x,         y0, 0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+            table.insert(vertices, { x + width, y1, 0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+            table.insert(vertices, { x,         y1, 0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+        else
+            local x0 = x + width * t0
+            local x1 = x + width * t1
+
+            -- Side quad
+            table.insert(vertices, { x0, y,         0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+            table.insert(vertices, { x1, y,         0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+            table.insert(vertices, { x1, y + height, 0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+
+            table.insert(vertices, { x0, y,         0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+            table.insert(vertices, { x1, y + height, 0, 0, c1[1], c1[2], c1[3], c1[4] or 1 })
+            table.insert(vertices, { x0, y + height, 0, 0, c0[1], c0[2], c0[3], c0[4] or 1 })
+        end
+    end
+
+    return love.graphics.newMesh(vertices, "triangles", "static")
+end
+
+function tryExcept(try, catch, finally)   -- thank you rit (i hate rit so MUCH I HATE RIT!!!!)
+    local status, exception = pcall(try)
+    if not status and catch then
+        catch(exception)
+    end
+    if finally then
+        finally()
+    end
+
+    return status, exception
+end
+
 
 function toLinear(c)   -- stolen too 
     if c <= 0.04045 then
@@ -139,4 +201,8 @@ end
 ---@return table<number, number, number> colorsRGB
 function rgb(colors)  -- stolen from old harmoni cuz i hate the guy who made old harmoni so i steal from them 
     return {colors[1]/255, colors[2]/255, colors[3]/255}
+end
+
+function isEven(number)    -- borrring
+    return number % 2 == 0
 end

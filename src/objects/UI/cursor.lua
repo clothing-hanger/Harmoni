@@ -30,11 +30,41 @@ function cursor:new()
     self.weight = 100
     self.weightAngle = 0
 
+    self.fadeOutWhenIdle = false
+    self.fadeOutTime = 0.5
+    self.fadeOutTimer = 0
+    self.fadeOutAlpha = 1
+    self.didMove = false
+
     self.debug = true
 end
 
 function cursor:update(dt)
     self.x, self.y = love.mouse.getPosition()
+    if self.x ~= self.prevX or self.y ~= self.prevY then
+        self.didMove = true
+        self.fadeOutTimer = 0
+        self.fadingBackIn = true
+    else
+        self.didMove = false
+    end
+
+    if self.fadeOutWhenIdle then
+        if not self.didMove and not self.fadingBackIn then
+            self.fadeOutTimer = self.fadeOutTimer + dt
+            if self.fadeOutTimer >= self.fadeOutTime then
+                self.fadeOutAlpha = math.max(0, 1 - (self.fadeOutTimer - self.fadeOutTime) / self.fadeOutTime)
+            end
+        elseif self.fadingBackIn then
+            self.fadeOutAlpha = self.fadeOutAlpha + dt * 5
+            if self.fadeOutAlpha >= 1 then
+                self.fadeOutAlpha = 1
+                self.fadingBackIn = false
+            end
+        end
+    end
+
+    self.didMove = false
 
     if self.mouseDownX then
         local dx = self.x - self.mouseDownX
@@ -149,9 +179,10 @@ end
 
 function cursor:draw()
     if not self.visible then return end
+    local lastColor = {love.graphics.getColor()}
 
     love.graphics.push()
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1, self.fadeOutAlpha)
     love.graphics.draw(
         self.image,
         self.x, self.y,
@@ -175,6 +206,8 @@ function cursor:draw()
         end
         love.graphics.setColor(lastColor)
     end
+
+    love.graphics.setColor(lastColor)
 end
 
 function cursor:mousepressed(x, y, button)

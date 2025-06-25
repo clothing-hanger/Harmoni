@@ -6,15 +6,26 @@ function gameModeManager:enter(s,mode,chart)
                        -- because its FUNNY guglio,,,,, but you would never understand   -ch
                        -- stfu
                        -- no lol     -ch
+                       -- kladsjhdsajklcxzkljmn
+                       -- ok       -ch
+    print("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
-        self.gameMode = {mania(chart)}
+        self.gameMode = {mania(chart, self)}
     end
-    
+
+    cursor.fadeOutWhenIdle = true
+
     gameModeManager:initializeSong()
 
 end
+
+
 function gameModeManager:initializeSong()
-    MusicTime = -2000 -- should this be moved to the gamemode itself? maybe.. idk      --ch
+    MusicTime = -100000 -- we set this to something wild just so that it wont somehow reach 0 before we want
+end
+
+function gameModeManager:startSong(countdown)
+    MusicTime = 0 - (countdown or 0)*1000
 end
 
 function gameModeManager:update(dt)
@@ -30,6 +41,10 @@ function gameModeManager:draw()
         love.graphics.print(MusicTime, 0, 0)
     end
 
+end
+
+function gameModeManager:leave()
+    cursor.fadeOutWhenIdle = false
 end
 
 return gameModeManager

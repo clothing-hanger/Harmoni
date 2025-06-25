@@ -31,7 +31,7 @@ function ChartParse.harmc(harmc)
                 table.insert(chart[section], {startTime = tonumber(startTime), bpm = tonumber(bpm)})
             end
         elseif section == "sliderVelocities" then
-            local key, startTime, multiplier = Line:match("^(%a+):([%d%.]+):([%d%.]+)$")
+            local _, startTime, multiplier = Line:match("^(%a+):([%d%.]+):([%d%.]+)$")
             if startTime and multiplier then   -- not a bad error, just skip this one
                 table.insert(chart[section], {startTime = tonumber(startTime), multiplier = tonumber(multiplier)})
             end
