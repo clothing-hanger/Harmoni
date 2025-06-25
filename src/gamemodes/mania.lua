@@ -26,7 +26,7 @@ end
 function mania:setUpObjects()
 
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
-    self.background = sharedBackground(backgroundPath, 0.8, 1)
+    self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     local songLengthInSeconds = self.song:getDuration("seconds")
 
     self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,5,-5,5,30)

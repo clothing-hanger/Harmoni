@@ -364,55 +364,31 @@ function songSelect:checkForSongButtonClicks()
             if Input:pressed("menuClickLeft") then
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
-                if buttonInfo.loadSong then
-                    if switchingState then return end
-                    State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
-                    switchingState = true
-                else
-                    print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
-                    self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
-                end
+
+                print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
+                self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
             end
-        end
-    end
-    if buttonInfo then
-        if buttonInfo.loadSong then
-            if switchingState then return end
-            State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
-            switchingState = true
         end
     end
 end
 
 function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code 🤢🤢🤢🤢🤢
     local buttonInfo = false
+    local additionalInfo
     for i, SongButton in ipairs(difficultyButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
-                if buttonInfo.loadSong then
-                    if switchingState then return end
-                    State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
-                    switchingState = true
-                else
-                    print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
-                    self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
-                end
+                if switchingState then return end
+                State.switch(States.menu.transition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
+                switchingState = true
             end
-
-
             -- why go through the rest? we already have a match so just break
             break
         end
     end
-    if buttonInfo then
-        if buttonInfo.loadSong then
-            if switchingState then return end
-            State.switch(States.game.gameModeManager, buttonInfo.mode, buttonInfo.path)
-            switchingState = true
-        end
-    end
+
 end
 
 function songSelect:draw(dt)

@@ -2,11 +2,11 @@ local sharedBackground = Class:extend("sharedBackground")
 
 local bumpTween
 function sharedBackground:new(imagePath, dimness, size)
-    self.image = love.graphics.newImage(imagePath)
+    self.image = (type(imagePath) == "string" and love.graphics.newImage(imagePath)) or imagePath
     self.baseSizeX, self.baseSizeY = baseScreenRatio.x/self.image:getWidth(), baseScreenRatio.y/self.image:getHeight()
     self.size = size or 1
     self.originalSize = self.size
-    self.dimness = dimness or 1
+    self.dimness = dimness or 0
     self.rotation = 0 -- might be useful later idk
     self.x, self.y = baseScreenRatio.x / 2, baseScreenRatio.y / 2
 end
@@ -18,7 +18,14 @@ function sharedBackground:setSize(size)
     self.size = size or 1
 end
 
-function sharedBackground:changeDimness(dimness)
+function sharedBackground:changeDimness(dimness, time, func)
+    local doCallback = function() -- will i ever use this feature?   no.   is it useful?   probably not.   do i wanna add it anyway?   yeah lol 
+        if func then func() end
+    end
+    if time then -- we must be trying to tween the dimness
+        Timer.tween(time, self, {dimness = dimness}, "linear", function() doCallback() end)
+        return
+    end
     self.dimness = dimness or 1
 end
 

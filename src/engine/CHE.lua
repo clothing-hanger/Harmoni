@@ -49,6 +49,7 @@ function CHE:init()
     maninaLaneGap = 10
     maniaScrollSpeed = 2.85
     maniaLaneYOffset = 110
+    gameplayBackgroundDim = 0.65
     if DOWNSCROLL_ENABLED then
         maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
     end

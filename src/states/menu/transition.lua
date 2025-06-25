@@ -1,0 +1,68 @@
+local transition = State("transition")
+local BGImage
+local background
+local mode, chart
+local songInfo
+local timebar
+local time 
+function transition:enter(s,mode,chart,image)
+    time = 5
+    uhmmode, uhmchart = mode, chart
+    print(image)
+    timebar = {0}
+    background = sharedBackground(image)
+
+    background:changeDimness(0.8, time*0.1, function() self:startTimer(time*0.8) end)
+    self:startTimeRemaining()
+
+
+    songInfo = {
+        songName = "the fucking song name",
+        diffName = "this should prob be the difficulty name",
+        mode = "probably fucking mania since thats the only one",
+        artist = "whoever made the song idk",
+        charter = "somebody????",
+        mods = "the game doesnt even have mods..",
+        notes = "if its not obvious enough, this is a placeholder",
+    }
+end
+
+function transition:startTimer(time)
+    print("hi?")
+    local uhhDoShit = function()
+        background:changeDimness(gameplayBackgroundDim, time*0.1, function() self:switchToGame(uhmmode, uhmchart) end)
+    end
+
+    Timer.after(time, function()  uhhDoShit() end)
+end
+
+function transition:startTimeRemaining()
+    Timer.tween(time, timebar, {baseScreenRatio.x})
+end
+
+function transition:update(dt)
+    background:update(dt)
+end
+
+function transition:switchToGame(mode,chart)
+    State.switch(States.game.gameModeManager, uhmmode, uhmchart)
+end
+
+function transition:draw()
+    background:draw()
+    love.graphics.setFont(songButtonFontLarge)
+    love.graphics.printf(
+        "Song: " .. songInfo.songName .. "\n" .. 
+        "Difficulty: " .. songInfo.diffName .. "\n" ..
+        "Mode: " .. songInfo.mode .. "\n" ..
+        "Produced by: " .. songInfo.artist .. "\n" ..
+        "Charted by: " .. songInfo.charter .. "\n" ..
+        "Active Modifiers: " .. songInfo.mods .. "\n" ..
+        songInfo.notes,
+        0,baseScreenRatio.y/2-235,baseScreenRatio.x,"center"
+    )
+
+    love.graphics.rectangle("fill",0,baseScreenRatio.y-100,timebar[1],50)
+end
+
+return transition
