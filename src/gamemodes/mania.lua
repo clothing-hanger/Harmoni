@@ -26,7 +26,7 @@ function mania:startSong(countdown)
     self.parent:startSong(countdown)
 end
 
-function mania:setUpObjects(guglio, i, hate, you)
+function mania:setUpObjects()
 
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, 0.8, 1)
@@ -43,13 +43,18 @@ function mania:setUpChart(chart)
     local maniaChart = {}
     maniaChart.meta = chart.meta
     maniaChart.hitObjects = {}
+    maniaChart.scrollVelocities = {}
 
     for i, BpmChange in ipairs(chart.bpm) do
-        
+    
        -- print(i, BpmChange.startTime, BpmChange.bpm)
     end
     for i, SliderVeloticy in ipairs(chart.sliderVelocities) do
        -- print(i, SliderVeloticy.startTime, SliderVeloticy.multiplier)
+        table.insert(maniaChart.scrollVelocities, {
+                startTime = SliderVeloticy.startTime,
+                multiplier = SliderVeloticy.multiplier
+        })
     end
     for i, HitObject in ipairs(chart.hitObjects) do
        -- print(i, HitObject.type, HitObject.startTime, HitObject.length)

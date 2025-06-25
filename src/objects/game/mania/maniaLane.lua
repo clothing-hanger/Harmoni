@@ -26,7 +26,7 @@ end
 function maniaLane:setUpHitObjects(hitObjects)
     for i, HitObject in ipairs(hitObjects) do
         if HitObject.type == "note" then
-            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, self))
+            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, HitObject.initialSVTime, self))
         end
     end
 end
@@ -45,11 +45,7 @@ function maniaLane:update(dt)
 end
 
 function maniaLane:isOnScreen(note)
-    if DOWNSCROLL_ENABLED then
-        return note:getNotePosition(self.parent:getPositionFromTime(note.startTime), true) > -500
-    else
-        return note:getNotePosition(self.parent:getPositionFromTime(note.startTime), true) < baseScreenRatio.y + 500
-    end
+    return note.startTime - MusicTime <= 5000
 end
 
 function maniaLane:input()

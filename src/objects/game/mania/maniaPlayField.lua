@@ -5,6 +5,29 @@ function maniaPlayField:new(chart, parent)
     self.chart = chart
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
+    self.svMarks = {}
+    self.svIndex = 1
+    self.currentTime = 0
+
+    if #self.chart.scrollVelocities > 0 then
+        local first = self.chart.scrollVelocities[1]
+        table.insert(self.chart.scrollVelocities, {
+            startTime = self.chart.scrollVelocities[#self.chart.scrollVelocities].startTime + 1000,
+            multiplier = first.multiplier
+        })
+
+        local time = first.startTime
+        table.insert(self.svMarks, time)
+
+        for i = 2, #self.chart.scrollVelocities do
+            local prev = self.chart.scrollVelocities[i - 1]
+            local current = self.chart.scrollVelocities[i]
+
+            time = time + (current.startTime - prev.startTime) * prev.multiplier
+            table.insert(self.svMarks, time)
+        end
+    end
+
     for i = 1, self.chart.meta.laneCount do
         print(self.chart.meta.laneCount)
         local hitObjects = {}
@@ -13,7 +36,8 @@ function maniaPlayField:new(chart, parent)
                 table.insert(hitObjects, {
                     type = HitObject.type,
                     startTime = HitObject.startTime,
-                    length = HitObject.length
+                    length = HitObject.length,
+                    initialSVTime = self:getPositionFromTime(HitObject.startTime)
                 })
             end
         end
@@ -24,10 +48,31 @@ end
 function maniaPlayField:getPositionFromTime(time, index)
     index = index or -1
 
-    return time -- TODO: Implement SV's
+    if index <= 1 then
+        for i = 1, #self.chart.scrollVelocities do
+            if time < self.chart.scrollVelocities[i].startTime then
+                index = i
+                break
+            end
+        end
+    end
+
+    if index <= 1 then
+        return time * self.chart.meta.initialSV
+    end
+
+    local prev = self.chart.scrollVelocities[index - 1]
+
+    return self.svMarks[index - 1] + (time - prev.startTime) * prev.multiplier
 end
 
 function maniaPlayField:update(dt)
+    while (self.svIndex <= #self.chart.scrollVelocities and MusicTime >= self.chart.scrollVelocities[self.svIndex].startTime) do
+        self.svIndex = self.svIndex + 1
+    end
+
+    self.currentTime = self:getPositionFromTime(MusicTime, self.svIndex)
+
     for _, Lane in ipairs(self.lanes) do
         Lane:update(dt)
     end
