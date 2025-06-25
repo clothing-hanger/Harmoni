@@ -35,7 +35,7 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
     self.size = maniaNoteSize
     self.held = false
 
-    print("JIIIIII?")
+    print("HIIIIII?")
 end
 
 function maniaReceptor:getLaneString()
