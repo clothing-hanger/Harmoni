@@ -96,10 +96,11 @@ function video:draw()
         --love.graphics.setColor(self.colour[1], self.colour[2], self.colour[3], self.alpha)
 
         -- determine new scale
-        local sx, sy = self.width,self.height
+        local sx, sy = baseScreenRatio.x/self.image:getWidth(), baseScreenRatio.y/self.image:getHeight()
+        local ox, oy = self.image:getWidth()/2, self.image:getHeight()/2
 
 
-        love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy)
+        love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy)
 
 
     love.graphics.pop()

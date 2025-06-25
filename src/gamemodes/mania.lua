@@ -11,9 +11,6 @@ function mania:new(chart, parent)
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile,"stream")
 
     mania.judgements = require("Modules.maniaJudgements")
-    self.judgements = mania.judgementObject
-
-    self.judgements = require("Modules.maniaJudgements")
 
     self:setUpObjects()
 
@@ -32,17 +29,23 @@ function mania:setUpObjects(guglio, i, hate, you)
     self.background = sharedBackground(backgroundPath, 0.8, 1)
     local songLengthInSeconds = self.song:getDuration("seconds")
 
-    self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,10,-5,5,30)
+    self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,5,-5,5,30)
 
     self.judgementObject = maniaJudgement(Skin.Params["Judgement X Offset"], Skin.Params["Judgement Y Offset"], Skin.Params["Judgement Size"], self.judgements, self)
 
 end
 
 function mania:setUpChart(chart)
+    local songPath = getDirectory(chart)
     local chart = ChartParse.harmc(chart)
     local maniaChart = {}
     maniaChart.meta = chart.meta
     maniaChart.hitObjects = {}
+    if chart.meta.backgroundVideo then
+        if getFileExtension(chart.meta.backgroundVideo) == "mp4" then
+            self.videoBackground = video(songPath .. "/" .. chart.meta.backgroundVideo, baseScreenRatio.x/2, baseScreenRatio.y/2, 1, 1)
+        end
+    end
 
     for i, BpmChange in ipairs(chart.bpm) do
         
@@ -84,15 +87,17 @@ function mania:input()
 end
 --]]
 
+
 function mania:update(dt)
     self:updateObjects(dt)
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:update(dt)
     end
-    if MusicTime >=0 and not self.song:isPlaying() then self.song:play() end
+    if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end
 end
 
 function mania:updateObjects(dt)
+    if self.videoBackground then self.videoBackground:update(dt) end
     self.background:update(dt)
     self.judgementObject:update(dt)
     self.timeRemaingBar:update(dt)
@@ -100,6 +105,7 @@ end
 
 function mania:draw()
     self.background:draw()
+    if self.videoBackground then self.videoBackground:draw() end
 
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:draw()
