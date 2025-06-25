@@ -1,7 +1,8 @@
 local titleScreen = State("titleScreen")
 
 function titleScreen:enter()
-    self.realLogo = love.graphics.newImage("Skins/Default Arrow/TEMP/real logo.png")
+    self.realLogo = love.graphics.newImage("Skins/Default Arrow/TEMP/real logo"..tostring(love.math.random(1,2))..".png")
+
 end
 
 function titleScreen:update(dt)
