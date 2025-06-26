@@ -5,7 +5,7 @@ local mode, chart
 local songInfo
 local timebar
 local time 
-function transition:enter(s,mode,chart,image)
+function transition:enter(previous,mode,chart,image)
     time = 5
     uhmmode, uhmchart = mode, chart
     print(image)
