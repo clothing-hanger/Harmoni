@@ -28,6 +28,7 @@ function maniaPlayField:new(chart, parent)
         end
     end
 
+    local mode = tonumber(self.chart.meta.laneCount)
     for i = 1, self.chart.meta.laneCount do
         print(self.chart.meta.laneCount)
         local hitObjects = {}
@@ -41,7 +42,7 @@ function maniaPlayField:new(chart, parent)
                 })
             end
         end
-        table.insert(self.lanes, maniaLane(i, self.laneSpacing, self.laneYOffset, hitObjects, self))
+        table.insert(self.lanes, maniaLane(mode, i, self.laneSpacing, self.laneYOffset, hitObjects, self))
     end
 end
 

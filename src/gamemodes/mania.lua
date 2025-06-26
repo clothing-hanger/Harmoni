@@ -121,7 +121,7 @@ function mania:draw()
     love.graphics.printf(mania.currentTEMPJudgement or "i dont fucking know yet", baseScreenRatio.x/2-1000, baseScreenRatio.y/2, 1000, "center")
 
 
-    love.graphics.print(#maniaChart.hitObjects, nil, 3, 3)
+    --love.graphics.print(#maniaChart.hitObjects, nil, 3, 3)
 
     self.timeRemaingBar:draw()
 end

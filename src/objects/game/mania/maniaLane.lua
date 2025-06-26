@@ -1,32 +1,33 @@
 local maniaLane = Class:extend("maniaLane")
 
-function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
+function maniaLane:new(mode,maniaLane,spacing,YOffset,hitObjects,parent)
     self.maniaLane = maniaLane
+    self.maniaMode = mode
     self.spacing = spacing
     self.yOffset = YOffset
     self.hitObjects = hitObjects
-    self.inputBind = maniaInputs[self.maniaLane]
+    self.inputBind = maniaInputs[mode][self.maniaLane]
     self.parent = parent
     self.notes = {}
     self.drawableNotes = {}
 
     self:setUpHitObjects(self.hitObjects)
-    print("hi",maniaLanePositions[self.maniaLane])
+    print("hi",maniaLanePositions[self.parent.chart.meta.laneCount .. "K"][self.maniaLane])
 
-    self.x,self.y = maniaLanePositions[self.maniaLane], self.yOffset
+    self.x,self.y = maniaLanePositions[self.parent.chart.meta.laneCount .. "K"][self.maniaLane], self.yOffset
 
     self:setUpReceptor()
 end
 
 function maniaLane:setUpReceptor()  -- does this really need to be a whole function lol
-    self.receptor = maniaReceptor(self.maniaLane, self.inputBind, self.x, self.y, self)
+    self.receptor = maniaReceptor(self.maniaMode, self.maniaLane, self.inputBind, self.x, self.y, self)
 
 end
 
 function maniaLane:setUpHitObjects(hitObjects)
     for i, HitObject in ipairs(hitObjects) do
         if HitObject.type == "note" then
-            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, HitObject.initialSVTime, self))
+            table.insert(self.notes, maniaNote(HitObject.startTime, HitObject.length, self.maniaLane, self.maniaMode, HitObject.initialSVTime, self))
         end
     end
 end

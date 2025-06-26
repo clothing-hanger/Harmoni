@@ -6,7 +6,7 @@ local songInfo
 local timebar
 local time 
 function transition:enter(previous,mode,chart,image)
-    time = 5
+    time = 0.5
     uhmmode, uhmchart = mode, chart
     local chart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
     print(image)

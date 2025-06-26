@@ -3,11 +3,12 @@ local maniaNote = Class:extend("maniaNote")
 local fourkLanes = {"Left", "Down", "Up", "Right"}
 local sevenkLanes = {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
 
-function maniaNote:new(startTime, holdLength, lane, initialSVTime, parent)
+function maniaNote:new(startTime, holdLength, lane, mode, initialSVTime, parent)
     self.size = maniaNoteSize
     self.startTime = startTime
     self.holdLength = holdLength
     self.lane = lane
+    self.mode = mode
 
     self.parent = parent
 
@@ -17,7 +18,7 @@ function maniaNote:new(startTime, holdLength, lane, initialSVTime, parent)
 
     self.image = Skin.Notes[self.laneCountString][self.laneString]
 
-    self.x, self.y = maniaLanePositions[self.lane], self.startTime + (MusicTime or 0)
+    self.x, self.y = maniaLanePositions[self.laneCountString][self.lane], self.startTime + (MusicTime or 0)
     self.initialSVTime = initialSVTime
 
     self.visible = true
