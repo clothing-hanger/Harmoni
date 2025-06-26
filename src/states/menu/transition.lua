@@ -1,13 +1,14 @@
 local transition = State("transition")
 local BGImage
 local background
-local mode, chart
+local uhmmode, uhmchart
 local songInfo
 local timebar
 local time 
 function transition:enter(s,mode,chart,image)
-    time = 5
+    time = 3
     uhmmode, uhmchart = mode, chart
+    local chart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
     print(image)
     timebar = {0}
     background = sharedBackground(image)
@@ -17,11 +18,11 @@ function transition:enter(s,mode,chart,image)
 
 
     songInfo = {
-        songName = "the fucking song name",
-        diffName = "this should prob be the difficulty name",
-        mode = "probably fucking mania since thats the only one",
-        artist = "whoever made the song idk",
-        charter = "somebody????",
+        songName = chart.meta.title,
+        diffName = chart.meta.difficultyName,
+        mode = chart.meta.gameMode,
+        artist = chart.meta.artist,
+        charter = chart.meta.creator,
         mods = "the game doesnt even have mods..",
         notes = "if its not obvious enough, this is a placeholder",
     }
