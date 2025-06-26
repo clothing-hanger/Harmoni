@@ -29,11 +29,11 @@ end
 
 function transition:startTimer(time)
     print("hi?")
-    local uhhDoShit = function()
+    local function uhhDoShit()
         background:changeDimness(gameplayBackgroundDim, time*0.1, function() self:switchToGame(uhmmode, uhmchart) end)
     end
 
-    Timer.after(time, function()  uhhDoShit() end)
+    Timer.after(time, function() uhhDoShit() end)
 end
 
 function transition:startTimeRemaining()
