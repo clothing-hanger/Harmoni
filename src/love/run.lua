@@ -190,6 +190,7 @@ function love.run()
 end
 
 local o_timer_getFPS = love.timer.getFPS
+---@diagnostic disable-next-line: duplicate-set-field
 function love.timer.getFPS()
     return love._currentFPS, o_timer_getFPS()
 end
