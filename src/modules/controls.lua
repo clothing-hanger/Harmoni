@@ -15,6 +15,14 @@ function setupControls()
             lane34K = {"key:j"},
             lane44K = {"key:k"},
 
+            lane17K = {"key:s"},
+            lane27K = {"key:d"},
+            lane37K = {"key:f"},
+            lane47K = {"key:space"},
+            lane57K = {"key:j"},
+            lane67K = {"key:k"},
+            lane77K = {"key:l"},
+
             debugConsoleToggle = {"key:`"}
         },
         joystick = love.joystick.getJoysticks()[1]

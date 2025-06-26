@@ -158,14 +158,14 @@ end
 
     self:setupSongList()
 
-    self:setUpThoseLinesThatIHate(8)
+    self:setUpThoseLinesThatIHate(10)
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
     self.squiglyLines = {}
     for i = 1,numberOfLines do
-        local y = (baseScreenRatio.y/numberOfLines)*(i-1)
-        local x1,x2 = 0, baseScreenRatio.x
+        local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
+        local x1,x2 = -50, baseScreenRatio.x+50
         table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
     end
 end
@@ -398,9 +398,11 @@ function songSelect:draw(dt)
     love.graphics.setColor(1,1,1,BGAlpha[1])
     if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
     love.graphics.setColor(1,1,1,0.1)
+
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end
+
     self:drawGradients()
 
     for _, SongButton in ipairs(songButtons) do

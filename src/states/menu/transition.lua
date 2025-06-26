@@ -5,8 +5,8 @@ local uhmmode, uhmchart
 local songInfo
 local timebar
 local time 
-function transition:enter(s,mode,chart,image)
-    time = 0.1
+function transition:enter(previous,mode,chart,image)
+    time = 0.5
     uhmmode, uhmchart = mode, chart
     local chart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
     print(image)
@@ -30,11 +30,11 @@ end
 
 function transition:startTimer(time)
     print("hi?")
-    local uhhDoShit = function()
+    local function uhhDoShit()
         background:changeDimness(gameplayBackgroundDim, time*0.1, function() self:switchToGame(uhmmode, uhmchart) end)
     end
 
-    Timer.after(time, function()  uhhDoShit() end)
+    Timer.after(time, function() uhhDoShit() end)
 end
 
 function transition:startTimeRemaining()

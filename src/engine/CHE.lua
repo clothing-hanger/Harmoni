@@ -38,12 +38,8 @@ function CHE:init()
 
     cursor = cursor()
 
-
-
-
-
-
-    local screenMiddle = baseScreenRatio.x / 2         --TEMP SHIT 
+    -- Temp
+    local screenMiddle = baseScreenRatio.x / 2
     musicPath = "Music/"
     maniaNoteSize = 180
     maninaLaneGap = 10
@@ -53,6 +49,7 @@ function CHE:init()
     if DOWNSCROLL_ENABLED then
         maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
     end
+    
 
     defaultFont = love.graphics.newFont(12)
 
@@ -63,19 +60,42 @@ function CHE:init()
     songSelectSongInfoFontSmall = love.graphics.newFont("fonts/astonpoliz.regular.ttf", 25)
 
     maniaLanePositions = {
-        screenMiddle - (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
-        screenMiddle - (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
-        screenMiddle + (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
-        screenMiddle + (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
+        ["4K"] = {
+            screenMiddle - (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
+            screenMiddle - (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
+            screenMiddle + (0.5 * maniaNoteSize + 0.5 * maninaLaneGap),
+            screenMiddle + (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
+        },
+        ["7K"] = {
+            screenMiddle - (3 * maniaNoteSize + 3 * maninaLaneGap),
+            screenMiddle - (2 * maniaNoteSize + 2 * maninaLaneGap),
+            screenMiddle - (1 * maniaNoteSize + 1 * maninaLaneGap),
+            screenMiddle - (0 * maniaNoteSize + 0 * maninaLaneGap),
+            screenMiddle + (1 * maniaNoteSize + 1 * maninaLaneGap),
+            screenMiddle + (2 * maniaNoteSize + 2 * maninaLaneGap),
+            screenMiddle + (3 * maniaNoteSize + 3 * maninaLaneGap),
+        }
     }
 
     maniaInputs = {
-        "lane14K",
-        "lane24K",
-        "lane34K",
-        "lane44K",
+        --[[  ]]
+        [4] = {
+            "lane14K",
+            "lane24K",
+            "lane34K",
+            "lane44K"
+        },
+        [7] = {
+            "lane17K",
+            "lane27K",
+            "lane37K",
+            "lane47K",
+            "lane57K",
+            "lane67K",
+            "lane77K"
+        }
     }
-
+    --
 
     Skin = SkinHandler:loadSkin("Default Arrow")
 

@@ -8,9 +8,10 @@ local laneStrings = {
     {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
 }
 
-function maniaReceptor:new(lane, input, x ,y ,parent)
+function maniaReceptor:new(mode, lane, input, x ,y ,parent)
     self.parent = parent
     self.lane = lane
+    self.mode = mode
     self.inputBind = input
     self.laneCount = self.parent.parent.chart.meta.laneCount  -- horrid, awful, disgusting, terrible, gross, icky, bad, i ran out of synonyms but i hate this
                                                               -- theres really nothing wrong with this i just dont like how it looks
@@ -23,8 +24,11 @@ function maniaReceptor:new(lane, input, x ,y ,parent)
 
     --print("HFHJDFD", self.laneCountString)
 
+    
     self.imageUp = Skin.Receptors.Up[self.laneCountString][self.laneString]
     self.imageDown = Skin.Receptors.Down[self.laneCountString][self.laneString]
+
+    print(self.laneCount, self.laneString, Skin.Receptors.Up[self.laneCountString][self.laneString], Skin.Receptors.Down[self.laneCountString][self.laneString])
 
     --print("images:",self.imageUp,self.imageDown)
     --print("SKIN SHIT", self.laneString)
