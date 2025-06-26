@@ -2,6 +2,7 @@ local mania = Class:extend("mania")
 
 function mania:new(chart, parent)
     self.parent = parent
+    self.videoBackground = false
     self.chartPath = getDirectory(chart)
     print("with file", chart, "without file", self.chartPath)
     self.chart = mania:setUpChart(chart)
@@ -99,6 +100,14 @@ function mania:update(dt)
         PlayFeild:update(dt)
     end
     if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end
+
+    if self.playField[1].empty then self:endSong() end
+
+    print(self.playField[1].empty)
+end
+
+function mania:endSong()
+    State.switch(States.menu.songSelect)
 end
 
 function mania:updateObjects(dt)
@@ -118,10 +127,8 @@ function mania:draw()
     self.judgementObject:draw()
     --TEMP
     love.graphics.setFont(songButtonFontLarge)
-    love.graphics.printf(mania.currentTEMPJudgement or "i dont fucking know yet", baseScreenRatio.x/2-1000, baseScreenRatio.y/2, 1000, "center")
 
 
-    love.graphics.print(#maniaChart.hitObjects, nil, 3, 3)
 
     self.timeRemaingBar:draw()
 end

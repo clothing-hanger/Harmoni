@@ -17,9 +17,10 @@ local songButtonX = 20
 
 local difficultyButtonX = songButtonX + songButtonWidth + 30
 
-local switchingState = false
+local switchingState
 
 function songSelect:enter()
+    switchingState = false
     self.colors = {
         light = {0, 0, 0, 0},
         dark = {0, 0, 0, 0.8}

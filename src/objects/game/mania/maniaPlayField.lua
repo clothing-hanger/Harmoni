@@ -1,11 +1,13 @@
 local maniaPlayField = Class:extend("maniaPlayField")
 
 function maniaPlayField:new(chart, parent)
+    self.totalNotes = 0
     self.parent = parent
     self.chart = chart
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
     self.svMarks = {}
+    self.empty = false
     self.svIndex = 1
     self.currentTime = 0
 
@@ -67,21 +69,28 @@ function maniaPlayField:getPositionFromTime(time, index)
 end
 
 function maniaPlayField:update(dt)
+    local allLanesEmpty
     while (self.svIndex <= #self.chart.scrollVelocities and MusicTime >= self.chart.scrollVelocities[self.svIndex].startTime) do
         self.svIndex = self.svIndex + 1
     end
 
     self.currentTime = self:getPositionFromTime(MusicTime, self.svIndex)
-
+    self.totalNotes = 0
     for _, Lane in ipairs(self.lanes) do
+        allLanesEmpty = true
         Lane:update(dt)
+        if Lane.empty == false then allLanesEmpty = false end
     end
+
+    self.empty = allLanesEmpty
 end
 
 function maniaPlayField:draw()
     for _, Lane in ipairs(self.lanes) do
         Lane:draw()
     end
+
+    love.graphics.print(tostring(self.empty), 20, 300, nil, 3,3)
 end
 
 return maniaPlayField

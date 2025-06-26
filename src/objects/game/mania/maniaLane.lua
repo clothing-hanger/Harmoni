@@ -9,6 +9,7 @@ function maniaLane:new(maniaLane,spacing,YOffset,hitObjects,parent)
     self.parent = parent
     self.notes = {}
     self.drawableNotes = {}
+    self.empty = false
 
     self:setUpHitObjects(self.hitObjects)
     print("hi",maniaLanePositions[self.maniaLane])
@@ -42,6 +43,8 @@ function maniaLane:update(dt)
     self.receptor:update(dt)
     self:input()
     self:checkForMisses()
+
+    if #self.notes == 0 and #self.drawableNotes == 0 then self.empty = true end
 end
 
 function maniaLane:isOnScreen(note)
