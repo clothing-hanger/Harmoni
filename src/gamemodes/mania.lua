@@ -101,12 +101,22 @@ function mania:update(dt)
     end
     if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end
 
-    if self.playField[1].empty then self:endSong() end
+    if self.playField[1].empty or debugShitIdk then self:endSong() end
 
-    print(self.playField[1].empty)
+
+
+
+    if thething then
+        thething = false
+        self:endSong()
+    end
 end
 
 function mania:endSong()
+    self.song:stop()
+    self.song = nil
+    self.chart = nil
+    self.playField = {}
     State.switch(States.menu.songSelect)
 end
 

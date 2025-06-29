@@ -20,6 +20,10 @@ local difficultyButtonX = songButtonX + songButtonWidth + 30
 local switchingState
 
 function songSelect:enter()
+
+    songList= {}
+    difficultyList = {}
+    songButtons = {}
     switchingState = false
     self.colors = {
         light = {0, 0, 0, 0},
@@ -383,6 +387,9 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
                 State.switch(States.menu.transition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
+                    songList= {}
+                    difficultyList = {}
+                    songButtons = {}
                 switchingState = true
             end
             -- why go through the rest? we already have a match so just break
@@ -412,6 +419,7 @@ function songSelect:draw(dt)
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
     songSelect:drawSongInfo()
     songSelect:drawSongInfo()
+
 end
 
 function songSelect:drawGradients()

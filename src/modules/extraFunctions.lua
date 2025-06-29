@@ -188,6 +188,10 @@ function lerp(a, b, t)
     return a + (b - a) * t
 end
 
+function getDistance(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
 function lerpAngle(a, b, t)
     local diff = (b - a + math.pi) % (2 * math.pi) - math.pi
     return a + diff * t
