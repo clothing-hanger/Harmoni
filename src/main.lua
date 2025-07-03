@@ -1,5 +1,9 @@
 require("love.error")
 require("love.run")
+
+
+dontShowBG = true  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
+
 local function table_find(t, value)
     for i, v in ipairs(t) do
         if v == value then

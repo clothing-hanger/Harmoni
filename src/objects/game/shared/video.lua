@@ -100,7 +100,7 @@ function video:draw()
         local ox, oy = self.image:getWidth()/2, self.image:getHeight()/2
 
 
-        love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy)
+        if not dontShowBG then love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy) end
 
 
     love.graphics.pop()

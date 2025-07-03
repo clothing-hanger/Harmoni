@@ -90,7 +90,7 @@ function menuSongButton:draw()
     if self.imageLoaded then
         imageScale = self.width/self.image:getWidth()
     end
-    if self.imageLoaded then love.graphics.draw(self.image, self.x, self.y-(self.image:getHeight()*imageScale)/2, nil, imageScale, imageScale) end
+    if self.imageLoaded and not dontShowBG then love.graphics.draw(self.image, self.x, self.y-(self.image:getHeight()*imageScale)/2, nil, imageScale, imageScale) end
 
     -- draw gradient and filler rectangle
     love.graphics.setColor(self.color)

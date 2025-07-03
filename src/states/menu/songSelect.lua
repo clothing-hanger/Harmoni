@@ -401,11 +401,12 @@ end
 
 function songSelect:draw(dt)
     -- draw background from selected song button
-    if previousBG then love.graphics.draw(previousBG,0,0, nil, baseScreenRatio.x/previousBG:getWidth(), baseScreenRatio.y/previousBG:getHeight()) end 
-    love.graphics.setColor(1,1,1,BGAlpha[1])
-    if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
-    love.graphics.setColor(1,1,1,0.1)
-
+    if not dontShowBG then
+        if previousBG then love.graphics.draw(previousBG,0,0, nil, baseScreenRatio.x/previousBG:getWidth(), baseScreenRatio.y/previousBG:getHeight()) end 
+        love.graphics.setColor(1,1,1,BGAlpha[1])
+        if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
+        love.graphics.setColor(1,1,1,0.1)
+    end
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end

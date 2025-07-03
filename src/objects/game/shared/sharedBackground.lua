@@ -41,7 +41,7 @@ end
 
 function sharedBackground:draw()
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.image, self.x, self.y, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2)
+    if not dontShowBG then love.graphics.draw(self.image, self.x, self.y, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2) end
     love.graphics.setColor(0,0,0,self.dimness)
     love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)
