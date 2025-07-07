@@ -41,7 +41,7 @@ function maniaReceptor:new(mode, lane, input, x ,y ,parent)
 
 
 
-    self.debug = true
+    self.debug = false
 end
 
 function maniaReceptor:getLaneString()

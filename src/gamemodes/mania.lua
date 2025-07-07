@@ -34,6 +34,9 @@ function mania:setUpObjects()
 
     self.judgementObject = maniaJudgement(Skin.Params["Judgement X Offset"], Skin.Params["Judgement Y Offset"], Skin.Params["Judgement Size"], self.judgements, self)
 
+    self.comboCount = maniaComboCount(Skin.Params["Combo X Offset"], Skin.Params["Combo Y Offset"])
+
+    self.healthBar = maniaHealthBar(Skin.Params["Health Bar X Offset"], Skin.Params["Health Bar Y Offset"], Skin.Params["Health Bar Width"], Skin.Params["Health Bar Height"], 1)
 end
 
 function mania:setUpChart(chart)
@@ -55,10 +58,12 @@ function mania:setUpChart(chart)
     end
     for i, SliderVeloticy in ipairs(chart.sliderVelocities) do
        -- print(i, SliderVeloticy.startTime, SliderVeloticy.multiplier)
+       --[[
         table.insert(maniaChart.scrollVelocities, {
-                startTime = SliderVeloticy.startTime,
+                startTime = SliderVeloticy.startTime,             GUGLIOO PLEASSEEE
                 multiplier = SliderVeloticy.multiplier
         })
+        --]]
     end
     for i, HitObject in ipairs(chart.hitObjects) do
        -- print(i, HitObject.type, HitObject.startTime, HitObject.length)
@@ -99,9 +104,10 @@ function mania:update(dt)
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:update(dt)
     end
-    if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end
+    if self.song then if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end end
 
-    if self.playField[1].empty or debugShitIdk then self:endSong() end
+    if self.song then if self.playField[1].empty or debugShitIdk then self:endSong() end end   -- i could not tell you why the if self.song needs to be there but without it the game dies
+                                                                                                         -- fucking tf2 coconut
 
 
 
@@ -125,6 +131,9 @@ function mania:updateObjects(dt)
     self.background:update(dt)
     self.judgementObject:update(dt)
     self.timeRemaingBar:update(dt)
+    self.comboCount:update(dt)
+    self.healthBar:update(dt)
+    if self.healthBar.health <= 0 then self:endSong() end
 end
 
 function mania:draw()
@@ -139,8 +148,10 @@ function mania:draw()
     love.graphics.setFont(songButtonFontLarge)
 
 
-
+    self.comboCount:draw()
     self.timeRemaingBar:draw()
+
+    self.healthBar:draw()
 end
 
 return mania

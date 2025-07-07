@@ -26,7 +26,7 @@ function maniaJudgement:judge(judgement)
 
     table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false})
 
-
+    return 
 end
 
 function maniaJudgement:judgementAnimation()
@@ -70,7 +70,7 @@ function maniaJudgement:draw()
         ::continue::
     end
     love.graphics.setColor(1,1,1)
-    love.graphics.print("Judgement Table Length: " .. #self.judgements, 0, 50, nil, 10,10)
+   -- love.graphics.print("Judgement Table Length: " .. #self.judgements, 0, 50, nil, 10,10)
 end
 
 return maniaJudgement

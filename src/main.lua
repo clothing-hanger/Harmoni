@@ -2,7 +2,7 @@ require("love.error")
 require("love.run")
 
 
-dontShowBG = true  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
+dontShowBG = false  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 
 local function table_find(t, value)
     for i, v in ipairs(t) do
@@ -34,10 +34,13 @@ function love.load(args)
     require("modules.gamemodes")
 
     require("bob.init")
-
+    Settings = require("Modules.Settings")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
     SongListManager = require("modules.songListManager")
+
+    --Settings.createSettingsFile()
+   -- Settings.loadSettings()
 
     State.switch(States.menu.titleScreen)
 end

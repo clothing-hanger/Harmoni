@@ -58,9 +58,9 @@ function maniaLane:input()
             if Input:pressed(self.inputBind) then
                 if math.abs(MusicTime - Note.startTime) <= Judgement.timing then
                     table.remove(self.drawableNotes, i)
-                    mania.currentTEMPJudgement=   Judgement.name
+                    self.parent.parent.comboCount:incrementCombo()
                     self.parent.parent.judgementObject:judge(Judgement.name)
-
+                    self.parent.parent.healthBar:changeHealth(Judgement.health)
                     break
                 end
             end
@@ -71,10 +71,12 @@ end
 function maniaLane:checkForMisses()
     local timing
     local judgementName
+    local JudgementHealth
     for _, Judgement in ipairs(mania.judgements) do
         if Judgement.name == "Miss" then
             timing = Judgement.timing
             judgementName = Judgement.name
+            JudgementHealth = Judgement.health
             break
         end
     end
@@ -84,9 +86,9 @@ function maniaLane:checkForMisses()
     for i = #self.drawableNotes, 1, -1 do
         local Note = self.drawableNotes[i]
         if MusicTime - Note.startTime > timing then
-            mania.currentTEMPJudgement=   judgementName
             self.parent.parent.judgementObject:judge(judgementName)
-
+            self.parent.parent.comboCount:breakCombo()
+            self.parent.parent.healthBar:changeHealth(JudgementHealth)
 
             table.remove(self.drawableNotes, i)
         end

@@ -54,8 +54,28 @@ Settings.defaultSettings = function()
 
 end
 
+Settings.loadSettings = function()
+    LoadedSettings = require("Settings.Settings")
+    for tabName,Tab in pairs(settingsFile) do
+        for modeName, Mode in pairs(Tab) do
+            for settingName, Setting in pairs(Mode) do
+                -- this is useless i think? because the fucking settings file itself is literally already good
+            end
+        end
+    end
+end
+
+function Settings.checkForMissingSettings()
+    for tabName, Tab in pairs(Settings.SettingsTable) do
+        if not LoadedSettings[tabName] then
+            return "the settings file is super fucked up idfk"
+        end
+        --for 
+    end
+end
+
 Settings.createSettingsFile = function()
-    love.filesystem.write("Settings.Settings.lua")
+    love.filesystem.write("Settings/Settings.lua", "hiii!")
 end
 
 return Settings
