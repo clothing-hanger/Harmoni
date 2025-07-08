@@ -27,7 +27,7 @@ end
 
 function maniaComboCount:tweenCombo(combo)
     combo.hasTweened = true
-    Timer.tween(Skin.Params["Judgement Bump Time"], combo, {y = combo.y+Skin.Params["Judgement Bump Amount"]}, Skin.Params["Judgement Bump Tween Type"])
+    Timer.tween(SkinHandler:getParam("Judgement Bump Time"), combo, {y = combo.y+SkinHandler:getParam("Judgement Bump Amount")}, SkinHandler:getParam("Judgement Bump Tween Type"))
 end
 
 function maniaComboCount:breakCombo()
@@ -42,7 +42,7 @@ function maniaComboCount:addDrawableCombo()
 end
 
 function maniaComboCount:draw()
-    love.graphics.setFont(Skin.Fonts["Combo"])
+    love.graphics.setFont(SkinHandler:getFont("Combo"))
     for i, Combo in ipairs(self.drawnCombos) do
         local alpha = self.fullTimeLimit/Combo.time
         if self.removeThatUglyAssStackingEffect then alpha = 1 end

@@ -25,8 +25,6 @@ function maniaJudgement:judge(judgement)
     end
 
     table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false})
-
-    return 
 end
 
 function maniaJudgement:judgementAnimation()
@@ -35,7 +33,7 @@ function maniaJudgement:judgementAnimation()
         if not Judgement.bumped then
             Judgement.bumped = true
             if judgeTween then Timer.cancel(judgeTween) end
-            judgeTween = Timer.tween(Skin.Params["Judgement Bump Time"], Judgement, {y = Judgement.y+Skin.Params["Judgement Bump Amount"]}, Skin.Params["Judgement Bump Tween Type"])
+            judgeTween = Timer.tween(SkinHandler:getParam("Judgement Bump Time"), Judgement, {y = Judgement.y+SkinHandler:getParam("Judgement Bump Amount")}, SkinHandler:getParam("Judgement Bump Tween Type"))
         end
     end
 end

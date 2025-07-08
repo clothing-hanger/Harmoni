@@ -3,7 +3,11 @@ local sharedBackground = Class:extend("sharedBackground")
 local bumpTween
 function sharedBackground:new(imagePath, dimness, size)
     self.image = (type(imagePath) == "string" and love.graphics.newImage(imagePath)) or imagePath
-    self.baseSizeX, self.baseSizeY = baseScreenRatio.x/self.image:getWidth(), baseScreenRatio.y/self.image:getHeight()
+    if self.image then
+        self.baseSizeX, self.baseSizeY = baseScreenRatio.x/self.image:getWidth(), baseScreenRatio.y/self.image:getHeight()
+    else
+        self.baseSizeX, self.baseSizeY = baseScreenRatio.x, baseScreenRatio.y
+    end
     self.size = size or 1
     self.originalSize = self.size
     self.dimness = dimness or 0
@@ -41,7 +45,16 @@ end
 
 function sharedBackground:draw()
     love.graphics.setColor(1,1,1,1)
-    if not dontShowBG then love.graphics.draw(self.image, self.x, self.y, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2) end
+    if not dontShowBG and self.image then
+        love.graphics.draw(self.image, self.x, self.y, self.rotation, self.baseSizeX * self.size, self.baseSizeY * self.size, self.image:getWidth()/2, self.image:getHeight()/2)
+    else
+        love.graphics.push()
+        love.graphics.translate(self.baseSizeX/2, self.baseSizeY/2)
+        love.graphics.rotate(self.rotation)
+        love.graphics.scale(self.size, self.size)
+        love.graphics.rectangle("fill", self.x, self.y, self.baseSizeX, self.baseSizeY, 0, 0)
+        love.graphics.pop()
+    end
     love.graphics.setColor(0,0,0,self.dimness)
     love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)

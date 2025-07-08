@@ -24,12 +24,9 @@ function maniaReceptor:new(mode, lane, input, x ,y ,parent)
 
     --print("HFHJDFD", self.laneCountString)
 
-    
-    self.imageUp = Skin.Receptors.Up[self.laneCountString][self.laneString]
-    self.imageDown = Skin.Receptors.Down[self.laneCountString][self.laneString]
 
-    print(self.laneCount, self.laneString, Skin.Receptors.Up[self.laneCountString][self.laneString], Skin.Receptors.Down[self.laneCountString][self.laneString])
-
+    self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
+    self.imageDown =SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)
     --print("images:",self.imageUp,self.imageDown)
     --print("SKIN SHIT", self.laneString)
 

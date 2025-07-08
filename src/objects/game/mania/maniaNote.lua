@@ -16,7 +16,7 @@ function maniaNote:new(startTime, holdLength, lane, mode, initialSVTime, parent)
     self.laneCountString = tostring(self.laneCount .. "K")
     self.laneString = self:getLaneString()
 
-    self.image = Skin.Notes[self.laneCountString][self.laneString]
+    self.image = SkinHandler:getImage("Notes", self.laneCountString, self.laneString)
 
     self.x, self.y = maniaLanePositions[self.laneCountString][self.lane], self.startTime + (MusicTime or 0)
     self.initialSVTime = initialSVTime

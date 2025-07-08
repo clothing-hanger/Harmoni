@@ -25,23 +25,23 @@ function mania:startSong(countdown)
 end
 
 function mania:setUpObjects()
-
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
+
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     local songLengthInSeconds = self.song:getDuration("seconds")
 
     self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,5,-5,5,30)
 
-    self.judgementObject = maniaJudgement(Skin.Params["Judgement X Offset"], Skin.Params["Judgement Y Offset"], Skin.Params["Judgement Size"], self.judgements, self)
+    self.judgementObject = maniaJudgement(SkinHandler:getParam("Judgement X Offset"), SkinHandler:getParam("Judgement Y Offset"), SkinHandler:getParam("Judgement Size"), self.judgements, self)
 
-    self.comboCount = maniaComboCount(Skin.Params["Combo X Offset"], Skin.Params["Combo Y Offset"])
+    self.comboCount = maniaComboCount(SkinHandler:getParam("Combo X Offset"), SkinHandler:getParam("Combo Y Offset"))
 
-    self.healthBar = maniaHealthBar(Skin.Params["Health Bar X Offset"], Skin.Params["Health Bar Y Offset"], Skin.Params["Health Bar Width"], Skin.Params["Health Bar Height"], 1)
+    self.healthBar = maniaHealthBar(SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar Width"),SkinHandler:getParam("Health Bar Height"), 1)
 end
 
 function mania:setUpChart(chart)
     local songPath = getDirectory(chart)
-    local chart = ChartParse.harmc(chart)
+    chart = ChartParse.harmc(chart)
     local maniaChart = {}
     maniaChart.meta = chart.meta
     maniaChart.hitObjects = {}
@@ -53,20 +53,12 @@ function mania:setUpChart(chart)
     end
 
     for i, BpmChange in ipairs(chart.bpm) do
-    
-       -- print(i, BpmChange.startTime, BpmChange.bpm)
+
     end
     for i, SliderVeloticy in ipairs(chart.sliderVelocities) do
-       -- print(i, SliderVeloticy.startTime, SliderVeloticy.multiplier)
-       --[[
-        table.insert(maniaChart.scrollVelocities, {
-                startTime = SliderVeloticy.startTime,             GUGLIOO PLEASSEEE
-                multiplier = SliderVeloticy.multiplier
-        })
-        --]]
+
     end
     for i, HitObject in ipairs(chart.hitObjects) do
-       -- print(i, HitObject.type, HitObject.startTime, HitObject.length)
         table.insert(maniaChart.hitObjects, {
             type = HitObject.type,
             startTime = HitObject.startTime,
@@ -76,28 +68,6 @@ function mania:setUpChart(chart)
     end
     return maniaChart
 end
-
---[[
-function mania:input()
-    for p,PlayField in ipairs(self.playField) do
-        for l,Lane in ipairs(PlayField.lanes) do
-            for h,HitObject in ipairs(Lane.hitObjects) do
-                if Input:pressed(allInputs[l]) then
-                    for j,Judgement in ipairs(self.judgements) do
-                        print(Judgement.timing)
-                        if math.abs(HitObject.startTime - MusicTime) > Judgement.timing then
-                           -- HitObject:hit()
-                            --table.remove(Lane.hitObjects, h)
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
---]]
-
 
 function mania:update(dt)
     self:updateObjects(dt)
