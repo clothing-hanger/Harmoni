@@ -55,7 +55,16 @@ local restricted = {
     end,
 }
 
-local skinEnv = {}
+local skinEnv = {
+    newImage = restricted.love.graphics.newImage,
+    newFont = restricted.love.graphics.newFont,
+
+    newSource = restricted.love.audio.newSource,
+
+    getInfo = restricted.love.filesystem.getInfo,
+    read = restricted.love.filesystem.read,
+    exists = restricted.love.filesystem.exists
+}
 
 local chunk
 

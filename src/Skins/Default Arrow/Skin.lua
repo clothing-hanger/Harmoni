@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+---@
 Skin = {   -- i need to remove lots of these tbh..
     Params = {
         ["Note Size"] = 125,
@@ -37,127 +39,127 @@ Skin = {   -- i need to remove lots of these tbh..
     },
 
     Fonts = {
-        ["HUD Large"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 65),
-        ["HUD Small"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 15),
-        ["HUD Extra Small"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 12),
-        ["Combo"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 65),
-        ["Menu Large"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 25),
-        ["Menu Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 15),
-        ["Menu Extra Small"] = love.graphics.newFont("FONTS/SourceCodePro-Medium.ttf", 12),
-        ["Judgement Counter"] = love.graphics.newFont("FONTS/Novamono-njdg.ttf", 60)
+        ["HUD Large"] = newFont("FONTS/Novamono-njdg.ttf", 65),
+        ["HUD Small"] = newFont("FONTS/Novamono-njdg.ttf", 15),
+        ["HUD Extra Small"] = newFont("FONTS/Novamono-njdg.ttf", 12),
+        ["Combo"] = newFont("FONTS/SourceCodePro-Medium.ttf", 65),
+        ["Menu Large"] = newFont("FONTS/SourceCodePro-Medium.ttf", 25),
+        ["Menu Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 15),
+        ["Menu Extra Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 12),
+        ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60)
     },
 
     Notes = {
         ["4K"] = {
-            ["Left"] = love.graphics.newImage("NOTES/NoteLeft.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDown.png"),
-            ["Right"] = love.graphics.newImage("NOTES/NoteRight.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUp.png"),
+            ["Left"] = newImage("NOTES/NoteLeft.png"),
+            ["Down"] = newImage("NOTES/NoteDown.png"),
+            ["Right"] = newImage("NOTES/NoteRight.png"),
+            ["Up"] = newImage("NOTES/NoteUp.png"),
         },
         ["7K"] = {
-            ["Left1"] = love.graphics.newImage("NOTES/NoteLeft.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDown.png"),
-            ["Left2"] = love.graphics.newImage("NOTES/NoteLeft.png"),
-            ["Center"] = love.graphics.newImage("NOTES/NoteUp.png"),
-            ["Right1"] = love.graphics.newImage("NOTES/NoteRight.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUp.png"),
-            ["Right2"] = love.graphics.newImage("NOTES/NoteRight.png"),
+            ["Left1"] = newImage("NOTES/NoteLeft.png"),
+            ["Down"] = newImage("NOTES/NoteDown.png"),
+            ["Left2"] = newImage("NOTES/NoteLeft.png"),
+            ["Center"] = newImage("NOTES/NoteUp.png"),
+            ["Right1"] = newImage("NOTES/NoteRight.png"),
+            ["Up"] = newImage("NOTES/NoteUp.png"),
+            ["Right2"] = newImage("NOTES/NoteRight.png"),
         }
     },
 
     HoldNotes = {
         ["4K"] = {
-            ["Left"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDownTrail.png"),
-            ["Right"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
+            ["Left"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
+            ["Right"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
         },
         ["7K"] = {
-            ["Left1"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDownTrail.png"),
-            ["Right1"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
-            ["Center"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
-            ["Left2"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
-            ["Right2"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
+            ["Left1"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
+            ["Right1"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Center"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Left2"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Right2"] = newImage("NOTES/NoteRightTrail.png"),
         }
     },
 
     HoldEndNotes = {
         ["4K"] = {
-            ["Left"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDownTrail.png"),
-            ["Right"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
+            ["Left"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
+            ["Right"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
         },
         ["7K"] = {
-            ["Left1"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = love.graphics.newImage("NOTES/NoteDownTrail.png"),
-            ["Right1"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
-            ["Center"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
-            ["Left2"] = love.graphics.newImage("NOTES/NoteLeftTrail.png"),
-            ["Up"] = love.graphics.newImage("NOTES/NoteUpTrail.png"),
-            ["Right2"] = love.graphics.newImage("NOTES/NoteRightTrail.png"),
+            ["Left1"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
+            ["Right1"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Center"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Left2"] = newImage("NOTES/NoteLeftTrail.png"),
+            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Right2"] = newImage("NOTES/NoteRightTrail.png"),
         }
     },
 
     Receptors = {
         Up = {
             ["4K"] = {
-                ["Left"] = love.graphics.newImage("RECEPTORS/ReceptorLeft.png"),
-                ["Down"] = love.graphics.newImage("RECEPTORS/ReceptorDown.png"),
-                ["Right"] = love.graphics.newImage("RECEPTORS/ReceptorRight.png"),
-                ["Up"] = love.graphics.newImage("RECEPTORS/ReceptorUp.png"),
+                ["Left"] = newImage("RECEPTORS/ReceptorLeft.png"),
+                ["Down"] = newImage("RECEPTORS/ReceptorDown.png"),
+                ["Right"] = newImage("RECEPTORS/ReceptorRight.png"),
+                ["Up"] = newImage("RECEPTORS/ReceptorUp.png"),
             },
             ["7K"] = {
-                ["Left1"] = love.graphics.newImage("RECEPTORS/ReceptorLeft.png"),
-                ["Down"] = love.graphics.newImage("RECEPTORS/ReceptorDown.png"),
-                ["Right1"] = love.graphics.newImage("RECEPTORS/ReceptorRight.png"),
-                ["Center"] = love.graphics.newImage("RECEPTORS/ReceptorUp.png"),
-                ["Left2"] = love.graphics.newImage("RECEPTORS/ReceptorLeft.png"),
-                ["Up"] = love.graphics.newImage("RECEPTORS/ReceptorUp.png"),
-                ["Right2"] = love.graphics.newImage("RECEPTORS/ReceptorRight.png"),
+                ["Left1"] = newImage("RECEPTORS/ReceptorLeft.png"),
+                ["Down"] = newImage("RECEPTORS/ReceptorDown.png"),
+                ["Right1"] = newImage("RECEPTORS/ReceptorRight.png"),
+                ["Center"] = newImage("RECEPTORS/ReceptorUp.png"),
+                ["Left2"] = newImage("RECEPTORS/ReceptorLeft.png"),
+                ["Up"] = newImage("RECEPTORS/ReceptorUp.png"),
+                ["Right2"] = newImage("RECEPTORS/ReceptorRight.png"),
             }
         },
         Down = {
             ["4K"] = {
-                ["Left"] = love.graphics.newImage("RECEPTORS/ReceptorPressedLeft.png"),
-                ["Down"] = love.graphics.newImage("RECEPTORS/ReceptorPressedDown.png"),
-                ["Right"] = love.graphics.newImage("RECEPTORS/ReceptorPressedRight.png"),
-                ["Up"] = love.graphics.newImage("RECEPTORS/ReceptorPressedUp.png"),
+                ["Left"] = newImage("RECEPTORS/ReceptorPressedLeft.png"),
+                ["Down"] = newImage("RECEPTORS/ReceptorPressedDown.png"),
+                ["Right"] = newImage("RECEPTORS/ReceptorPressedRight.png"),
+                ["Up"] = newImage("RECEPTORS/ReceptorPressedUp.png"),
             },
             ["7K"] = {
-                ["Left1"] = love.graphics.newImage("RECEPTORS/ReceptorPressedLeft.png"),
-                ["Down"] = love.graphics.newImage("RECEPTORS/ReceptorPressedDown.png"),
-                ["Right1"] = love.graphics.newImage("RECEPTORS/ReceptorPressedRight.png"),
-                ["Center"] = love.graphics.newImage("RECEPTORS/ReceptorPressedUp.png"),
-                ["Left2"] = love.graphics.newImage("RECEPTORS/ReceptorPressedLeft.png"),
-                ["Up"] = love.graphics.newImage("RECEPTORS/ReceptorPressedUp.png"),
-                ["Right2"] = love.graphics.newImage("RECEPTORS/ReceptorPressedRight.png"),
+                ["Left1"] = newImage("RECEPTORS/ReceptorPressedLeft.png"),
+                ["Down"] = newImage("RECEPTORS/ReceptorPressedDown.png"),
+                ["Right1"] = newImage("RECEPTORS/ReceptorPressedRight.png"),
+                ["Center"] = newImage("RECEPTORS/ReceptorPressedUp.png"),
+                ["Left2"] = newImage("RECEPTORS/ReceptorPressedLeft.png"),
+                ["Up"] = newImage("RECEPTORS/ReceptorPressedUp.png"),
+                ["Right2"] = newImage("RECEPTORS/ReceptorPressedRight.png"),
             }
         }
     },
 
     Judgements = {
-        ["Perfect"] = love.graphics.newImage("JUDGEMENTS/perfect.png"),
-        ["Great"] = love.graphics.newImage("JUDGEMENTS/great.png"),
-        ["Good"] = love.graphics.newImage("JUDGEMENTS/good.png"),
-        ["Alright"] = love.graphics.newImage("JUDGEMENTS/alright.png"),
-        ["Awful"] = love.graphics.newImage("JUDGEMENTS/awful.png"),
-        ["Miss"] = love.graphics.newImage("JUDGEMENTS/miss.png"),
+        ["Perfect"] = newImage("JUDGEMENTS/perfect.png"),
+        ["Great"] = newImage("JUDGEMENTS/great.png"),
+        ["Good"] = newImage("JUDGEMENTS/good.png"),
+        ["Alright"] = newImage("JUDGEMENTS/alright.png"),
+        ["Awful"] = newImage("JUDGEMENTS/awful.png"),
+        ["Miss"] = newImage("JUDGEMENTS/miss.png"),
     },
 
     Particles = {
-        ["Note Splash"] = love.graphics.newImage("PARTICLES/circle.png"),
-        ["Combo Alert"] = love.graphics.newImage("PARTICLES/the  o r b.png"),
-        ["Health Particle"] = love.graphics.newImage("PARTICLES/lightDot.png"),
+        ["Note Splash"] = newImage("PARTICLES/circle.png"),
+        ["Combo Alert"] = newImage("PARTICLES/the  o r b.png"),
+        ["Health Particle"] = newImage("PARTICLES/lightDot.png"),
     },
 
     Menu = {
-        ["Main Logo"] = love.graphics.newImage("MENU/main logo.png"),
-        ["H"] = love.graphics.newImage("MENU/H.png"),
-        ["Icon Logo"] = love.graphics.newImage("MENU/logoH.png"),
-        ["Loading Spinner"] = love.graphics.newImage("MENU/logoH.png"),
+        ["Main Logo"] = newImage("MENU/main logo.png"),
+        ["H"] = newImage("MENU/H.png"),
+        ["Icon Logo"] = newImage("MENU/logoH.png"),
+        ["Loading Spinner"] = newImage("MENU/logoH.png"),
     },
 
     Sounds = {
