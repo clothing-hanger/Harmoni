@@ -20,8 +20,6 @@ local difficultyButtonX = songButtonX + songButtonWidth + 30
 local switchingState
 
 function songSelect:enter()
-
-    songList= {}
     difficultyList = {}
     songButtons = {}
     switchingState = false
@@ -160,7 +158,11 @@ end
     self.bannerThread:start()
     self.songThread:start()
 
-    self:setupSongList()
+    if #songList == 0 then
+        self:setupSongList()
+    else
+        self:loadBanners()
+    end
 
     self:setUpThoseLinesThatIHate(10)
 end
@@ -178,23 +180,56 @@ end
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
 
-    for i = 1, #songList do
-        if not songList[i] then
+    for i, song in ipairs(songList) do
+        if not song then
             table.remove(songList, i)
             goto continue
         end
-        local diffList = SongListManager.getDifficultyList(musicPath .. songList[i])
+
+        local diffList = SongListManager.getDifficultyList(musicPath .. song)
         if not diffList[1] then
-            if not diffList[1] then table.remove(songList, i) end
-            goto continue
-        end
-        if not love.filesystem.getInfo(musicPath .. "/" .. songList[i] .. "/" .. diffList[1], "file") then
             table.remove(songList, i)
             goto continue
         end
-        self.songInputChannel:push(musicPath .. songList[i] .. "/" .. diffList[1] .. "/")
+
+        if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
+            table.remove(songList, i)
+            goto continue
+        end
+
+        self.songInputChannel:push(musicPath .. song .. "/" .. diffList[1] .. "/")
 
         ::continue::
+    end
+end
+
+function songSelect:loadBanners()
+    for i, song in ipairs(songList) do
+        if not song then
+            table.remove(songList, i)
+            goto continue
+        end
+
+        local diffList = SongListManager.getDifficultyList(musicPath .. song)
+        if not diffList[1] then
+            table.remove(songList, i)
+            goto continue
+        end
+
+        local bannerPath = musicPath .. song .. "/" .. diffList[1] .. "/banner.png"
+        if love.filesystem.getInfo(bannerPath, "file") then
+            self.bannerInputChannel:push(bannerPath)
+        end
+
+        ::continue::
+    end
+end
+
+function songSelect:clearBanners()
+    for i, SongButton in ipairs(songButtons) do
+        SongButton.image:release() ; SongButton.image = nil
+        SongButton.imageLoaded = false
+        SongButton.color = {1,1,1}
     end
 end
 
@@ -484,13 +519,19 @@ end
 function songSelect:leave()
     self.bannerThread:wait()
     self.bannerThread:release()
-    self.bannerInputChannel:clear()
+    self.bannerInputChannel:clear() ; self.bannerInputChannel:release() ; self.bannerChannel = nil
     self.bannerChannel:clear()
 
     self.songThread:wait()
     self.songThread:release()
-    self.songInputChannel:clear()
+    self.songInputChannel:clear() ; self.songInputChannel:release() ; self.songChannel = nil
     self.songChannel:clear()
+
+    self.songThread:kill() ; self.songThread = nil
+    self.bannerThread:kill() ; self.bannerThread = nil
+
+    self:clearBanners()
+
     songButtons = {}
     difficultyButtons = {}
     songList = {}
