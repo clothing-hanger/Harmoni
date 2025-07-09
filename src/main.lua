@@ -13,7 +13,7 @@ local function table_find(t, value)
     return nil
 end
 
-DOWNSCROLL_ENABLED = false
+DOWNSCROLL_ENABLED = os.getenv("USERNAME") == "Guglio" -- Im tired of this shit bro
 
 function love.load(args)
     if table_find(args, "--downscroll") then

@@ -20,15 +20,14 @@ local difficultyButtonX = songButtonX + songButtonWidth + 30
 local switchingState
 
 function songSelect:enter()
-    difficultyList = {}
-    songButtons = {}
+    selectedSong = 1
     switchingState = false
     self.colors = {
         light = {0, 0, 0, 0},
         dark = {0, 0, 0, 0.8}
     }
 
-    self.songThread = love.thread.newThread [[
+    self.songThread = self.songThread or love.thread.newThread [[
 require("love.timer")
 require("love.filesystem")
 
@@ -89,7 +88,7 @@ while true do
 end
 ]]
 
-    self.bannerThread = love.thread.newThread [[
+    self.bannerThread = self.bannerThread or love.thread.newThread [[
 require("love.timer")
 require("love.image")
 
@@ -149,11 +148,11 @@ while true do
 end
 ]]
 
-    self.bannerInputChannel = love.thread.getChannel("thread.bannerLoader")
-    self.bannerChannel = love.thread.getChannel("thread.bannerLoader.out")
+    self.bannerInputChannel = self.bannerInputChannel or love.thread.getChannel("thread.bannerLoader")
+    self.bannerChannel = self.bannerChannel or love.thread.getChannel("thread.bannerLoader.out")
 
-    self.songInputChannel = love.thread.getChannel("thread.songLoader")
-    self.songChannel = love.thread.getChannel("thread.songLoader.out")
+    self.songInputChannel = self.songInputChannel or love.thread.getChannel("thread.songLoader")
+    self.songChannel = self.songChannel or love.thread.getChannel("thread.songLoader.out")
 
     self.bannerThread:start()
     self.songThread:start()
@@ -226,10 +225,12 @@ function songSelect:loadBanners()
 end
 
 function songSelect:clearBanners()
-    for i, SongButton in ipairs(songButtons) do
+    for _, SongButton in ipairs(songButtons) do
         SongButton.image:release() ; SongButton.image = nil
         SongButton.imageLoaded = false
         SongButton.color = {1,1,1}
+
+        collectgarbage("step")
     end
 end
 
@@ -422,9 +423,6 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
                 State.switch(States.menu.transition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
-                    songList= {}
-                    difficultyList = {}
-                    songButtons = {}
                 switchingState = true
             end
             -- why go through the rest? we already have a match so just break
@@ -519,23 +517,15 @@ end
 function songSelect:leave()
     self.bannerThread:wait()
     self.bannerThread:release()
-    self.bannerInputChannel:clear() ; self.bannerInputChannel:release() ; self.bannerChannel = nil
+    self.bannerInputChannel:clear() ; self.bannerInputChannel:release()
     self.bannerChannel:clear()
 
     self.songThread:wait()
     self.songThread:release()
-    self.songInputChannel:clear() ; self.songInputChannel:release() ; self.songChannel = nil
+    self.songInputChannel:clear() ; self.songInputChannel:release()
     self.songChannel:clear()
 
-    self.songThread:kill() ; self.songThread = nil
-    self.bannerThread:kill() ; self.bannerThread = nil
-
     self:clearBanners()
-
-    songButtons = {}
-    difficultyButtons = {}
-    songList = {}
-    difficultyList = {}
 end
 
 return songSelect
