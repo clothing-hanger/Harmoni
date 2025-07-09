@@ -7,9 +7,10 @@ function maniaPlayField:new(chart, parent)
     self.laneYOffset = maniaLaneYOffset
     self.lanes = {}
     self.svMarks = {}
-    self.empty = false
+    self.finished = false
     self.svIndex = 1
     self.currentTime = 0
+    self.endNoteTime = 0
 
     if #self.chart.scrollVelocities > 0 then
         local first = self.chart.scrollVelocities[1]
@@ -42,6 +43,7 @@ function maniaPlayField:new(chart, parent)
                     length = HitObject.length,
                     initialSVTime = self:getPositionFromTime(HitObject.startTime)
                 })
+                self.endNoteTime = math.max(self.endNoteTime, HitObject.startTime + HitObject.length)
             end
         end
         table.insert(self.lanes, maniaLane(mode, i, self.laneSpacing, self.laneYOffset, hitObjects, self))
@@ -77,13 +79,15 @@ function maniaPlayField:update(dt)
 
     self.currentTime = self:getPositionFromTime(MusicTime, self.svIndex)
     self.totalNotes = 0
+
     for _, Lane in ipairs(self.lanes) do
-        allLanesEmpty = true
-        Lane:update(dt)
-        if Lane.empty == false then allLanesEmpty = false end
+        Lane:update(dt, self.currentTime)
+        self.totalNotes = self.totalNotes + #Lane.notes
     end
 
-    self.empty = allLanesEmpty
+    if MusicTime > self.endNoteTime + 1000 then
+        self.finished = true
+    end
 end
 
 function maniaPlayField:draw()

@@ -32,11 +32,19 @@ function mania:setUpObjects()
 
     self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,5,-5,5,30)
 
-    self.judgementObject = maniaJudgement(SkinHandler:getParam("Judgement X Offset"), SkinHandler:getParam("Judgement Y Offset"), SkinHandler:getParam("Judgement Size"), self.judgements, self)
+    self.judgementObject = maniaJudgement(
+        SkinHandler:getParam("Judgement X Offset"), SkinHandler:getParam("Judgement Y Offset"),
+        SkinHandler:getParam("Judgement Size"),
+        self.judgements, self
+    )
 
     self.comboCount = maniaComboCount(SkinHandler:getParam("Combo X Offset"), SkinHandler:getParam("Combo Y Offset"))
 
-    self.healthBar = maniaHealthBar(SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar Width"),SkinHandler:getParam("Health Bar Height"), 1)
+    self.healthBar = maniaHealthBar(
+        SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar X Offset"),
+        SkinHandler:getParam("Health Bar Width"),SkinHandler:getParam("Health Bar Height"),
+        1
+    )
 end
 
 function mania:setUpChart(chart)
@@ -74,13 +82,18 @@ function mania:update(dt)
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:update(dt)
     end
-    if self.song then if MusicTime >=0 and not self.song:isPlaying() then self.song:play(); if self.videoBackground then self.videoBackground:play() end end end
+    if self.song then
+        if MusicTime >= 0 and not self.song:isPlaying() then
+            self.song:play()
+            if self.videoBackground then self.videoBackground:play() end
+        end
+    end
 
-    if self.song then if self.playField[1].empty or debugShitIdk then self:endSong() end end   -- i could not tell you why the if self.song needs to be there but without it the game dies
-                                                                                                         -- fucking tf2 coconut
-
-
-
+    if self.song then 
+        if self.playField[1].finished or debugShitIdk then
+            self:endSong()
+        end
+    end
 
     if thething then
         thething = false
