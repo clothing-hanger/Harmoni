@@ -36,7 +36,7 @@ function maniaReceptor:new(mode, lane, input, x ,y ,parent)
     --print("JIIIIII?")
 
 
-
+    
 
     self.debug = false
 end
