@@ -2,7 +2,7 @@ local mania = Class:extend("mania")
 
 function mania:new(chart, parent)
     self.parent = parent
-    self.videoBackground = false
+    self.videoBackground = nil
     self.chartPath = getDirectory(chart)
     print("with file", chart, "without file", self.chartPath)
     self.chart = mania:setUpChart(chart)
@@ -15,7 +15,7 @@ function mania:new(chart, parent)
 
     self:setUpObjects()
 
-    local songCountDown = 2
+    local songCountDown = 0.2
 
     Timer.after(0.15, function() self:startSong(songCountDown) end)
 end
@@ -41,7 +41,7 @@ function mania:setUpObjects()
     self.comboCount = maniaComboCount(SkinHandler:getParam("Combo X Offset"), SkinHandler:getParam("Combo Y Offset"))
 
     self.healthBar = maniaHealthBar(
-        SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar X Offset"),
+        SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar Y Offset"),
         SkinHandler:getParam("Health Bar Width"),SkinHandler:getParam("Health Bar Height"),
         1
     )
@@ -102,11 +102,14 @@ function mania:update(dt)
 end
 
 function mania:endSong()
+
+    --[[
     self.song:stop()
     self.song = nil
     self.chart = nil
     self.playField = {}
     State.switch(States.menu.songSelect)
+    --]]
 end
 
 function mania:updateObjects(dt)

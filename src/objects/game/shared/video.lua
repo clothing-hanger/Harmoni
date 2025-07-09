@@ -46,6 +46,7 @@ function video:new(video,x,y,width,height,fr)
 end
 
 function video:update(dt)
+    print("HII u")
     if self.playing and self.video then
         self.checkTimer = self.checkTimer + dt
         local interval = 1 / self.checkPerFrame
@@ -67,6 +68,7 @@ function video:update(dt)
 end
 
 function video:play()
+    print("PL:ASJADSJI")
     if not self.playing and self.video then
         self.playing = true
         self.previousFrameTime = love.timer.getTime()
@@ -88,6 +90,8 @@ function video:seek(time)
 end
 
 function video:draw()
+        print("HII p")
+
     if not self.video then return end
     if not self.visible or not self.image then return end
     

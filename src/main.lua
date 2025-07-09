@@ -16,6 +16,7 @@ end
 DOWNSCROLL_ENABLED = false
 
 function love.load(args)
+
     if table_find(args, "--downscroll") then
         DOWNSCROLL_ENABLED = true
     end
@@ -47,6 +48,7 @@ end
 
 function love.update(dt)
     CHE:update(dt)
+
 end
 
 function love.mousepressed(x, y, b)
