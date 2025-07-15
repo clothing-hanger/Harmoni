@@ -13,13 +13,11 @@ local function table_find(t, value)
     return nil
 end
 
-DOWNSCROLL_ENABLED = os.getenv("USERNAME") == "Guglio" -- Im tired of this shit bro
-
 function love.load(args)
+    Settings = require("Modules.Settings")
+    Settings.default = Settings:defaultSettings()
+    Settings:loadSettings()
 
-    if table_find(args, "--downscroll") then
-        DOWNSCROLL_ENABLED = true
-    end
     GPUInfo = {test = "HI"}
     love.graphics.setDefaultFilter("linear","linear")
     require("modules.extraFunctions")
@@ -28,6 +26,7 @@ function love.load(args)
     require("TEMP")
 
     SkinHandler = require("modules.skinHandler")
+    Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     CHE = require("engine.CHE")
     CHE:init()
@@ -35,13 +34,9 @@ function love.load(args)
     require("modules.gamemodes")
 
     require("bob.init")
-    Settings = require("Modules.Settings")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
     SongListManager = require("modules.songListManager")
-
-    --Settings.createSettingsFile()
-   -- Settings.loadSettings()
 
     State.switch(States.menu.titleScreen)
 end

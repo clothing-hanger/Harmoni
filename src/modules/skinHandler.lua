@@ -131,8 +131,21 @@ function SkinHandler:loadSkin(filePath)
     chunk()
 
     self.__data = mt
+end
 
-    print(SkinHandler:getImage("Notes", "4K", "Left"))
+function SkinHandler:getAllSkins()
+    local skins = {}
+    for _, file in ipairs(love.filesystem.getDirectoryItems("Skins")) do
+        if love.filesystem.getInfo("Skins/" .. file .. "/Meta.lua") then
+            local data = love.filesystem.load("Skins/" .. file .. "/Meta.lua")()
+            if data then
+                data.path = file
+                table.insert(skins, data)
+            end
+        end
+    end
+
+    return skins
 end
 
 function SkinHandler:getParam(param)

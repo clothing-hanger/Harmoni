@@ -47,10 +47,10 @@ function CHE:init()
     maniaScrollSpeed = 2.85
     maniaLaneYOffset = 110
     gameplayBackgroundDim = 0.65
-    if DOWNSCROLL_ENABLED then
+    if Settings:getValue("Game", "Mania", "Scroll Direction") == "Down" then
         maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
     end
-    
+
 
     defaultFont = love.graphics.newFont(12)
 

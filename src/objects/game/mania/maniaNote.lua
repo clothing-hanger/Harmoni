@@ -46,11 +46,15 @@ function maniaNote:updatePosition()
     self.y = self:getNotePosition(self.initialSVTime, true)
 end
 
+local function msToMulti(speed)
+    return baseScreenRatio.y / speed
+end
+
 function maniaNote:getNotePosition(time, moveWithScroll) -- moveWithScroll is unused until hold notes are implemented
-    if not DOWNSCROLL_ENABLED then
-        return self.parent.y - (self.parent.parent.currentTime - time) * maniaScrollSpeed
+    if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+        return self.parent.y - (self.parent.parent.currentTime - time) * msToMulti(Settings:getValue("Game", "Mania", "Scroll Speed"))
     else
-        return self.parent.y + (self.parent.parent.currentTime - time) * maniaScrollSpeed
+        return self.parent.y + (self.parent.parent.currentTime - time) * msToMulti(Settings:getValue("Game", "Mania", "Scroll Speed"))
     end
 end
 
