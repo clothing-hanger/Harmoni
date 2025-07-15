@@ -128,7 +128,8 @@ function menuSongButton:draw()
     love.graphics.setColor(textColor)
     love.graphics.print(self.name, self.x+3, self.y+3)
     love.graphics.setFont(self.fontSmall)
-    love.graphics.print("By: " .. self.artist .. "Charted by: " .. self.charter .. "BPM: " .. self.bpm, self.x+3, self.y + self.height/2)
+
+    love.graphics.print(string.format("By: %s Charted by: %s BPM: %s", self.artist, self.charter, self.bpm), self.x+3, self.y + self.height/2)
 
     love.graphics.setColor(textColor)
     love.graphics.setLineWidth(5)

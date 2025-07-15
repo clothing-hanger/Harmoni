@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 local maniaReceptor = Class:extend("maniaReceptor")
 
 local fourkLanes = {"Left", "Down", "Up", "Right"}
@@ -58,17 +59,28 @@ function maniaReceptor:update(dt)
 end
 
 function maniaReceptor:draw()
-   local drawnImage = (self.held and self.imageDown) or self.imageUp
+    local drawnImage = (self.held and self.imageDown) or self.imageUp
 
-   love.graphics.draw(drawnImage, self.x, self.y, nil, self.size/drawnImage:getWidth(), self.size/drawnImage:getHeight(), drawnImage:getWidth()/2, drawnImage:getHeight()/2)
+    local arrowBatch = SkinHandler:getBatch("Arrows")
+    local receptorBatch = SkinHandler:getBatch("Receptors")
 
-   if self.debug then
-    love.graphics.setColor(1,0,0)
-    love.graphics.setLineWidth(10)
-   love.graphics.line(self.x-200, self.y, self.x+200, self.y)
-   love.graphics.setColor(1,1,1)
-    love.graphics.setLineWidth(1)
-   end
+    if arrowBatch then
+        local _, _, w, h = drawnImage:getViewport()
+        arrowBatch:add(drawnImage, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
+    elseif receptorBatch then
+        local _, _, w, h = drawnImage:getViewport()
+        receptorBatch:add(drawnImage, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
+    else
+        love.graphics.draw(drawnImage, self.x, self.y, nil, self.size/drawnImage:getWidth(), self.size/drawnImage:getHeight(), drawnImage:getWidth()/2, drawnImage:getHeight()/2)
+    end
+
+    if self.debug then
+        love.graphics.setColor(1,0,0)
+        love.graphics.setLineWidth(10)
+        love.graphics.line(self.x-200, self.y, self.x+200, self.y)
+        love.graphics.setColor(1,1,1)
+        love.graphics.setLineWidth(1)
+    end
 
 end
 

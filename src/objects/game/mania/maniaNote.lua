@@ -23,8 +23,6 @@ function maniaNote:new(startTime, holdLength, lane, mode, initialSVTime, parent)
 
     self.visible = true
 
-
-
     self.debug = false
 end
 
@@ -61,11 +59,28 @@ function maniaNote:hit()
 end
 
 function maniaNote:draw()
+    -- check if on screen
     if not self.visible then return end
-    
-    love.graphics.draw(self.image, self.x, self.y, nil, self.size/self.image:getWidth(), self.size/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
 
-    if self.debug then 
+    -- check if in view
+    local w, h = baseScreenRatio.x, baseScreenRatio.y
+    if self.x < -300 or self.x > w+300 or self.y < -300 or
+         self.y > h+300 then return end
+
+    local arrowBatch = SkinHandler:getBatch("Arrows")
+    local noteBatch = SkinHandler:getBatch("Notes")
+
+    if arrowBatch then
+        local _, _, w, h = self.image:getViewport()
+        arrowBatch:add(self.image, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
+    elseif noteBatch then
+        local _, _, w, h = self.image:getViewport()
+        noteBatch:add(self.image, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
+    else
+        love.graphics.draw(self.image, self.x, self.y, nil, self.size/self.image:getWidth(), self.size/self.image:getHeight(), self.image:getWidth()/2, self.image:getHeight()/2)
+    end
+
+    if self.debug then
         love.graphics.setColor(1,0,0)
         love.graphics.setLineWidth(10)
         love.graphics.line(self.x-200, self.y, self.x+200, self.y)

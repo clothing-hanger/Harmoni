@@ -54,6 +54,7 @@ local function switch(newstate, ...)
     last = current
     current = newstate
     if current.enter then current:enter(last, ...) end
+    collectgarbage("collect")
     return current
 end
 
