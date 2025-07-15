@@ -226,12 +226,15 @@ end
 
 function songSelect:clearBanners()
     for _, SongButton in ipairs(songButtons) do
-        SongButton.image:release() ; SongButton.image = nil
+        if SongButton.image then
+            SongButton.image:release()
+            SongButton.image = nil
+        end
         SongButton.imageLoaded = false
-        SongButton.color = {1,1,1}
-
-        collectgarbage("step")
+        SongButton.color = {1, 1, 1}
     end
+
+    collectgarbage("step")
 end
 
 function songSelect:setupDifficultyList(path,color)
