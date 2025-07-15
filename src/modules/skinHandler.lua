@@ -2,6 +2,9 @@ local SkinHandler = {}
 
 SkinHandler.__path = ""
 SkinHandler.__data = {}
+SkinHandler.__sheets = {}
+SkinHandler.info = {}
+SkinHandler.batches = {}
 
 local mt = {}
 local restricted = {
@@ -11,19 +14,22 @@ local restricted = {
         end,
         __newindex = function(_, key, value)
             print("Modification of States is restricted: " .. key .. " = " .. tostring(value))
-        end,
+        end
     }),
     os = {
         time = os.time,
         date = os.date,
-        execute = function() 
-            print("os.execute is restricted") 
+        execute = function()
+            print("os.execute is restricted")
         end,
     },
     love = {
         graphics = {
             newImage = function(path)
                 return love.graphics.newImage(SkinHandler.__path .. path)
+            end,
+            newQuad = function(sheet, x, y, width, height)
+                return love.graphics.newQuad(x, y, width, height, SkinHandler.__sheets[sheet]:getDimensions())
             end,
             newFont = function(path, size)
                 return love.graphics.newFont(SkinHandler.__path .. path, size)
@@ -58,6 +64,7 @@ local restricted = {
 local skinEnv = {
     newImage = restricted.love.graphics.newImage,
     newFont = restricted.love.graphics.newFont,
+    newQuad = restricted.love.graphics.newQuad,
 
     newSource = restricted.love.audio.newSource,
 
@@ -71,9 +78,49 @@ local chunk
 function SkinHandler:loadSkin(filePath)
     filePath = ("Skins/" .. filePath .. "/Skin.lua") or "Skins/Default Arrow/Skin.lua"
     self.__path = filePath:gsub("/Skin.lua", "/")
+    self.__sheets = {}
+    self.info = {
+        hasBatchedArrows = false, -- if arrows, receptors and notes are batched
+        hasBatchedReceptors = false, -- if receptors are batched
+        hasBatchedNotes = false, -- if notes are batched
+        hasBatchedJudgements = false, -- if judgements are batched
+    }
+
+    if love.filesystem.getInfo(self.__path .. "arrowsSheet.png") then
+        self.__sheets.Arrows = love.graphics.newImage(self.__path .. "arrowsSheet.png")
+    end
+
+    if love.filesystem.getInfo(self.__path .. "receptorsSheet.png") then
+        self.__sheets.Receptors = love.graphics.newImage(self.__path .. "receptorsSheet.png")
+    end
+
+    if love.filesystem.getInfo(self.__path .. "notesSheet.png") then
+        self.__sheets.Notes = love.graphics.newImage(self.__path .. "notesSheet.png")
+    end
+
+    if love.filesystem.getInfo(self.__path .. "judgementsSheet.png") then
+        self.__sheets.Judgements = love.graphics.newImage(self.__path .. "judgementsSheet.png")
+    end
+
+    self.info.hasBatchedArrows = self.__sheets.Arrows ~= nil
+    self.info.hasBatchedReceptors = self.__sheets.Receptors ~= nil
+    self.info.hasBatchedNotes = self.__sheets.Notes ~= nil
+    self.info.hasBatchedJudgements = self.__sheets.Judgements ~= nil
+
+    if self.info.hasBatchedArrows then
+        self.batches.Arrows = love.graphics.newSpriteBatch(self.__sheets.Arrows, 1000, "stream")
+    end
+    if self.info.hasBatchedReceptors then
+        self.batches.Receptors = love.graphics.newSpriteBatch(self.__sheets.Receptors, 1000, "stream")
+    end
+    if self.info.hasBatchedNotes then
+        self.batches.Notes = love.graphics.newSpriteBatch(self.__sheets.Notes, 1000, "stream")
+    end
+    if self.info.hasBatchedJudgements then
+        self.batches.Judgements = love.graphics.newSpriteBatch(self.__sheets.Judgements, 1000, "stream")
+    end
 
     chunk = love.filesystem.load(filePath)
-    print(chunk)
     for k, v in pairs(_G) do
         mt[k] = restricted[k] or v
     end
@@ -124,6 +171,18 @@ function SkinHandler:getImage(...)
     end
 
     return b
+end
+
+function SkinHandler:getBatch(name)
+    if self.batches[name] then
+        return self.batches[name]
+    end
+end
+
+function SkinHandler:getSheet(name)
+    if self.__sheets[name] then
+        return self.__sheets[name]
+    end
 end
 
 return SkinHandler

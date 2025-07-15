@@ -98,7 +98,7 @@ function CHE:init()
     }
     --
 
-    SkinHandler:loadSkin("Default Arrow")
+    SkinHandler:loadSkin("Default Arrow Batched")
 
 end
 

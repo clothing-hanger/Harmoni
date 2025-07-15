@@ -126,10 +126,26 @@ function mania:draw()
     self.background:draw()
     if self.videoBackground then self.videoBackground:draw() end
 
+    local arrowBatch = SkinHandler:getBatch("Arrows")
+    local receptorBatch = SkinHandler:getBatch("Receptors")
+    local noteBatch = SkinHandler:getBatch("Notes")
+    local judgementBatch = SkinHandler:getBatch("Judgements")
+
+    if arrowBatch then arrowBatch:clear() end
+    if receptorBatch then receptorBatch:clear() end
+    if noteBatch then noteBatch:clear() end
+    if judgementBatch then judgementBatch:clear() end
+
     for i,PlayFeild in ipairs(self.playField) do
         PlayFeild:draw()
     end
+
+    if arrowBatch then love.graphics.draw(arrowBatch) end
+    if receptorBatch then love.graphics.draw(receptorBatch) end
+    if noteBatch then love.graphics.draw(noteBatch) end
+
     self.judgementObject:draw()
+    if judgementBatch then love.graphics.draw(judgementBatch) end
     --TEMP
     love.graphics.setFont(songButtonFontLarge)
 
