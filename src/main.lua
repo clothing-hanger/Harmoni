@@ -85,13 +85,15 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
     love.graphics.setColor(0, 0, 0)
 
     local graphicStats = love.graphics.getStats()
+    local drawCalls = graphicStats.drawcalls or 0
+    local textureMemory = graphicStats.texturememory or 0
     for x = -1, 1 do
         for y = -1, 1 do
-            love.graphics.printf(string.format("UPS: %d, DPS: %d\nTextureMemory: %dMB", UPS, DPS, graphicStats.texturememory/1024/1024), x, y, love.graphics.getWidth(), "right")
+            love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d\nTextureMemory: %dMB", UPS, DPS, drawCalls, textureMemory/1024/1024), x, y, love.graphics.getWidth(), "right")
         end
     end
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(string.format("UPS: %d, DPS: %d\nTextureMemory: %dMB", UPS, DPS, graphicStats.texturememory/1024/1024), 0, 0, love.graphics.getWidth(), "right")
+    love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d\nTextureMemory: %dMB", UPS, DPS, drawCalls, textureMemory/1024/1024), 0, 0, love.graphics.getWidth(), "right")
 end
 
 function love.quit()

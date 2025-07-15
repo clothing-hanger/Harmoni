@@ -11,21 +11,19 @@ function maniaHealthBar:new(x,y,width,height,health,max)
     self.line = UIsquiglyLine(self.x, self.y, self.x, self.y-self.height,4,5,50,1,self.width)
 end
 
+local maxHealthLerpSpeed = 30
+local printableHealthLerpSpeed = 20
+
 function maniaHealthBar:update(dt)
     self.line:update(dt)
 
-    if self.healthMaxTween then Timer.cancel(self.healthMaxTween) end
     if self.health > self.max then
-        self.healthMaxTween = Timer.tween(0.001, self, {health = self.max})  
+        self.health = self.health + (self.max - self.health) * (1 - math.exp(-dt * maxHealthLerpSpeed))
     end
 
-
-    if self.healthTween then
-        Timer.cancel(self.healthTween)
-    end
-
-    self.healthTween = Timer.tween(0.05, self, {printableHealth = self.health})
+    self.printableHealth = self.printableHealth + (self.health - self.printableHealth) * (1 - math.exp(-dt * printableHealthLerpSpeed))
 end
+
 function maniaHealthBar:changeHealth(amount)
     self.health = self.health + amount
     if self.health > 1 then self.health = 1 elseif self.health < 0 then self.health = 0 end
