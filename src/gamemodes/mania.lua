@@ -15,7 +15,7 @@ function mania:new(chart, parent)
 
     self:setUpObjects()
 
-    local songCountDown = 0.2
+    local songCountDown = 2
 
     Timer.after(0.15, function() self:startSong(songCountDown) end)
 end
@@ -103,13 +103,13 @@ end
 
 function mania:endSong()
 
-    --[[
+    
     self.song:stop()
     self.song = nil
     self.chart = nil
     self.playField = {}
     State.switch(States.menu.songSelect)
-    --]]
+    
 end
 
 function mania:updateObjects(dt)
