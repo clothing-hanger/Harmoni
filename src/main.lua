@@ -23,7 +23,6 @@ function love.load(args)
     require("modules.extraFunctions")
     love.filesystem.createDirectory("Music")
     love.filesystem.createDirectory("Settings")
-    require("TEMP")
 
     SkinHandler = require("modules.skinHandler")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())

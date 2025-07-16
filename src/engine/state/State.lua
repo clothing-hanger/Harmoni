@@ -1,54 +1,13 @@
--- Short and sweet state library for LÖVE. States and substates supported! (Substate draws above the state)
--- GuglioIsStupid - 2025
--- Version: 1.2.0
---[[
-
-The MIT License (MIT)
-
-=====================
-
-Copyright © 2025 GuglioIsStupid
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software 
-and associated documentation files (the “Software”), to deal in the Software without 
-restriction, including without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the 
-Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or 
-substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING 
-BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-]]
-
--- Modified for use with Rit
-
 ---@alias State table
 ---@class state
-local state = {} -- The state library
-state.__index = state -- Allows us to call state functions as if they were global
-state.__storage = {} -- Storage for previous states that were pushed
+local state = {}
+state.__index = state
+state.__storage = {}
 
----@type any
-local current = nil -- Current state
+local current, last, substate = nil, nil, nil
+state.inSubstate = false
 
----@type any
-local last = nil -- Last state
-
----@type any
-local substate = nil -- Current substate
-
----@type boolean
-state.inSubstate = false -- If we are in a substate
-
----@param newstate State
----@param ... any
----@return State
+-- Internal switch logic
 local function switch(newstate, ...)
     if current and current.exit then current:exit() end
     last = current
@@ -58,161 +17,82 @@ local function switch(newstate, ...)
     return current
 end
 
----@param newState State
----@param ... any
----@return State
-local function pop(newState, ...)
+-- Internal pop logic
+local function pop(newstate, ...)
     if current and current.exit then current:exit() end
     last = current
-    current = newState
+    current = newstate
     if current.reload then current:reload(last, ...) end
     return current
 end
 
----Switches to a new state, returns the new state
----@param newstate State
----@param ... any
----@return State
 function state.switch(newstate, ...)
-    assert(newstate, "Called state.switch with no state")
-    assert(type(newstate) == "table", "Called state.switch with invalid state")
-    switch(newstate, ...)
-    return current
+    assert(type(newstate) == "table", "Called state.switch with invalid or no state")
+    return switch(newstate, ...)
 end
 
----Pushes a new state, keeping the old one in storage
----@param newstate State
----@param ... any
----@return State
 function state.push(newstate, ...)
-    assert(newstate, "Called state.push with no state")
-    assert(type(newstate) == "table", "Called state.push with invalid state")
+    assert(type(newstate) == "table", "Called state.push with invalid or no state")
     table.insert(state.__storage, current)
-    switch(newstate, ...)
-    return current
+    return switch(newstate, ...)
 end
 
----Pops the current state, returns the new state
----@return State
 function state.pop()
     assert(#state.__storage > 0, "Called state.pop with no states in storage")
     return pop(table.remove(state.__storage))
 end
 
----Pops all states, returns the new state
----@return State
 function state.popAll()
     assert(#state.__storage > 0, "Called state.popAll with no states in storage")
     return pop(table.remove(state.__storage, 1))
 end
 
----Returns the current state
----@return State
 function state.current() return current end
-
----Returns the last state
----@return State
 function state.last() return last end
-
----Kills the current substate and calls current:substateReturn, returns nothing
----@param ... any
----@return nil
-function state.killSubstate(...)
-    if substate and substate.exit then substate:exit() end
-    substate = nil
-    state.inSubstate = false
-    if current.substateReturn then current:substateReturn(...) end
-end
-
----Returns the current substate
----@return State
 function state.currentSubstate() return substate end
 
----Returns to the last state, returns the new state
----@return State
 function state.returnToLast()
-    assert(last, "Called state.return with no last state")
-    switch(last)
-    return current
+    assert(last, "Called state.returnToLast with no last state")
+    return switch(last)
 end
 
----Switches to a new substate, returns the new substate
----@param newstate State
----@param ... any
----@return State
 function state.substate(newstate, ...)
-    assert(newstate, "Called state.substate with no state")
-    assert(type(newstate) == "table", "Called state.substate with invalid state")
-    substate = newstate -- Set the substate
+    assert(type(newstate) == "table", "Called state.substate with invalid or no state")
+    substate = newstate
     state.inSubstate = true
     if substate.enter then substate:enter(...) end
     return substate
 end
 
----Creates a new state object (table). Only to be used locally. Please use state() instead.
+function state.killSubstate(...)
+    if substate and substate.exit then substate:exit() end
+    substate = nil
+    state.inSubstate = false
+    if current and current.substateReturn then current:substateReturn(...) end
+end
+
+-- Generate a new named state
 local function new(name)
-    name = name or ("State." .. string.format("%x", math.random(0, 0xFFFFFFFF)))
+    name = name or ("State." .. string.format("%x", love.math.random(0, 0xFFFFFFFF)))
     return setmetatable({
-        members = {},
-        add = function(self, obj)
-            table.insert(self.members, obj)
-        end,
-        remove = function(self, obj)
-            for i, v in ipairs(self.members) do
-                if v == obj then
-                    table.remove(self.members, i)
-                    break
-                end
-            end
-        end,
-        removeAll = function(self)
-            self.members = {}
-        end,
-        _update = function(self, ...)
-            for _, v in ipairs(self.members) do
-                if v.update then v:update(...) end
-            end
-        end,
-        _draw = function(self, ...)
-            for _, v in ipairs(self.members) do
-                if v.draw then v:draw(...) end
-            end
-        end,
         __name = name
     }, {
-        __tostring = function()
-            return name
-        end,
-        __call = function(_, ...)
-            return state.switch(_, ...)
-        end
+        __tostring = function() return name end,
+        __call = function(self, ...) return state.switch(self, ...) end
     })
 end
 
 local unpack = table.unpack or unpack
-setmetatable(state, { -- Allows you to call state functions as if they were global
-    __index = function(_, func)
-        -- return function(...) return (current[func] or nop)(...) end
-        -- call substate and current state (substate calls above current state)
-        return function(...)
-            local args = {...} -- Allows us to pass arguments to the function
-            local function f() -- Allows us to call both current and substate
-                if func == "draw" then
-                    if current and current._draw then current:_draw(unpack(args)) end
-                    if substate and substate._draw then substate:_draw(unpack(args)) end
-                elseif func == "update" then
-                    if current and current._update then current:_update(unpack(args)) end
-                    if substate and substate._update then substate:_update(unpack(args)) end
-                end
 
-                if current and current[func] then current[func](current, unpack(args)) end -- Call current state
-                if substate and substate[func] then substate[func](substate, unpack(args)) end -- Call substate
-            end
-            return f()
+-- Forward calls to current and substate (e.g. update, draw)
+setmetatable(state, {
+    __index = function(_, func)
+        return function(...)
+            local args = {...}
+            if current and current[func] then current[func](current, unpack(args)) end
+            if substate and substate[func] then substate[func](substate, unpack(args)) end
         end
     end,
-
-    -- when state is called as a function, return new, just makes the state definition look nicer
     __call = function(_, name) return new(name) end
 })
 

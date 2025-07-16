@@ -4,7 +4,7 @@ local background
 local uhmmode, uhmchart
 local songInfo
 local timebar
-local time 
+local time
 function transition:enter(previous,mode,chart,image)
     time = 0.5
     uhmmode, uhmchart = mode, chart
@@ -18,24 +18,24 @@ function transition:enter(previous,mode,chart,image)
 
 
     songInfo = {
-        songName = chart.meta.title,
-        diffName = chart.meta.difficultyName,
-        mode = chart.meta.gameMode,
-        artist = chart.meta.artist,
-        charter = chart.meta.creator,
+        songName = chart.meta.title or "Unknown",
+        diffName = chart.meta.difficultyName or "Unknown",
+        mode = chart.meta.gameMode or "Unknown",
+        artist = chart.meta.artist or "Unknown",
+        charter = chart.meta.creator or "Unknown",
         mods = "the game doesnt even have mods..",
         notes = "if its not obvious enough, this is a placeholder",
     }
 end
 
-function transition:startTimer(time)
-    print("hi?")
-    local function uhhDoShit()
-        background:changeDimness(gameplayBackgroundDim, time*0.1, function() self:switchToGame(uhmmode, uhmchart) end)
-    end
-
-    Timer.after(time, function() uhhDoShit() end)
+function transition:startTimer(timeToStart)
+    Timer.after(timeToStart, function()
+        background:changeDimness(gameplayBackgroundDim, timeToStart * 0.1, function()
+            self:switchToGame(uhmmode, uhmchart)
+        end)
+    end)
 end
+
 
 function transition:startTimeRemaining()
     Timer.tween(time, timebar, {baseScreenRatio.x})
@@ -52,16 +52,17 @@ end
 function transition:draw()
     background:draw()
     love.graphics.setFont(songButtonFontLarge)
-    love.graphics.printf(
-        "Song: " .. songInfo.songName .. "\n" .. 
-        "Difficulty: " .. songInfo.diffName .. "\n" ..
-        "Mode: " .. songInfo.mode .. "\n" ..
-        "Produced by: " .. songInfo.artist .. "\n" ..
-        "Charted by: " .. songInfo.charter .. "\n" ..
-        "Active Modifiers: " .. songInfo.mods .. "\n" ..
-        songInfo.notes,
-        0,baseScreenRatio.y/2-235,baseScreenRatio.x,"center"
+    local infoText = string.format(
+        "Song: %s\nDifficulty: %s\nMode: %s\nProduced by: %s\nCharted by: %s\nActive Modifiers: %s\n%s",
+        songInfo.songName,
+        songInfo.diffName,
+        songInfo.mode,
+        songInfo.artist,
+        songInfo.charter,
+        songInfo.mods,
+        songInfo.notes or "No notes available"
     )
+    love.graphics.printf(infoText, 0, baseScreenRatio.y / 2 - 235, baseScreenRatio.x, "center")
 
     love.graphics.rectangle("fill",0,baseScreenRatio.y-100,timebar[1],50)
 end

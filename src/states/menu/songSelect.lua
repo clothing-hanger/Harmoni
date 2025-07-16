@@ -201,6 +201,15 @@ function songSelect:setupSongList()
         ::continue::
     end
 end
+function songSelect:handleInputs()
+    if Input:pressed("menuUp") then
+        selectedSong = math.max(1, selectedSong - 1)
+    elseif Input:pressed("menuDown") then
+        selectedSong = math.min(#songButtons, selectedSong + 1)
+    elseif Input:pressed("menuConfirm") then
+        -- Your confirm logic
+    end
+end
 
 function songSelect:loadBanners()
     for i, song in ipairs(songList) do
@@ -345,15 +354,6 @@ function songSelect:mousemoved()
     if cursor:isMouseDown() then
         hoveredSong = hoveredSong + dy
         self.ignoreInterpolation = true
-    end
-end
-
-function songSelect:handleInputs()
-    if Input:pressed("menuUp") then
-        selectedSong = selectedSong - 1
-    elseif Input:pressed("menuDown") then
-        selectedSong = selectedSong + 1
-    elseif Input:pressed("menuConfirm") then
     end
 end
 

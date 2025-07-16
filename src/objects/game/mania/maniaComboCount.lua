@@ -44,16 +44,18 @@ end
 function maniaComboCount:draw()
     love.graphics.setFont(SkinHandler:getFont("Combo"))
     for i, Combo in ipairs(self.drawnCombos) do
-        local alpha = self.fullTimeLimit/Combo.time
-        if self.removeThatUglyAssStackingEffect then alpha = 1 end
-        love.graphics.setColor(1,1,1,alpha)
-        love.graphics.printf(Combo.combo, Combo.x-self.limit/2, Combo.y, self.limit, "center")
+        local alpha = self.removeThatUglyAssStackingEffect and 1 or (Combo.time / self.fullTimeLimit)
+        alpha = math.min(math.max(alpha, 0), 1)
+
+        love.graphics.setColor(1, 1, 1, alpha)
+        love.graphics.printf(Combo.combo, Combo.x - self.limit / 2, Combo.y, self.limit, "center")
     end
 
     if self.debug then
-        love.graphics.rectangle("line",self.x-self.limit/2, self.y, self.limit, 50)
-        love.graphics.print("Combo: " .. self.combo .. "\n" .. "Combo Table: " .. #self.drawnCombos, self.x, self.y+30)
+        love.graphics.rectangle("line", self.x - self.limit / 2, self.y, self.limit, 50)
+        love.graphics.print("Combo: " .. self.combo .. "\n" .. "Combo Table: " .. #self.drawnCombos, self.x, self.y + 30)
     end
 end
+
 
 return maniaComboCount

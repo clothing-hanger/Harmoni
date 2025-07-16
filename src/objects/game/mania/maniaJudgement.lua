@@ -16,16 +16,27 @@ function maniaJudgement:judge(judgement)
     for i = 1,#self.judgementsTable do
         if judgement == self.judgementsTable[i].name then
             image = self.judgementsTable[i].image
+            break
         end
     end
 
+    if not image then return end -- no valid judgement image found, skip
+
+    local w, h
+    if image.getViewport then
+        _, _, w, h = image:getViewport()
+    else
+        w, h = image:getWidth(), image:getHeight()
+    end
+
     if self.noStacking then
-        self.judgements = {{image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false}}
+        self.judgements = {{image = image, x = self.x, y = self.y, width = w, height = h, timer = 500, bumped = false}}
         return
     end
 
-    table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false})
+    table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = w, height = h, timer = 500, bumped = false})
 end
+
 
 function maniaJudgement:judgementAnimation()
     local tweenType = SkinHandler:getParam("Judgement Bump Tween Type")

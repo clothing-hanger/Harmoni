@@ -3,25 +3,25 @@ function getFileExtension(fileName)
 end
 
 function getAverageColor(imageData)
-    local r, g, b = 0, 0, 0
+    local r, g, b, count = 0, 0, 0, 0
     local width, height = imageData:getDimensions()
-    local totalPixels = width * height
 
     for y = 0, height - 1 do
         for x = 0, width - 1 do
-            local pr, pg, pb = imageData:getPixel(x, y)
-            r = r + pr
-            g = g + pg
-            b = b + pb
+            local pr, pg, pb, pa = imageData:getPixel(x, y)
+            if pa > 0 then  -- skip fully transparent
+                r = r + pr
+                g = g + pg
+                b = b + pb
+                count = count + 1
+            end
         end
     end
 
-    r = r / totalPixels
-    g = g / totalPixels
-    b = b / totalPixels
-
-    return {r, g, b}
+    if count == 0 then return {0, 0, 0} end
+    return {r / count, g / count, b / count}
 end
+
 
 function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- stolen lol
     local vertices
@@ -198,8 +198,10 @@ function lerpAngle(a, b, t)
 end
 
 function getDirectory(path)
-    return path:match("^(.*)[/\\]")
+    local dir = path:match("^(.*)[/\\]")
+    return dir or ""
 end
+
 
 ---@param colors table<number, number, number>
 ---@return table<number, number, number> colorsRGB

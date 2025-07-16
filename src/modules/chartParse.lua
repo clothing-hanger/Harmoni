@@ -12,7 +12,12 @@ function ChartParse.harmc(harmc)
     end
 
     for Line in love.filesystem.lines(harmc) do
-        if Line:match("^%[.*%]$") then 
+        -- if line starts with //, then skip it
+        if Line:match("^%s*//") then
+            goto continue  -- skip this line, just a comment
+        end
+
+        if Line:match("^%[.*%]$") then
             section = Line:sub(2, -2)
             if not section then  -- this is bad, dont parse the chart
                 print("ERROR: ChartParse.harmc(): oopsies :3,,, a section was not found when parsing: "  .. harmc)
@@ -26,7 +31,7 @@ function ChartParse.harmc(harmc)
                 if not value then value = "???" end
                 chart[section][key] = value
         elseif section == "bpm" then   
-            local key, startTime, bpm = Line:match("^(%a+):(%d+):(%d+)$")  
+            local key, startTime, bpm = Line:match("^(%a+):([%d%.]+):([%d%.]+)$")
             if key == "bpm" and startTime and bpm then  -- not a bad error, just skip this one
                 table.insert(chart[section], {startTime = tonumber(startTime), bpm = tonumber(bpm)})
             end
@@ -36,11 +41,13 @@ function ChartParse.harmc(harmc)
                 table.insert(chart[section], {startTime = tonumber(startTime), multiplier = tonumber(multiplier)})
             end
         elseif section == "hitObjects" then
-            local key, startTime, length, lane = Line:match("^(%a+):([%d%.]+):([%d%.]+):(%d+)$")
+            local key, startTime, length, lane = Line:match("^(%a+):([%d%.]+):([%d%.]+):([%d%.]+)$")
             if key and startTime and length and lane then   -- not a bad error, just skip this note
                 table.insert(chart[section], {type = key, startTime = tonumber(startTime), length = tonumber(length), lane = tonumber(lane)})
             end
         end
+
+        ::continue::
     end
 
     return chart  -- will return the chart if everything goes well, or will return false if, uhh, everything does not go well
