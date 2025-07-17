@@ -31,8 +31,8 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.bpm = bpm or "???"
 
     self.imagePath = image
-    self.image = (type(image) == "string" and love.graphics.newImage(image)) or image
-    self.imageLoaded = self.image ~= nil
+    self.image = ((type(image) == "string" and love.filesystem.getInfo(image, "file")) and love.graphics.newImage(image)) or image
+    self.imageLoaded = type(self.image) ~= "string" and self.image ~= nil
 
     if not self.isDifficultyButton and self.imagePath then
         self.instance.bannerInputChannel:push(self.imagePath)
