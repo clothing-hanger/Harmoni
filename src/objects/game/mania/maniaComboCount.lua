@@ -6,8 +6,7 @@ function maniaComboCount:new(x,y)
     self.fullTimeLimit = 200
     self.x, self.y, self.limit = x or 0, y or 0, 400
 
-
-    self.removeThatUglyAssStackingEffect = true -- im doing it this way in case i ever wanna add it back but i know i wont cuz its ugly as shit
+    self.removeComboStack = SkinHandler:getParam("Remove Combo Stack") or false
 
     self.debug = false
 end
@@ -15,7 +14,7 @@ end
 function maniaComboCount:update(dt)
     for i, Combo in ipairs(self.drawnCombos) do
         if not Combo.hasTweened then self:tweenCombo(Combo) end
-        if not self.removeThatUglyAssStackingEffect then Combo.time = Combo.time-1000*dt end
+        if not self.removeComboStack then Combo.time = Combo.time-1000*dt end
         if Combo.time <= 0 then table.remove(self.drawnCombos, i); break end
     end
 end
@@ -37,18 +36,26 @@ function maniaComboCount:breakCombo()
 end
 
 function maniaComboCount:addDrawableCombo()
-    if self.removeThatUglyAssStackingEffect then self.drawnCombos = {} end
+    if self.removeComboStack then self.drawnCombos = {} end
         table.insert(self.drawnCombos, {combo = self.combo, time = self.fullTimeLimit,x = self.x, y = self.y, hasTweened = false})
 end
 
 function maniaComboCount:draw()
     love.graphics.setFont(SkinHandler:getFont("Combo"))
     for i, Combo in ipairs(self.drawnCombos) do
-        local alpha = self.removeThatUglyAssStackingEffect and 1 or (Combo.time / self.fullTimeLimit)
+        local alpha = self.removeComboStack and 1 or (Combo.time / self.fullTimeLimit)
         alpha = math.min(math.max(alpha, 0), 1)
 
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.printf(Combo.combo, Combo.x - self.limit / 2, Combo.y, self.limit, "center")
+
+        local formattedCombo
+        local param = SkinHandler:getParam("Combo Format") or "Full"
+        if param == "Short" then
+            formattedCombo = string.format("%d", Combo.combo)
+        else
+            formattedCombo = string.format("%03d", Combo.combo)
+        end
+        love.graphics.printf(formattedCombo, Combo.x - self.limit / 2, Combo.y, self.limit, "center")
     end
 
     if self.debug then

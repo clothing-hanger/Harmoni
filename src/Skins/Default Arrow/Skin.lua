@@ -6,18 +6,25 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Hold Size"] = 125,
         ["HoldEnd Size"] = 125,
         ["Receptor Size"] = 125,
+
         ["Judgement Size"] = 1,
         ["Judgement Y Offset"] = baseScreenRatio.y/2,
         ["Judgement X Offset"] = baseScreenRatio.x/2-500,
+
         ["Combo Y Offset"] = baseScreenRatio.y/2,
         ["Combo X Offset"] = baseScreenRatio.x/2+500,
+        ["Combo Format"] = "Full",
+        ["Remove Combo Stack"] = true,
+
         ["Hit Error Meter Y"] = 0,
         ["Hit Error Meter X"] = 0,
         ["Hit Error Meter Height"] = 15,
         ["Hit Error Meter Width"] = 150,
         ["Hit Error Meter Solid"] = false,
         ["Hit Error Meter Fade"] = 1000,
+
         ["Note Underlay Color"] = rgb {0, 0, 0},
+
         ["Judgement Counter Bump Amount"] = 50,
         ["Judgement Bump Amount"] = -70,
         ["Judgement Bump Tween Type"] = "out-back",
@@ -25,11 +32,13 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Judgement Counter Spacing"] = 60,
         ["Judgement Counter X"] = baseScreenRatio.x - 210,
         ["Judgement Counter Y"] = baseScreenRatio.y/2-150,
+
         ["Health Bar X Offset"] = baseScreenRatio.x/2+650,
         ["Health Bar Y Offset"] = baseScreenRatio.y-100,
         ["Health Bar Height"] = 1250,
         ["Health Bar Width"] = 40,
         ["Health Bar Direction"] = "vertical",
+
         ["Marvelous Color"] = rgb {0, 213, 255},
         ["Perfect Color"] = rgb {0, 0, 225},
         ["Great Color"] = rgb {0, 255, 81},
