@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
----@
+
 Skin = {   -- i need to remove lots of these tbh..
     Params = {
         ["Note Size"] = 125,
@@ -7,12 +7,12 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HoldEnd Size"] = 125,
         ["Receptor Size"] = 125,
 
-        ["Judgement Size"] = 1,
-        ["Judgement Y Offset"] = baseScreenRatio.y/2,
-        ["Judgement X Offset"] = baseScreenRatio.x/2-500,
+        ["Judgement Size"] = 1.5,
+        ["Judgement Y Offset"] = getScreenCenter().y,
+        ["Judgement X Offset"] = getScreenCenter().x-500,
 
-        ["Combo Y Offset"] = baseScreenRatio.y/2,
-        ["Combo X Offset"] = baseScreenRatio.x/2+500,
+        ["Combo Y Offset"] = getScreenCenter().y,
+        ["Combo X Offset"] = getScreenCenter().x+500,
         ["Combo Format"] = "Full",
         ["Remove Combo Stack"] = true,
 
@@ -30,11 +30,11 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Judgement Bump Tween Type"] = "out-back",
         ["Judgement Bump Time"] = 0.5,
         ["Judgement Counter Spacing"] = 60,
-        ["Judgement Counter X"] = baseScreenRatio.x - 210,
-        ["Judgement Counter Y"] = baseScreenRatio.y/2-150,
+        ["Judgement Counter X"] = getScreenCenter().x - 210,
+        ["Judgement Counter Y"] = getScreenCenter().y-150,
 
-        ["Health Bar X Offset"] = baseScreenRatio.x/2+650,
-        ["Health Bar Y Offset"] = baseScreenRatio.y-100,
+        ["Health Bar X Offset"] = getScreenCenter().x+650,
+        ["Health Bar Y Offset"] = getScreenDimensions().height-100,
         ["Health Bar Height"] = 1250,
         ["Health Bar Width"] = 40,
         ["Health Bar Direction"] = "vertical",

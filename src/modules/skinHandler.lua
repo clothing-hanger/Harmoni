@@ -70,7 +70,14 @@ local skinEnv = {
 
     getInfo = restricted.love.filesystem.getInfo,
     read = restricted.love.filesystem.read,
-    exists = restricted.love.filesystem.exists
+    exists = restricted.love.filesystem.exists,
+
+    getScreenCenter = function()
+        return { x = baseScreenRatio.x / 2, y = baseScreenRatio.y / 2 }
+    end,
+    getScreenDimensions = function()
+        return { width = baseScreenRatio.x, height = baseScreenRatio.y }
+    end
 }
 
 local chunk
