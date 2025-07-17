@@ -43,8 +43,9 @@ function gameModeManager:draw()
 
 end
 
-function gameModeManager:leave()
+function gameModeManager:exit()
     cursor.fadeOutWhenIdle = false
+    cursor.fadeOutAlpha = 1
 end
 
 return gameModeManager

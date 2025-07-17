@@ -2,7 +2,6 @@ local songSelect = State("songSelect")
 local songList = {}
 local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
-local songButtonByPath = {}
 local difficultyButtons = {}
 local songButtonWidth = 600 * 1.3
 local songButtonHeight = 75 * 1.3
@@ -13,10 +12,6 @@ local buttonAngle = 5
 local BGAlpha = {1}
 local currentDisplayedBG
 local previousBG
-local songLoadIndex = 1
-local SONGS_PER_BATCH = 5
-local songsLoadingComplete = false
-local loadedBannerPaths = {}
 
 local songButtonX = 20
 
@@ -134,7 +129,7 @@ while true do
 
     if not love.filesystem.getInfo(path, "file") then 
         goto continue 
-    else
+    else 
         image = love.image.newImageData(path) 
     end
 
@@ -163,7 +158,7 @@ end
     self.songThread:start()
 
     if #songList == 0 then
-        self:startLoadingSongsInBatches()
+        self:setupSongList()
     else
         self:loadBanners()
     end
@@ -179,6 +174,7 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
         table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
     end
 end
+
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
@@ -216,72 +212,40 @@ function songSelect:handleInputs()
 end
 
 function songSelect:loadBanners()
-    for i, song in ipairs(songList) do
-        if not song then
-            table.remove(songList, i)
-            goto continue
+    for _, button in ipairs(songButtons) do
+        if button.imagePath and not button.imageLoaded then
+            if love.filesystem.getInfo(button.imagePath, "file") then
+                self.bannerInputChannel:push(button.imagePath)
+            else
+                button.imageLoaded = false
+                button.color = {1, 1, 1}
+            end
         end
-
-        local diffList = SongListManager.getDifficultyList(musicPath .. song)
-        if not diffList[1] then
-            table.remove(songList, i)
-            goto continue
-        end
-        local bannerPath = musicPath .. song .. "/" .. diffList[1] .. "/banner.png"
-
-        if not loadedBannerPaths[bannerPath] and love.filesystem.getInfo(bannerPath, "file") then
-            self.bannerInputChannel:push(bannerPath)
-            loadedBannerPaths[bannerPath] = true -- ✅ mark as loaded
-        end
-
-        ::continue::
     end
 end
 
-
 function songSelect:clearBanners()
-    loadedBannerPaths = {}
     for _, SongButton in ipairs(songButtons) do
-        if SongButton.image then
-            SongButton.image:release()
-            SongButton.image = nil
+        if SongButton.image == currentDisplayedBG then
+            goto continue
         end
+        SongButton.image = nil
         SongButton.imageLoaded = false
         SongButton.color = {1, 1, 1}
+
+        ::continue::
     end
 
     collectgarbage("step")
 end
 
-function songSelect:loadSongBatch()
-    if songsLoadingComplete then return end
-
-    for i = 1, SONGS_PER_BATCH do
-        local song = songList[songLoadIndex]
-        if not song then
-            songsLoadingComplete = true
-            self:loadBanners()
-            break
-        end
-
-        local diffList = SongListManager.getDifficultyList(musicPath .. song)
-        if not diffList[1] or not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
-            songLoadIndex = songLoadIndex + 1
-            goto continue
-        end
-
-        self.songInputChannel:push(musicPath .. song .. "/" .. diffList[1] .. "/")
-
-        ::continue::
-        songLoadIndex = songLoadIndex + 1
-    end
-end
-
-
 function songSelect:setupDifficultyList(path,color)
     difficultyList = SongListManager.getDifficultyList(path)
     difficultyButtons = {}
 
+    local difficultyListBoxHeight = #difficultyList*(songButtonHeight+songButtonSpacing)
+
+    -- Slope values to match song buttons
     local slope = math.rad(buttonAngle)
     local baseX = -10
     local baseY = 0
@@ -330,10 +294,9 @@ function songSelect:loadSongs()
             -- add to songButtons
             local songInfo = data.songInfo
             if songInfo then
-                local button = menuSongButton(
+                table.insert(songButtons, menuSongButton(
                     self,
-                    songButtonWidth, songButtonHeight,
-                    songButtonX, (#songButtons+1)*(songButtonHeight+songButtonSpacing),
+                    songButtonWidth,songButtonHeight,songButtonX,(#songButtons+1)*(songButtonHeight+songButtonSpacing),
                     songInfo.title,
                     songInfo.artist,
                     songInfo.charter,
@@ -342,45 +305,34 @@ function songSelect:loadSongs()
                     false,
                     songInfo.gameMode,
                     musicPath .. data.folderPath
-                )
-
-                table.insert(songButtons, button)
-                songButtonByPath[button.imagePath] = button
+                ))
             end
         end
     end
 end
-
-function songSelect:startLoadingSongsInBatches()
-    songList = SongListManager.getSongList(musicPath)
-    songLoadIndex = 1
-    songsLoadingComplete = false
-end
-
-
-local MAX_IMAGES_PER_FRAME = 1
 
 function songSelect:loadSongButtonImages()
-    for i = 1, MAX_IMAGES_PER_FRAME do
-        if not self.bannerChannel:peek() then break end
+    if self.bannerChannel:peek() then
         local data = self.bannerChannel:pop()
-        if data and data.path then
-            local SongButton = songButtonByPath[data.path]
-            if SongButton and love.filesystem.getInfo(data.path, "file") then
-                SongButton.image = love.graphics.newImage(data.image)
-                SongButton.imageLoaded = true
-                SongButton.color = data.averageColor
+        if data then
+            for i, SongButton in ipairs(songButtons) do
+                if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
+                    SongButton.imageData = data.image
+                    SongButton.image = love.graphics.newImage(data.image)
+                    SongButton.imageLoaded = true
+                    SongButton.color = data.averageColor
+                    break
+                end
             end
         end
     end
 end
+
 
 function songSelect:update(dt)
     for i, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:update(dt)
     end
-
-    self:loadSongBatch()
     self:updateBGImage()
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
@@ -390,7 +342,6 @@ function songSelect:update(dt)
     self:handleInputs()
     self.ignoreInterpolation = false
 end
-
 
 function songSelect:mousemoved()
     local _, _, _, dy = cursor:getPosition()
@@ -445,16 +396,15 @@ function songSelect:updateBGImage()
 end
 
 function songSelect:checkForSongButtonClicks()
-    local screenTop = -200
-    local screenBottom = baseScreenRatio.y + 200
-
+    local buttonInfo = false
     for i, SongButton in ipairs(songButtons) do
-        if SongButton.y > screenTop and SongButton.y < screenBottom then
-            if mouseOver(SongButton) and Input:pressed("menuClickLeft") then
+        if mouseOver(SongButton) then
+            if Input:pressed("menuClickLeft") then
                 selectedSong = i
-                local buttonInfo = SongButton:onClick()
-                self:setupDifficultyList(buttonInfo.path, buttonInfo.color)
-                break
+                buttonInfo = SongButton:onClick()
+
+                print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
+                self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
             end
         end
     end
@@ -561,17 +511,7 @@ function songSelect:drawSongInfo()
     love.graphics.setColor(1,1,1)
 end
 
-function songSelect:leave()
-    self.bannerThread:wait()
-    self.bannerThread:release()
-    self.bannerInputChannel:clear() ; self.bannerInputChannel:release()
-    self.bannerChannel:clear()
-
-    self.songThread:wait()
-    self.songThread:release()
-    self.songInputChannel:clear() ; self.songInputChannel:release()
-    self.songChannel:clear()
-
+function songSelect:exit()
     self:clearBanners()
 end
 

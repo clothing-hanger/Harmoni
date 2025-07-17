@@ -32,7 +32,7 @@ function love.load(args)
 
     require("modules.gamemodes")
 
-    require("bob.init")
+    require("bob")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
     SongListManager = require("modules.songListManager")
