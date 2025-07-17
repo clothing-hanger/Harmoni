@@ -25,7 +25,7 @@ function toggle:returnState()
     return self.toggleState
 end
 
-function draw()
+function toggle:draw()
     love.graphics.setColor((self.toggleState and self.color.on) or self.color.off)
     love.graphics.rectangle("fill",self.x,self.y,self.width,self.height)
 end
