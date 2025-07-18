@@ -28,6 +28,7 @@ function CHE:init()
     States = require("modules.states")
     Timer = require("engine.lib.Timer")
     Console = require("engine.modules.console")
+    Ease = require("engine.lib.Ease")
     require("modules.objects")
 
     tryExcept(function()
