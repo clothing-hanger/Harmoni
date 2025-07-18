@@ -68,7 +68,7 @@ end
 function sharedBackground:bump(intensity, speed, tweenType)
     intensity = intensity or 0
     speed = speed or 0.5
-    tweenType = tweenType or "outquad"
+    tweenType = tweenType or "out-quad"
 
     self.size = self.size + intensity
     local start = self.size
