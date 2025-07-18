@@ -66,7 +66,7 @@ function Settings:defaultSettings()
             if type(subData) == "table" and subData.settings then
                 defaults[category][subCategory] = {}
                 for settingName, setting in pairs(subData.settings) do
-                    defaults[category][subCategory][settingName] = setting.defaultValue
+                    defaults[category][subCategory][settingName] = {value = setting.defaultValue}
                 end
             end
         end
