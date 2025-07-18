@@ -201,37 +201,39 @@ function songSelect:setupSongList()
         ::continue::
     end
 end
+function songSelect:handleInputs()
+    if Input:pressed("menuUp") then
+        selectedSong = math.max(1, selectedSong - 1)
+    elseif Input:pressed("menuDown") then
+        selectedSong = math.min(#songButtons, selectedSong + 1)
+    elseif Input:pressed("menuConfirm") then
+        -- Your confirm logic
+    end
+end
 
 function songSelect:loadBanners()
-    for i, song in ipairs(songList) do
-        if not song then
-            table.remove(songList, i)
-            goto continue
+    for _, button in ipairs(songButtons) do
+        if button.imagePath and not button.imageLoaded then
+            if love.filesystem.getInfo(button.imagePath, "file") then
+                self.bannerInputChannel:push(button.imagePath)
+            else
+                button.imageLoaded = false
+                button.color = {1, 1, 1}
+            end
         end
-
-        local diffList = SongListManager.getDifficultyList(musicPath .. song)
-        if not diffList[1] then
-            table.remove(songList, i)
-            goto continue
-        end
-
-        local bannerPath = musicPath .. song .. "/" .. diffList[1] .. "/banner.png"
-        if love.filesystem.getInfo(bannerPath, "file") then
-            self.bannerInputChannel:push(bannerPath)
-        end
-
-        ::continue::
     end
 end
 
 function songSelect:clearBanners()
     for _, SongButton in ipairs(songButtons) do
-        if SongButton.image then
-            SongButton.image:release()
-            SongButton.image = nil
+        if SongButton.image == currentDisplayedBG then
+            goto continue
         end
+        SongButton.image = nil
         SongButton.imageLoaded = false
         SongButton.color = {1, 1, 1}
+
+        ::continue::
     end
 
     collectgarbage("step")
@@ -315,6 +317,7 @@ function songSelect:loadSongButtonImages()
         if data then
             for i, SongButton in ipairs(songButtons) do
                 if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
+                    SongButton.imageData = data.image
                     SongButton.image = love.graphics.newImage(data.image)
                     SongButton.imageLoaded = true
                     SongButton.color = data.averageColor
@@ -345,15 +348,6 @@ function songSelect:mousemoved()
     if cursor:isMouseDown() then
         hoveredSong = hoveredSong + dy
         self.ignoreInterpolation = true
-    end
-end
-
-function songSelect:handleInputs()
-    if Input:pressed("menuUp") then
-        selectedSong = selectedSong - 1
-    elseif Input:pressed("menuDown") then
-        selectedSong = selectedSong + 1
-    elseif Input:pressed("menuConfirm") then
     end
 end
 
@@ -517,17 +511,7 @@ function songSelect:drawSongInfo()
     love.graphics.setColor(1,1,1)
 end
 
-function songSelect:leave()
-    self.bannerThread:wait()
-    self.bannerThread:release()
-    self.bannerInputChannel:clear() ; self.bannerInputChannel:release()
-    self.bannerChannel:clear()
-
-    self.songThread:wait()
-    self.songThread:release()
-    self.songInputChannel:clear() ; self.songInputChannel:release()
-    self.songChannel:clear()
-
+function songSelect:exit()
     self:clearBanners()
 end
 

@@ -4,20 +4,19 @@ function mania:new(chart, parent)
     self.parent = parent
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
-    print("with file", chart, "without file", self.chartPath)
-    self.chart = mania:setUpChart(chart)
+
+    self.chart = self:setUpChart(chart)
+    print(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart, self)}
-    self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile,"stream")
+    self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "stream")
 
     mania.judgements = require("Modules.maniaJudgements")
 
     self:setUpObjects()
 
-    local songCountDown = 2
-
-    Timer.after(0.15, function() self:startSong(songCountDown) end)
+    Timer.after(0.15, function() self:startSong(2) end)
 end
 
 function mania:startSong(countdown)
@@ -26,73 +25,91 @@ end
 
 function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
-
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
-    local songLengthInSeconds = self.song:getDuration("seconds")
 
-    self.timeRemaingBar = UITimeRemaing(0, songLengthInSeconds, 0, baseScreenRatio.y-50, baseScreenRatio.x, self,5,-5,5,30)
-
-    self.judgementObject = maniaJudgement(
-        SkinHandler:getParam("Judgement X Offset"), SkinHandler:getParam("Judgement Y Offset"),
-        SkinHandler:getParam("Judgement Size"),
-        self.judgements, self
+    local songLength = self.song and self.song:getDuration("seconds") or 0
+    self.timeRemaingBar = UITimeRemaing(
+        0, songLength,
+        0, baseScreenRatio.y - 50,
+        baseScreenRatio.x,
+        self,
+        5, -5, 5, 30
     )
 
-    self.comboCount = maniaComboCount(SkinHandler:getParam("Combo X Offset"), SkinHandler:getParam("Combo Y Offset"))
+    self.judgementObject = maniaJudgement(
+        SkinHandler:getParam("Judgement X Offset"),
+        SkinHandler:getParam("Judgement Y Offset"),
+        SkinHandler:getParam("Judgement Size"),
+        self.judgements,
+        self
+    )
+
+    self.comboCount = maniaComboCount(
+        SkinHandler:getParam("Combo X Offset"),
+        SkinHandler:getParam("Combo Y Offset")
+    )
 
     self.healthBar = maniaHealthBar(
-        SkinHandler:getParam("Health Bar X Offset"), SkinHandler:getParam("Health Bar Y Offset"),
-        SkinHandler:getParam("Health Bar Width"),SkinHandler:getParam("Health Bar Height"),
+        SkinHandler:getParam("Health Bar X Offset"),
+        SkinHandler:getParam("Health Bar Y Offset"),
+        SkinHandler:getParam("Health Bar Width"),
+        SkinHandler:getParam("Health Bar Height"),
         1
     )
 end
 
 function mania:setUpChart(chart)
     local songPath = getDirectory(chart)
-    chart = ChartParse.harmc(chart)
-    local maniaChart = {}
-    maniaChart.meta = chart.meta
-    maniaChart.hitObjects = {}
-    maniaChart.scrollVelocities = {}
-    if chart.meta.backgroundVideo then
-        if getFileExtension(chart.meta.backgroundVideo) == "mp4" then
-            self.videoBackground = video(songPath .. "/" .. chart.meta.backgroundVideo, baseScreenRatio.x/2, baseScreenRatio.y/2, 1, 1)
-        end
+    local parsed = ChartParse.harmc(chart)
+
+    local maniaChart = {
+        meta = parsed.meta,
+        hitObjects = {},
+        scrollVelocities = {}
+    }
+
+    -- Setup video background if valid
+    if parsed.meta.backgroundVideo and getFileExtension(parsed.meta.backgroundVideo) == "mp4" then
+        self.videoBackground = video(
+            songPath .. "/" .. parsed.meta.backgroundVideo,
+            baseScreenRatio.x / 2,
+            baseScreenRatio.y / 2,
+            1, 1
+        )
     end
 
-    for i, BpmChange in ipairs(chart.bpm) do
+    for i, BpmChange in ipairs(parsed.bpm) do
 
     end
-    for i, SliderVeloticy in ipairs(chart.sliderVelocities) do
+    for i, SliderVeloticy in ipairs(parsed.sliderVelocities) do
 
     end
-    for i, HitObject in ipairs(chart.hitObjects) do
+    for _, obj in ipairs(parsed.hitObjects) do
         table.insert(maniaChart.hitObjects, {
-            type = HitObject.type,
-            startTime = HitObject.startTime,
-            length = HitObject.length,
-            lane = HitObject.lane
+            type = obj.type,
+            startTime = obj.startTime,
+            length = obj.length,
+            lane = obj.lane
         })
     end
+
     return maniaChart
 end
 
 function mania:update(dt)
     self:updateObjects(dt)
-    for i,PlayFeild in ipairs(self.playField) do
-        PlayFeild:update(dt)
-    end
-    if self.song then
-        if MusicTime >= 0 and not self.song:isPlaying() then
-            self.song:play()
-            if self.videoBackground then self.videoBackground:play() end
-        end
+
+    for _, playField in ipairs(self.playField) do
+        playField:update(dt)
     end
 
-    if self.song then 
-        if self.playField[1].finished or debugShitIdk then
-            self:endSong()
-        end
+    if self.song and MusicTime >= 0 and not self.song:isPlaying() then
+        self.song:play()
+        if self.videoBackground then self.videoBackground:play() end
+    end
+
+    if self.song and self.playField[1].finished then
+        self:endSong()
     end
 
     if thething then
@@ -102,14 +119,11 @@ function mania:update(dt)
 end
 
 function mania:endSong()
-
-    
-    self.song:stop()
+    if self.song then self.song:stop() end
     self.song = nil
     self.chart = nil
     self.playField = {}
     State.switch(States.menu.songSelect)
-    
 end
 
 function mania:updateObjects(dt)
@@ -119,13 +133,17 @@ function mania:updateObjects(dt)
     self.timeRemaingBar:update(dt)
     self.comboCount:update(dt)
     self.healthBar:update(dt)
-    if self.healthBar.health <= 0 then self:endSong() end
+
+    if self.healthBar.health <= 0 then
+        self:endSong()
+    end
 end
 
 function mania:draw()
     self.background:draw()
     if self.videoBackground then self.videoBackground:draw() end
 
+    -- Prepare batches
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local receptorBatch = SkinHandler:getBatch("Receptors")
     local noteBatch = SkinHandler:getBatch("Notes")
@@ -136,8 +154,8 @@ function mania:draw()
     if noteBatch then noteBatch:clear() end
     if judgementBatch then judgementBatch:clear() end
 
-    for i,PlayFeild in ipairs(self.playField) do
-        PlayFeild:draw()
+    for _, playField in ipairs(self.playField) do
+        playField:draw()
     end
 
     if arrowBatch then love.graphics.draw(arrowBatch) end
@@ -146,13 +164,9 @@ function mania:draw()
 
     self.judgementObject:draw()
     if judgementBatch then love.graphics.draw(judgementBatch) end
-    --TEMP
-    love.graphics.setFont(songButtonFontLarge)
-
 
     self.comboCount:draw()
     self.timeRemaingBar:draw()
-
     self.healthBar:draw()
 end
 

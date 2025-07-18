@@ -70,7 +70,14 @@ local skinEnv = {
 
     getInfo = restricted.love.filesystem.getInfo,
     read = restricted.love.filesystem.read,
-    exists = restricted.love.filesystem.exists
+    exists = restricted.love.filesystem.exists,
+
+    getScreenCenter = function()
+        return { x = baseScreenRatio.x / 2, y = baseScreenRatio.y / 2 }
+    end,
+    getScreenDimensions = function()
+        return { width = baseScreenRatio.x, height = baseScreenRatio.y }
+    end
 }
 
 local chunk
@@ -131,8 +138,21 @@ function SkinHandler:loadSkin(filePath)
     chunk()
 
     self.__data = mt
+end
 
-    print(SkinHandler:getImage("Notes", "4K", "Left"))
+function SkinHandler:getAllSkins()
+    local skins = {}
+    for _, file in ipairs(love.filesystem.getDirectoryItems("Skins")) do
+        if love.filesystem.getInfo("Skins/" .. file .. "/Meta.lua") then
+            local data = love.filesystem.load("Skins/" .. file .. "/Meta.lua")()
+            if data then
+                data.path = file
+                table.insert(skins, data)
+            end
+        end
+    end
+
+    return skins
 end
 
 function SkinHandler:getParam(param)

@@ -1,57 +1,37 @@
 ---@diagnostic disable: need-check-nil
 local maniaReceptor = Class:extend("maniaReceptor")
 
-local fourkLanes = {"Left", "Down", "Up", "Right"}
-local sevenkLanes = {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
-
 local laneStrings = {
-    {"Left", "Down", "Up", "Right"},
-    {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
+    [4] = {"Left", "Down", "Up", "Right"},
+    [7] = {"Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2"}
 }
 
-function maniaReceptor:new(mode, lane, input, x ,y ,parent)
+function maniaReceptor:new(mode, lane, inputBind, x, y, parent)
     self.parent = parent
     self.lane = lane
     self.mode = mode
-    self.inputBind = input
-    self.laneCount = self.parent.parent.chart.meta.laneCount  -- horrid, awful, disgusting, terrible, gross, icky, bad, i ran out of synonyms but i hate this
-                                                              -- theres really nothing wrong with this i just dont like how it looks
+    self.inputBind = inputBind
+    self.laneCount = tonumber(self.parent.parent.chart.meta.laneCount)
+    self.laneCountString = tostring(self.laneCount) .. "K"
     self.laneString = self:getLaneString()
 
-
-    self.x,self.y = x,y
-
-    self.laneCountString = tostring(self.laneCount) .. "K"
-
-    --print("HFHJDFD", self.laneCountString)
-
-
-    self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
-    self.imageDown =SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)
-    --print("images:",self.imageUp,self.imageDown)
-    --print("SKIN SHIT", self.laneString)
-
+    self.x, self.y = x, y
     self.size = maniaNoteSize
     self.held = false
-
-    --print("JIIIIII?")
-
-
-    
-
     self.debug = false
+
+    self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
+    self.imageDown = SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)
 end
 
 function maniaReceptor:getLaneString()
-    local string
-    local laneCount = tonumber(self.laneCount) -- idfk if this is a number or string but im too lazy to find out
-    for i = 1,#laneStrings do
-        if laneCount == #laneStrings[i] then
-            string = laneStrings[i][self.lane]  -- remember to replace the version of this in maniaNote with this this is so much better
-        end
+    local laneList = laneStrings[self.laneCount]
+    if laneList then
+        return laneList[self.lane]
+    else
+        print("wtf")
+        return "wtf"
     end
-
-    return string
 end
 
 function maniaReceptor:update(dt)
@@ -59,29 +39,32 @@ function maniaReceptor:update(dt)
 end
 
 function maniaReceptor:draw()
-    local drawnImage = (self.held and self.imageDown) or self.imageUp
-
+    local drawnImage = self.held and self.imageDown or self.imageUp
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local receptorBatch = SkinHandler:getBatch("Receptors")
 
-    if arrowBatch then
-        local _, _, w, h = drawnImage:getViewport()
-        arrowBatch:add(drawnImage, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
-    elseif receptorBatch then
-        local _, _, w, h = drawnImage:getViewport()
-        receptorBatch:add(drawnImage, self.x, self.y, nil, self.size/w, self.size/h, w/2, h/2)
+    local w, h
+    if drawnImage.getViewport then
+        _, _, w, h = drawnImage:getViewport()
     else
-        love.graphics.draw(drawnImage, self.x, self.y, nil, self.size/drawnImage:getWidth(), self.size/drawnImage:getHeight(), drawnImage:getWidth()/2, drawnImage:getHeight()/2)
+        w, h = drawnImage:getWidth(), drawnImage:getHeight()
+    end
+
+    if arrowBatch then
+        arrowBatch:add(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
+    elseif receptorBatch then
+        receptorBatch:add(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
+    else
+        love.graphics.draw(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
     end
 
     if self.debug then
-        love.graphics.setColor(1,0,0)
+        love.graphics.setColor(1, 0, 0)
         love.graphics.setLineWidth(10)
-        love.graphics.line(self.x-200, self.y, self.x+200, self.y)
-        love.graphics.setColor(1,1,1)
+        love.graphics.line(self.x - 200, self.y, self.x + 200, self.y)
+        love.graphics.setColor(1, 1, 1)
         love.graphics.setLineWidth(1)
     end
-
 end
 
 return maniaReceptor

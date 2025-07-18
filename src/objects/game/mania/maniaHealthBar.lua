@@ -11,8 +11,8 @@ function maniaHealthBar:new(x,y,width,height,health,max)
     self.line = UIsquiglyLine(self.x, self.y, self.x, self.y-self.height,4,5,50,1,self.width)
 end
 
-local maxHealthLerpSpeed = 30
-local printableHealthLerpSpeed = 20
+local maxHealthLerpSpeed = 10
+local printableHealthLerpSpeed = 10
 
 function maniaHealthBar:update(dt)
     self.line:update(dt)

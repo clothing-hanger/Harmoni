@@ -36,7 +36,7 @@ function cursor:new()
     self.fadeOutAlpha = 1
     self.didMove = false
 
-    self.debug = true
+    self.debug = false
 end
 
 function cursor:update(dt)
@@ -49,7 +49,7 @@ function cursor:update(dt)
         self.didMove = false
     end
 
-    if self.fadeOutWhenIdle then
+    if self.fadeOutWhenIdle and self.angle == 0 and self.angularVelocity == 0 then
         if not self.didMove and not self.fadingBackIn then
             self.fadeOutTimer = self.fadeOutTimer + dt
             if self.fadeOutTimer >= self.fadeOutTime then
@@ -192,7 +192,6 @@ function cursor:draw()
     love.graphics.pop()
 
     if self.debug then
-        local lastColor = {love.graphics.getColor()}
         love.graphics.setColor(1, 0, 0, 1)
         love.graphics.circle("line", self.x, self.y, 5)
         love.graphics.print(string.format("Angle: %.2f, WeightAngle: %.2f", self.angle, self.weightAngle), self.x + 10, self.y - 10)
@@ -204,7 +203,6 @@ function cursor:draw()
             love.graphics.line(self.mouseDownX, self.mouseDownY, self.x, self.y)
             love.graphics.circle("line", self.mouseDownX, self.mouseDownY, 5)
         end
-        love.graphics.setColor(lastColor)
     end
 
     love.graphics.setColor(lastColor)

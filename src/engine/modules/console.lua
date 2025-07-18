@@ -1,53 +1,47 @@
-local console = {}
+local console = {
+    isVisible = false,
+    input = "",
+    history = {},
+    width = 1280,
+    maxHistory = 10,
+    textPadding = 20,
+    font = love.graphics.newFont(12),
+    height = 0
+}
 
-console.isVisible = false
-console.input = ""
-console.history = {}
-console.width = 1280
-console.maxHistory = 10
-console.textPadding = 20
-console.font = love.graphics.newFont(12)
-console.height = 0
--- calculate height with padding
+local utf8 = require("utf8")
 
 local function printToConsole(text, wasCommand, showTimestamp)
     if #console.history >= console.maxHistory then
         table.remove(console.history, 1)
     end
-    showTimestamp = showTimestamp ~= nil and showTimestamp or true
-    if not wasCommand then
-        table.insert(console.history, {text = text, timestamp = os.date("%Y-%m-%d %H:%M:%S", os.time()), wasCommand = false, showTimestamp = showTimestamp})
-    else
-        if showTimestamp then
-            table.insert(console.history, {
-                text = text,
-                timestamp = os.date("%Y-%m-%d %H:%M:%S", os.time()),
-                wasCommand = true,
-                showTimestamp = showTimestamp
-            })
-        else
-            table.insert(console.history, {
-                text = ">> " .. text,
-                timestamp = os.date("%Y-%m-%d %H:%M:%S", os.time()),
-                wasCommand = true,
-                showTimestamp = showTimestamp
-            })
-        end
-    end
+
+    local timestamp = os.date("%Y-%m-%d %H:%M:%S")
+    showTimestamp = showTimestamp ~= false
+
+    table.insert(console.history, {
+        text = wasCommand and (showTimestamp and text or ">> " .. text) or text,
+        timestamp = timestamp,
+        wasCommand = wasCommand,
+        showTimestamp = showTimestamp
+    })
 end
 
+-- Utility: string.split
 function string:split(sep)
-    local sep, fields = sep or ":", {}
-    local pattern = string.format("([^%s]+)", sep)
-    self:gsub(pattern, function(c) fields[#fields + 1] = c end)
+    local fields = {}
+    for field in self:gmatch("[^" .. (sep or ":") .. "]+") do
+        fields[#fields + 1] = field
+    end
     return fields
 end
 
+-- Command registry
 console.commands = {
     help = {
         name = "Help",
         description = "Lists all available commands.",
-        usage = "help [command | optional]",
+        usage = "help [command]",
         callback = function(args)
             if #args == 0 then
                 printToConsole("Available commands:")
@@ -68,15 +62,13 @@ console.commands = {
         name = "Test",
         description = "A test command that does nothing.",
         usage = "test",
-        callback = function(args)
-            printToConsole("This is a test command. It does nothing.")
-        end
+        callback = function() printToConsole("This is a test command. It does nothing.") end
     },
     clear = {
         name = "Clear",
         description = "Clears the console history.",
         usage = "clear",
-        callback = function(args)
+        callback = function()
             console.clear()
             printToConsole("Console cleared.")
         end
@@ -85,9 +77,9 @@ console.commands = {
         name = "Save Folder",
         description = "Opens the save directory.",
         usage = "saveFolder",
-        callback = function(args)
+        callback = function()
             local saveDir = love.filesystem.getSaveDirectory()
-            os.execute("start " .. "\"" .. saveDir .. "\"")
+            os.execute('start "" "' .. saveDir .. '"')
         end
     },
     lua = {
@@ -106,55 +98,49 @@ console.commands = {
                 return
             end
             local success, result = pcall(func)
-            if not success then
-                printToConsole("Error: " .. result)
-            else
-                if tostring(result) ~= "nil" then
-                    printToConsole(tostring(result))
-                end
-            end
+            printToConsole(success and tostring(result) or "Error: " .. result)
         end
     }
 }
 
 function console.runCommand(command)
     local args = command:split(" ")
-    local name = args[1]
+    local name = table.remove(args, 1)
     local cmd = console.commands[name]
 
-    if cmd then
-        table.remove(args, 1) -- remove the command name
-        if cmd.callback then
-            cmd.callback(args)
-        else
-            printToConsole("Command '" .. name .. "' has no callback function.", false, false)
-        end
+    if cmd and cmd.callback then
+        cmd.callback(args)
     else
         printToConsole("Unknown command: " .. name, false, false)
     end
 end
 
 function console.draw()
+    local lineHeight = 20
+    local height = #console.history * lineHeight + lineHeight
     love.graphics.setColor(0.25, 0.25, 0.25, 0.8)
-    love.graphics.rectangle("fill", 0, 0, console.width, #console.history * 20 + 20)
+    love.graphics.rectangle("fill", 0, 0, console.width, height)
+
     love.graphics.setFont(console.font)
     love.graphics.setColor(1, 1, 1)
+
     local y = 0
-    for i = 1, #console.history do
-        local entry = console.history[i]
+    for _, entry in ipairs(console.history) do
         if entry.showTimestamp then
-            love.graphics.print({{0.9, 0.9, 0.9}, "[", {0.7, 0.7, 0.7}, entry.timestamp, {0.9, 0.9, 0.9}, "]: ", {1, 1, 1}, entry.text}, 10, y)
+            love.graphics.print({
+                {0.9, 0.9, 0.9}, "[",
+                {0.7, 0.7, 0.7}, entry.timestamp,
+                {0.9, 0.9, 0.9}, "]: ",
+                {1, 1, 1}, entry.text
+            }, 10, y)
         else
             love.graphics.print(entry.text, 10, y)
         end
-        y = y + 20
-        if y > love.graphics.getHeight() - 20 then
-            break
-        end
+        y = y + lineHeight
+        if y > love.graphics.getHeight() - lineHeight then break end
     end
 
     love.graphics.print({{1, 0, 0}, ">> ", {1, 1, 1}, console.input}, 10, y)
-
 end
 
 function console.clear()
@@ -167,22 +153,23 @@ function console.init()
 end
 
 function console.textinput(text)
-    if not console.isVisible then return end
-    console.input = console.input .. text
+    if console.isVisible then
+        console.input = console.input .. text
+    end
 end
 
-local utf8 = require("utf8")
 function console.keypressed(key)
-    if key == "backspace" then
-        if not console.isVisible then return end
+    if not console.isVisible then
+        if key == "f7" then console.toggle(false) end
+        return
+    end
 
+    if key == "backspace" then
         local byteoffset = utf8.offset(console.input, -1)
         if byteoffset then
-            console.input = string.sub(console.input, 1, byteoffset - 1)
+            console.input = console.input:sub(1, byteoffset - 1)
         end
     elseif key == "return" then
-        if not console.isVisible then return end
-
         if console.input ~= "" then
             printToConsole(console.input, true)
             console.runCommand(console.input)

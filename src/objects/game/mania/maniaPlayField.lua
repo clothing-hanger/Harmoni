@@ -1,7 +1,6 @@
 local maniaPlayField = Class:extend("maniaPlayField")
 
 function maniaPlayField:new(chart, parent)
-    self.totalNotes = 0
     self.parent = parent
     self.chart = chart
     self.laneYOffset = maniaLaneYOffset
@@ -11,42 +10,50 @@ function maniaPlayField:new(chart, parent)
     self.svIndex = 1
     self.currentTime = 0
     self.endNoteTime = 0
+    self.totalNotes = 0
+    self.laneSpacing = 0
 
     if #self.chart.scrollVelocities > 0 then
-        local first = self.chart.scrollVelocities[1]
-        table.insert(self.chart.scrollVelocities, {
-            startTime = self.chart.scrollVelocities[#self.chart.scrollVelocities].startTime + 1000,
+        local svs = self.chart.scrollVelocities
+        local first = svs[1]
+
+        table.insert(svs, {
+            startTime = svs[#svs].startTime + 1000,
             multiplier = first.multiplier
         })
 
         local time = first.startTime
         table.insert(self.svMarks, time)
 
-        for i = 2, #self.chart.scrollVelocities do
-            local prev = self.chart.scrollVelocities[i - 1]
-            local current = self.chart.scrollVelocities[i]
-
+        for i = 2, #svs do
+            local prev, current = svs[i - 1], svs[i]
             time = time + (current.startTime - prev.startTime) * prev.multiplier
             table.insert(self.svMarks, time)
         end
     end
 
     local mode = tonumber(self.chart.meta.laneCount)
-    for i = 1, self.chart.meta.laneCount do
-        print(self.chart.meta.laneCount)
+
+    for laneIndex = 1, mode do
         local hitObjects = {}
-        for _, HitObject in ipairs(self.chart.hitObjects) do
-            if i == HitObject.lane then
+
+        for _, hitObj in ipairs(self.chart.hitObjects) do
+            if laneIndex == hitObj.lane then
                 table.insert(hitObjects, {
-                    type = HitObject.type,
-                    startTime = HitObject.startTime,
-                    length = HitObject.length,
-                    initialSVTime = self:getPositionFromTime(HitObject.startTime)
+                    type = hitObj.type,
+                    startTime = hitObj.startTime,
+                    length = hitObj.length,
+                    initialSVTime = self:getPositionFromTime(hitObj.startTime)
                 })
-                self.endNoteTime = math.max(self.endNoteTime, HitObject.startTime + HitObject.length)
+
+                local noteEndTime = hitObj.startTime + (hitObj.length or 0)
+                if noteEndTime > self.endNoteTime then
+                    self.endNoteTime = noteEndTime
+                end
             end
         end
-        table.insert(self.lanes, maniaLane(mode, i, self.laneSpacing, self.laneYOffset, hitObjects, self))
+
+        table.insert(self.lanes, maniaLane(mode, laneIndex, self.laneSpacing, self.laneYOffset, hitObjects, self))
     end
 end
 
@@ -54,8 +61,8 @@ function maniaPlayField:getPositionFromTime(time, index)
     index = index or -1
 
     if index <= 1 then
-        for i = 1, #self.chart.scrollVelocities do
-            if time < self.chart.scrollVelocities[i].startTime then
+        for i, sv in ipairs(self.chart.scrollVelocities) do
+            if time < sv.startTime then
                 index = i
                 break
             end
@@ -72,17 +79,17 @@ function maniaPlayField:getPositionFromTime(time, index)
 end
 
 function maniaPlayField:update(dt)
-    local allLanesEmpty
-    while (self.svIndex <= #self.chart.scrollVelocities and MusicTime >= self.chart.scrollVelocities[self.svIndex].startTime) do
+    while self.svIndex <= #self.chart.scrollVelocities and
+          MusicTime >= self.chart.scrollVelocities[self.svIndex].startTime do
         self.svIndex = self.svIndex + 1
     end
 
     self.currentTime = self:getPositionFromTime(MusicTime, self.svIndex)
-    self.totalNotes = 0
 
-    for _, Lane in ipairs(self.lanes) do
-        Lane:update(dt, self.currentTime)
-        self.totalNotes = self.totalNotes + #Lane.notes
+    self.totalNotes = 0
+    for _, lane in ipairs(self.lanes) do
+        lane:update(dt, self.currentTime)
+        self.totalNotes = self.totalNotes + #lane.notes
     end
 
     if MusicTime > self.endNoteTime + 1000 then
@@ -91,11 +98,9 @@ function maniaPlayField:update(dt)
 end
 
 function maniaPlayField:draw()
-    for _, Lane in ipairs(self.lanes) do
-        Lane:draw()
+    for _, lane in ipairs(self.lanes) do
+        lane:draw()
     end
-
-    love.graphics.print(tostring(self.empty), 20, 300, nil, 3,3)
 end
 
 return maniaPlayField

@@ -1,98 +1,124 @@
 local maniaJudgement = Class:extend("maniaJudgement")
 
-function maniaJudgement:new(x,y,size,judgementsTable,parent)
+function maniaJudgement:new(x, y, size, judgementsTable, parent)
     self.parent = parent
     self.x = x or 0
     self.y = y or 0
     self.size = size or 1
-    self.judgementsTable = judgementsTable or (error("fucking dumbass how do you think the judgements object will work without judgements"))
+    self.judgementsTable = judgementsTable or error("fucking dumbass how do you think the judgements object will work without judgements")
     self.judgements = {}
-
+    self.activeTweens = {}
     self.noStacking = false
 end
 
 function maniaJudgement:judge(judgement)
     local image
-    for i = 1,#self.judgementsTable do
+    for i = 1, #self.judgementsTable do
         if judgement == self.judgementsTable[i].name then
             image = self.judgementsTable[i].image
+            break
         end
     end
+    if not image then return end
+
+    local w, h
+    if image.getViewport then
+        _, _, w, h = image:getViewport()
+    else
+        w, h = image:getWidth(), image:getHeight()
+    end
+
+    local newJudgement = {
+        image = image,
+        x = self.x,
+        y = self.y,
+        width = w,
+        height = h,
+        timer = 500,
+        bumped = false
+    }
 
     if self.noStacking then
-        self.judgements = {{image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false}}
-        return
+        self.judgements = {newJudgement}
+    else
+        table.insert(self.judgements, newJudgement)
     end
 
-    table.insert(self.judgements, {image = image, x = self.x, y = self.y, width = self.width, height = self.height, timer = 500, bumped = false})
+    self:startTween(newJudgement)
 end
 
-function maniaJudgement:judgementAnimation()
+function maniaJudgement:startTween(j)
+    if j.bumped then return end
+    j.bumped = true
+
+    local duration = SkinHandler:getParam("Judgement Bump Time")
+    local amount = SkinHandler:getParam("Judgement Bump Amount")
     local tweenType = SkinHandler:getParam("Judgement Bump Tween Type")
-    for _, Judgement in ipairs(self.judgements) do
-        if not Judgement.bumped then
-            Judgement.bumped = true
-            Timer.tween(
-                SkinHandler:getParam("Judgement Bump Time"),
-                Judgement,
-                { y = Judgement.y + SkinHandler:getParam("Judgement Bump Amount") },
-                tweenType
-            )
+    local easing = Ease[tweenType] or Ease.linear
+
+    local startY = j.y
+    local endY = startY + amount
+    local time = 0
+
+    table.insert(self.activeTweens, {
+        target = j,
+        update = function(dt)
+            time = time + dt
+            local t = math.min(time / duration, 1)
+            j.y = startY + (endY - startY) * easing(t)
+            return t >= 1
         end
-    end
+    })
 end
 
 function maniaJudgement:update(dt)
-    self:judgementAnimation()
+    for i = #self.activeTweens, 1, -1 do
+        if self.activeTweens[i].update(dt) then
+            table.remove(self.activeTweens, i)
+        end
+    end
+
     for i = #self.judgements, 1, -1 do
-        local Judgement = self.judgements[i]
-        Judgement.timer = Judgement.timer - 1000 * dt
-        if Judgement.timer <= 0 then
+        local j = self.judgements[i]
+        j.timer = j.timer - dt * 1000
+        if j.timer <= 0 then
             table.remove(self.judgements, i)
         end
     end
 end
 
 function maniaJudgement:draw()
-    for i, Judgement in ipairs(self.judgements) do
-        local image = Judgement.image -- just in case
+    local judgementBatch = SkinHandler:getBatch("Judgements")
 
-        if not image then goto continue end
-        local x,y = Judgement.x, Judgement.y
-        local size = self.size
+    for i, j in ipairs(self.judgements) do
+        local img = j.image
+        if not img then goto continue end
 
-        local judgementBatch = SkinHandler:getBatch("Judgements")
-        local alpha = Judgement.timer/500
+        local x, y, size = j.x, j.y, self.size
+        local alpha = j.timer / 500
+        local isTop = (i == #self.judgements)
+        local color = isTop and {1, 1, 1, alpha} or {0.5, 0.5, 0.5, alpha}
 
-        local ox,oy
-
-        if judgementBatch then
-            local _, _, w, h = image:getViewport()
-            ox, oy = w/2, h/2
+        local ox, oy
+        if img.getViewport then
+            local _, _, w, h = img:getViewport()
+            ox, oy = w / 2, h / 2
         else
-            ox, oy = image:getWidth()/2, image:getHeight()/2
+            ox, oy = img:getWidth() / 2, img:getHeight() / 2
         end
 
         if judgementBatch then
-            local _, _, w, h = image:getViewport()
-            if i == #self.judgements then
-                judgementBatch:setColor(1,1,1, alpha)
-            else
-                judgementBatch:setColor(0.5,0.5,0.5, alpha)
-            end
-            judgementBatch:add(image, x, y, 0, size, size, ox, oy)
+            judgementBatch:setColor(color)
+            judgementBatch:add(img, x, y, 0, size, size, ox, oy)
         else
-
-            if i == #self.judgements then
-                love.graphics.setColor(1,1,1, alpha)
-            else
-                love.graphics.setColor(0.5,0.5,0.5, alpha)
-            end
-            love.graphics.draw(image, x, y, 0, size, size, ox, oy)
+            love.graphics.setColor(color)
+            love.graphics.draw(img, x, y, 0, size, size, ox, oy)
         end
+
         ::continue::
     end
-    love.graphics.setColor(1,1,1)
+
+    love.graphics.setColor(1, 1, 1)
 end
 
 return maniaJudgement
