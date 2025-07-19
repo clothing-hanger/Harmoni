@@ -44,7 +44,6 @@ end
 
 function love.update(dt)
     CHE:update(dt)
-
 end
 
 function love.mousepressed(x, y, b)

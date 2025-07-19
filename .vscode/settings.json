@@ -5,5 +5,8 @@
         "param-type-mismatch",
         "lowercase-global"
     ],
-    "pixelbyte.love2d.srcDir": "./src/"
+    "pixelbyte.love2d.srcDir": "./src/",
+    "Lua.diagnostics.globals": [
+        "jit"
+    ]
 }
