@@ -20,8 +20,8 @@ Settings.SettingsTable = {
                     type = "slider",
                     min = 300,
                     max = 3000,
-                    value = 600,
-                    defaultValue = 600,
+                    value = 480,
+                    defaultValue = 480,
                     description = "How quickly the notes travel across the screen (in milliseconds)"
                 },
                 ["Lane Spacing"] = {

@@ -163,7 +163,7 @@ end
         self:loadBanners()
     end
 
-    self:setUpThoseLinesThatIHate(10)
+    self:setUpThoseLinesThatIHate(11)
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)

@@ -52,10 +52,11 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HUD Small"] = newFont("FONTS/Novamono-njdg.ttf", 15),
         ["HUD Extra Small"] = newFont("FONTS/Novamono-njdg.ttf", 12),
         ["Combo"] = newFont("FONTS/SourceCodePro-Medium.ttf", 65),
-        ["Menu Large"] = newFont("FONTS/SourceCodePro-Medium.ttf", 25),
-        ["Menu Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 15),
-        ["Menu Extra Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 12),
-        ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60)
+        ["Menu Extra Large"] = newFont("FONTS/astonpoliz.regular.ttf", 50),
+        ["Menu Large"] = newFont("FONTS/astonpoliz.regular.ttf", 25),
+        ["Menu Small"] = newFont("FONTS/astonpoliz.regular.ttf", 15),
+        ["Menu Extra Small"] = newFont("FONTS/astonpoliz.regular.ttf", 12),
+        ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60),
     },
 
     Notes = {
