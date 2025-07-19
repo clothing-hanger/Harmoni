@@ -7,7 +7,7 @@ function titleScreen:enter()
     self.buttonHeight = 100 
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
-        {label = "Play", func = function() State.switch(States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,1}},
+        {label = "Play", func = function() State.transition("slideLeft", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,1}},
         {label = "Jukebox", func = function() State.switch(States.menu.jukebox) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
         {label = "Settings", func = function() State.switch(States.menu.songSelect) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
         {label = "Discord", func = function() love.system.openURL("https://discord.gg/bBcjrRAeh4") end, color1 = {131/255,119/255,209/255,1},color2 = {97/255,82/255,196/255,1}},

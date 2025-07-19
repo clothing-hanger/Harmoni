@@ -419,7 +419,7 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
-                State.switch(States.menu.transition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
+                State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
                 switchingState = true
             end
             -- why go through the rest? we already have a match so just break

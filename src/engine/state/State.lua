@@ -1,18 +1,34 @@
+--[[
+State.lua - @GuglioIsStupid
+
+Heavily modified for use with Harmoni
+]]
+
 ---@alias State table
 ---@class state
 local state = {}
 state.__index = state
 state.__storage = {}
+state.__transitions = {}
 
 local current, last, substate = nil, nil, nil
 state.inSubstate = false
 
+-- Transition system internals
+local activeTransition = nil
+local transitionTarget = nil
+local transitionArgs = nil
+
 -- Internal switch logic
 local function switch(newstate, ...)
-    if current and current.exit then current:exit() end
+    if current and current.exit then
+        current:exit()
+    end
     last = current
     current = newstate
-    if current.enter then current:enter(last, ...) end
+    if current.enter then
+        current:enter(last, ...)
+    end
     collectgarbage("collect")
     return current
 end
@@ -71,11 +87,81 @@ function state.killSubstate(...)
     if current and current.substateReturn then current:substateReturn(...) end
 end
 
+function state.addTransition(name, file)
+    assert(type(name) == "string", "State transition name must be a string")
+    assert(type(file) == "string", "State transition file must be a string")
+
+    state.__transitions[name] = love.filesystem.load(file)
+    if not state.__transitions[name] then
+        error("Failed to load state transition: " .. name .. " from file: " .. file)
+    end
+    return state.__transitions[name]
+end
+
+function state.transition(name, newstate, ...)
+    assert(type(name) == "string", "Called state.transition with invalid transition name")
+    assert(type(newstate) == "table", "Called state.transition with invalid newstate")
+
+    local transition = state.__transitions[name]
+    assert(transition, "Transition not found: " .. name)
+
+    activeTransition = transition()
+    transitionTarget = newstate
+    transitionArgs = {...}
+
+    if activeTransition.enter then
+        activeTransition:enter(current, newstate, ...)
+    end
+end
+
+function state.completeTransition()
+    if not activeTransition then return end
+    local newstate = transitionTarget
+    local args = transitionArgs
+
+    -- Check if this is the first transition (has endTransition)
+    if activeTransition.endTransition then
+        -- First, switch to the new state immediately
+        switch(newstate, nil, unpack(args))
+
+        -- Then load and run the endTransition as overlay on the new state
+        local nextTransitionLoader = love.filesystem.load(activeTransition.endTransition)
+        if not nextTransitionLoader then
+            error("Failed to load endTransition: " .. tostring(activeTransition.endTransition))
+        end
+
+        activeTransition = nextTransitionLoader()
+        activeTransition.endTransition = nil -- prevent recursion
+
+        if activeTransition.enter then
+            activeTransition:enter(current, newstate, unpack(args))
+        end
+
+        -- We do NOT clear transitionTarget or transitionArgs here
+        -- Because the state is already switched and this is just a presentation
+
+        return nil -- No further switching here
+    end
+
+    -- No endTransition, so this must be the endTransition finishing
+    -- Just clear activeTransition to finish transition (state already switched)
+    activeTransition = nil
+    transitionTarget = nil
+    transitionArgs = nil
+    return nil
+end
+
+
+function state.isTransitioning()
+    return activeTransition ~= nil
+end
+
 -- Generate a new named state
 local function new(name)
     name = name or ("State." .. string.format("%x", love.math.random(0, 0xFFFFFFFF)))
     return setmetatable({
-        __name = name
+        __name = name,
+        __forceCallEnter = true,
     }, {
         __tostring = function() return name end,
         __call = function(self, ...) return state.switch(self, ...) end
@@ -91,6 +177,7 @@ setmetatable(state, {
             local args = {...}
             if current and current[func] then current[func](current, unpack(args)) end
             if substate and substate[func] then substate[func](substate, unpack(args)) end
+            if activeTransition and activeTransition[func] then activeTransition[func](activeTransition, unpack(args)) end
         end
     end,
     __call = function(_, name) return new(name) end

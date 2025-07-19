@@ -118,10 +118,13 @@ function buttonSlideOut:startPressTween()
     })
 end
 
-
 function buttonSlideOut:onClick()
     self.func()
     self:startPressTween()
+end
+
+local function remap(value, oldMin, oldMax, newMin, newMax)
+    return (value - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin
 end
 
 function buttonSlideOut:draw()
@@ -142,15 +145,23 @@ function buttonSlideOut:draw()
     love.graphics.stencil(stencilShape, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
 
-    if math.abs(self.slideWidth - self.slideInitialWidth) < 2 then
-        love.graphics.setColor(self.color1)
-        love.graphics.rectangle("fill", self.x, self.y, self.slideWidth, self.height, self.cornerRadius, self.cornerRadius)
-    else
-        drawGradientRect(
-            self.x, self.y, self.slideWidth, self.height,
-            {self.color1[1], self.color1[2], self.color1[3], 1},
-            {self.color2[1], self.color2[2], self.color2[3], 1},
-            false)
+    love.graphics.setColor(self.color1)
+    love.graphics.rectangle("fill", self.x, self.y, self.slideWidth, self.height, self.cornerRadius, self.cornerRadius)
+
+    if self.hovered then
+        local mouseX = toCanvasCoords(love.mouse.getPosition())
+        local remappedX = remap(mouseX, self.x, self.x + self.slideWidth, 0, 1)
+
+        local gradientWidth = self.slideWidth
+        local gradientX = self.x + (remappedX * self.slideWidth) - (gradientWidth / 2)
+        drawMultiGradientRect(
+            gradientX, self.y, gradientWidth, self.height,
+            {
+                {self.color1[1], self.color1[2], self.color1[3], 0},
+                {self.color2[1] * 0.75, self.color2[2] * 0.75, self.color2[3] * 0.75, 1},
+                {self.color1[1], self.color1[2], self.color1[3], 0}
+            }
+        )
     end
 
     local textColorPercent = self.slideWidth / self.width
@@ -169,6 +180,5 @@ function buttonSlideOut:draw()
     love.graphics.setStencilTest()
     love.graphics.pop()
 end
-
 
 return buttonSlideOut
