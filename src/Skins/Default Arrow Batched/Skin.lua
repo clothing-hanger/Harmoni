@@ -77,6 +77,42 @@ Skin = {   -- i need to remove lots of these tbh..
         }
     },
 
+    HoldNotes = {
+        ["4K"] = {
+            ["Left"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 0, 300, 300),
+        },
+        ["7K"] = {
+            ["Left1"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right1"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Center"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Left2"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right2"] = newQuad("Arrows", 0, 0, 300, 300),
+        }
+    },
+
+    HoldEndNotes = {
+        ["4K"] = {
+            ["Left"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Down"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Up"] = newQuad("Arrows", 602, 903, 300, 300),
+        },
+        ["7K"] = {
+            ["Left1"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Down"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right1"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Center"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Left2"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Up"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right2"] = newQuad("Arrows", 602, 903, 300, 300),
+        }
+    },
+
     Receptors = {
         Up = {
             ["4K"] = {

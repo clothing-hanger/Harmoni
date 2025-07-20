@@ -88,7 +88,7 @@ function mania:setUpChart(chart)
         table.insert(maniaChart.hitObjects, {
             type = obj.type,
             startTime = obj.startTime,
-            length = obj.length,
+            endTime = obj.endTime,
             lane = obj.lane
         })
     end

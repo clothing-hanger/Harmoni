@@ -3,10 +3,10 @@ local maniaNote = Class:extend("maniaNote")
 local fourkLanes = { "Left", "Down", "Up", "Right" }
 local sevenkLanes = { "Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2" }
 
-function maniaNote:new(startTime, holdLength, lane, mode, initialSVTime, parent)
+function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, parent)
     self.size = maniaNoteSize
     self.startTime = startTime
-    self.holdLength = holdLength
+    self.endTime = endTime or startTime
     self.lane = lane
     self.mode = mode
     self.parent = parent
@@ -21,6 +21,24 @@ function maniaNote:new(startTime, holdLength, lane, mode, initialSVTime, parent)
     self.y = self.startTime + (MusicTime or 0)
 
     self.initialSVTime = initialSVTime
+
+    if self.endTime <= self.startTime then
+        self.holdLength = nil
+    else
+        self.holdLength = self.endTime - self.startTime
+    end
+
+    if self.holdLength then
+        self.endTime = self.startTime + self.holdLength
+        self.holdAsset = SkinHandler:getImage("HoldNotes", self.laneCountString, self.laneString)
+        self.holdEndAsset = SkinHandler:getImage("HoldEndNotes", self.laneCountString, self.laneString)
+
+        self.holdPixelHeight = 1
+        self.endY = self.startTime + self.holdLength + (MusicTime or 0)
+    end
+
+    self.held = false
+    self.released = false
 
     self.visible = true
     self.debug = false
@@ -41,7 +59,11 @@ function maniaNote:update(dt)
 end
 
 function maniaNote:updatePosition()
-    self.y = self:getNotePosition(self.initialSVTime, true)
+    self.y = self:getNotePosition(self.initialSVTime, not self.held)
+    if self.holdLength then
+        self.endY = self:getNotePosition(self.endTime, true)
+    end
+
 end
 
 local function msToMulti(speed)
@@ -54,15 +76,23 @@ function maniaNote:getNotePosition(time, moveWithScroll)
     local multiplier = msToMulti(scrollSpeed)
     local currentTime = self.parent.parent.currentTime
 
-    if scrollDir == "Up" then
-        return self.parent.y - (currentTime - time) * multiplier
+    if moveWithScroll then
+        if scrollDir == "Up" then
+            return self.parent.y - (currentTime - time) * multiplier
+        else
+            return self.parent.y + (currentTime - time) * multiplier
+        end
     else
-        return self.parent.y + (currentTime - time) * multiplier
+        return self.parent.y
     end
 end
 
 function maniaNote:hit()
     print("Note hit at time: ", self.startTime)
+end
+
+function maniaNote:release()
+    print("Note released at time: ", self.startTime)
 end
 
 function maniaNote:draw()
@@ -77,13 +107,66 @@ function maniaNote:draw()
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
 
-    if arrowBatch then
+    local curBatch = arrowBatch or noteBatch
+
+    if curBatch then
+        if self.holdLength then
+            local _, _, hw, hh = self.holdAsset:getViewport()
+            local _, _, tailW, tailH = self.holdEndAsset:getViewport()
+            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+                self.y = self.y - 70
+            else
+                self.y = self.y + 70
+            end
+            local midY = (self.y + self.endY) / 2
+            local bodyHeight = math.abs(self.endY - self.y)
+            bodyHeight = bodyHeight - tailH/2
+
+            curBatch:add(self.holdAsset, self.x, midY, 0,
+                self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+
+            local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+
+
+            curBatch:add(self.holdEndAsset, self.x, self.endY, 0,
+                self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
+                nil)
+
+            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+                self.y = self.y + 70
+            else
+                self.y = self.y - 70
+            end
+        end
+
         local _, _, w, h = self.image:getViewport()
-        arrowBatch:add(self.image, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
-    elseif noteBatch then
-        local _, _, w, h = self.image:getViewport()
-        noteBatch:add(self.image, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
+        curBatch:add(self.image, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
     else
+        if self.holdLength then
+            local _, _, hw, hh = self.holdAsset:getViewport()
+            local _, _, tailW, tailH = self.holdEndAsset:getViewport()
+            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+                self.y = self.y - 70
+            else
+                self.y = self.y + 70
+            end
+            local midY = (self.y + self.endY) / 2
+            local bodyHeight = math.abs(self.endY - self.y)
+            bodyHeight = bodyHeight - tailH/2
+
+            love.graphics.draw(self.holdAsset, self.x, midY, 0,
+                self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+
+            local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+            love.graphics.draw(self.holdEndAsset, self.x, self.endY, 0,
+                self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
+                nil)
+            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+                self.y = self.y + 70
+            else
+                self.y = self.y - 70
+            end
+        end
         love.graphics.draw(self.image, self.x, self.y, 0, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2)
     end
 

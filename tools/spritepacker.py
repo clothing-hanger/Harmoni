@@ -65,7 +65,7 @@ def pack_spritesheet(images, output_image, output_txt):
     with open(output_txt, 'w') as f:
         for img, name, x, y in packed:
             spritesheet.paste(img, (x, y))
-            f.write(f"{name} {x} {y} {img.width} {img.height}\n")
+            f.write(f"{name} {x}, {y}, {img.width}, {img.height}\n")
             max_x = max(max_x, x + img.width + PADDING)
             max_y = max(max_y, y + img.height + PADDING)
 
