@@ -37,7 +37,6 @@ function love.load(args)
     MusicTimeManager = require("modules.musicTimeManager")
     SongListManager = require("modules.songListManager")
 
-    State.addTransition("fade", "states/transitions/fade.lua")
     State.addTransition("slideLeft", "states/transitions/slideLeft/slideLeft.lua")
     State.switch(States.menu.titleScreen)
 end
