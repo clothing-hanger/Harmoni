@@ -175,7 +175,6 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
     end
 end
 
-
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
 
@@ -328,8 +327,15 @@ function songSelect:loadSongButtonImages()
     end
 end
 
-
 function songSelect:update(dt)
+    if Input:pressed("menuBack") then
+        if switchingState then return end
+
+        State.transition("waveDissolve", States.menu.titleScreen, function()
+            self:clearBanners()
+        end)
+        return
+    end
     for i, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:update(dt)
     end

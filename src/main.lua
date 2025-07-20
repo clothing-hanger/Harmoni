@@ -38,6 +38,15 @@ function love.load(args)
     SongListManager = require("modules.songListManager")
 
     State.addTransition("slideLeft", "states/transitions/slideLeft/slideLeft.lua")
+    State.addTransition("slideRight", "states/transitions/slideRight/slideRight.lua")
+    State.addTransition("slideUp", "states/transitions/slideUp/slideUp.lua")
+    State.addTransition("slideDown", "states/transitions/slideDown/slideDown.lua")
+    State.addTransition("fade", "states/transitions/fade/fade.lua")
+    State.addTransition("curtains", "states/transitions/curtains/curtains.lua")
+    State.addTransition("circleWipe", "states/transitions/circleWipe/circleWipe.lua")
+    State.addTransition("checkerboardFade", "states/transitions/checkerboardFade/checkerboardFade.lua")
+    State.addTransition("waveDissolve", "states/transitions/waveDissolve/waveDissolve.lua")
+
     State.switch(States.menu.titleScreen)
 end
 

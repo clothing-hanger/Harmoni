@@ -19,6 +19,10 @@ local activeTransition = nil
 local transitionTarget = nil
 local transitionArgs = nil
 
+local canvas = nil
+
+local callback = nil
+
 -- Internal switch logic
 local function switch(newstate, ...)
     if current and current.exit then
@@ -43,6 +47,9 @@ local function pop(newstate, ...)
 end
 
 function state.switch(newstate, ...)
+    if not canvas then 
+        canvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
+    end
     assert(type(newstate) == "table", "Called state.switch with invalid or no state")
     return switch(newstate, ...)
 end
@@ -80,6 +87,10 @@ function state.substate(newstate, ...)
     return substate
 end
 
+function state.resize(w, h)
+    canvas = love.graphics.newCanvas(w, h)
+end
+
 function state.killSubstate(...)
     if substate and substate.exit then substate:exit() end
     substate = nil
@@ -98,7 +109,15 @@ function state.addTransition(name, file)
     return state.__transitions[name]
 end
 
-function state.transition(name, newstate, ...)
+function state.transition(name, newstate, cb, ...)
+    transitionArgs = {...}
+    if type(cb) ~= "function" then
+        -- its an argument
+        transitionArgs = {cb, ...}
+        cb = nil
+    else
+        callback = cb
+    end
     assert(type(name) == "string", "Called state.transition with invalid transition name")
     assert(type(newstate) == "table", "Called state.transition with invalid newstate")
 
@@ -107,7 +126,6 @@ function state.transition(name, newstate, ...)
 
     activeTransition = transition()
     transitionTarget = newstate
-    transitionArgs = {...}
 
     if activeTransition.enter then
         activeTransition:enter(current, newstate, ...)
@@ -143,6 +161,12 @@ function state.completeTransition()
         return nil -- No further switching here
     end
 
+    if callback then
+        -- Call the callback if provided
+        callback(newstate, unpack(args))
+        callback = nil -- Clear callback after use
+    end
+
     -- No endTransition, so this must be the endTransition finishing
     -- Just clear activeTransition to finish transition (state already switched)
     activeTransition = nil
@@ -175,9 +199,30 @@ setmetatable(state, {
     __index = function(_, func)
         return function(...)
             local args = {...}
-            if current and current[func] then current[func](current, unpack(args)) end
-            if substate and substate[func] then substate[func](substate, unpack(args)) end
-            if activeTransition and activeTransition[func] then activeTransition[func](activeTransition, unpack(args)) end
+            if func == "draw" then
+                local lastCanvas = love.graphics.getCanvas()
+                love.graphics.setCanvas({canvas, stencil = true, depth = false})
+                love.graphics.clear(0, 0, 0, 1)
+                if current and current.draw then current:draw(unpack(args)) end
+                if substate and substate.draw then substate:draw(unpack(args)) end
+                if activeTransition and activeTransition.draw then
+                    activeTransition:draw(activeTransition, unpack(args))
+                end
+                love.graphics.setCanvas(lastCanvas)
+                if activeTransition and activeTransition.startDraw then
+                    activeTransition:startDraw()
+                end
+                love.graphics.draw(canvas, 0, 0)
+                if activeTransition and activeTransition.stopDraw then
+                    activeTransition:stopDraw()
+                end
+            else
+                if current and current[func] then current[func](current, unpack(args)) end
+                if substate and substate[func] then substate[func](substate, unpack(args)) end
+                if activeTransition and activeTransition[func] then
+                    activeTransition[func](activeTransition, unpack(args))
+                end
+            end
         end
     end,
     __call = function(_, name) return new(name) end
