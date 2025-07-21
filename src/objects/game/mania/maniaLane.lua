@@ -65,26 +65,23 @@ function maniaLane:handleInput()
     if not Input then return end
     if not Input:pressed(self.inputBind) then return end
 
-    local bestNoteIndex = nil
     local bestJudgement = nil
     local bestTimeDiff = math.huge
+    local note = self.drawableNotes[1]
+    if not note then goto continue end
 
-    for i, note in ipairs(self.drawableNotes) do
-        local timeDiff = math.abs(MusicTime - note.startTime)
-        for _, judgement in ipairs(mania.judgements) do
-            if timeDiff <= judgement.timing and timeDiff < bestTimeDiff then
-                bestTimeDiff = timeDiff
-                bestNoteIndex = i
-                bestJudgement = judgement
-            end
+    local timeDiff = math.abs(MusicTime - note.startTime)
+    for _, judgement in ipairs(mania.judgements) do
+        if timeDiff <= judgement.timing*1.15 and timeDiff < bestTimeDiff then
+            bestTimeDiff = timeDiff
+            bestJudgement = judgement
         end
     end
 
-    if bestNoteIndex and bestJudgement then
-        local note = self.drawableNotes[bestNoteIndex]
+    if bestJudgement then
         local parentParent = self.parent.parent
         if not note.holdLength then
-            table.remove(self.drawableNotes, bestNoteIndex)
+            table.remove(self.drawableNotes, 1)
         else
             note.held = true
             note.holdStartTime = MusicTime
@@ -92,7 +89,10 @@ function maniaLane:handleInput()
 
         parentParent.judgementObject:judge(bestJudgement.name)
         parentParent.healthBar:changeHealth(bestJudgement.health)
+        parentParent.comboCount:incrementCombo()
     end
+
+    ::continue::
 end
 
 function maniaLane:checkHoldReleases()
