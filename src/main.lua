@@ -1,9 +1,9 @@
 require("love.error")
 require("love.run")
 
-
-dontShowBG = false  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
-
+-- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
+-- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
+dontShowBG = false
 local function table_find(t, value)
     for i, v in ipairs(t) do
         if v == value then
@@ -95,13 +95,15 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
     local drawCalls = graphicStats.drawcalls or 0
     local drawCallsBatched = graphicStats.drawcallsbatched or 0
     local textureMemory = graphicStats.texturememory or 0
+
+    local str = string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024)
     for x = -1, 1 do
         for y = -1, 1 do
-            love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), x, y, love.graphics.getWidth(), "right")
+            love.graphics.printf(str, x, y, love.graphics.getWidth(), "right")
         end
     end
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), 0, 0, love.graphics.getWidth(), "right")
+    love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
 end
 
 function love.quit()
