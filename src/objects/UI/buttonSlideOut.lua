@@ -140,13 +140,19 @@ function buttonSlideOut:draw()
     love.graphics.translate(-cx, -cy)
 
     local function stencilShape()
-        love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+        love.graphics.rectangle("fill", self.x, self.y, self.slideWidth, self.height, self.cornerRadius, self.cornerRadius)
     end
     love.graphics.stencil(stencilShape, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
 
     love.graphics.setColor(self.color1)
-    love.graphics.rectangle("fill", self.x, self.y, self.slideWidth, self.height, self.cornerRadius, self.cornerRadius)
+    drawMultiGradientRect(
+        self.x, self.y, self.slideWidth, self.height,
+        {
+            {self.color1[1], self.color1[2], self.color1[3], 1},
+            {self.color2[1], self.color2[2], self.color2[3], 1},
+        }
+    )
 
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
@@ -158,12 +164,13 @@ function buttonSlideOut:draw()
             gradientX, self.y, gradientWidth, self.height,
             {
                 {self.color1[1], self.color1[2], self.color1[3], 0},
-                {self.color2[1] * 0.75, self.color2[2] * 0.75, self.color2[3] * 0.75, 1},
+                {self.color2[1] * 0.75, self.color2[2] * 0.75, self.color2[3] * 0.75, 0.5},
                 {self.color1[1], self.color1[2], self.color1[3], 0}
             }
         )
     end
 
+    love.graphics.setStencilTest()
     local textColorPercent = self.slideWidth / self.width
     local textColor = {
         self.color1[1] + (0 - self.color1[1]) * textColorPercent,
@@ -176,8 +183,6 @@ function buttonSlideOut:draw()
     local textX = self.x + self.slideInitialWidth * 2
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2
     love.graphics.printf(self.text, textX, textY, self.width, "left")
-
-    love.graphics.setStencilTest()
     love.graphics.pop()
 end
 
