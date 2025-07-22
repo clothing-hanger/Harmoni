@@ -1,17 +1,11 @@
 require("love.error")
 require("love.run")
 
+-- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
+-- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
+dontShowBG = false
 
-dontShowBG = false  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
-
-local function table_find(t, value)
-    for i, v in ipairs(t) do
-        if v == value then
-            return i
-        end
-    end
-    return nil
-end
+local spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function love.load(args)
     Settings = require("Modules.Settings")
@@ -79,7 +73,9 @@ function love.wheelmoved(x,y)
     State.scroll(y)
 end
 
-function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
+--if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
+function love.draw(dt)
+    love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
     local baseFont = love.graphics.getFont()
     CHE:draw(dt)
 
@@ -91,13 +87,15 @@ function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit 
     local drawCalls = graphicStats.drawcalls or 0
     local drawCallsBatched = graphicStats.drawcallsbatched or 0
     local textureMemory = graphicStats.texturememory or 0
+
+    local str = string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024)
     for x = -1, 1 do
         for y = -1, 1 do
-            love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), x, y, love.graphics.getWidth(), "right")
+            love.graphics.printf(str, x, y, love.graphics.getWidth(), "right")
         end
     end
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), 0, 0, love.graphics.getWidth(), "right")
+    love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
 end
 
 function love.quit()

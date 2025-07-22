@@ -137,38 +137,29 @@ function state.completeTransition()
     local newstate = transitionTarget
     local args = transitionArgs
 
-    -- Check if this is the first transition (has endTransition)
     if activeTransition.endTransition then
-        -- First, switch to the new state immediately
         switch(newstate, nil, unpack(args))
 
-        -- Then load and run the endTransition as overlay on the new state
         local nextTransitionLoader = love.filesystem.load(activeTransition.endTransition)
         if not nextTransitionLoader then
             error("Failed to load endTransition: " .. tostring(activeTransition.endTransition))
         end
 
         activeTransition = nextTransitionLoader()
-        activeTransition.endTransition = nil -- prevent recursion
+        activeTransition.endTransition = nil
 
         if activeTransition.enter then
             activeTransition:enter(current, newstate, unpack(args))
         end
 
-        -- We do NOT clear transitionTarget or transitionArgs here
-        -- Because the state is already switched and this is just a presentation
-
-        return nil -- No further switching here
+        return nil
     end
 
     if callback then
-        -- Call the callback if provided
         callback(newstate, unpack(args))
-        callback = nil -- Clear callback after use
+        callback = nil
     end
 
-    -- No endTransition, so this must be the endTransition finishing
-    -- Just clear activeTransition to finish transition (state already switched)
     activeTransition = nil
     transitionTarget = nil
     transitionArgs = nil
@@ -180,7 +171,6 @@ function state.isTransitioning()
     return activeTransition ~= nil
 end
 
--- Generate a new named state
 local function new(name)
     name = name or ("State." .. string.format("%x", love.math.random(0, 0xFFFFFFFF)))
     return setmetatable({
@@ -194,7 +184,6 @@ end
 
 local unpack = table.unpack or unpack
 
--- Forward calls to current and substate (e.g. update, draw)
 setmetatable(state, {
     __index = function(_, func)
         return function(...)
@@ -207,6 +196,7 @@ setmetatable(state, {
                 if substate and substate.draw then substate:draw(unpack(args)) end
                 if activeTransition and activeTransition.draw then
                     activeTransition:draw(activeTransition, unpack(args))
+                    love.graphics.setColor(1, 1, 1, 1)
                 end
                 love.graphics.setCanvas(lastCanvas)
                 if activeTransition and activeTransition.startDraw then
