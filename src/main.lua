@@ -8,7 +8,7 @@ dontShowBG = false
 local spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function love.load(args)
-    Settings = require("Modules.Settings")
+    Settings = require("modules.Settings")
     Settings.default = Settings:defaultSettings()
     Settings:loadSettings()
 
