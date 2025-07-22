@@ -15,6 +15,11 @@ function titleScreen:enter()
         {label = "Exit", func = function() love.event.quit() end, color1 = {1,1,1,1}, color2 = {1,1,1,1}},
     }
 
+    self.images = {
+        ["H"] = {image = SkinHandler:getImage("Menu", "H"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
+        ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
+    }
+
     buttonSpacing = 10
 
     self.buttons = {
@@ -37,6 +42,14 @@ function titleScreen:setUpThoseLinesThatIHate(numberOfLines)
     end
 end
 
+function titleScreen:switchState(state)
+    if state == "H" then
+
+    elseif state == "logo" then
+        
+    end
+end
+
 function titleScreen:update(dt)
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
@@ -47,6 +60,7 @@ function titleScreen:update(dt)
 end
 
 function titleScreen:draw()
+
     love.graphics.print("harmoni lol")
 
     love.graphics.setColor(1,1,1,0.1)
@@ -59,6 +73,19 @@ function titleScreen:draw()
         Button:draw()
     end
     love.graphics.setColor(1,1,1,1)
+end
+
+
+function titleScreen:drawLogo()
+    -- the logo drawing is complex so we move it to its own function 
+
+
+    -- we need to draw the full logo first 
+
+    -- logo variables 
+  --  local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 1, 1, 
+
+    --love.graphics.draw(self.images["logo"], baseScreenRatio.x /)
 end
 
 return titleScreen
