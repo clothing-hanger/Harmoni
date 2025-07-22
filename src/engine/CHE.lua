@@ -25,11 +25,12 @@ function CHE:init()
 
     Class = require("engine.class.class")
     State = require("engine.state.State")
-    States = require("modules.states")
+    require("modules.Transitions")
+    States = require("modules.States")
     Timer = require("engine.lib.Timer")
     Console = require("engine.modules.console")
     Ease = require("engine.lib.Ease")
-    require("modules.objects")
+    require("modules.Objects")
 
     tryExcept(function()
         DLL_Video = require("video")
@@ -104,48 +105,49 @@ function CHE:textinput(t)
     Console.textinput(t)
 end
 
-local function updateMouse()
-    Mouse.x, Mouse.y = love.mouse.getPosition()
+local function updateMouse(mx, my)
+    Mouse.x, Mouse.y = mx, my
 end
 
-function CHE:mousepressed(_, _, b)
-    updateMouse()
+function CHE:mousepressed(x, y, b)
+    updateMouse(x, y)
     cursor:mousepressed(Mouse.x, Mouse.y, b)
     State.mousepressed(Mouse.x, Mouse.y, b)
 end
 
-function CHE:mousemoved(_, _, dx, dy)
-    updateMouse()
+function CHE:mousemoved(x, y, dx, dy)
+    updateMouse(x, y)
     State.mousemoved(Mouse.x, Mouse.y, dx, dy)
 end
 
-function CHE:mousereleased(_, _, b)
-    updateMouse()
+function CHE:mousereleased(x, y, b)
+    updateMouse(x, y)
     cursor:mousereleased(Mouse.x, Mouse.y, b)
     State.mousereleased(Mouse.x, Mouse.y, b)
 end
 
 function CHE:draw(dt)
     love.graphics.push()
-    love.graphics.setCanvas({CHECanvas, stencil = true})
-    love.graphics.clear(0, 0, 0, 1)
+        love.graphics.setCanvas({CHECanvas, stencil = true})
+            love.graphics.clear(0, 0, 0, 1)
 
-    local startFont = love.graphics.getFont()
-    local lastLineWidth = love.graphics.getLineWidth()
-    local lastColor = { love.graphics.getColor() }
+            local startFont = love.graphics.getFont()
+            local lastLineWidth = love.graphics.getLineWidth()
+            local r, g, b, a = love.graphics.getColor()
 
-    State.draw(dt)
+            State.draw(dt)
 
-    love.graphics.setFont(startFont)
-    love.graphics.setLineWidth(lastLineWidth)
-    love.graphics.setColor(lastColor)
-    love.graphics.setCanvas()
+            love.graphics.setFont(startFont)
+            love.graphics.setLineWidth(lastLineWidth)
+            love.graphics.setColor(r, g, b, a)
+        love.graphics.setCanvas()
     love.graphics.pop()
 
     local ratio = math.min(
         love.graphics.getWidth() / baseScreenRatio.x,
         love.graphics.getHeight() / baseScreenRatio.y
     )
+
     love.graphics.draw(
         CHECanvas,
         love.graphics.getWidth() / 2, love.graphics.getHeight() / 2,
@@ -160,9 +162,28 @@ function CHE:draw(dt)
     end
 
     cursor:draw()
+
+    local baseFont = love.graphics.getFont()
+
+    love.graphics.setFont(baseFont)
+    local DPS, UPS = love.timer.getFPS()
+    love.graphics.setColor(0, 0, 0)
+
+    local graphicStats = love.graphics.getStats()
+    local drawCalls = graphicStats.drawcalls or 0
+    local drawCallsBatched = graphicStats.drawcallsbatched or 0
+    local textureMemory = graphicStats.texturememory or 0
+
+    local str = string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024)
+    for x = -1, 1 do
+        for y = -1, 1 do
+            love.graphics.printf(str, x, y, love.graphics.getWidth(), "right")
+        end
+    end
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
 end
 
-function love.resize(w, h) end
 function CHE:exit() end
 
 return CHE
