@@ -4,14 +4,6 @@ require("love.run")
 -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 dontShowBG = false
-local function table_find(t, value)
-    for i, v in ipairs(t) do
-        if v == value then
-            return i
-        end
-    end
-    return nil
-end
 
 local spongebirth = love.graphics.newImage("images/spongebirth.png")
 
@@ -81,8 +73,8 @@ function love.wheelmoved(x,y)
     State.scroll(y)
 end
 
-function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
-
+--if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
+function love.draw(dt)
     love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
     local baseFont = love.graphics.getFont()
     CHE:draw(dt)
