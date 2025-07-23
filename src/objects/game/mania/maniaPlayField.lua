@@ -46,7 +46,10 @@ function maniaPlayField:new(chart, parent)
                     initialSVTime = self:getPositionFromTime(hitObj.startTime)
                 })
 
-                local noteEndTime = hitObj.endTime
+                local noteEndTime = hitObj.startTime
+                if hitObj.endTime and hitObj.endTime > noteEndTime then
+                    noteEndTime = hitObj.endTime
+                end
                 if noteEndTime > self.endNoteTime then
                     self.endNoteTime = noteEndTime
                 end
