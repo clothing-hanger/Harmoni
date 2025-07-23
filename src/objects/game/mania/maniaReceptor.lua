@@ -18,7 +18,7 @@ function maniaReceptor:new(mode, lane, inputBind, x, y, parent)
     self.x, self.y = x, y
     self.size = maniaNoteSize
     self.held = false
-    self.debug = false
+    self.debug = true
 
     self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
     self.imageDown = SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)
@@ -57,6 +57,8 @@ function maniaReceptor:draw()
     else
         love.graphics.draw(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
     end
+
+    -- draw a line at the center position
 
     if self.debug then
         love.graphics.setColor(1, 0, 0)

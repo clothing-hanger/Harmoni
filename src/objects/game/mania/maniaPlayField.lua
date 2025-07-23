@@ -42,11 +42,14 @@ function maniaPlayField:new(chart, parent)
                 table.insert(hitObjects, {
                     type = hitObj.type,
                     startTime = hitObj.startTime,
-                    length = hitObj.length,
+                    endTime = hitObj.endTime,
                     initialSVTime = self:getPositionFromTime(hitObj.startTime)
                 })
 
-                local noteEndTime = hitObj.startTime + (hitObj.length or 0)
+                local noteEndTime = hitObj.startTime
+                if hitObj.endTime and hitObj.endTime > noteEndTime then
+                    noteEndTime = hitObj.endTime
+                end
                 if noteEndTime > self.endNoteTime then
                     self.endNoteTime = noteEndTime
                 end
@@ -92,7 +95,7 @@ function maniaPlayField:update(dt)
         self.totalNotes = self.totalNotes + #lane.notes
     end
 
-    if MusicTime > self.endNoteTime + 1000 then
+    if MusicTime > self.endNoteTime + 10000 then
         self.finished = true
     end
 end

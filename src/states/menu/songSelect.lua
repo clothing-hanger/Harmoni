@@ -163,7 +163,7 @@ end
         self:loadBanners()
     end
 
-    self:setUpThoseLinesThatIHate(10)
+    self:setUpThoseLinesThatIHate(11)
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -174,7 +174,6 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
         table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
     end
 end
-
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
@@ -212,35 +211,28 @@ function songSelect:handleInputs()
 end
 
 function songSelect:loadBanners()
-    for i, song in ipairs(songList) do
-        if not song then
-            table.remove(songList, i)
-            goto continue
+    for _, button in ipairs(songButtons) do
+        if button.imagePath and not button.imageLoaded then
+            if love.filesystem.getInfo(button.imagePath, "file") then
+                self.bannerInputChannel:push(button.imagePath)
+            else
+                button.imageLoaded = false
+                button.color = {1, 1, 1}
+            end
         end
-
-        local diffList = SongListManager.getDifficultyList(musicPath .. song)
-        if not diffList[1] then
-            table.remove(songList, i)
-            goto continue
-        end
-
-        local bannerPath = musicPath .. song .. "/" .. diffList[1] .. "/banner.png"
-        if love.filesystem.getInfo(bannerPath, "file") then
-            self.bannerInputChannel:push(bannerPath)
-        end
-
-        ::continue::
     end
 end
 
 function songSelect:clearBanners()
     for _, SongButton in ipairs(songButtons) do
-        if SongButton.image then
-            SongButton.image:release()
-            SongButton.image = nil
+        if SongButton.image == currentDisplayedBG then
+            goto continue
         end
+        SongButton.image = nil
         SongButton.imageLoaded = false
         SongButton.color = {1, 1, 1}
+
+        ::continue::
     end
 
     collectgarbage("step")
@@ -324,6 +316,7 @@ function songSelect:loadSongButtonImages()
         if data then
             for i, SongButton in ipairs(songButtons) do
                 if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
+                    SongButton.imageData = data.image
                     SongButton.image = love.graphics.newImage(data.image)
                     SongButton.imageLoaded = true
                     SongButton.color = data.averageColor
@@ -334,8 +327,15 @@ function songSelect:loadSongButtonImages()
     end
 end
 
-
 function songSelect:update(dt)
+    if Input:pressed("menuBack") then
+        if switchingState then return end
+
+        State.transition("waveDissolve", States.menu.titleScreen, function()
+            self:clearBanners()
+        end)
+        return
+    end
     for i, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:update(dt)
     end
@@ -425,7 +425,7 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
-                State.switch(States.menu.transition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
+                State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
                 switchingState = true
             end
             -- why go through the rest? we already have a match so just break
@@ -517,17 +517,7 @@ function songSelect:drawSongInfo()
     love.graphics.setColor(1,1,1)
 end
 
-function songSelect:leave()
-    self.bannerThread:wait()
-    self.bannerThread:release()
-    self.bannerInputChannel:clear() ; self.bannerInputChannel:release()
-    self.bannerChannel:clear()
-
-    self.songThread:wait()
-    self.songThread:release()
-    self.songInputChannel:clear() ; self.songInputChannel:release()
-    self.songChannel:clear()
-
+function songSelect:exit()
     self:clearBanners()
 end
 

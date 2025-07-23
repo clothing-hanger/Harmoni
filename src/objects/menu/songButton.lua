@@ -9,12 +9,12 @@ local menuSongButton = Class:extend("menuSongButton")
 --- @param artist string
 --- @param charter string
 --- @param bpm number
---- @param image string or Image
+--- @param image string | love.Image
 --- @param isDifficultyButton boolean
 --- @param gameMode string
 --- @param path string
 --- @param cornerRadius number
---- @param color table (r,g,b)
+--- @param color table <number, number, number>
 function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
     self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
@@ -31,8 +31,9 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.bpm = bpm or "???"
 
     self.imagePath = image
-    self.image = ((type(image) == "string" and love.filesystem.getInfo(image, "file")) and love.graphics.newImage(image)) or image
-    self.imageLoaded = type(self.image) ~= "string" and self.image ~= nil
+
+    self.image = image or nil
+    self.imageLoaded = false
 
     if not self.isDifficultyButton and self.imagePath then
         self.instance.bannerInputChannel:push(self.imagePath)

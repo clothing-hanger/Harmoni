@@ -41,9 +41,9 @@ function ChartParse.harmc(harmc)
                 table.insert(chart[section], {startTime = tonumber(startTime), multiplier = tonumber(multiplier)})
             end
         elseif section == "hitObjects" then
-            local key, startTime, length, lane = Line:match("^(%a+):([%d%.]+):([%d%.]+):([%d%.]+)$")
-            if key and startTime and length and lane then   -- not a bad error, just skip this note
-                table.insert(chart[section], {type = key, startTime = tonumber(startTime), length = tonumber(length), lane = tonumber(lane)})
+            local key, startTime, endTime, lane = Line:match("^(%a+):([%d%.]+):([%d%.]+):([%d%.]+)$")
+            if key and startTime and endTime and lane then   -- not a bad error, just skip this note
+                table.insert(chart[section], {type = key, startTime = tonumber(startTime), endTime = tonumber(endTime), lane = tonumber(lane)})
             end
         end
 

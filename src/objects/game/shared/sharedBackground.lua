@@ -3,7 +3,6 @@ local sharedBackground = Class:extend("sharedBackground")
 local bumpTween
 
 function sharedBackground:new(imagePath, dimness, size)
-    -- Load image if a string path is provided, else assume image object
     if type(imagePath) == "string" then
         self.image = love.graphics.newImage(imagePath)
     else
@@ -24,9 +23,18 @@ function sharedBackground:new(imagePath, dimness, size)
     self.rotation = 0
     self.x = baseScreenRatio.x / 2
     self.y = baseScreenRatio.y / 2
+
+    self.activeTweens = {}
 end
 
 function sharedBackground:update(dt)
+    for i = #self.activeTweens, 1, -1 do
+        local tween = self.activeTweens[i]
+        if tween.update(dt) then
+            if tween.callback then tween.callback() end
+            table.remove(self.activeTweens, i)
+        end
+    end
 end
 
 function sharedBackground:setSize(size)
@@ -34,24 +42,57 @@ function sharedBackground:setSize(size)
 end
 
 function sharedBackground:changeDimness(targetDimness, time, callback)
-    if time then
-        Timer.tween(time, self, {dimness = targetDimness or 1}, "linear", callback)
-    else
-        self.dimness = targetDimness or 1
+    targetDimness = targetDimness or 1
+    if not time then
+        self.dimness = targetDimness
         if callback then callback() end
+        return
     end
+
+    local start = self.dimness
+    local change = targetDimness - start
+    local t = 0
+    local easing = Ease.linear
+
+    table.insert(self.activeTweens, {
+        update = function(dt)
+            t = t + dt
+            local progress = math.min(t / time, 1)
+            self.dimness = start + change * easing(progress)
+            return progress >= 1
+        end,
+        callback = callback
+    })
 end
 
 function sharedBackground:bump(intensity, speed, tweenType)
-    self.size = self.size + (intensity or 0)
+    intensity = intensity or 0
     speed = speed or 0.5
     tweenType = tweenType or "out-quad"
 
-    if bumpTween then
-        Timer.cancel(bumpTween)
+    self.size = self.size + intensity
+    local start = self.size
+    local target = self.originalSize
+    local change = target - start
+    local t = 0
+    local easing = Ease[tweenType] or Ease.linear
+
+    -- remove existing bump tween
+    for i = #self.activeTweens, 1, -1 do
+        if self.activeTweens[i].tag == "bump" then
+            table.remove(self.activeTweens, i)
+        end
     end
 
-    bumpTween = Timer.tween(self, {size = self.originalSize}, speed, tweenType)
+    table.insert(self.activeTweens, {
+        tag = "bump",
+        update = function(dt)
+            t = t + dt
+            local progress = math.min(t / speed, 1)
+            self.size = start + change * easing(progress)
+            return progress >= 1
+        end
+    })
 end
 
 function sharedBackground:draw()
@@ -79,7 +120,7 @@ function sharedBackground:draw()
     -- Draw dimness overlay
     love.graphics.setColor(0, 0, 0, self.dimness)
     love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return sharedBackground

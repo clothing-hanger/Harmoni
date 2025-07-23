@@ -30,7 +30,7 @@ function maniaLane:setUpHitObjects(hitObjects)
         if hitObject.type == "note" then
             table.insert(self.notes, maniaNote(
                 hitObject.startTime,
-                hitObject.length,
+                hitObject.endTime,
                 self.maniaLane,
                 self.maniaMode,
                 hitObject.initialSVTime,
@@ -51,6 +51,7 @@ function maniaLane:update(dt)
 
     self.receptor:update(dt)
     self:handleInput()
+    self:checkHoldReleases()
     self:checkForMisses()
 
     self.empty = (#self.notes == 0 and #self.drawableNotes == 0)
@@ -64,34 +65,76 @@ function maniaLane:handleInput()
     if not Input then return end
     if not Input:pressed(self.inputBind) then return end
 
-    local bestNoteIndex = nil
     local bestJudgement = nil
     local bestTimeDiff = math.huge
+    local note = self.drawableNotes[1]
+    if not note then goto continue end
 
-    for i, note in ipairs(self.drawableNotes) do
-        local timeDiff = math.abs(MusicTime - note.startTime)
-        for _, judgement in ipairs(mania.judgements) do
-            if timeDiff <= judgement.timing and timeDiff < bestTimeDiff then
-                bestTimeDiff = timeDiff
-                bestNoteIndex = i
-                bestJudgement = judgement
-            end
+    local timeDiff = math.abs(MusicTime - note.startTime)
+    for _, judgement in ipairs(mania.judgements) do
+        if timeDiff <= judgement.timing*1.15 and timeDiff < bestTimeDiff then
+            bestTimeDiff = timeDiff
+            bestJudgement = judgement
         end
     end
 
-    if bestNoteIndex and bestJudgement then
-        local note = self.drawableNotes[bestNoteIndex]
+    if bestJudgement then
         local parentParent = self.parent.parent
-        table.remove(self.drawableNotes, bestNoteIndex)
-        parentParent.comboCount:incrementCombo()
+        if not note.holdLength then
+            table.remove(self.drawableNotes, 1)
+        else
+            note.held = true
+            note.holdStartTime = MusicTime
+        end
+
         parentParent.judgementObject:judge(bestJudgement.name)
         parentParent.healthBar:changeHealth(bestJudgement.health)
+        parentParent.comboCount:incrementCombo()
+    end
+
+    ::continue::
+end
+
+function maniaLane:checkHoldReleases()
+    if not Input then return end
+    if not Input:released(self.inputBind) then return end
+
+    for i = #self.drawableNotes, 1, -1 do
+        local note = self.drawableNotes[i]
+
+        if note.holdLength and note.held and not note.released then
+            local releaseDiff = math.abs(MusicTime - note.endTime)
+
+            local bestJudgement = nil
+            local bestDiff = math.huge
+
+            for _, judgement in ipairs(mania.judgements) do
+                local holdWindow = judgement.timing * 1.5
+                if judgement.name == "Miss" then
+                    holdWindow = judgement.timing
+                end
+                if releaseDiff <= holdWindow and releaseDiff < bestDiff then
+                    bestDiff = releaseDiff
+                    bestJudgement = judgement
+                end
+            end
+
+            if bestJudgement then
+                note.held = false
+                note.released = true
+                table.remove(self.drawableNotes, i)
+
+                --[[ local parentParent = self.parent.parent
+                parentParent.comboCount:incrementCombo()
+                parentParent.judgementObject:judge(bestJudgement.name)
+                parentParent.healthBar:changeHealth(bestJudgement.health) ]]
+            end
+        end
     end
 end
 
-
 function maniaLane:checkForMisses()
-    local missJudgement
+    local missJudgement = nil
     for _, judgement in ipairs(mania.judgements or {}) do
         if judgement.name == "Miss" then
             missJudgement = judgement
@@ -106,16 +149,30 @@ function maniaLane:checkForMisses()
 
     for i = #self.drawableNotes, 1, -1 do
         local note = self.drawableNotes[i]
-        if currentTime - note.startTime > timingWindow then
-            local parentParent = self.parent.parent
-            parentParent.judgementObject:judge(missJudgement.name)
-            parentParent.comboCount:breakCombo()
-            parentParent.healthBar:changeHealth(missJudgement.health)
 
+        if not note.holdLength and currentTime - note.startTime > timingWindow then
             table.remove(self.drawableNotes, i)
+            local parentParent = self.parent.parent
+            parentParent.comboCount:breakCombo()
+            parentParent.judgementObject:judge("Miss")
+            parentParent.healthBar:changeHealth(missJudgement.health)
+        end
+
+        if note.holdLength and not note.released then
+            if currentTime > note.endTime + 100 then
+                table.remove(self.drawableNotes, i)
+                note.held = false
+                note.released = true
+
+                local parentParent = self.parent.parent
+                parentParent.comboCount:breakCombo()
+                parentParent.judgementObject:judge("Miss")
+                parentParent.healthBar:changeHealth(missJudgement.health)
+            end
         end
     end
 end
+
 
 function maniaLane:draw()
     self.receptor:draw()

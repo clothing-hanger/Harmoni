@@ -1,6 +1,9 @@
 require("love.error")
 require("love.run")
 
+-- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
+-- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
+dontShowBG = false
 
 dontShowBG = true  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 
@@ -12,9 +15,10 @@ local function table_find(t, value)
     end
     return nil
 end
+local spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function love.load(args)
-    Settings = require("Modules.Settings")
+    Settings = require("modules.Settings")
     Settings.default = Settings:defaultSettings()
     Settings:loadSettings()
 
@@ -32,9 +36,10 @@ function love.load(args)
 
     require("modules.gamemodes")
 
-    require("bob.init")
+    require("bob")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
+    ScoreHandler = require("modules.scoreHandler")
     SongListManager = require("modules.songListManager")
 
     State.switch(States.menu.titleScreen)
@@ -42,7 +47,6 @@ end
 
 function love.update(dt)
     CHE:update(dt)
-
 end
 
 function love.mousepressed(x, y, b)
@@ -70,25 +74,13 @@ function love.wheelmoved(x,y)
     State.scroll(y)
 end
 
-function love.draw(dt)  --if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep the screen aspect ratio shit
-    local baseFont = love.graphics.getFont()
+function love.resize(w, h) end
+
+--if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep drawing in a letterboxed environment
+function love.draw(dt)
+    love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
+
     CHE:draw(dt)
-
-    love.graphics.setFont(baseFont)
-    local DPS, UPS = love.timer.getFPS()
-    love.graphics.setColor(0, 0, 0)
-
-    local graphicStats = love.graphics.getStats()
-    local drawCalls = graphicStats.drawcalls or 0
-    local drawCallsBatched = graphicStats.drawcallsbatched or 0
-    local textureMemory = graphicStats.texturememory or 0
-    for x = -1, 1 do
-        for y = -1, 1 do
-            love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), x, y, love.graphics.getWidth(), "right")
-        end
-    end
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024), 0, 0, love.graphics.getWidth(), "right")
 end
 
 function love.quit()

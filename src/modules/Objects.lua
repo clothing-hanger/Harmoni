@@ -14,9 +14,11 @@
 
     --menu
     menuSongButton = require("objects.menu.songButton")
-
+    modifiersMenu = require("objects.menu.modifiersMenu")
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")
     cursor = require("objects.UI.cursor")
     SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")
     UITimeRemaing = require("objects.UI.UITimeRemaining")
+    toggle = require("objects.UI.toggle")
+    buttonSlideOut = require("objects.UI.buttonSlideOut")

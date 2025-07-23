@@ -78,37 +78,37 @@ Skin = {   -- i need to remove lots of these tbh..
 
     HoldNotes = {
         ["4K"] = {
-            ["Left"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
-            ["Right"] = newImage("NOTES/NoteRightTrail.png"),
-            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Left"] = newImage("NOTES/hold.png"),
+            ["Down"] = newImage("NOTES/hold.png"),
+            ["Right"] = newImage("NOTES/hold.png"),
+            ["Up"] = newImage("NOTES/hold.png"),
         },
         ["7K"] = {
-            ["Left1"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
-            ["Right1"] = newImage("NOTES/NoteRightTrail.png"),
-            ["Center"] = newImage("NOTES/NoteUpTrail.png"),
-            ["Left2"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
-            ["Right2"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Left1"] = newImage("NOTES/hold.png"),
+            ["Down"] = newImage("NOTES/hold.png"),
+            ["Right1"] = newImage("NOTES/hold.png"),
+            ["Center"] = newImage("NOTES/hold.png"),
+            ["Left2"] = newImage("NOTES/hold.png"),
+            ["Up"] = newImage("NOTES/hold.png"),
+            ["Right2"] = newImage("NOTES/hold.png"),
         }
     },
 
     HoldEndNotes = {
         ["4K"] = {
-            ["Left"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
-            ["Right"] = newImage("NOTES/NoteRightTrail.png"),
-            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
+            ["Left"] = newImage("NOTES/holdEnd.png"),
+            ["Down"] = newImage("NOTES/holdEnd.png"),
+            ["Right"] = newImage("NOTES/holdEnd.png"),
+            ["Up"] = newImage("NOTES/holdEnd.png"),
         },
         ["7K"] = {
-            ["Left1"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Down"] = newImage("NOTES/NoteDownTrail.png"),
-            ["Right1"] = newImage("NOTES/NoteRightTrail.png"),
-            ["Center"] = newImage("NOTES/NoteUpTrail.png"),
-            ["Left2"] = newImage("NOTES/NoteLeftTrail.png"),
-            ["Up"] = newImage("NOTES/NoteUpTrail.png"),
-            ["Right2"] = newImage("NOTES/NoteRightTrail.png"),
+            ["Left1"] = newImage("NOTES/holdEnd.png"),
+            ["Down"] = newImage("NOTES/holdEnd.png"),
+            ["Right1"] = newImage("NOTES/holdEnd.png"),
+            ["Center"] = newImage("NOTES/holdEnd.png"),
+            ["Left2"] = newImage("NOTES/holdEnd.png"),
+            ["Up"] = newImage("NOTES/holdEnd.png"),
+            ["Right2"] = newImage("NOTES/holdEnd.png"),
         }
     },
 

@@ -52,57 +52,100 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HUD Small"] = newFont("FONTS/Novamono-njdg.ttf", 15),
         ["HUD Extra Small"] = newFont("FONTS/Novamono-njdg.ttf", 12),
         ["Combo"] = newFont("FONTS/SourceCodePro-Medium.ttf", 65),
-        ["Menu Large"] = newFont("FONTS/SourceCodePro-Medium.ttf", 25),
-        ["Menu Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 15),
-        ["Menu Extra Small"] = newFont("FONTS/SourceCodePro-Medium.ttf", 12),
-        ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60)
+        ["Menu Extra Large"] = newFont("FONTS/astonpoliz.regular.ttf", 50),
+        ["Menu Large"] = newFont("FONTS/astonpoliz.regular.ttf", 25),
+        ["Menu Small"] = newFont("FONTS/astonpoliz.regular.ttf", 15),
+        ["Menu Extra Small"] = newFont("FONTS/astonpoliz.regular.ttf", 12),
+        ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60),
     },
 
     Notes = {
         ["4K"] = {
-            ["Left"] = newQuad("Arrows", 301, 0, 300, 300),
-            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
-            ["Right"] = newQuad("Arrows", 602, 0, 300, 300),
-            ["Up"] = newQuad("Arrows", 903, 0, 300, 300),
+            ["Left"] = newQuad("Arrows", 602, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 301, 0, 300, 300),
+            ["Right"] = newQuad("Arrows", 903, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 301, 300, 300),
         },
         ["7K"] = {
-            ["Left1"] = newQuad("Arrows", 301, 0, 300, 300),
-            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
-            ["Right1"] = newQuad("Arrows", 602, 0, 300, 300),
+            ["Left1"] = newQuad("Arrows", 602, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 301, 0, 300, 300),
+            ["Right1"] = newQuad("Arrows", 903, 0, 300, 300),
             ["Center"] = newQuad("Arrows", 903, 0, 300, 300),
-            ["Left2"] = newQuad("Arrows", 301, 0, 300, 300),
-            ["Up"] = newQuad("Arrows", 903, 0, 300, 300),
-            ["Right2"] = newQuad("Arrows", 602, 0, 300, 300),
+            ["Left2"] = newQuad("Arrows", 602, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 301, 300, 300),
+            ["Right2"] = newQuad("Arrows", 903, 0, 300, 300),
+        }
+    },
+
+    HoldNotes = {
+        ["4K"] = {
+            ["Left"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 0, 300, 300),
+        },
+        ["7K"] = {
+            ["Left1"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Down"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right1"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Center"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Left2"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Up"] = newQuad("Arrows", 0, 0, 300, 300),
+            ["Right2"] = newQuad("Arrows", 0, 0, 300, 300),
+        }
+    },
+
+    HoldEndNotes = {
+        ["4K"] = {
+            ["Left"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Down"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Up"] = newQuad("Arrows", 602, 903, 300, 300),
+        },
+        ["7K"] = {
+            ["Left1"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Down"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right1"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Center"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Left2"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Up"] = newQuad("Arrows", 602, 903, 300, 300),
+            ["Right2"] = newQuad("Arrows", 602, 903, 300, 300),
         }
     },
 
     Receptors = {
         Up = {
             ["4K"] = {
-                ["Left"] = newQuad("Arrows", 301, 301, 300, 300),
-                ["Down"] = newQuad("Arrows", 0, 301, 300, 300),
-                ["Right"] = newQuad("Arrows", 602, 602, 300, 300),
-                ["Up"] = newQuad("Arrows", 903, 602, 300, 300),
+                ["Left"] = newQuad("Arrows", 602, 301, 300, 300),
+                ["Down"] = newQuad("Arrows", 301, 301, 300, 300),
+                ["Right"] = newQuad("Arrows", 903, 602, 300, 300),
+                ["Up"] = newQuad("Arrows", 301, 903, 300, 300),
             },
             ["7K"] = {
-                ["Left1"] = newQuad("Arrows", 301, 301, 300, 300),
-                ["Down"] = newQuad("Arrows", 0, 301, 300, 300),
-                ["Right1"] = newQuad("Arrows", 602, 602, 300, 300),
+                ["Left1"] = newQuad("Arrows", 602, 301, 300, 300),
+                ["Down"] = newQuad("Arrows", 301, 301, 300, 300),
+                ["Right1"] = newQuad("Arrows", 903, 602, 300, 300),
                 ["Center"] = newQuad("Arrows", 903, 602, 300, 300),
-                ["Left2"] = newQuad("Arrows", 301, 301, 300, 300),
-                ["Up"] = newQuad("Arrows", 903, 602, 300, 300),
-                ["Right2"] = newQuad("Arrows", 602, 602, 300, 300),
+                ["Left2"] = newQuad("Arrows", 602, 301, 300, 300),
+                ["Up"] = newQuad("Arrows", 301, 903, 300, 300),
+                ["Right2"] = newQuad("Arrows", 903, 602, 300, 300),
             }
         },
         Down = {
             ["4K"] = {
-                ["Left"] = newQuad("Arrows", 903, 301, 300, 300),
-                ["Down"] = newQuad("Arrows", 602, 301, 300, 300),
-                ["Right"] = newQuad("Arrows", 0, 602, 300, 300),
-                ["Up"] = newQuad("Arrows", 301, 602, 300, 300),
+                ["Left"] = newQuad("Arrows", 0, 602, 300, 300),
+                ["Down"] = newQuad("Arrows", 903, 301, 300, 300),
+                ["Up"] = newQuad("Arrows", 602, 602, 300, 300),
+                ["Right"] = newQuad("Arrows", 301, 602, 300, 300),
             },
             ["7K"] = {
-                
+                ["Left1"] = newQuad("Arrows", 0, 602, 300, 300),
+                ["Down"] = newQuad("Arrows", 903, 301, 300, 300),
+                ["Right1"] = newQuad("Arrows", 602, 602, 300, 300),
+                ["Center"] = newQuad("Arrows", 602, 602, 300, 300),
+                ["Left2"] = newQuad("Arrows", 0, 602, 300, 300),
+                ["Up"] = newQuad("Arrows", 903, 301, 300, 300),
+                ["Right2"] = newQuad("Arrows", 602, 602, 300, 300),
             }
         }
     },
