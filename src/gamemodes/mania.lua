@@ -5,7 +5,17 @@ function mania:new(chart, parent)
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
 
+    
+
     self.chart = self:setUpChart(chart)
+
+    --score shit 
+    ScoreHandler:resetScore()
+
+    self.scoresPerJudgements = ScoreHandler:getScorePerJudgment(self.totalNotes)
+
+
+    print("FJIDFJOFI",self.scoresPerJudgements.perfect)
     print(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
@@ -61,6 +71,7 @@ end
 function mania:setUpChart(chart)
     local songPath = getDirectory(chart)
     local parsed = ChartParse.harmc(chart)
+    self.totalNotes = #parsed.hitObjects
 
     local maniaChart = {
         meta = parsed.meta,
@@ -85,6 +96,7 @@ function mania:setUpChart(chart)
 
     end
     for _, obj in ipairs(parsed.hitObjects) do
+
         table.insert(maniaChart.hitObjects, {
             type = obj.type,
             startTime = obj.startTime,
