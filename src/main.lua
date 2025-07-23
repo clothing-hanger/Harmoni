@@ -29,6 +29,7 @@ function love.load(args)
     require("bob")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
+    ScoreHandler = require("modules.scoreHandler")
     SongListManager = require("modules.songListManager")
 
     State.addTransition("slideLeft", "states/transitions/slideLeft/slideLeft.lua")

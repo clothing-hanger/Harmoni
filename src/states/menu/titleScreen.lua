@@ -73,19 +73,31 @@ function titleScreen:draw()
         Button:draw()
     end
     love.graphics.setColor(1,1,1,1)
+
+    self:drawLogo()
 end
 
 
 function titleScreen:drawLogo()
+    
     -- the logo drawing is complex so we move it to its own function 
+    local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
+    local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later 
+    local HOnlyStartingX, HOnlyStartingY = 0,0
 
+    local HOnlyX, HOnlyY = HOnlyStartingX, HOnlyStartingY
+
+  
+  --  love.graphics.draw(self.images["H"], )
 
     -- we need to draw the full logo first 
 
     -- logo variables 
-  --  local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 1, 1, 
+    local fullLogo = self.images["logo"].image
+    local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 1, 1, baseScreenRatio.x/2, baseScreenRatio.y/2 
+    local fullLogoCenterX, fullLogoCenterY = fullLogo:getWidth()/2, fullLogo:getHeight()/2
 
-    --love.graphics.draw(self.images["logo"], baseScreenRatio.x /)
+    love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
 end
 
 return titleScreen
