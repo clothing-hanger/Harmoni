@@ -95,7 +95,7 @@ function maniaPlayField:update(dt)
         self.totalNotes = self.totalNotes + #lane.notes
     end
 
-    if MusicTime > self.endNoteTime + 1000 then
+    if MusicTime > self.endNoteTime + 10000 then
         self.finished = true
     end
 end
