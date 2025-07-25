@@ -92,8 +92,8 @@ function mania:setUpChart(chart)
     for i, BpmChange in ipairs(parsed.bpm) do
 
     end
-    for i, SliderVeloticy in ipairs(parsed.sliderVelocities) do
-
+    for i, SliderVelocity in ipairs(parsed.sliderVelocities) do
+        
     end
     for _, obj in ipairs(parsed.hitObjects) do
 
