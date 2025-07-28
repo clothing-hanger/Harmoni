@@ -32,7 +32,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.time = 0
     self.previousFrameTime = 0
 
-    self.angle = 0  -- i guess this was handled by the sprite thingy in tit?? idk
+    self.angle = 0  -- i guess this was handled by the sprite thingy in rit?? idk
     self.origin = {x = 0, y = 0}
     self.windowScale = {x = 1, y = 1}
     self.scale = {x = 1, y = 1}
