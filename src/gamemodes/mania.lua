@@ -21,6 +21,7 @@ function mania:new(chart, parent)
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart, self)}
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "stream")
+    self.song:setLooping(false)
 
     mania.judgements = require("Modules.maniaJudgements")
 
@@ -121,7 +122,7 @@ function mania:update(dt)
     end
 
     if self.song and self.playField[1].finished then
-        self:endSong()
+        if self.videoBackground and not self.song:isPlaying() then self:endSong() end
     end
 
     if thething then

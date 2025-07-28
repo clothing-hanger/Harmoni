@@ -54,6 +54,7 @@ function video:new(videoPath, x, y, width, height, fr)
 end
 
 function video:update(dt)
+
     if self.playing and self.video then
         self.checkTimer = self.checkTimer + dt
         local interval = 1 / self.checkPerFrame
@@ -104,6 +105,7 @@ end
 
 function video:draw()
     if not self.video or not self.visible or not self.image then return end
+    print("hiiii")
 
     love.graphics.push()
     love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)

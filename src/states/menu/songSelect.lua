@@ -435,6 +435,7 @@ function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code
 
 end
 
+
 function songSelect:draw(dt)
     -- draw background from selected song button
     if not dontShowBG then
