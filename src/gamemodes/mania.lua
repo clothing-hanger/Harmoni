@@ -8,6 +8,7 @@ function mania:new(chart, parent)
     
 
     self.chart = self:setUpChart(chart)
+    self.scoreHandler = ScoreHandler
 
     --score shit 
     ScoreHandler:resetScore()
@@ -37,6 +38,7 @@ end
 function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
+    self.HUD = maniaHUD()
 
     local songLength = self.song and self.song:getDuration("seconds") or 0
     self.timeRemaingBar = UITimeRemaing(
@@ -147,6 +149,10 @@ function mania:updateObjects(dt)
     self.comboCount:update(dt)
     self.healthBar:update(dt)
 
+    self.HUD:update(dt) -- we also gotta send values to the hud
+    self.HUD:sendValues(ScoreHandler:getScore("true"))
+    print(ScoreHandler:getScore("printable"))
+
     if self.healthBar.health <= 0 then
         self:endSong()
     end
@@ -179,6 +185,7 @@ function mania:draw()
     if judgementBatch then love.graphics.draw(judgementBatch) end
 
     self.comboCount:draw()
+    self.HUD:draw()
     self.timeRemaingBar:draw()
     self.healthBar:draw()
 end

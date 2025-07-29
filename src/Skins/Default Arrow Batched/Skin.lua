@@ -173,7 +173,7 @@ Skin = {   -- i need to remove lots of these tbh..
     },
 
     Sounds = {
-        ["First Miss"] = nil,
+        ["First Miss"] = nil,  -- some day
         ["Miss"] = nil,
         ["Menu Scroll"] = nil,
         ["Hit Sound"] = nil,
