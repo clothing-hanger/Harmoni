@@ -7,6 +7,7 @@
     maniaJudgement = require("objects.game.mania.maniaJudgement")
     maniaComboCount = require("objects.game.mania.maniaComboCount")
     maniaHealthBar = require("objects.game.mania.maniaHealthBar")
+    maniaHUD = require("objects.game.mania.maniaHUD")
 
     --shared game thingies
     sharedBackground = require("objects.game.shared.sharedBackground")

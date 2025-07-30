@@ -32,7 +32,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.time = 0
     self.previousFrameTime = 0
 
-    self.angle = 0  -- i guess this was handled by the sprite thingy in tit?? idk
+    self.angle = 0  -- i guess this was handled by the sprite thingy in rit?? idk
     self.origin = {x = 0, y = 0}
     self.windowScale = {x = 1, y = 1}
     self.scale = {x = 1, y = 1}
@@ -46,6 +46,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
 end
 
 function video:update(dt)
+
     if self.playing and self.video then
         self.checkTimer = self.checkTimer + dt
         local interval = 1 / self.checkPerFrame
@@ -88,8 +89,8 @@ function video:seek(time)
 end
 
 function video:draw()
-    if not self.video then return end
-    if not self.visible or not self.image then return end
+    if not self.video or not self.visible or not self.image then return end
+    print("hiiii")
 
     love.graphics.push()
         love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)

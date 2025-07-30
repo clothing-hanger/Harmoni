@@ -11,15 +11,17 @@ end
 function scoreHandler:getScorePerJudgment(noteCount)
     local noteCount = noteCount or 1  
     local maxScorePerNote = self.valuesAndShitIDK.maxScore / noteCount
-    
+        self.valuesAndShitIDK.maxScorePerNote = maxScorePerNote
+
     return {
         perfect = maxScorePerNote*judgements[1].score,
         great = maxScorePerNote*judgements[2].score,
-        good = maxScorePerNote*judgements[3].score,   -- this is fucking gross but it works
+        good = maxScorePerNote*judgements[3].score,   -- this is fucking gross but it works   (and its prob just gonna go unused lmfao)
         alright = maxScorePerNote*judgements[4].score,
         awful = maxScorePerNote*judgements[5].score,
         miss = maxScorePerNote*judgements[6].score
     }
+
 
 end
 
@@ -33,6 +35,9 @@ function scoreHandler:getScore(arg)
     end
 end
 function scoreHandler:addScore(score)
+
+    local score = score*self.valuesAndShitIDK.maxScorePerNote
+    print("adding score", score)
     self.Scores.trueScore = self.Scores.trueScore + score
   --  self.tween = Timer.tween(0.1, self.Scores, {printableScore})
 end

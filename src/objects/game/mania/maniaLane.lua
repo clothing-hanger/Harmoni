@@ -74,7 +74,7 @@ function maniaLane:handleInput()
     for _, judgement in ipairs(mania.judgements) do
         if timeDiff <= judgement.timing*1.15 and timeDiff < bestTimeDiff then
             bestTimeDiff = timeDiff
-            bestJudgement = judgement
+            bestJudgement = judgement 
         end
     end
 
@@ -88,6 +88,7 @@ function maniaLane:handleInput()
         end
 
         parentParent.judgementObject:judge(bestJudgement.name)
+        parentParent.scoreHandler:addScore(bestJudgement.score)
         parentParent.healthBar:changeHealth(bestJudgement.health)
         parentParent.comboCount:incrementCombo()
     end
@@ -155,6 +156,7 @@ function maniaLane:checkForMisses()
             local parentParent = self.parent.parent
             parentParent.comboCount:breakCombo()
             parentParent.judgementObject:judge("Miss")
+            parentParent.scoreHandler:addScore(missJudgement.score)
             parentParent.healthBar:changeHealth(missJudgement.health)
         end
 
@@ -167,6 +169,7 @@ function maniaLane:checkForMisses()
                 local parentParent = self.parent.parent
                 parentParent.comboCount:breakCombo()
                 parentParent.judgementObject:judge("Miss")
+                parentParent.scoreHandler:addScore(missJudgement.score)
                 parentParent.healthBar:changeHealth(missJudgement.health)
             end
         end
