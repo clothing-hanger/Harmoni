@@ -37,16 +37,23 @@ function love.load(args)
     require("modules.gamemodes")
 
     require("bob")
+    maniaChartDifficultyCalculator = require("modules.maniaChartDifficultyCalculator")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
     ScoreHandler = require("modules.scoreHandler")
     SongListManager = require("modules.songListManager")
 
     State.switch(States.menu.titleScreen)
+
+
+    -- load objects
+    GlobalNotificationsHandler = notificationsHandler()
+    
 end
 
 function love.update(dt)
     CHE:update(dt)
+    GlobalNotificationsHandler:update(dt)
 end
 
 function love.mousepressed(x, y, b)
@@ -81,6 +88,7 @@ function love.draw(dt)
     love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
 
     CHE:draw(dt)
+    GlobalNotificationsHandler:draw()
 end
 
 function love.quit()

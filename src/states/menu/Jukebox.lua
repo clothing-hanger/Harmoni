@@ -1,6 +1,8 @@
 local jukebox = State("jukebox")
 
 function jukebox:enter()
+        GlobalNotificationsHandler:addNotification("HII!")
+
     State.switch(States.menu.titleScreen)
 end
 

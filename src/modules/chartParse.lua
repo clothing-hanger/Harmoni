@@ -50,6 +50,12 @@ function ChartParse.harmc(harmc)
         ::continue::
     end
 
+
+    -- we will check the song's difficulty here and add it to metadata 
+
+    -- we set it to 0 if the calculation fails or if the chart is invalid cuz idk what would happen if i didnt do that but i dont wanna find out 
+   -- if chart then chart["meta"].difficultyRating = maniaChartDifficultyCalculator:calculateDifficulty(chart) or 0 else chart["meta"].difficultyRating = 0 end
+
     return chart  -- will return the chart if everything goes well, or will return false if, uhh, everything does not go well
 end
 
@@ -76,6 +82,9 @@ function ChartParse.harmcMeta(harmc)
             chart[key] = value
         end
     end
+
+   --if chart then chart["meta"].difficultyRating = maniaChartDifficultyCalculator:calculateDifficulty(chart) or 0 else chart["meta"].difficultyRating = 0 end
+
 
     return chart  -- will return the chart if everything goes well, or will return false if, uhh, everything does not go well
 end

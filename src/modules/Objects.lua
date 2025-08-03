@@ -16,6 +16,8 @@
     --menu
     menuSongButton = require("objects.menu.songButton")
     modifiersMenu = require("objects.menu.modifiersMenu")
+        notificationsHandler = require("objects.menu.notificationsHandler")
+
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")
     cursor = require("objects.UI.cursor")
@@ -23,3 +25,4 @@
     UITimeRemaing = require("objects.UI.UITimeRemaining")
     toggle = require("objects.UI.toggle")
     buttonSlideOut = require("objects.UI.buttonSlideOut")
+    notification = require("objects.UI.notification")
