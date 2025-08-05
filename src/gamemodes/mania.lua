@@ -151,7 +151,6 @@ function mania:updateObjects(dt)
 
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(ScoreHandler:getScore("true"))
-    print(ScoreHandler:getScore("printable"))
 
     if self.healthBar.health <= 0 then
         self:endSong()

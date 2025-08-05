@@ -37,7 +37,6 @@ end
 function scoreHandler:addScore(score)
 
     local score = score*self.valuesAndShitIDK.maxScorePerNote
-    print("adding score", score)
     self.Scores.trueScore = self.Scores.trueScore + score
   --  self.tween = Timer.tween(0.1, self.Scores, {printableScore})
 end
