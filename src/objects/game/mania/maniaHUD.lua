@@ -4,6 +4,9 @@ function maniaHUD:new()
     self.score = 0
 
     self.debug = true
+    self.fontLarge = SkinHandler:getFont("HUD Large")
+    self.fontSmall = SkinHandler:getFont("HUD Small")
+    self.fontExtraSmall = SkinHandler:getFont("HUD Extra Small")
 end
 
 function maniaHUD:update(dt)
@@ -16,6 +19,10 @@ end
 
 function maniaHUD:draw()
     if self.debug then self:debugDraw() end
+
+    -- top left
+    love.graphics.setFont(self.fontLarge)
+    love.graphics.printf(self.score, 10, 10, baseScreenRatio.x, "left")
 
 end
 

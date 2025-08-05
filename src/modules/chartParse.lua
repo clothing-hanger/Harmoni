@@ -85,6 +85,10 @@ function ChartParse.harmcMeta(harmc)
 
    --if chart then chart["meta"].difficultyRating = maniaChartDifficultyCalculator:calculateDifficulty(chart) or 0 else chart["meta"].difficultyRating = 0 end
 
+    -- why did i think this could work when chart here doesnt have any notes 
+    -- we need a better way of doing this,, the notes being calculated every time is slow but we need to find the chart's difficulty too
+    -- and storing the difficutly in some cached data is bad because we dont want people editing that 
+    -- gugglliooo help :((
 
     return chart  -- will return the chart if everything goes well, or will return false if, uhh, everything does not go well
 end
