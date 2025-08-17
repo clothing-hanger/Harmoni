@@ -38,7 +38,6 @@ end
 function gameModeManager:draw()
     for i, gameMode in ipairs(self.gameMode) do
         gameMode:draw()
-        love.graphics.print(MusicTime, 0, 0)
     end
 
 end

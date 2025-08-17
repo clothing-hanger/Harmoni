@@ -21,8 +21,6 @@ function scoreHandler:getScorePerJudgment(noteCount)
         awful = maxScorePerNote*judgements[5].score,
         miss = maxScorePerNote*judgements[6].score
     }
-
-
 end
 
 function scoreHandler:getScore(arg)
@@ -35,10 +33,10 @@ function scoreHandler:getScore(arg)
     end
 end
 function scoreHandler:addScore(score)
-
     local score = score*self.valuesAndShitIDK.maxScorePerNote
     self.Scores.trueScore = self.Scores.trueScore + score
-  --  self.tween = Timer.tween(0.1, self.Scores, {printableScore})
+    self.tween = Timer.tween(0.8, self.Scores, {printableScore = self.Scores.trueScore}, "out-quad")
+
 end
 
 
