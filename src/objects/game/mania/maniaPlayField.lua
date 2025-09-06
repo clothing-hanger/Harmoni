@@ -49,6 +49,8 @@ function maniaPlayField:new(chart, parent)
                 local noteEndTime = hitObj.startTime
                 if hitObj.endTime and hitObj.endTime > noteEndTime then
                     noteEndTime = hitObj.endTime
+
+                   printToConsole("song SHOULD end at " .. noteEndTime .. " if it doesnt im deleting the fucking game")
                 end
                 if noteEndTime > self.endNoteTime then
                     self.endNoteTime = noteEndTime
@@ -95,7 +97,7 @@ function maniaPlayField:update(dt)
         self.totalNotes = self.totalNotes + #lane.notes
     end
 
-    if MusicTime > self.endNoteTime + 10000 then
+    if MusicTime > self.endNoteTime  then
         self.finished = true
     end
 end

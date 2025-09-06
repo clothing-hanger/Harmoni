@@ -84,10 +84,10 @@ function Settings:loadSettings()
         if success and type(loadedSettings) == "table" then
             self.loadedSettings = self:mergeSettings(defaultValues, loadedSettings)
         else
-            print("Error loading settings, reverting to defaults:", loadedSettings)
+           print("Error loading settings, reverting to defaults:", loadedSettings)
         end
     else
-        print("Settings file not found, creating with defaults.")
+       print("Settings file not found, creating with defaults.")
     end
 
     self:writeSettings()
@@ -142,9 +142,9 @@ function Settings:writeSettings()
     local settingsString = "return " .. tableToString(self.loadedSettings, "  ")
     local success, err = love.filesystem.write("Settings/Settings.lua", settingsString)
     if not success then
-        print("Error writing settings file: " .. tostring(err))
+       print("Error writing settings file: " .. tostring(err))
     else
-        print("Settings saved successfully.")
+       print("Settings saved successfully.")
     end
 end
 

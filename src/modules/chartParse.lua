@@ -7,7 +7,7 @@ function ChartParse.harmc(harmc)
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then   -- obviously if the file is either not real or not a file, thats a bad error lmfao, so dont try to parse it
-        print("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
+       printToConsole("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
         return false
     end
 
@@ -20,7 +20,7 @@ function ChartParse.harmc(harmc)
         if Line:match("^%[.*%]$") then
             section = Line:sub(2, -2)
             if not section then  -- this is bad, dont parse the chart
-                print("ERROR: ChartParse.harmc(): oopsies :3,,, a section was not found when parsing: "  .. harmc)
+               printToConsole("ERROR: ChartParse.harmc(): oopsies :3,,, a section was not found when parsing: "  .. harmc)
                 --                                ^ CH this is why you're gay
                 return false
             end
@@ -67,7 +67,7 @@ function ChartParse.harmcMeta(harmc)
     local section = "meta"  -- we only want the meta section, so we set it to meta
 
     if not love.filesystem.getInfo(harmc, "file") then   -- obviously if the file is either not real or not a file, thats a bad error lmfao, so dont try to parse it
-        print("ERROR: ChartParse.harmcMeta(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
+       printToConsole("ERROR: ChartParse.harmcMeta(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
         return false
     end
 

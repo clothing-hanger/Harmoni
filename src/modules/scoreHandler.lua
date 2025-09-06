@@ -1,11 +1,11 @@
 local scoreHandler = {}
 
-scoreHandler.Scores = {trueScore = 0, printableScore = 0}
+scoreHandler.Scores = {trueScore = 0,printableScore = 0}
 scoreHandler.valuesAndShitIDK = {maxScore = 1000000}
  local judgements = require("modules.maniaJudgements") -- lol this is bad i think
 
 function scoreHandler:resetScore()
-    self.Scores = {trueScore = 0, printableScore = 0}
+    self.Scores = {trueScore = 0,printableScore = 0}
 end
 
 function scoreHandler:getScorePerJudgment(noteCount)

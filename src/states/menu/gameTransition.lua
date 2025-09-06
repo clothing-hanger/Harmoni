@@ -9,7 +9,7 @@ function transition:enter(previous,mode,chart,image)
     time = 0.5
     uhmmode, uhmchart = mode, chart
     chart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
-    print(image)
+   printToConsole(image)
     timebar = {0}
     background = sharedBackground(image)
 

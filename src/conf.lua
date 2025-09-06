@@ -1,4 +1,5 @@
 function love.conf(t)
+    local debug = true
     t.console = true
     t.window.title = "Harmoni Rewrite 0.2.0"
     t.identity = "Harmoni Rewrite 0.2.0"
@@ -8,4 +9,9 @@ function love.conf(t)
     t.window.highdpi = true
     t.window.msaa = 1
     t.window.vsync = 0
+
+    if debug then 
+        t.window.title = "Harmoni Rewrite 0.2.0  |   LÖVE Version " .. (love.getVersion() or "UNKNOWN (how is this possible?")
+    end
+
 end

@@ -11,7 +11,8 @@ local console = {
 
 local utf8 = require("utf8")
 
-local function printToConsole(text, wasCommand, showTimestamp)
+function printToConsole(text, wasCommand, showTimestamp)
+    local text = tostring(text)
     if #console.history >= console.maxHistory then
         table.remove(console.history, 1)
     end
@@ -44,16 +45,16 @@ console.commands = {
         usage = "help [command]",
         callback = function(args)
             if #args == 0 then
-                printToConsole("Available commands:")
+               printToConsole("Available commands:")
                 for id, cmd in pairs(console.commands) do
-                    printToConsole(string.format("%s: %s - %s (Usage: %s)", id, cmd.name, cmd.description, cmd.usage), false, false)
+                   printToConsole(string.format("%s: %s - %s (Usage: %s)", id, cmd.name, cmd.description, cmd.usage), false, false)
                 end
             else
                 local command = console.commands[args[1]]
                 if command then
-                    printToConsole(string.format("%s: %s - %s (Usage: %s)", args[1], command.name, command.description, command.usage), false, false)
+                   printToConsole(string.format("%s: %s - %s (Usage: %s)", args[1], command.name, command.description, command.usage), false, false)
                 else
-                    printToConsole("Command not found: " .. args[1])
+                   printToConsole("Command not found: " .. args[1])
                 end
             end
         end
@@ -62,7 +63,7 @@ console.commands = {
         name = "Test",
         description = "A test command that does nothing.",
         usage = "test",
-        callback = function() printToConsole("This is a test command. It does nothing.") end
+        callback = function()printToConsole("This is a test command. It does nothing.") end
     },
     clear = {
         name = "Clear",
@@ -70,7 +71,7 @@ console.commands = {
         usage = "clear",
         callback = function()
             console.clear()
-            printToConsole("Console cleared.")
+           printToConsole("Console cleared.")
         end
     },
     saveFolder = {
@@ -88,17 +89,17 @@ console.commands = {
         usage = "lua <code>",
         callback = function(args)
             if #args == 0 then
-                printToConsole("Usage: lua <code>")
+               printToConsole("Usage: lua <code>")
                 return
             end
             local code = table.concat(args, " ")
             local func, err = load(code)
             if not func then
-                printToConsole("Error: " .. err)
+               printToConsole("Error: " .. err)
                 return
             end
             local success, result = pcall(func)
-            printToConsole(success and tostring(result) or "Error: " .. result)
+           printToConsole(success and tostring(result) or "Error: " .. result)
         end
     }
 }
@@ -111,7 +112,7 @@ function console.runCommand(command)
     if cmd and cmd.callback then
         cmd.callback(args)
     else
-        printToConsole("Unknown command: " .. name, false, false)
+       printToConsole("Unknown command: " .. name, false, false)
     end
 end
 
@@ -149,7 +150,7 @@ function console.clear()
 end
 
 function console.init()
-    printToConsole("Console initialized. Type 'help' for a list of commands.")
+   printToConsole("Console initialized. Type 'help' for a list of commands.")
 end
 
 function console.textinput(text)
@@ -171,7 +172,7 @@ function console.keypressed(key)
         end
     elseif key == "return" then
         if console.input ~= "" then
-            printToConsole(console.input, true)
+           printToConsole(console.input, true)
             console.runCommand(console.input)
             console.input = ""
         end

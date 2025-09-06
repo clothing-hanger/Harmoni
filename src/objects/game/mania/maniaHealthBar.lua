@@ -12,7 +12,7 @@ function maniaHealthBar:new(x,y,width,height,health,max)
 end
 
 local maxHealthLerpSpeed = 10
-local printableHealthLerpSpeed = 10
+local HealthLerpSpeed = 10
 
 function maniaHealthBar:update(dt)
     self.line:update(dt)
@@ -21,7 +21,7 @@ function maniaHealthBar:update(dt)
         self.health = self.health + (self.max - self.health) * (1 - math.exp(-dt * maxHealthLerpSpeed))
     end
 
-    self.printableHealth = self.printableHealth + (self.health - self.printableHealth) * (1 - math.exp(-dt * printableHealthLerpSpeed))
+    self.printableHealth = self.printableHealth + (self.health - self.printableHealth) * (1 - math.exp(-dt *HealthLerpSpeed))
 end
 
 function maniaHealthBar:changeHealth(amount)

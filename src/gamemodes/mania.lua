@@ -5,6 +5,9 @@ function mania:new(chart, parent)
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
 
+
+    self.debug = true
+
     
 
     self.chart = self:setUpChart(chart)
@@ -16,8 +19,8 @@ function mania:new(chart, parent)
     self.scoresPerJudgements = ScoreHandler:getScorePerJudgment(self.totalNotes)
 
 
-    print("FJIDFJOFI",self.scoresPerJudgements.perfect)
-    print(self.chart)
+   printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
+   printToConsole(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart, self)}
@@ -112,6 +115,7 @@ function mania:setUpChart(chart)
 end
 
 function mania:update(dt)
+    
     self:updateObjects(dt)
 
     for _, playField in ipairs(self.playField) do
@@ -124,7 +128,8 @@ function mania:update(dt)
     end
 
     if self.song and self.playField[1].finished then
-        if self.videoBackground and not self.song:isPlaying() then self:endSong() end
+       printToConsole("SONG END 1")
+        if not self.song:isPlaying() then printToConsole("SONG END 2"); self:endSong() end
     end
 
     if thething then
@@ -134,7 +139,8 @@ function mania:update(dt)
 end
 
 function mania:endSong()
-    if self.song then self.song:stop() end
+   printToConsole("mania:endSong()")
+    if self.song then self.song:stop();printToConsole("SONG END 3") end
     self.song = nil
     self.chart = nil
     self.playField = {}
@@ -187,6 +193,12 @@ function mania:draw()
     self.HUD:draw()
     self.timeRemaingBar:draw()
     self.healthBar:draw()
+
+
+
+    if self.debug then 
+        love.graphics.print(MusicTime, 250, 400)
+    end
 end
 
 return mania

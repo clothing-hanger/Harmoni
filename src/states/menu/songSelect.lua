@@ -59,7 +59,7 @@ while true do
         --songInfo = loadSongMetadata(path) 
         ok, err = pcall(function() songInfo = loadSongMetadata(path) end)
         if not ok then
-            print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
+           printToConsole("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
             goto continue
         end
     end
@@ -409,7 +409,7 @@ function songSelect:checkForSongButtonClicks()
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
 
-                print("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
+               printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
             end
         end

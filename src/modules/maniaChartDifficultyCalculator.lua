@@ -10,7 +10,7 @@ function maniaChartDifficultyCalculator:calculateDifficulty(chart)
 
         local lastNoteTime = chart.hitObjects[#chart.hitObjects].startTime
 
-        print(lastNoteTime)
+       printToConsole(lastNoteTime)
         --local 
         for i, hitObject in ipairs(chart.hitObjects) do
             

@@ -15,6 +15,9 @@ function mouseOver(object)
 end
 
 function CHE:init()
+
+    Console = require("engine.modules.console")
+
     baseScreenRatio = { x = 2560, y = 1440 }
 
     CHECanvas = love.graphics.newCanvas(baseScreenRatio.x, baseScreenRatio.y)
@@ -28,7 +31,6 @@ function CHE:init()
     require("modules.Transitions")
     States = require("modules.States")
     Timer = require("engine.lib.Timer")
-    Console = require("engine.modules.console")
     Ease = require("engine.lib.Ease")
     require("modules.Objects")
 

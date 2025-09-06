@@ -8,7 +8,7 @@ function gameModeManager:enter(s,mode,chart)
                        -- no lol     -ch
                        -- kladsjhdsajklcxzkljmn
                        -- ok       -ch
-    print("Game Mode Manager Entered with mode: " .. mode)
+   printToConsole("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
         self.gameMode = {mania(chart, self)}
     end

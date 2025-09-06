@@ -88,11 +88,11 @@ function maniaNote:getNotePosition(time, moveWithScroll)
 end
 
 function maniaNote:hit()
-    print("Note hit at time: ", self.startTime)
+   printToConsole("Note hit at time: ", self.startTime)
 end
 
 function maniaNote:release()
-    print("Note released at time: ", self.startTime)
+   printToConsole("Note released at time: ", self.startTime)
 end
 
 function maniaNote:draw()
