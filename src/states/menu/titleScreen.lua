@@ -2,12 +2,13 @@ local titleScreen = State("titleScreen")
 
 function titleScreen:enter()
     self.realLogo = love.graphics.newImage("Skins/Default Arrow/TEMP/real logo"..tostring(love.math.random(1,2))..".png")
+    self.wavesY = 0
 
     self.buttonWidth = 400
     self.buttonHeight = 100 
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
-        {label = "Play", func = function() State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
+        {label = "Play", func = function() self:raiseWaves(); State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
         {label = "Jukebox", func = function() State.switch(States.menu.jukebox) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
         {label = "Settings", func = function() State.switch(States.menu.songSelect) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
         {label = "Discord", func = function() love.system.openURL("https://discord.gg/bBcjrRAeh4") end, color1 = {131/255,119/255,209/255,1},color2 = {97/255,82/255,196/255,1}},
@@ -31,7 +32,20 @@ function titleScreen:enter()
     end
 
     self:setUpThoseLinesThatIHate(10)
+    self:setUpThoseWavesThatIHate(4)
 end
+
+
+function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
+    local colors = {
+        {1,1,1,0.5},
+        {0,1,1,0.5},
+        {1,0,1,0.5},
+        {0,0,1,0.5}
+    }
+    self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,300, 30, 50, colors)
+end
+
 
 function titleScreen:setUpThoseLinesThatIHate(numberOfLines)
     self.squiglyLines = {}
@@ -50,6 +64,11 @@ function titleScreen:switchState(state)
     end
 end
 
+function titleScreen:raiseWaves()
+    Timer.tween(0.5, self, {wavesY = -500}, "in-quad")
+end
+
+
 function titleScreen:update(dt)
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
@@ -57,6 +76,8 @@ function titleScreen:update(dt)
     for i, squiglyLines in ipairs(self.squiglyLines) do
         squiglyLines:update(dt)
     end
+
+    self.layerWaves:update(dt)
 end
 
 function titleScreen:draw()
@@ -64,7 +85,11 @@ function titleScreen:draw()
     love.graphics.print("harmoni lol")
 
     love.graphics.setColor(1,1,1,0.1)
-
+    love.graphics.push()
+        love.graphics.translate(0, self.wavesY)
+        self.layerWaves:draw()
+    love.graphics.pop()
+    love.graphics.setColor(1,1,1,0.05)
     for i, squiglyLines in ipairs(self.squiglyLines) do
         squiglyLines:draw()
     end
@@ -80,7 +105,7 @@ end
 
 function titleScreen:drawLogo()
     
-    -- the logo drawing is complex so we move it to its own function 
+    -- the logo drawing is complex so we move it to its own function
     local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
     local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later 
     local HOnlyStartingX, HOnlyStartingY = 0,0
@@ -97,7 +122,7 @@ function titleScreen:drawLogo()
     local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 1, 1, baseScreenRatio.x/2, baseScreenRatio.y/2 
     local fullLogoCenterX, fullLogoCenterY = fullLogo:getWidth()/2, fullLogo:getHeight()/2
 
-    love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
+    --love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
 end
 
 return titleScreen

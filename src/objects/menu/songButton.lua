@@ -23,6 +23,9 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.x = x or 10
     self.y = y or 10
 
+
+    self.onlySkeleton = false -- why did i even add this we wont use it
+
     self.mode = gameMode or "???"
 
     self.name = name or "???"
@@ -95,7 +98,7 @@ function menuSongButton:draw()
     if self.imageLoaded and not dontShowBG then
         local imageScale = self.width / self.image:getWidth()
         local imageDrawY = self.y - (self.image:getHeight() * imageScale) / 2
-        love.graphics.draw(self.image, self.x, imageDrawY, 0, imageScale, imageScale)
+        if not self.skeleton and not self.onlySkeleton then love.graphics.draw(self.image, self.x, imageDrawY, 0, imageScale, imageScale) else love.graphics.setColor(0.5,0.5,0.5);love.graphics.rectangle("fill",self.x, imageDrawY,1000,1000) end
     end
 
     love.graphics.setColor(self.color)
@@ -134,6 +137,7 @@ function menuSongButton:draw()
     local textColor = getTextColor(self.color[1], self.color[2], self.color[3])
     love.graphics.setColor(textColor)
     love.graphics.print(self.name, self.x + 3, self.y + 3)
+
 
     love.graphics.setFont(self.fontSmall)
     love.graphics.print(string.format("By: %s  Charted by: %s  BPM: %s", self.artist, self.charter, self.bpm), self.x + 3, self.y + self.height / 2)

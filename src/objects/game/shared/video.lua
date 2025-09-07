@@ -38,7 +38,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.scale = {x = 1, y = 1}
     self.colour = {1, 1, 1}
     self.alpha = 1
-    self.debug = false
+    self.debug = true
     self.drawX, self.drawY = self.x, self.y
     self.blendMode = "alpha"
     self.blendModeAlpha = "alphamultiply"

@@ -19,10 +19,11 @@
         notificationsHandler = require("objects.menu.notificationsHandler")
 
     --UI
-    UIsquiglyLine = require("objects.UI.UIsquiglyLine")
+    UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop
     cursor = require("objects.UI.cursor")
     SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")
     UITimeRemaing = require("objects.UI.UITimeRemaining")
     toggle = require("objects.UI.toggle")
     buttonSlideOut = require("objects.UI.buttonSlideOut")
     notification = require("objects.UI.notification")
+    UILayerWave = require("objects.UI.UILayerWave")  -- UIslop the fucking sequel 

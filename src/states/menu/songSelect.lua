@@ -164,6 +164,7 @@ end
     end
 
     self:setUpThoseLinesThatIHate(11)
+    self:setUpThoseWavesThatIHate(4)
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -173,6 +174,16 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
         local x1,x2 = -50, baseScreenRatio.x+50
         table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
     end
+end
+
+function songSelect:setUpThoseWavesThatIHate(numberOfWaves)
+    local colors = {
+        {1,1,1,0.5},
+        {0,1,1,0.5},
+        {1,0,1,0.5},
+        {0,0,1,0.5}
+    }
+    self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,300, 30, 50, colors)
 end
 
 function songSelect:setupSongList()
@@ -200,15 +211,7 @@ function songSelect:setupSongList()
         ::continue::
     end
 end
-function songSelect:handleInputs()
-    if Input:pressed("menuUp") then
-        selectedSong = math.max(1, selectedSong - 1)
-    elseif Input:pressed("menuDown") then
-        selectedSong = math.min(#songButtons, selectedSong + 1)
-    elseif Input:pressed("menuConfirm") then
-        -- Your confirm logic
-    end
-end
+
 
 function songSelect:loadBanners()
     for _, button in ipairs(songButtons) do
@@ -339,13 +342,14 @@ function songSelect:update(dt)
     for i, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:update(dt)
     end
+
+    self.layerWaves:update(dt)
     self:updateBGImage()
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
     self:loadSongs()
     self:loadSongButtonImages()
-    self:handleInputs()
     self.ignoreInterpolation = false
 end
 
@@ -442,8 +446,10 @@ function songSelect:draw(dt)
         if previousBG then love.graphics.draw(previousBG,0,0, nil, baseScreenRatio.x/previousBG:getWidth(), baseScreenRatio.y/previousBG:getHeight()) end 
         love.graphics.setColor(1,1,1,BGAlpha[1])
         if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
-        love.graphics.setColor(1,1,1,0.1)
     end
+    self.layerWaves:draw()
+            love.graphics.setColor(1,1,1,0.05)
+
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end

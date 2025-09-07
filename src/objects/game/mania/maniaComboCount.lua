@@ -8,7 +8,7 @@ function maniaComboCount:new(x, y)
 
     self.removeComboStack = SkinHandler:getParam("Remove Combo Stack") or false
     self.activeTweens = {}
-    self.debug = false
+    self.debug = true
 end
 
 function maniaComboCount:update(dt)
