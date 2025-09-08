@@ -3,7 +3,7 @@ local maniaHUD = Class:extend("maniaHUD")
 function maniaHUD:new()
     self.score = 0
 
-    self.debug = true
+    self.debug = false
     self.fontLarge = SkinHandler:getFont("HUD Large")
     self.fontSmall = SkinHandler:getFont("HUD Small")
     self.fontExtraSmall = SkinHandler:getFont("HUD Extra Small")

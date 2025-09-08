@@ -36,7 +36,7 @@ function cursor:new()
     self.fadeOutAlpha = 1
     self.didMove = false
 
-    self.debug = true
+    self.debug = false
 end
 
 function cursor:update(dt)

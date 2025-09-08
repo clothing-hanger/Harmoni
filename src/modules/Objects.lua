@@ -27,3 +27,4 @@
     buttonSlideOut = require("objects.UI.buttonSlideOut")
     notification = require("objects.UI.notification")
     UILayerWave = require("objects.UI.UILayerWave")  -- UIslop the fucking sequel 
+    UISquigleCircle = require("objects.UI.UISquigleCircle")  -- i dont even need to say it again

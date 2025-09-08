@@ -48,7 +48,6 @@ function love.load(args)
 
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()
-    
 end
 
 function love.update(dt)

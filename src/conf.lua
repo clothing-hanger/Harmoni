@@ -1,5 +1,5 @@
 function love.conf(t)
-    local debug = true
+    local debug = false
     t.console = true
     t.window.title = "Harmoni Rewrite 0.2.0"
     t.identity = "Harmoni Rewrite 0.2.0"
@@ -7,7 +7,7 @@ function love.conf(t)
     t.window.height = 720
     t.window.resizable = true
     t.window.highdpi = true
-    t.window.msaa = 1
+    t.window.msaa = 8
     t.window.vsync = 0
 
     if debug then 

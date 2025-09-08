@@ -18,7 +18,7 @@ function maniaReceptor:new(mode, lane, inputBind, x, y, parent)
     self.x, self.y = x, y
     self.size = maniaNoteSize
     self.held = false
-    self.debug = true
+    self.debug = false
 
     self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
     self.imageDown = SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)

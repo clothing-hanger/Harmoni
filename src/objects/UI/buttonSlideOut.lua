@@ -13,7 +13,7 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
     self.color2 = color2 or {1,1,1}
 
     self.cornerRadius = cornerRadius or 7
-    self.debug = true
+    self.debug = false
 
     self.slideInitialWidth = self.width * 0.05
     self.slideWidth = self.slideInitialWidth

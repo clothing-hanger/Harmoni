@@ -41,7 +41,7 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, parent)
     self.released = false
 
     self.visible = true
-    self.debug = true
+    self.debug = false
 end
 
 function maniaNote:getLaneString()

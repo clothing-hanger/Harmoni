@@ -6,7 +6,7 @@ function mania:new(chart, parent)
     self.chartPath = getDirectory(chart)
 
 
-    self.debug = true
+    self.debug = false
 
     
 
