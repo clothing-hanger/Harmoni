@@ -36,11 +36,13 @@ function titleScreen:enter()
     self:setUpThoseWavesThatIHate(4)
 
 
---    self.circcle = UISquigleCircle("fill", 400, 300, 120, 5, 13, 3)
 
 
 
-    self:setUpThoseBubblesThatIHate(10)
+    self:setUpThoseBubblesThatIHate(20)
+
+
+    self.throbber = throbber(300,300,100, 1)
 end
 
 
@@ -48,40 +50,9 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
     self.bubbles = {}
 
     transparency = 0.1
-local colors = {
-    {240/255, 323/255, 205/255, transparency},  -- 240/323/205
-    {219/255, 213/255, 185/255, transparency},  -- 219/213/185
-    {192/255, 186/255, 153/255, transparency},  -- 192/186/153
-    {254/255, 235/255, 201/255, transparency},  -- 254/235/201
-    {253/255, 203/255, 162/255, transparency},  -- 253/203/162
-    {252/255, 169/255, 133/255, transparency},  -- 252/169/133
-    {125/255, 255/255, 76/255, transparency},   -- 125/255/76
-    {255/255, 250/255, 19/255, transparency},   -- 255/250/19
-    {255/255, 237/255, 81/255, transparency},   -- 255/237/81
-    {224/255, 243/255, 176/255, transparency},  -- 224/243/176
-    {191/255, 228/255, 18/255, transparency},   -- 191/228/18
-    {133/255, 202/255, 93/255, transparency},   -- 133/202/93
-    {207/255, 236/255, 207/255, transparency},  -- 207/236/207
-    {181/255, 235/255, 174/255, transparency},  -- 181/235/174
-    {145/255, 210/255, 144/255, transparency},  -- 145/210/144
-    {179/255, 226/255, 221/255, transparency},  -- 179/226/221
-    {134/255, 207/255, 190/255, transparency},  -- 134/207/190
-    {72/255, 181/255, 163/255, transparency},   -- 72/181/163
-    {20/255, 173/255, 207/255, transparency},   -- 20/173/207
-    {18/255, 225/255, 174/255, transparency},   -- 18/225/174
-    {14/255, 210/255, 144/255, transparency},   -- 14/210/144
-    {179/255, 226/255, 21/255, transparency},   -- 179/226/21
-    {134/255, 207/255, 79/255, transparency},   -- 134/207/79
-    {72/255, 181/255, 63/255, transparency},    -- 72/181/63
-    {15/255, 106/255, 239/255, transparency},   -- 15/106/239
-    {154/255, 206/255, 235/255, transparency},  -- 154/206/235
-    {111/255, 183/255, 214/255, transparency},  -- 111/183/214
-    {191/255, 213/255, 232/255, transparency},  -- 191/213/232
-    {148/255, 168/255, 208/255, transparency},  -- 148/168/208
-    {117/255, 137/255, 191/255, transparency},  -- 117/137/191
-}
+    local colors = SkinHandler:getRandomColors()
 
-    for i = 1,20 do 
+    for i = 1,numberOfBubbles do 
         ::start::
         local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
@@ -104,39 +75,7 @@ function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
         {0,0,1,0.5}
     }
     local transparency = 0.5
-    local colors = {
-        {240/255, 323/255, 205/255, transparency},  -- 240/323/205
-        {219/255, 213/255, 185/255, transparency},  -- 219/213/185
-        {192/255, 186/255, 153/255, transparency},  -- 192/186/153
-        {254/255, 235/255, 201/255, transparency},  -- 254/235/201
-        {253/255, 203/255, 162/255, transparency},  -- 253/203/162
-        {252/255, 169/255, 133/255, transparency},  -- 252/169/133
-        {125/255, 255/255, 76/255, transparency},   -- 125/255/76
-        {255/255, 250/255, 19/255, transparency},   -- 255/250/19
-        {255/255, 237/255, 81/255, transparency},   -- 255/237/81
-        {224/255, 243/255, 176/255, transparency},  -- 224/243/176
-        {191/255, 228/255, 18/255, transparency},   -- 191/228/18
-        {133/255, 202/255, 93/255, transparency},   -- 133/202/93
-        {207/255, 236/255, 207/255, transparency},  -- 207/236/207
-        {181/255, 235/255, 174/255, transparency},  -- 181/235/174
-        {145/255, 210/255, 144/255, transparency},  -- 145/210/144
-        {179/255, 226/255, 221/255, transparency},  -- 179/226/221
-        {134/255, 207/255, 190/255, transparency},  -- 134/207/190
-        {72/255, 181/255, 163/255, transparency},   -- 72/181/163
-        {20/255, 173/255, 207/255, transparency},   -- 20/173/207
-        {18/255, 225/255, 174/255, transparency},   -- 18/225/174
-        {14/255, 210/255, 144/255, transparency},   -- 14/210/144
-        {179/255, 226/255, 21/255, transparency},   -- 179/226/21
-        {134/255, 207/255, 79/255, transparency},   -- 134/207/79
-        {72/255, 181/255, 63/255, transparency},    -- 72/181/63
-        {15/255, 106/255, 239/255, transparency},   -- 15/106/239
-        {154/255, 206/255, 235/255, transparency},  -- 154/206/235
-        {111/255, 183/255, 214/255, transparency},  -- 111/183/214
-        {191/255, 213/255, 232/255, transparency},  -- 191/213/232
-        {148/255, 168/255, 208/255, transparency},  -- 148/168/208
-        {117/255, 137/255, 191/255, transparency},  -- 117/137/191
-
-    }
+    local colors = SkinHandler:getRandomColors()
     colorsREAL = {}
 
     -- we need to randomly choose numberOfWaves amount of these colors 
@@ -180,6 +119,8 @@ function titleScreen:update(dt)
 
     self.layerWaves:update(dt)
 
+    self.throbber:update(dt)
+
     self:updateBubbles(dt) 
 end
 
@@ -195,8 +136,8 @@ end
 function titleScreen:draw()
     love.graphics.draw(self.BG) -- TEMP 
        for i, Bubble in ipairs(self.bubbles) do
-    Bubble:draw()
-   end
+        Bubble:draw()
+    end
     love.graphics.print("harmoni lol")
 
     love.graphics.setColor(1,1,1,0.1)
@@ -216,6 +157,8 @@ function titleScreen:draw()
 
     self:drawLogo()
    -- self.circcle:draw(0)
+
+   self.throbber:draw()
 
 end
 

@@ -24,7 +24,7 @@ function mania:new(chart, parent)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart, self)}
-    self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "stream")
+    self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "static")
     self.song:setLooping(false)
 
     mania.judgements = require("Modules.maniaJudgements")

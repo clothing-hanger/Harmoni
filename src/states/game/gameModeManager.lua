@@ -13,7 +13,7 @@ function gameModeManager:enter(s,mode,chart)
         self.gameMode = {mania(chart, self)}
     end
 
-    cursor.fadeOutWhenIdle = true
+    cursor.fadeOutWhenIdle = true    -- why dont we just add a check to the cursor to see if we are in gamemodemanager
 
     gameModeManager:initializeSong()
 

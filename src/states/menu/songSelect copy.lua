@@ -8,16 +8,14 @@ local songButtonHeight = 75 * 1.3
 local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 0
+local buttonAngle = 5
 local BGAlpha = {1}
-
 local currentDisplayedBG
 local previousBG
 
-local BGDarkness = 0
+local songButtonX = 20
 
-local songButtonX = baseScreenRatio.x - songButtonWidth - songButtonSpacing
-
-local difficultyButtonX = songButtonX
+local difficultyButtonX = songButtonX + songButtonWidth + 30
 
 local switchingState
 
@@ -167,8 +165,6 @@ end
     self:setUpThoseBubblesThatIHate(10)
     self:setUpThoseLinesThatIHate(11)
     self:setUpThoseWavesThatIHate(4)
-
-    self.logoCircle = UISquigleCircle("line", 0,baseScreenRatio.y, 350, 5, 20, 5, {1,1,1,1})
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -213,8 +209,6 @@ end
 
 function songSelect:setupSongList()
     songList = SongListManager.getSongList(musicPath)
-
-    self.menuState = "song"
 
     for i, song in ipairs(songList) do
         if not song then
@@ -274,10 +268,10 @@ function songSelect:setupDifficultyList(path,color)
 
     local difficultyListBoxHeight = #difficultyList*(songButtonHeight+songButtonSpacing)
 
+    -- Slope values to match song buttons
+    local slope = math.rad(buttonAngle)
     local baseX = -10
     local baseY = 0
-
-    local slope = 0
 
     for i = 1, #difficultyList do
         local songInfo = nil
@@ -359,8 +353,6 @@ end
 
 function songSelect:update(dt)
     if Input:pressed("menuBack") then
-
-        if self.menuState == "difficulty" then self.menuState = "song"; return end
         if switchingState then return end
 
         State.transition("waveDissolve", States.menu.titleScreen, function()
@@ -377,16 +369,11 @@ function songSelect:update(dt)
     self:checkForSongButtonClicks()
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
-    self:updateDifficultyButtons(dt)
     self:loadSongs()
     self:loadSongButtonImages()
     self.ignoreInterpolation = false
 
-    local BGDimTarget = (self.menuState == "song" and 0) or 0.7
-    BGDarkness = BGDarkness + (BGDimTarget - BGDarkness) * 10 * dt
 
-    self.logoCircle:update(dt)
-    self.logoCircle.rotation = self.logoCircle.rotation +5*dt
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
         Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
@@ -411,19 +398,18 @@ end
 
 function songSelect:updateSongButtons(dt)
     local speed = 10
-    local slope = 0
-    local baseX = songButtonX
+    local slope = math.rad(buttonAngle)
+    local baseX = -10
     local baseY = 0
 
     for i, SongButton in ipairs(songButtons) do
         local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
-        local targetX = (self.menuState == "song" and songButtonX) or baseScreenRatio.x + songButtonSpacing
         if self.ignoreInterpolation then
             SongButton.y = targetY
         else
             SongButton.y = SongButton.y + (targetY - SongButton.y) * speed * dt
         end
-        SongButton.x = SongButton.x + (targetX - SongButton.x) * speed * dt
+        SongButton.x = baseX + slope * (SongButton.y - baseY)
 
         SongButton:update(dt)
     end
@@ -450,45 +436,24 @@ function songSelect:updateBGImage()
     end
 end
 
-function songSelect:updateDifficultyButtons(dt)
-            local speed = 10
-
-    local function fadeBG()
-        BGAlpha = {0}
-        if BGFade then Timer.cancel(BGFade) end
-        BGFade = Timer.tween(0.25, BGAlpha, {1})
-    end
-
-    
-    for i, DifficultyButton in ipairs(difficultyButtons) do
-        local targetX = (self.menuState == "difficulty" and songButtonX) or (baseScreenRatio.x + songButtonSpacing)
-        DifficultyButton.x = DifficultyButton.x + (targetX - DifficultyButton.x) * speed * dt
-
-    end
-end
-
-
 function songSelect:checkForSongButtonClicks()
     local buttonInfo = false
-    if self.menuState == "difficulty" then return end
     for i, SongButton in ipairs(songButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
                 selectedSong = i
                 buttonInfo = SongButton:onClick()
-                printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
-                self.menuState = "difficulty"
-                self.uglyDiffButtonIssueFix = true    -- this is gross
+
+               printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
             end
         end
     end
 end
 
-function songSelect:checkForDifficultyButtonClicks() 
+function songSelect:checkForDifficultyButtonClicks()   -- disgusting copied code 🤢🤢🤢🤢🤢
     local buttonInfo = false
     local additionalInfo
-    if self.uglyDiffButtonIssueFix then self.uglyDiffButtonIssueFix = false; return end  -- fucking disgusting fix 
     for i, SongButton in ipairs(difficultyButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
@@ -502,6 +467,7 @@ function songSelect:checkForDifficultyButtonClicks()
             break
         end
     end
+
 end
 
 
@@ -512,34 +478,85 @@ function songSelect:draw(dt)
         love.graphics.setColor(1,1,1,BGAlpha[1])
         if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
     end
-    printToConsole(BGDarkness)
-    love.graphics.setColor(0,0,0,BGDarkness or 0)
-    love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
-        love.graphics.setColor(11,1,1)
-
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:draw()
     end
-    love.graphics.setColor(1,1,1,0.05)
+    self.layerWaves:draw()
+            love.graphics.setColor(1,1,1,0.05)
+
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end
+
+    self:drawGradients()
+
     for _, SongButton in ipairs(songButtons) do
         SongButton:draw()
     end
 
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
-    self.logoCircle:draw()
-    love.graphics.setColor(1,1,1)
-    love.graphics.setLineWidth(5)
-    love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
-    
-    love.graphics.setColor(1,1,1)
-
+    songSelect:drawSongInfo()
+    songSelect:drawSongInfo()
 
 end
 
+function songSelect:drawGradients()
+    local sw, sh = baseScreenRatio.x, baseScreenRatio.y+500
+    local gradientWidth = 5
 
+    love.graphics.push()
+        love.graphics.rotate(math.rad(-buttonAngle))
+
+        -- left side
+        local leftRectEdge = songButtonWidth
+
+        love.graphics.setColor(self.colors.dark)
+        love.graphics.rectangle("fill", -500,0,leftRectEdge+500,sh)
+
+        drawGradientRect(leftRectEdge, 0, gradientWidth, sh, self.colors.dark, self.colors.light)
+    love.graphics.pop()
+end
+
+function songSelect:drawSongInfo()
+    --get song info 
+    local box = {}
+    box.height,box.width = 250,700
+    local x, y = baseScreenRatio.x - box.width,-5
+
+    local songInfo = {}
+    for i, SongButton in ipairs(songButtons) do
+        if i == selectedSong then
+            songInfo = SongButton:returnInfo()
+        end
+    end
+    if not songInfo or not songInfo.name then
+        love.graphics.setColor(1,1,1)
+        love.graphics.setFont(songSelectSongInfoFontLarge)
+        love.graphics.print("No song selected", x+10, y+10)
+        return
+    end
+    local color = {songInfo.color[1]-0.1,songInfo.color[2]-0.1,songInfo.color[3]-0.1,0.75}
+    local textColor = getTextColor(color[1], color[2], color[3])
+
+    love.graphics.setColor(color or {1,1,1})
+    love.graphics.rectangle("fill", x, y, box.width+10, box.height+10, 7,7)  -- add 10 to width and height to move rounded corners off screen
+    love.graphics.setFont(songSelectSongInfoFontLarge)
+    love.graphics.setColor(textColor)
+    love.graphics.print(songInfo.name, x+10,y+10)
+    love.graphics.setFont(songSelectSongInfoFontSmall)
+    love.graphics.printf(
+        "By: " .. songInfo.artist .. "\n" ..
+        "Charted by: " .. songInfo.charter .. "\n" ..
+        "BPM: " .. songInfo.bpm .. "\n" ..
+        "Gamemode: " .. songInfo.mode .. "\n" ..
+        "Note Count: " .. "PLACEHOLDER" .. "\n" ..
+        "Long Note Percent: " .. "PLACEHOLDER" .. "\n",
+        x+10, y+45,
+        box.width,"left"
+    )
+
+    love.graphics.setColor(1,1,1)
+end
 
 function songSelect:exit()
     self:clearBanners()

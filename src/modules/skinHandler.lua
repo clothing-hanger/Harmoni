@@ -161,6 +161,12 @@ function SkinHandler:getParam(param)
     end
 end
 
+function SkinHandler:getRandomColors()
+    if self.__data.Skin.RandomColors then
+        return self.__data.Skin.RandomColors
+    end
+end
+
 function SkinHandler:getFont(param)
     if self.__data.Skin.Fonts then
         return self.__data.Skin.Fonts[param]

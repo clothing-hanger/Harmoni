@@ -15,7 +15,7 @@ end
             local t, px, py
 
             for i = 0, layer.segments do
-                t = i / layer.segments
+                t = i --/ layer.segments
                 px = layer.x + t * layer.width
                 py = layer.y + math.sin(t * math.pi * 2 * layer.freqMultiplier + layer.phaseOffset + love.timer.getTime() * layer.speed) * layer.amplitude
                 table.insert(points, px)
