@@ -11,7 +11,7 @@ function titleScreen:enter()
     self.buttonLabels = {
         {label = "Play", func = function() self:raiseWaves(); State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
         {label = "Jukebox", func = function() State.switch(States.menu.jukebox) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
-        {label = "Settings", func = function() State.switch(States.menu.songSelect) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
+        {label = "Settings", func = function() State.switch(States.menu.settingsMenu) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
         {label = "Discord", func = function() love.system.openURL("https://discord.gg/bBcjrRAeh4") end, color1 = {131/255,119/255,209/255,1},color2 = {97/255,82/255,196/255,1}},
         {label = "GitHub", func = function() love.system.openURL("https://github.com/clothhang/Harmoni") end, color1 = {109/255,90/255,114/255,1},color2 = {93/255,76/255,97/255,1}},
         {label = "Exit", func = function() love.event.quit() end, color1 = {1,1,1,1}, color2 = {1,1,1,1}},
