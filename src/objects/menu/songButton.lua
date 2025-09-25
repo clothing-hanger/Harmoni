@@ -84,6 +84,7 @@ local function remap(value, oldMin, oldMax, newMin, newMax)
 end
 
 function menuSongButton:draw()
+
     if self.x + self.width < 0 or self.x > baseScreenRatio.x or
        self.y + self.height < 0 or self.y > baseScreenRatio.y then
         return
@@ -149,6 +150,11 @@ function menuSongButton:draw()
         love.graphics.setLineWidth(1)
     end
 
+    if not self.imageLoaded then
+        local throbberRadius = 30
+        
+        Throbber:draw(self.x + self.width - (throbberRadius*2), self.y+self.height/2, throbberRadius, 15)
+    end
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setStencilTest()
 end

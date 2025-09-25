@@ -9,6 +9,8 @@ dontShowBG = false
 
 dontShowBG = false  -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 
+
+--why did it duplicate 💔
 local function table_find(t, value)
     for i, v in ipairs(t) do
         if v == value then
@@ -38,7 +40,9 @@ function love.load(args)
 
     require("modules.gamemodes")
 
-    require("bob")
+    require("bob")  -- bob 💖
+    -- bob WILL be added
+    
     maniaChartDifficultyCalculator = require("modules.maniaChartDifficultyCalculator")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
@@ -50,10 +54,13 @@ function love.load(args)
 
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()
+    printToConsole(SkinHandler:getRandomColors())
+    Throbber = throbber(SkinHandler:getRandomColors())
 end
 
 function love.update(dt)
     CHE:update(dt)
+    Throbber:update(dt)
     GlobalNotificationsHandler:update(dt)
 end
 

@@ -22,7 +22,8 @@ local difficultyButtonX = songButtonX
 local switchingState
 
 function songSelect:enter()
-    selectedSong = 1
+    self.debug = true
+   -- selectedSong = 1
     switchingState = false
     self.colors = {
         light = {0, 0, 0, 0},
@@ -492,7 +493,7 @@ function songSelect:checkForDifficultyButtonClicks()
     for i, SongButton in ipairs(difficultyButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
-                selectedSong = i
+                --selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
                 State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
@@ -535,6 +536,9 @@ function songSelect:draw(dt)
     love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
     
     love.graphics.setColor(1,1,1)
+
+
+    if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
 
 
 end

@@ -42,7 +42,7 @@ function titleScreen:enter()
     self:setUpThoseBubblesThatIHate(20)
 
 
-    self.throbber = throbber(300,300,100, 1)
+ --   self.throbber = throbber(600,200,100, 1.9 , 5, SkinHandler:getRandomColors() )
 end
 
 
@@ -119,7 +119,7 @@ function titleScreen:update(dt)
 
     self.layerWaves:update(dt)
 
-    self.throbber:update(dt)
+   -- self.throbber:update(dt)
 
     self:updateBubbles(dt) 
 end
@@ -158,7 +158,8 @@ function titleScreen:draw()
     self:drawLogo()
    -- self.circcle:draw(0)
 
-   self.throbber:draw()
+   --self.throbber:draw(200,200, 50, 5)
+  --Throbber:draw(200,200, 50, 5)
 
 end
 
@@ -179,7 +180,7 @@ function titleScreen:drawLogo()
 
     -- logo variables 
     local fullLogo = self.images["logo"].image
-    local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 1.5, 1.5, baseScreenRatio.x/2, baseScreenRatio.y/2
+    local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 0.3,0.3, baseScreenRatio.x/2, baseScreenRatio.y/2
     local fullLogoCenterX, fullLogoCenterY = fullLogo:getWidth()/2, fullLogo:getHeight()/2
 
     love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2-350, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
