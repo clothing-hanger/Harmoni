@@ -23,6 +23,9 @@ local switchingState
 
 function songSelect:enter()
     self.debug = true
+
+
+    self.currentSongInfo = {}
    -- selectedSong = 1
     switchingState = false
     self.colors = {
@@ -170,6 +173,9 @@ end
     self:setUpThoseWavesThatIHate(4)
 
     self.logoCircle = UISquigleCircle("line", 0,baseScreenRatio.y, 350, 5, 20, 5, {1,1,1,1})
+    self.logoCircleFill = UISquigleCircle("fill", 0,baseScreenRatio.y, 350, 5, 20, 5, {0,0,0,0.5})
+
+    self.logoH = SkinHandler:getImage("Menu", "H")
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -387,7 +393,11 @@ function songSelect:update(dt)
     BGDarkness = BGDarkness + (BGDimTarget - BGDarkness) * 10 * dt
 
     self.logoCircle:update(dt)
+        self.logoCircleFill:update(dt)
+
     self.logoCircle.rotation = self.logoCircle.rotation +5*dt
+        self.logoCircleFill.rotation = self.logoCircle.rotation +5*dt
+
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
         Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
@@ -419,6 +429,7 @@ function songSelect:updateSongButtons(dt)
     for i, SongButton in ipairs(songButtons) do
         local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
         local targetX = (self.menuState == "song" and songButtonX) or baseScreenRatio.x + songButtonSpacing
+        if i == selectedSong and self.menuState ~= "difficulty" then targetX = targetX - 50 end
         if self.ignoreInterpolation then
             SongButton.y = targetY
         else
@@ -475,7 +486,8 @@ function songSelect:checkForSongButtonClicks()
     for i, SongButton in ipairs(songButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
-                selectedSong = i
+                self.currentSongInfo = SongButton:returnInfo()
+                if selectedSong ~= i then selectedSong = i return end
                 buttonInfo = SongButton:onClick()
                 printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self.menuState = "difficulty"
@@ -513,7 +525,6 @@ function songSelect:draw(dt)
         love.graphics.setColor(1,1,1,BGAlpha[1])
         if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
     end
-    printToConsole(BGDarkness)
     love.graphics.setColor(0,0,0,BGDarkness or 0)
     love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
         love.graphics.setColor(11,1,1)
@@ -525,25 +536,66 @@ function songSelect:draw(dt)
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end
+
+        love.graphics.setColor(1,1,1)
+    love.graphics.setLineWidth(5)
+    
+        love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
+
     for _, SongButton in ipairs(songButtons) do
         SongButton:draw()
     end
 
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
-    self.logoCircle:draw()
-    love.graphics.setColor(1,1,1)
-    love.graphics.setLineWidth(5)
-    love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
-    
+    self:drawCircleWithContents()
+    self:drawSongInfo(20,20,15)
+
     love.graphics.setColor(1,1,1)
 
 
-    if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
+   -- if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
 
 
 end
 
 
+function songSelect:drawSongInfo(x, y, spacing)
+    love.graphics.setFont(SkinHandler:getFont("Menu Extra Extra Large"))
+    love.graphics.printf(self.currentSongInfo.name or "Error - no current song name", x, y, 2000, "left")
+    y = y + SkinHandler:getFont("Menu Extra Extra Large"):getHeight() + spacing
+
+    love.graphics.setFont(SkinHandler:getFont("Menu Large"))
+    love.graphics.printf("Song by: " .. (self.currentSongInfo.artist or "Error - no current artist name"), x, y, 1000, "left")
+    y = y + SkinHandler:getFont("Menu Large"):getHeight() + spacing
+
+    love.graphics.printf("Charted by: " .. (self.currentSongInfo.charter or "Error - no current charter name"), x, y, 1000, "left")
+    y = y + SkinHandler:getFont("Menu Large"):getHeight() + spacing
+
+    love.graphics.setFont(SkinHandler:getFont("Menu Small"))
+    love.graphics.printf("Length: " .. "PLACEHOLDER", x, y, 1000, "left")
+    y = y + SkinHandler:getFont("Menu Small"):getHeight() + spacing
+
+    love.graphics.printf("BPM: " .. (self.currentSongInfo.bpm or "???"), x, y, 1000, "left")
+    y = y + SkinHandler:getFont("Menu Small"):getHeight() + spacing
+
+    love.graphics.printf("LN%: " .. "PLACEHOLDER", x, y, 1000, "left")
+end
+
+
+function songSelect:drawCircleWithContents()
+    self.logoCircleFill:draw()
+    self.logoCircle:draw()
+    local logoHsx, logoHsy = 0.17,0.17
+    local logoHoffset = 80
+    local timeOffset = 150
+
+    local timeStr = CHETime.session.."\n"..CHETime.real
+
+    love.graphics.draw(self.logoH, self.logoCircle.x+100, self.logoCircle.y-logoHoffset-70, 0, logoHsx, logoHsy, self.logoH:getWidth()/2, self.logoH:getHeight()/2)
+    love.graphics.setFont(SkinHandler:getFont("Menu Large"))
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf(timeStr, self.logoCircle.x+200, self.logoCircle.y-100, 150, "left")
+end
 
 function songSelect:exit()
     self:clearBanners()

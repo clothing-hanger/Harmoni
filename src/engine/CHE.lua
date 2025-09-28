@@ -1,6 +1,7 @@
 local CHE = {}
 Mouse = {}
 
+local sessionBegin
 function toCanvasCoords(mx, my)
     local ratio = math.min(love.graphics.getWidth() / baseScreenRatio.x, love.graphics.getHeight() / baseScreenRatio.y)
     mx = (mx - love.graphics.getWidth() / 2) / ratio + baseScreenRatio.x / 2
@@ -13,6 +14,7 @@ function mouseOver(object)
     return mx >= object.x and mx <= object.x + object.width and
            my >= object.y and my <= object.y + object.height
 end
+
 
 function CHE:init()
 
@@ -48,6 +50,9 @@ function CHE:init()
     maniaLaneYOffset = 110
 
     gameplayBackgroundDim = 0.65
+
+    CHETime = {real = 0, session = 0}
+    sessionBegin = love.timer.getTime()
 
     if Settings:getValue("Game", "Mania", "Scroll Direction") == "Down" then
         maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
@@ -96,7 +101,19 @@ function CHE:update(dt)
     Timer.update(dt)
     cursor:update(dt)
 
+    CHETime.real, CHETime.session = self:updateTime()
+
     love.mouse.setVisible(false)
+end
+
+function CHE:updateTime()
+    local sessionTimeStamp = love.timer.getTime() - sessionBegin
+    local sessionHours = math.floor(sessionTimeStamp/3600)
+    local sessionMinutes = math.floor((sessionTimeStamp%3600))/60
+
+    local realTime = os.date("%I:%M %p")
+    local sessionTime = string.format("%02d:%02d",sessionHours,sessionMinutes)
+    return realTime, sessionTime
 end
 
 function CHE:keypressed(k, sc, isrepeat)

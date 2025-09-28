@@ -26,8 +26,8 @@ function throbber:throb()  -- god why did they name these things "throbbers"
     self.color2 = self.colors[love.math.random(1,#self.colors)]
     self.color3 = self.colors[love.math.random(1,#self.colors)]
 
-    Timer.tween(self.time, self, {arcLength = self.arcLengthLarge}, "in-out-back", function()
-        Timer.tween(self.time, self, {arcLength = self.arcLengthSmall}, "in-out-back", function()
+    Timer.tween(self.time, self, {arcLength = self.arcLengthLarge}, "in-out-quad", function()
+        Timer.tween(self.time, self, {arcLength = self.arcLengthSmall}, "in-out-quad", function()
         self:throb() end) -- a function calling itself... surely this wont lead to any problems
     end)
 end
@@ -41,8 +41,8 @@ function throbber:draw(x,y,radius,linewidth)
 
     local thingies = {
         {rotation = self.rotation*3, color = {self.color[1], self.color[2], self.color[3]}},
-        {rotation = self.rotation*2, color = {self.color2[1], self.color2[2], self.color2[3]}},
-        {rotation = self.rotation, color = self.color3},  -- yes there is a real reason for the color tables being like this
+       -- {rotation = self.rotation*2, color = {self.color2[1], self.color2[2], self.color2[3]}},
+        --{arotation = self.rotation, color = self.color3},  -- yes there is a real reason for the color tables being like this
     }
     love.graphics.setLineWidth(linewidth)
 

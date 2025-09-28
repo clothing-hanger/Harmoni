@@ -1,7 +1,7 @@
 local utf8 = require("utf8")
 
 local function error_printer(msg, layer)
-	print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
+	print((debug.traceback("Here's what broke: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
 function love.errorhandler(msg)
@@ -10,9 +10,9 @@ function love.errorhandler(msg)
     local GPUname, GPUversion, GPUvendor, GPUdevice = love.graphics.getRendererInfo( )
 
     local errorTexts = {
-        header = "Looks like Harmoni crashed...",
-        crashMessage = "Here's some info: ",
-        traceback = "These details are important! Please include this in your crash report.",
+        header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
+        crashMessage = "Error: ",
+        traceback = "Traceback: (This is important! Please include this in your crash report!)",
         system = "System Information:",
     }
 
@@ -80,14 +80,14 @@ function love.errorhandler(msg)
 
 	local err = {}
 
-	table.insert(err, errorTexts.header.."\n\n\n"..errorTexts.crashMessage.."\n")
+	table.insert(err, errorTexts.header.."\n\n"..errorTexts.crashMessage.."\n")
 	table.insert(err, sanitizedmsg)
 
 	if #sanitizedmsg ~= #msg then
 		table.insert(err, "Invalid UTF-8 string in error message.")
 	end
 
-	table.insert(err, "\n")
+	table.insert(err, "")
 
 	for l in trace:gmatch("(.-)\n") do
 		if not l:match("boot.lua") then
@@ -96,7 +96,7 @@ function love.errorhandler(msg)
 		end
 	end
 
-    table.insert(err, "\n\n\n"..errorTexts.system.."\n")
+    table.insert(err, "\n\n"..errorTexts.system.."\n")
     for i = 1,#deviceInfo do
         table.insert(err, deviceInfo[i])
     end
@@ -110,10 +110,10 @@ function love.errorhandler(msg)
 
 	local function draw()
 		if not love.graphics.isActive() then return end
-		local pos = 100
-		love.graphics.clear()
-		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)
-        love.graphics.draw(logo, 10,10, nil, 0.5, 0.5)
+		local pos = 135
+		love.graphics.clear(46/255,0,52/255)
+		love.graphics.printf(p, pos, pos, love.graphics.getWidth()-pos, "left")
+        love.graphics.draw(logo, 20,20, nil, 0.11, 0.11)
 		love.graphics.present()
 	end
 
@@ -162,3 +162,4 @@ function love.errorhandler(msg)
 	end
 
 end
+
