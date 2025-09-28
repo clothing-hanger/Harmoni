@@ -178,7 +178,7 @@ function buttonSlideOut:draw()
         self.color1[3] + (0 - self.color1[3]) * textColorPercent
     }
     love.graphics.setColor(textColor)
-    love.graphics.setFont(SkinHandler:getFont("Menu Extra Large"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
     local textX = self.x + self.slideInitialWidth * 2
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2

@@ -563,23 +563,23 @@ end
 
 
 function songSelect:drawSongInfo(x, y, spacing)
-    love.graphics.setFont(SkinHandler:getFont("Menu Extra Extra Large"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Extra Large"))
     love.graphics.printf(self.currentSongInfo.name or "Error - no current song name", x, y, 2000, "left")
-    y = y + SkinHandler:getFont("Menu Extra Extra Large"):getHeight() + spacing
+    y = y + SkinHandler:getFontLegacy("Menu Extra Extra Large"):getHeight() + spacing
 
-    love.graphics.setFont(SkinHandler:getFont("Menu Large"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
     love.graphics.printf("Song by: " .. (self.currentSongInfo.artist or "Error - no current artist name"), x, y, 1000, "left")
-    y = y + SkinHandler:getFont("Menu Large"):getHeight() + spacing
+    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
 
     love.graphics.printf("Charted by: " .. (self.currentSongInfo.charter or "Error - no current charter name"), x, y, 1000, "left")
-    y = y + SkinHandler:getFont("Menu Large"):getHeight() + spacing
+    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
 
-    love.graphics.setFont(SkinHandler:getFont("Menu Small"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Small"))
     love.graphics.printf("Length: " .. "PLACEHOLDER", x, y, 1000, "left")
-    y = y + SkinHandler:getFont("Menu Small"):getHeight() + spacing
+    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
 
     love.graphics.printf("BPM: " .. (self.currentSongInfo.bpm or "???"), x, y, 1000, "left")
-    y = y + SkinHandler:getFont("Menu Small"):getHeight() + spacing
+    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
 
     love.graphics.printf("LN%: " .. "PLACEHOLDER", x, y, 1000, "left")
 end
@@ -595,7 +595,7 @@ function songSelect:drawCircleWithContents()
     local timeStr = CHETime.session.."\n"..CHETime.real
 
     love.graphics.draw(self.logoH, self.logoCircle.x+100, self.logoCircle.y-logoHoffset-70, 0, logoHsx, logoHsy, self.logoH:getWidth()/2, self.logoH:getHeight()/2)
-    love.graphics.setFont(SkinHandler:getFont("Menu Large"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
     love.graphics.setColor(1,1,1)
     love.graphics.printf(timeStr, self.logoCircle.x+200, self.logoCircle.y-100, 150, "left")
 end

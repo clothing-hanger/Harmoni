@@ -167,9 +167,9 @@ function SkinHandler:getRandomColors()
     end
 end
 
-function SkinHandler:getFont(param)
-    if self.__data.Skin.Fonts then
-        return self.__data.Skin.Fonts[param]
+function SkinHandler:getFontLegacy(param)
+    if self.__data.Skin.FontsLegacy then
+        return self.__data.Skin.FontsLegacy[param]
     end
 end
 

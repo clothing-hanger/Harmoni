@@ -37,7 +37,6 @@ function titleScreen:enter()
 
 
 
-    self.bob = menuBob(200,200)
 
 
     self:setUpThoseBubblesThatIHate(20)
@@ -122,7 +121,6 @@ function titleScreen:update(dt)
 
    -- self.throbber:update(dt)
 
-       self.bob:update(dt)
 
 
     self:updateBubbles(dt) 
@@ -162,7 +160,6 @@ function titleScreen:draw()
     self:drawLogo()
    -- self.circcle:draw(0)
 
-       self.bob:draw()
 
 
    --self.throbber:draw(200,200, 50, 5)

@@ -47,7 +47,7 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Miss Color"] = rgb {209, 0, 0},
     },
 
-    Fonts = {
+    FontsLegacy = {
         ["HUD Large"] = newFont("FONTS/Novamono-njdg.ttf", 65),
         ["HUD Small"] = newFont("FONTS/Novamono-njdg.ttf", 15),
         ["HUD Extra Small"] = newFont("FONTS/Novamono-njdg.ttf", 12),
@@ -60,6 +60,13 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60),
     },
 
+    Fonts = {
+        ["HUD"] = "FONTS/Novamono-njdg.ttf",
+        ["Combo"] = "FONTS/SourceCodePro-Medium.ttf",
+        ["Menu"] = "FONTS/astonpoliz.regular.ttf",
+        ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
+    },
+    
     Notes = {
         ["4K"] = {
             ["Left"] = newQuad("Arrows", 602, 0, 300, 300),

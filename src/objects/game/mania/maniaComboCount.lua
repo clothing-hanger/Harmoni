@@ -80,7 +80,7 @@ function maniaComboCount:startTween(combo)
 end
 
 function maniaComboCount:draw()
-    love.graphics.setFont(SkinHandler:getFont("Combo"))
+    love.graphics.setFont(SkinHandler:getFontLegacy("Combo"))
     for i, Combo in ipairs(self.drawnCombos) do
         local alpha = self.removeComboStack and 1 or (Combo.time / self.fullTimeLimit)
         alpha = math.min(math.max(alpha, 0), 1)
