@@ -20,7 +20,7 @@ local function table_find(t, value)
     end
     return nil
 end
-local spongebirth = love.graphics.newImage("images/spongebirth.png")
+ spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function love.load(args)
     Settings = require("modules.Settings")

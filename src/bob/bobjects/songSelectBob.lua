@@ -75,7 +75,7 @@ function bob:spookedFunc()
     self.spookTimer = self.spookTimer + dt
 
     if self.spookTimer > 5 then 
-        love.window.showMessageBox("bob :)", "your cursor kinda scares me,,\n can you please keep it away? sorry :((")
+        love.window.showMessageBox("the bob :)", "your cursor kinda scares me,,\n can you please keep it away? sorry :((")
         self.spookTimer = 0
     end
 end
@@ -85,7 +85,7 @@ function bob:scaredFunc()
     self.scareTimer = self.scareTimer + dt
 
     if self.scareTimer > 1 then 
-        love.window.showMessageBox("bob :/", "your cursor is scaring me :(\n please keep it away from me,,,\n im sorry :(")
+        love.window.showMessageBox("the bob :/", "your cursor is scaring me :(\n please keep it away from me,,,\n im sorry :(")
         self.scareTimer = 0
     end
 end
@@ -95,7 +95,7 @@ function bob:terrifiedFunc()
     self.terrifyTimer = self.terrifyTimer + dt
 
     if self.terrifyTimer > 0.5 then 
-        love.window.showMessageBox("bob :(", "please its really scaring me")
+        love.window.showMessageBox("the bob :(", "please its really scaring me")
         self.terrifyTimer = 0
     end
 
@@ -106,7 +106,7 @@ function bob:tooCloseFunc()
     self.tooCloseTimer = self.tooCloseTimer + dt
 
     if self.tooCloseTimer > 1 then 
-        love.window.showMessageBox("bob :(", "Your cursor is too close")
+        love.window.showMessageBox("the bob :(", "Your cursor is too close")
         self.tooCloseTimer = 0
     end
 end
@@ -139,6 +139,7 @@ end
 
 function bob:draw()
     love.graphics.circle("fill", self.x, self.y, 30)
+    love.graphics.draw(spongebirth, self.x, self.y,0, 1,1,spongebirth:getWidth()/2,spongebirth:getHeight()/2)
        -- love.graphics.circle("line", self.cursorX, self.cursorY, 30)
 
 end

@@ -32,7 +32,9 @@ function UISquigleCircle:draw()
 
     love.graphics.setLineWidth(self.lineThickness)
     love.graphics.polygon(self.mode, self.points)
+
     love.graphics.pop()
+
 end
 
 return UISquigleCircle

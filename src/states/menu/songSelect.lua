@@ -176,6 +176,7 @@ end
     self.logoCircleFill = UISquigleCircle("fill", 0,baseScreenRatio.y, 350, 5, 20, 5, {0,0,0,0.5})
 
     self.logoH = SkinHandler:getImage("Menu", "H")
+
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -406,6 +407,7 @@ function songSelect:update(dt)
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
     end
 
+
 end
 
 function songSelect:mousemoved()
@@ -551,6 +553,8 @@ function songSelect:draw(dt)
     self:drawSongInfo(20,20,15)
 
     love.graphics.setColor(1,1,1)
+
+    self.bob:draw()
 
 
    -- if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
