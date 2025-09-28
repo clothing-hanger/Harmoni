@@ -554,7 +554,6 @@ function songSelect:draw(dt)
 
     love.graphics.setColor(1,1,1)
 
-    self.bob:draw()
 
 
    -- if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
