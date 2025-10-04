@@ -73,8 +73,16 @@ end
 
 function transition:draw()
     background:draw()
-    love.graphics.push()
 
+    local progress = (self.quickSettings.x - self.quickSettings.closedX) /(self.quickSettings.openX - self.quickSettings.closedX)
+                     
+    if progress > 0 then
+        love.graphics.setColor(0, 0, 0, 0.5 * progress) 
+        love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+                love.graphics.setColor(1, 1, 1)
+    end
+
+    love.graphics.push()
     love.graphics.translate(self.quickSettings.x - self.quickSettings.closedX, 0)
 
     love.graphics.setFont(songButtonFontLarge)
@@ -96,5 +104,6 @@ function transition:draw()
     love.graphics.pop()
     self.quickSettings:draw()
 end
+
 
 return transition
