@@ -5,6 +5,7 @@ SkinHandler.__data = {}
 SkinHandler.__sheets = {}
 SkinHandler.info = {}
 SkinHandler.batches = {}
+SkinHandler.loadedFonts = {}
 
 local mt = {}
 local restricted = {
@@ -170,6 +171,20 @@ end
 function SkinHandler:getFontLegacy(param)
     if self.__data.Skin.FontsLegacy then
         return self.__data.Skin.FontsLegacy[param]
+    end
+end
+
+function SkinHandler:getFont(font,size)
+    local fontR
+    if self.__data.Skin.Fonts then
+        if not self.loadedFonts[font] or not self.loadedFonts[font][size] then -- doesnt exist yet, so we make a new font
+            fontR = love.graphics.newFont(self.__path..self.__data.Skin.Fonts[font],size)
+            self.loadedFonts[font] = {}
+            self.loadedFonts[font][size] = fontR
+        else   -- it must already have been made, we will just use that then
+            fontR = self.loadedFonts[font][size]
+        end
+        return fontR
     end
 end
 

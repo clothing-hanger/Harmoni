@@ -174,8 +174,11 @@ end
 
     self.logoCircle = UISquigleCircle("line", 0,baseScreenRatio.y, 350, 5, 20, 5, {1,1,1,1})
     self.logoCircleFill = UISquigleCircle("fill", 0,baseScreenRatio.y, 350, 5, 20, 5, {0,0,0,0.5})
+    self.logoH = UIlogoH(90,1300,0.17)
 
-    self.logoH = SkinHandler:getImage("Menu", "H")
+    self.coverBG = {alpha = 0}
+
+--    self.logoH = SkinHandler:getImage("Menu", "H")
 
 end
 
@@ -510,13 +513,24 @@ function songSelect:checkForDifficultyButtonClicks()
                 --selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
-                State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG)
-                switchingState = true
+                self:switchToPlaystate(buttonInfo)
+
             end
             -- why go through the rest? we already have a match so just break
             break
         end
     end
+end
+
+function songSelect:switchToPlaystate(buttonInfo)
+    Timer.tween(0.4,self.logoH, {x = baseScreenRatio.x/2, y = baseScreenRatio.y/2}, "out-quad")
+
+    Timer.tween(0.4,self.coverBG, {alpha = 1}, "out-quad", function() 
+    State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG, self.logoH, BGDarkness)
+
+    end)
+    
+    switchingState = true
 end
 
 
@@ -527,8 +541,9 @@ function songSelect:draw(dt)
         love.graphics.setColor(1,1,1,BGAlpha[1])
         if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
     end
-    love.graphics.setColor(0,0,0,BGDarkness or 0)
-    love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
+        love.graphics.setColor(0,0,0,BGDarkness or 0)
+    if not switchingState then love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y) end
+
         love.graphics.setColor(11,1,1)
 
     for i, Bubble in ipairs(self.bubbles) do
@@ -549,10 +564,22 @@ function songSelect:draw(dt)
     end
 
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
-    self:drawCircleWithContents()
     self:drawSongInfo(20,20,15)
 
+
+    self:drawCircleWithContents()
+    
+
+    -- this is a sorta ugly hack but it works 
+    if switchingState then
+    love.graphics.setColor(1,1,1,self.coverBG.alpha)
+    if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
+    love.graphics.setColor(0,0,0,BGDarkness or 0)
+    love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
     love.graphics.setColor(1,1,1)
+    end
+    self.logoH:draw()
+
 
 
 
@@ -594,7 +621,7 @@ function songSelect:drawCircleWithContents()
 
     local timeStr = CHETime.session.."\n"..CHETime.real
 
-    love.graphics.draw(self.logoH, self.logoCircle.x+100, self.logoCircle.y-logoHoffset-70, 0, logoHsx, logoHsy, self.logoH:getWidth()/2, self.logoH:getHeight()/2)
+    --love.graphics.draw(self.logoH, self.logoCircle.x+100, self.logoCircle.y-logoHoffset-70, 0, logoHsx, logoHsy, self.logoH:getWidth()/2, self.logoH:getHeight()/2)
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
     love.graphics.setColor(1,1,1)
     love.graphics.printf(timeStr, self.logoCircle.x+200, self.logoCircle.y-100, 150, "left")

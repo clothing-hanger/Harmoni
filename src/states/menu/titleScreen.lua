@@ -42,7 +42,7 @@ function titleScreen:enter()
     self:setUpThoseBubblesThatIHate(20)
 
 
- --   self.throbber = throbber(600,200,100, 1.9 , 5, SkinHandler:getRandomColors() )
+ --   self.throbbert = throbbert(600,200,100, 1.9 , 5, SkinHandler:getRandomColors() )
 end
 
 
@@ -119,7 +119,7 @@ function titleScreen:update(dt)
 
     self.layerWaves:update(dt)
 
-   -- self.throbber:update(dt)
+   -- self.throbbert:update(dt)
 
 
 
@@ -162,8 +162,12 @@ function titleScreen:draw()
 
 
 
-   --self.throbber:draw(200,200, 50, 5)
-  --Throbber:draw(200,200, 50, 5)
+   --self.throbbert:draw(200,200, 50, 5)
+  --throbbert:draw(200,200, 50, 5)
+
+  --local testFont = SkinHandler:getFont("Menu", 300)
+  --love.graphics.setFont(testFont)
+  --love.graphics.print("Hello!!!", 400, 400)
 
 end
 

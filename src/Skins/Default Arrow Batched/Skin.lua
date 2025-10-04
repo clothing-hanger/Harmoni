@@ -52,18 +52,18 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HUD Small"] = newFont("FONTS/Novamono-njdg.ttf", 15),
         ["HUD Extra Small"] = newFont("FONTS/Novamono-njdg.ttf", 12),
         ["Combo"] = newFont("FONTS/SourceCodePro-Medium.ttf", 65),
-        ["Menu Extra Extra Large"] = newFont("FONTS/astonpoliz.regular.ttf", 75),  -- what am i even doing at this point
-        ["Menu Extra Large"] = newFont("FONTS/astonpoliz.regular.ttf", 50),
-        ["Menu Large"] = newFont("FONTS/astonpoliz.regular.ttf", 30),
-        ["Menu Small"] = newFont("FONTS/astonpoliz.regular.ttf", 20),
-        ["Menu Extra Small"] = newFont("FONTS/astonpoliz.regular.ttf", 12),
+        ["Menu Extra Extra Large"] = newFont("FONTS/astonpolizregular.ttf", 75),  -- what am i even doing at this point
+        ["Menu Extra Large"] = newFont("FONTS/astonpolizregular.ttf", 50),
+        ["Menu Large"] = newFont("FONTS/astonpolizregular.ttf", 30),
+        ["Menu Small"] = newFont("FONTS/astonpolizregular.ttf", 20),
+        ["Menu Extra Small"] = newFont("FONTS/astonpolizregular.ttf", 12),
         ["Judgement Counter"] = newFont("FONTS/Novamono-njdg.ttf", 60),
     },
 
     Fonts = {
         ["HUD"] = "FONTS/Novamono-njdg.ttf",
         ["Combo"] = "FONTS/SourceCodePro-Medium.ttf",
-        ["Menu"] = "FONTS/astonpoliz.regular.ttf",
+        ["Menu"] = "FONTS/astonpolizregular.ttf",
         ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
     },
     

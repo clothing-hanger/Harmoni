@@ -1,6 +1,6 @@
-local throbber = Class:extend("throbber")
+local throbbert = Class:extend("throbbert")
 
-function throbber:new(colors)
+function throbbert:new(colors)
     
     self.colors = colors or {1,1,1,1}
 
@@ -21,7 +21,7 @@ function throbber:new(colors)
     self:throb()
 end
 
-function throbber:throb()  -- god why did they name these things "throbbers"
+function throbbert:throb()  -- god why did they name these things "throbberts"
     self.color = self.colors[love.math.random(1,#self.colors)]
     self.color2 = self.colors[love.math.random(1,#self.colors)]
     self.color3 = self.colors[love.math.random(1,#self.colors)]
@@ -32,11 +32,11 @@ function throbber:throb()  -- god why did they name these things "throbbers"
     end)
 end
 
-function throbber:update(dt)
+function throbbert:update(dt)
     self.rotation = self.rotation + self.rotateSpeed*dt
 end
 
-function throbber:draw(x,y,radius,linewidth)
+function throbbert:draw(x,y,radius,linewidth)
     local x,y,radius,linewidth = x or 0,y or 0,radius or 10,linewidth or 5
 
     local thingies = {
@@ -46,7 +46,7 @@ function throbber:draw(x,y,radius,linewidth)
     }
     love.graphics.setLineWidth(linewidth)
 
-    for i, Thingy in ipairs(thingies) do -- 3 throbbers  🤤🤤🤤
+    for i, Thingy in ipairs(thingies) do -- 3 throbberts  🤤🤤🤤
         love.graphics.push()
         love.graphics.translate(x,y)
         love.graphics.rotate(Thingy.rotation)
@@ -57,4 +57,4 @@ function throbber:draw(x,y,radius,linewidth)
     love.graphics.setColor(1,1,1,1)
 end
 
-return throbber
+return throbbert

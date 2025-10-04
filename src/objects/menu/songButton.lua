@@ -151,9 +151,9 @@ function menuSongButton:draw()
     end
 
     if not self.imageLoaded then
-        local throbberRadius = 30
+        local throbbertRadius = 30
         
-        Throbber:draw(self.x + self.width - (throbberRadius*2), self.y+self.height/2, throbberRadius, 15)
+        throbbert:draw(self.x + self.width - (throbbertRadius*2), self.y+self.height/2, throbbertRadius, 15)
     end
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setStencilTest()

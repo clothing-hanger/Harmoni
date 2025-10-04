@@ -17,6 +17,7 @@
     menuSongButton = require("objects.menu.songButton")
     modifiersMenu = require("objects.menu.modifiersMenu")
         notificationsHandler = require("objects.menu.notificationsHandler")
+        quickSettings = require("objects.menu.quickSettings")
 
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop
@@ -28,5 +29,6 @@
     notification = require("objects.UI.notification")
     UILayerWave = require("objects.UI.UILayerWave")  -- UIslop the fucking sequel 
     UISquigleCircle = require("objects.UI.UISquigleCircle")  -- i dont even need to say it again
-    throbber = require("objects.UI.throbber")
-    toggleSettings = require("Objects.UI.toggleSettings")
+    throbbert = require("objects.UI.throbbert")
+    toggleSettings = require("objects.UI.toggleSettings")
+    UIlogoH = require("objects.UI.logoH")

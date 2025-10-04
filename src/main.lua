@@ -56,12 +56,12 @@ function love.load(args)
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()
     printToConsole(SkinHandler:getRandomColors())
-    Throbber = throbber(SkinHandler:getRandomColors())
+    throbbert = throbbert(SkinHandler:getRandomColors())
 end
 
 function love.update(dt)
     CHE:update(dt)
-    Throbber:update(dt)
+    throbbert:update(dt)
     GlobalNotificationsHandler:update(dt)
 end
 
