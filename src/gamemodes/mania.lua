@@ -31,17 +31,26 @@ function mania:new(chart, parent)
 
     self:setUpObjects()
 
-    Timer.after(0.15, function() self:startSong(2) end)
+  --  Timer.after(0.15, function() self:startSong(2) end)
 end
 
+
+function mania:countdownhandler()
+
+end
+
+
 function mania:startSong(countdown)
-    self.parent:startSong(countdown)
+    self.parent:startSong(0) -- we dont use the countdown built into startSong because we use our own countdown in mania
 end
 
 function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     self.HUD = maniaHUD()
+
+        self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
+
 
     local songLength = self.song and self.song:getDuration("seconds") or 0
     self.timeRemaingBar = UITimeRemaing(
@@ -150,8 +159,10 @@ end
 function mania:updateObjects(dt)
     if self.videoBackground then self.videoBackground:update(dt) end
     self.background:update(dt)
+    self.countdownBar:update(dt)
+    if self.countdownBar.complete and not self.song:isPlaying() then self:startSong(0) end
     self.judgementObject:update(dt)
-    self.timeRemaingBar:update(dt)
+    self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration())
     self.comboCount:update(dt)
     self.healthBar:update(dt)
 
@@ -194,6 +205,7 @@ function mania:draw()
     self.timeRemaingBar:draw()
     self.healthBar:draw()
 
+    self.countdownBar:draw()
 
 
     if self.debug then 

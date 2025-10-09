@@ -20,14 +20,14 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 
     self.activeTweens = {}
 
-    self.tweenDuration = 0.3
-    self.tweenEasingType = "out-quad"
+    self.tweenDuration = 1.5
+    self.tweenEasingType = "out-elastic"
     self.easeFunc = Ease[self.tweenEasingType] or Ease.linear
 
     self.scale = 1
     self.scaleTweens = {}
     self.pressDuration = 0.15
-    self.pressEasing = Ease["out-quad"]
+    self.pressEasing = Ease["out-expo"]
 
     self.isPressed = false
     self.wasPressedInside = false
@@ -35,6 +35,8 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 end
 
 function buttonSlideOut:update(dt)
+        if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
+
     self.hovered = mouseOver(self)
 
     local targetWidth = self.hovered and self.width or self.slideInitialWidth
@@ -83,6 +85,8 @@ function buttonSlideOut:update(dt)
             self.scale = tween.from + (tween.to - tween.from) * tween.easing(t)
         end
     end
+
+         --   if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
 end
 
@@ -154,6 +158,7 @@ function buttonSlideOut:draw()
         }
     )
 
+
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
         local remappedX = remap(mouseX, self.x, self.x + self.slideWidth, 0, 1)
@@ -177,6 +182,7 @@ function buttonSlideOut:draw()
         self.color1[2] + (0 - self.color1[2]) * textColorPercent,
         self.color1[3] + (0 - self.color1[3]) * textColorPercent
     }
+
     love.graphics.setColor(textColor)
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
@@ -184,6 +190,8 @@ function buttonSlideOut:draw()
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2
     love.graphics.printf(self.text, textX, textY, self.width, "left")
     love.graphics.pop()
+
+
 end
 
 return buttonSlideOut

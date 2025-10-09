@@ -18,6 +18,7 @@
     modifiersMenu = require("objects.menu.modifiersMenu")
         notificationsHandler = require("objects.menu.notificationsHandler")
         quickSettings = require("objects.menu.quickSettings")
+        countdownBar = require("objects.menu.countdownBar")
 
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop

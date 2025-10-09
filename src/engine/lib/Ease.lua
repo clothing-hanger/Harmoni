@@ -45,9 +45,10 @@ local symbols = {
 }
 
 local compile = function(name, str, expr)
-	ease[name] = load([[
-		local sin = math.sin; local cos = math.cos; local pi = math.pi; local sqrt = math.sqrt;
-		return function(p) ]] .. str:gsub("%$e", expr) .. " end", name)()
+  ease[name] = load([[
+    local sin = math.sin; local cos = math.cos; local pi = math.pi; local sqrt = math.sqrt;
+    local bounce = ...
+    return function(p) ]] .. str:gsub("%$e", expr) .. " end", name)(bounce)
 end
 
 for k, v in pairs(penner) do

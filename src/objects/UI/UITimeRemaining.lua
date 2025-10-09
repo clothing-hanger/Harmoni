@@ -22,12 +22,12 @@ function UITimeRemaining:new(startTime, endTime, x,y,widht,parent,lineWidth,spee
     self.gradient = createMultiGradientRectMesh(self.x,self.y-200, self.width, 300, {{1,1,1}, {61/255,0,100/255}})
 end
 
-function UITimeRemaining:update(dt)
+function UITimeRemaining:update(dt, progress)
+    self.percent = progress 
     self.timer = (self.timer + dt) -- get the time in seconds
 
     self.squiglyLine:update(dt)
 
-self.percent = self.timer / self.lengthInSeconds
 
 end
 
