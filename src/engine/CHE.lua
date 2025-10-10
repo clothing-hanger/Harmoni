@@ -92,6 +92,7 @@ function CHE:init()
 
     SkinHandler:loadSkin("Default Arrow Batched")
     LocaleHandler:loadLocale("english.lua")
+    if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
 end
 
 function CHE:update(dt)

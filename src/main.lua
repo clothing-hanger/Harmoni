@@ -44,7 +44,7 @@ function love.load(args)
 
     require("bob")  -- bob 💖
     -- bob WILL be added
-    
+
     maniaChartDifficultyCalculator = require("modules.maniaChartDifficultyCalculator")
     ChartParse = require("modules.chartParse")
     MusicTimeManager = require("modules.musicTimeManager")
