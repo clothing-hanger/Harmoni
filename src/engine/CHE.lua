@@ -34,6 +34,17 @@ function CHE:init()
     States = require("modules.States")
     Timer = require("engine.lib.Timer")
     Ease = require("engine.lib.Ease")
+    SDL2 = require("engine.modules.SDL2")
+    WINDOW = require("engine.modules.window")
+    if WINDOW then
+        local ok = WINDOW.setDarkMode(WINDOW.isDarkMode())
+        if ok then
+            print("Enabled dark mode for window title bar.")
+            WINDOW.hideWindow()
+            WINDOW.showWindow()
+        end
+    end
+    NOTIFICATIONS = require("engine.modules.notifications")
     require("modules.Objects")
 
     tryExcept(function()
@@ -91,11 +102,25 @@ function CHE:init()
     }
 
     SkinHandler:loadSkin("Default Arrow Batched")
-    LocaleHandler:loadLocale("english.lua")
+    local preferredLocales
+    if SDL2 then
+        preferredLocales = SDL2.getPreferredLocales()
+    else
+        preferredLocales = { { language = "en", country = "US" } }
+    end
+    local mostPreferred = preferredLocales[1] or {language = "en", country = "US"}
+    if mostPreferred.language == "en" and mostPreferred.country ~= "US" then mostPreferred.country = "US" end
+    print("Most preferred locale: " .. mostPreferred.language .. "-" .. mostPreferred.country)
+    LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
     if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
+    local id = 1
+    if NOTIFICATIONS then
+        NOTIFICATIONS.setAppID("com.ch.harmoni")
+    end
 end
 
 function CHE:update(dt)
+    local id = 1
     Mouse.x, Mouse.y = love.mouse.getPosition()
 
     State.update(dt)

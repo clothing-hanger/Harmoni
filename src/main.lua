@@ -71,6 +71,9 @@ function love.mousepressed(x, y, b)
 end
 
 function love.mousemoved(x, y, dx, dy)
+    if RAWINPUT then
+        return
+    end
     cursor.dx, cursor.dy = toCanvasCoords(dx, dy)
     CHE:mousemoved(x, y, dx, dy)
 end
