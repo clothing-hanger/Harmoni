@@ -7,7 +7,7 @@ function mania:new(chart, parent)
 
 
     self.debug = false
-
+self.songStarted = false
     
 
     self.chart = self:setUpChart(chart)
@@ -41,7 +41,8 @@ end
 
 
 function mania:startSong(countdown)
-    self.parent:startSong(0) -- we dont use the countdown built into startSong because we use our own countdown in mania
+    self.songStarted = true
+    self.parent:startSong(countdown) 
 end
 
 function mania:setUpObjects()
@@ -78,8 +79,7 @@ function mania:setUpObjects()
         SkinHandler:getParam("Health Bar X Offset"),
         SkinHandler:getParam("Health Bar Y Offset"),
         SkinHandler:getParam("Health Bar Width"),
-        SkinHandler:getParam("Health Bar Height"),
-        1
+        SkinHandler:getParam("Health Bar Height")
     )
 end
 
@@ -160,7 +160,7 @@ function mania:updateObjects(dt)
     if self.videoBackground then self.videoBackground:update(dt) end
     self.background:update(dt)
     self.countdownBar:update(dt)
-    if self.countdownBar.complete and not self.song:isPlaying() then self:startSong(0) end
+    if self.countdownBar.complete and not self.songStarted then self:startSong(1) end
     self.judgementObject:update(dt)
     self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration())
     self.comboCount:update(dt)

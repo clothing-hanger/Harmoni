@@ -3,9 +3,9 @@ local maniaHealthBar = Class:extend("maniaHealthBar")
 function maniaHealthBar:new(x,y,width,height,health,max)
     self.x,self.y = x or 0, y or 0
     self.width,self.height = width or 10, height or 30 
-    self.health = health
+    self.health = (health or 1)
 
-    self.max = max or 0.95  -- i really like the health bar having this it looks nice
+    self.max = (max or 0.95)  -- i really like the health bar having this it looks nice
     self.printableHealth = self.health
 
     self.line = UIsquiglyLine(self.x, self.y, self.x, self.y-self.height,4,5,50,1,self.width)

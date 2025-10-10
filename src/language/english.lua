@@ -36,7 +36,7 @@ Language = {
         ["Language"] = "This song features language that might not be suitable for all users."
     },
     Errors = {
-        ["Unkown"] = "???",
+        ["Unknown"] = "???",
         ["Error"] = "Error",
         ["Something Wrong"] = "Something went wrong...",
         ["Please Report"] = "Help us improve Harmoni! Please report this error!",
