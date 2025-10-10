@@ -8,5 +8,6 @@ return {
     },
     game = {
         gameModeManager = require("states.game.gameModeManager"),
+        resultsState = require("States.Game.resultsState")
     },
 }

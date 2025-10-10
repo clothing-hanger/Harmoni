@@ -5,12 +5,12 @@ function titleScreen:enter()
    self.BG = love.graphics.newImage("Skins/Default Arrow Batched/MENU/TITLEBG/1.png")
     self.wavesY = 0
 
-    self.buttonWidth = 400
+    self.buttonWidth = 500
     self.buttonHeight = 100 
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
         {label = LocaleHandler:getText("Menu", "Play"), func = function() self:raiseWaves(); State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
-        {label = LocaleHandler:getText("Menu", "Jukebox"), func = function() State.switch(States.menu.jukebox) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
+        {label = LocaleHandler:getText("Menu", "Jukebox"), func = function() State.switch(States.game.resultsState(self)) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
         {label = LocaleHandler:getText("Menu", "Settings"), func = function() State.switch(States.menu.settingsMenu) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
         {label = LocaleHandler:getText("Menu", "Discord"), func = function() love.system.openURL("https://discord.gg/bBcjrRAeh4") end, color1 = {131/255,119/255,209/255,1},color2 = {97/255,82/255,196/255,1}},
         {label = LocaleHandler:getText("Menu", "Github"), func = function() love.system.openURL("https://github.com/clothhang/Harmoni") end, color1 = {109/255,90/255,114/255,1},color2 = {93/255,76/255,97/255,1}},
