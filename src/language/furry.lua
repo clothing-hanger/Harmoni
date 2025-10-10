@@ -2,10 +2,10 @@
 
 Language = {
     Menu = {
-        ["Play"] = "pway!!  (˵˃ ᗜ ˂˵)",
-        ["Jukebox"] = "music box!  ▶︎ •၊၊||၊|။|||||",
-        ["Settings"] = "scarry menus  (˶˃⤙˂˶)",
-        ["Github"] = "github (๑ > ᴗ < ๑)",
+        ["Play"] = "pway!!",
+        ["Jukebox"] = "music box!",
+        ["Settings"] = "scarry menus",
+        ["Github"] = "github",
         ["Discord"] = "discowd",
         ["Exit"] = "gotta scurry away~!!",
         ["Now Playing"] = "now pwaying",
@@ -17,7 +17,7 @@ Language = {
         ["Charter"] = "cweator",
         ["Difficulty"] = "toughie woughly",
         ["Search"] = "findies",
-        ["Click Search"] = "cwick me to findies!! (˶ˆ꒳ˆ˵)"
+        ["Click Search"] = "cwick me to findies!! l"
     },
     Mania = {
         ["Combo"] = "combowo",
@@ -38,7 +38,7 @@ Language = {
         ["Language"] = "Owo, dis songy-wongy's got sum naughty wordies dat might make you blushie blush! >w<"
     },
     Errors = {
-        ["Unknown"] = "idk... (¬`‸´¬)",
+        ["Unknown"] = "idk...",
         ["Error"] = "ouchie!!",
         ["Something Wrong"] = "OWO,, a little mistake happened!!",
         ["Please Report"] = "Hewwo! Help us make Hawmoni even cutew! Pwease, pwease nyotice and report dis errow, nyaa~!",
