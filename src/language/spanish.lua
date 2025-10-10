@@ -1,3 +1,4 @@
+-- spanish translation by Corablitz
 Language = {
     Menu = {
         ["Play"] = "Jugar",
