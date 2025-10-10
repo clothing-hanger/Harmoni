@@ -91,6 +91,7 @@ function CHE:init()
     }
 
     SkinHandler:loadSkin("Default Arrow Batched")
+    LocaleHandler:loadLocale("english.lua")
 end
 
 function CHE:update(dt)

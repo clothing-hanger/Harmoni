@@ -34,6 +34,7 @@ function love.load(args)
     love.filesystem.createDirectory("Settings")
 
     SkinHandler = require("modules.skinHandler")
+    LocaleHandler = require("Modules.localeHandler")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     CHE = require("engine.CHE")
