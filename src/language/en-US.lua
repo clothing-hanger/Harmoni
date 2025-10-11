@@ -17,6 +17,11 @@ Language = {
         ["Search"] = "Search",
         ["Click Search"] = "Click here to search."
     },
+    Results = {
+        ["Accuracy"] = "Accuracy",
+        ["Score"] = "Score",
+        ["Highest Combo"] = "Highest Combo"
+    },
     Mania = {
         ["Combo"] = "Combo",  -- idk ,, theres prob more we need but i cant think rn
     },

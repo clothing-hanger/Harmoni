@@ -1,5 +1,5 @@
 return {
-    {grade = "SS", accuracy = 100},
+    {grade = "S+", accuracy = 100},
     {grade = "S", accuracy = 95},
     {grade = "A", accuracy = 90},
     {grade = "B", accuracy = 80},

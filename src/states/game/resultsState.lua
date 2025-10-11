@@ -1,6 +1,10 @@
 local resultsState = State("resultsState")
 
 function resultsState:enter(s, parent, accuracy, image)
+
+    self.score = 1000000
+    self.heighestCombo = 459
+    
     self.parent = parent
     self.grades = require("modules.maniaGrades")
     self.accuracy = accuracy or 100
@@ -41,8 +45,8 @@ end
 function resultsState:onGradeReached(grade)
     self.bump = 1.05
     if self.bumpTimer then Timer.cancel(self.bumpTimer) end
-    self.bumpTimer = Timer.tween(0.5, self, {bump = 1}, "out-quad")
-
+   -- self.bumpTimer = Timer.tween(0.5, self, {bump = 1}, "out-quad")
+    self.printableGrade = grade
     local hitClone = self.hitSound:clone()
     hitClone:setPitch(self.printableAccuracy / 100)
     hitClone:play()
@@ -51,9 +55,9 @@ function resultsState:onGradeReached(grade)
 end
 
 function resultsState:tweenArc(amount)
-    Timer.tween(2.5, self, {printableAccuracy = self.accuracy}, "out-quad", function() 
+    Timer.tween(2, self, {printableAccuracy = self.accuracy}, "out-expo", function() 
     self:expandRectangle()
-
+        self.printableAccuracy = self.accuracy -- we do this because the fucking tween doesnt get it the whole way for some reason
     end)
 end
 
@@ -62,7 +66,7 @@ function resultsState:moveArcUp(amount)
 end
 
 function resultsState:expandRectangle()
-    local newHeight = 1100
+    local newHeight = 1120
     local difference = newHeight - self.height
         self:moveArcUp(difference/2)
 
@@ -85,12 +89,71 @@ function resultsState:draw()
         local function stencilFunc()
             love.graphics.circle("fill", self.arcX, self.arcY, self.arcR - 10)
         end
+        
         love.graphics.stencil(stencilFunc, "replace", 1)
         love.graphics.setStencilTest("less", 1)
 
         love.graphics.arc("line", self.arcX, self.arcY, self.arcR, -math.pi/2, -math.pi/2 + self.accuracyCircleAngle)
+            love.graphics.setStencilTest()
+        love.graphics.setFont(SkinHandler:getFont("Menu", 400))
+            love.graphics.printf(self.printableGrade or "F", self.arcX-self.arcR, self.arcY-love.graphics.getFont():getHeight()/2, self.arcR*2, "center")
     love.graphics.pop()
-    love.graphics.setStencilTest()
+
+        self:drawSmallRectangles()
+    self:debugDraw()
+end
+
+
+function resultsState:drawSmallRectangles()
+    
+
+    local function stencilFunc()
+                love.graphics.rectangle("fill", self.rectX, self.rectY, self.width, self.height, self.rectRC, self.rectRC)
+    end
+
+        love.graphics.stencil(stencilFunc, "replace", 1)
+                love.graphics.setStencilTest("greater", 0)
+
+        local smallRectHeights = 130 
+        local smallRectSpacing = 20     
+        
+        local cornerRadius = 60
+                            
+        
+                                   -- this is the worst code in the entire game. but it works. and i am scared to touch it 
+    -- score rectangle
+        love.graphics.setColor(234/255,234/255,234/255,0.5)
+        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
+        love.graphics.setFont(SkinHandler:getFont("Menu", 50))
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.printf(LocaleHandler:getText("Results", "Score") .. ": " .. self.score,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing)+love.graphics.getFont():getHeight()/2,self.width-20,"center")
+        
+
+        love.graphics.setColor(1,1,1)
+
+    -- accuracy rectangle 
+        love.graphics.setColor(234/255,234/255,234/255,0.5)
+        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.printf(LocaleHandler:getText("Results", "Accuracy") .. ": " .. self.accuracy .. "%",self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2)+(smallRectHeights+love.graphics.getFont():getHeight()/2),self.width-20,"center")
+        love.graphics.setColor(1,1,1)
+
+
+    -- highest combo rectagle
+        love.graphics.setColor(234/255,234/255,234/255,0.5)
+        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.printf(LocaleHandler:getText("Results", "Highest Combo") .. ": " .. self.heighestCombo,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
+        love.graphics.setColor(1,1,1)
+        love.graphics.setStencilTest()
+end
+
+function resultsState:debugDraw()
+    love.graphics.setFont(SkinHandler:getFont("Menu", 50))
+    love.graphics.print("DEBUG SHIT    :3\n" .. 
+                        "Accuracy: " .. self.accuracy .. "\n" .. 
+                        "printableAccuracy: " .. self.printableAccuracy,
+                        10, 10)
 end
 
 return resultsState

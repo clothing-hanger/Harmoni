@@ -65,7 +65,8 @@ local restricted = {
 
 
 function LocaleHandler:loadLocale(file)
-    local filepath = "language/" .. (file or "en-US.lua")
+    local file = (file or "en-US.lua")
+    local filepath = "language/" .. (file)
     local chunk = love.filesystem.load(filepath)
 
     for k, v in pairs(_G) do
@@ -74,7 +75,7 @@ function LocaleHandler:loadLocale(file)
 
     setfenv(chunk, mt)
     chunk()
-
+    
     self.__data = {
         Locale = mt.Language
     }
@@ -99,8 +100,10 @@ function LocaleHandler:getText(category, text)
     if self.__data.Locale[category] then
         if self.__data.Locale[category][text] then
             return self.__data.Locale[category][text]
+        else
+            return "???"
         end
-    end
+    else return "???" end
 end
 
 return LocaleHandler
