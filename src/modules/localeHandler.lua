@@ -65,7 +65,7 @@ local restricted = {
 
 
 function LocaleHandler:loadLocale(file)
-    local filepath = "language/" .. (file or "english.lua")
+    local filepath = "language/" .. (file or "en-US.lua")
     local chunk = love.filesystem.load(filepath)
 
     for k, v in pairs(_G) do
