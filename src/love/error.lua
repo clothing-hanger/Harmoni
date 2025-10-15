@@ -9,13 +9,38 @@ function love.errorhandler(msg)
 
     local GPUname, GPUversion, GPUvendor, GPUdevice = love.graphics.getRendererInfo( )
 
-    local errorTexts = {
-        header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
-        crashMessage = "Error: ",
-        traceback = "Traceback: (This is important! Please include this in your crash report!)",
-        system = "System Information:",
-    }
 
+
+	local function setUpErrorText()
+		local errorTexts
+		local ok, test = pcall(LocaleHandler:getText("ErrorHandler", "Something Wrong"))
+		if not ok then
+			    errorTexts = {
+					header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
+					crashMessage = "Error: ",
+					traceback = "Traceback: (This is important! Please include this in your crash report!)",
+					system = "System Information:",
+    			}
+			else
+				errorTexts = {
+					header = LocaleHandler:getText("ErrorHandler", "Something Wrong"),
+					crashMessage = LocaleHandler:getText("ErrorHandler", "Error"),
+					traceback = LocaleHandler:getText("ErrorHandler", "traceback"),
+					system = LocaleHandler:getText("errorhandler", "System Information")
+				}
+			end
+		return errorTexts
+	end
+
+--	local errorTexts = setUpErrorText()
+
+
+			    local errorTexts = {
+					header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
+					crashMessage = "Error: ",
+					traceback = "Traceback: (This is important! Please include this in your crash report!)",
+					system = "System Information:",
+    			}
 
     local deviceInfo = {
         --OS

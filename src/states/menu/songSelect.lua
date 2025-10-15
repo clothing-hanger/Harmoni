@@ -591,14 +591,14 @@ end
 
 function songSelect:drawSongInfo(x, y, spacing)
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Extra Large"))
-    love.graphics.printf(self.currentSongInfo.name or "Error - no current song name", x, y, 2000, "left")
+    love.graphics.printf(self.currentSongInfo.name or (LocaleHandler:getText("GeneralErrors", "No Song Name")), x, y, 2000, "left")
     y = y + SkinHandler:getFontLegacy("Menu Extra Extra Large"):getHeight() + spacing
 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
-    love.graphics.printf("Song by: " .. (self.currentSongInfo.artist or "Error - no current artist name"), x, y, 1000, "left")
+    love.graphics.printf("Song by: " .. (self.currentSongInfo.artist or (LocaleHandler:getText("GeneralErrors", "No Artist Name"))), x, y, 1000, "left")
     y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
 
-    love.graphics.printf("Charted by: " .. (self.currentSongInfo.charter or "Error - no current charter name"), x, y, 1000, "left")
+    love.graphics.printf("Charted by: " .. (self.currentSongInfo.charter or LocaleHandler:getText("GeneralErrors", "No Charter Name")), x,y, 1000, "left")
     y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Small"))
