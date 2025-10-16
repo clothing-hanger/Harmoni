@@ -109,8 +109,8 @@ function mania:setUpChart(chartpath, chart)
     end
     for i, SliderVelocity in ipairs(parsed.sliderVelocities) do
         table.insert(maniaChart.scrollVelocities, {
-                startTime = SliderVelocity.startTime,
-                multiplier = SliderVelocity.multiplier
+            startTime = SliderVelocity.startTime,
+            multiplier = SliderVelocity.multiplier
         })
     end
     for _, obj in ipairs(parsed.hitObjects) do

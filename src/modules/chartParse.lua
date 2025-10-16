@@ -56,7 +56,7 @@ function ChartParse.harmc(harmc)
         elseif section == "scrollSpeedFactors" then
             local _, startTime, factor = parts[1], parts[2], parts[3]
             if startTime and factor then
-                table.insert(chart[section], {startTime = tonumber(startTime), factor = tonumber(factor)})
+                table.insert(chart[section], {startTime = tonumber(startTime), multiplier = tonumber(factor)})
             end
 
         elseif section == "hitObjects" then

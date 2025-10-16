@@ -20,13 +20,15 @@ function maniaPlayField:new(chart, parent)
         self.svMarks = {}
         local initialSV = self.chart.meta.initialSV or 1
 
-        self.svMarks[1] = svs[1].startTime * initialSV
-
+        local position = svs[1].startTime * initialSV
+        self.svMarks[1] = position
         for i = 2, #svs do
-            local prev = svs[i-1]
-            local cur = svs[i]
-            local multiplier = prev.multiplier or 1
-            self.svMarks[i] = self.svMarks[i-1] + (cur.startTime - prev.startTime) * multiplier
+            local multiplier = svs[i - 1].multiplier
+            if not multiplier or multiplier ~= multiplier then
+                multiplier = 0
+            end
+            position = position + ((svs[i].startTime - svs[i - 1].startTime) * multiplier)
+            self.svMarks[i] = position
         end
     end
 
@@ -91,7 +93,7 @@ function maniaPlayField:getPositionFromTime(time, index)
     if not multiplier or multiplier ~= multiplier then
         multiplier = 0
     end
-    curPos = curPos + (time - svs[index].startTime) * multiplier
+    curPos = curPos + ((time - svs[index].startTime) * multiplier)
 
     return curPos
 end
