@@ -1,16 +1,16 @@
 local mania = Class:extend("mania")
 
-function mania:new(chart, parent)
+function mania:new(chart, parent, fullChart)
     self.parent = parent
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
 
 
     self.debug = false
-self.songStarted = false
+    self.songStarted = false
     
 
-    self.chart = self:setUpChart(chart)
+    self.chart = self:setUpChart(chart, fullChart)
     self.scoreHandler = ScoreHandler
 
     --score shit 
@@ -19,8 +19,8 @@ self.songStarted = false
     self.scoresPerJudgements = ScoreHandler:getScorePerJudgment(self.totalNotes)
 
 
-   printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
-   printToConsole(self.chart)
+    printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
+    printToConsole(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.playField = {maniaPlayField(self.chart, self)}
@@ -83,9 +83,9 @@ function mania:setUpObjects()
     )
 end
 
-function mania:setUpChart(chart)
-    local songPath = getDirectory(chart)
-    local parsed = ChartParse.harmc(chart)
+function mania:setUpChart(chartpath, chart)
+    local songPath = getDirectory(chartpath)
+    local parsed = chart
     self.totalNotes = #parsed.hitObjects
 
     local maniaChart = {
@@ -108,11 +108,10 @@ function mania:setUpChart(chart)
 
     end
     for i, SliderVelocity in ipairs(parsed.sliderVelocities) do
-               -- print(i, SliderVeloticy.startTime, SliderVeloticy.multiplier)
-       -- table.insert(maniaChart.scrollVelocities, {
-       --         startTime = SliderVelocity.startTime,
-       --         multiplier = SliderVelocity.multiplier
-       -- })
+        table.insert(maniaChart.scrollVelocities, {
+                startTime = SliderVelocity.startTime,
+                multiplier = SliderVelocity.multiplier
+        })
     end
     for _, obj in ipairs(parsed.hitObjects) do
 
@@ -123,6 +122,8 @@ function mania:setUpChart(chart)
             lane = obj.lane
         })
     end
+
+    maniaChart.scrollSpeedFactors = parsed.scrollSpeedFactors or {}
 
     return maniaChart
 end

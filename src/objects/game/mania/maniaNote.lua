@@ -3,7 +3,7 @@ local maniaNote = Class:extend("maniaNote")
 local fourkLanes = { "Left", "Down", "Up", "Right" }
 local sevenkLanes = { "Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2" }
 
-function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, parent)
+function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVEndTime, parent)
     self.size = maniaNoteSize
     self.startTime = startTime
     self.endTime = endTime or startTime
@@ -19,8 +19,10 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, parent)
 
     self.x = maniaLanePositions[self.laneCountString][self.lane]
     self.y = self.startTime + (MusicTime or 0)
+    self.endY = self.endTime + (MusicTime or 0)
 
     self.initialSVTime = initialSVTime
+    self.initialSVEndTime = initialSVEndTime
 
     if self.endTime <= self.startTime then
         self.holdLength = nil
@@ -61,7 +63,7 @@ end
 function maniaNote:updatePosition()
     self.y = self:getNotePosition(self.initialSVTime, not self.held)
     if self.holdLength then
-        self.endY = self:getNotePosition(self.endTime, true)
+        self.endY = self:getNotePosition(self.initialSVEndTime, true)
     end
 
 end
@@ -74,13 +76,15 @@ function maniaNote:getNotePosition(time, moveWithScroll)
     local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
     local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
     local multiplier = msToMulti(scrollSpeed)
+    local sfMult = self.parent.parent:getScrollSpeedFactorFromTime(self.parent.parent.currentTime)
     local currentTime = self.parent.parent.currentTime
 
     if moveWithScroll then
+        local offset = (time - currentTime) * multiplier * sfMult
         if scrollDir == "Up" then
-            return self.parent.y - (currentTime - time) * multiplier
+            return self.parent.y + offset
         else
-            return self.parent.y + (currentTime - time) * multiplier
+            return self.parent.y - offset
         end
     else
         return self.parent.y
@@ -96,14 +100,6 @@ function maniaNote:release()
 end
 
 function maniaNote:draw()
-    if not self.visible then return end
-
-    local screenW, screenH = baseScreenRatio.x, baseScreenRatio.y
-
-    if self.x < -300 or self.x > screenW + 300 or self.y < -300 or self.y > screenH + 300 then
-        return
-    end
-
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
 

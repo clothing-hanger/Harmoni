@@ -1,6 +1,6 @@
 local gameModeManager = State()
 
-function gameModeManager:enter(s,mode,chart)
+function gameModeManager:enter(s,mode,chart,fullchart)
     self.gameMode = {} -- i hate that this has to be a table 😭😭      -ch
                        -- Literally why does it have to be a table?
                        -- because its FUNNY guglio,,,,, but you would never understand   -ch
@@ -8,12 +8,13 @@ function gameModeManager:enter(s,mode,chart)
                        -- no lol     -ch
                        -- kladsjhdsajklcxzkljmn
                        -- ok       -ch
-   printToConsole("Game Mode Manager Entered with mode: " .. mode)
+    printToConsole("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
-        self.gameMode = {mania(chart, self)}
+        self.gameMode = {mania(chart, self, fullchart)}
     end
 
     cursor.fadeOutWhenIdle = true    -- why dont we just add a check to the cursor to see if we are in gamemodemanager
+                                     -- because its not like the cursor will only ever fade out in gamemodemanager
 
     gameModeManager:initializeSong()
 
@@ -30,6 +31,9 @@ end
 
 function gameModeManager:update(dt)
     MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
+    if MusicTimeManager.needsResync(self.gameMode[1].song) then
+        MusicTime = MusicTimeManager.resyncMusicTime(self.gameMode[1].song)
+    end
     for i, gameMode in ipairs(self.gameMode) do
         gameMode:update(dt)
     end

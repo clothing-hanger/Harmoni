@@ -8,7 +8,11 @@ function notificationsHandler:new()
 end
 
 function notificationsHandler:addNotification(text, type)
-    table.insert(self.notifications,1, notification(7, 7, self.notificationWidth, self.notificationHeight, text, type))
+    if not self.notifications then return end
+    local n = notification(7, 7, self.notificationWidth, self.notificationHeight, text, type)
+    if n then
+        table.insert(self.notifications,1, n)
+    end
 end
 
 function notificationsHandler:update(dt)

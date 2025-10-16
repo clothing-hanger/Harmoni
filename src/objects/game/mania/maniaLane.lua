@@ -34,6 +34,7 @@ function maniaLane:setUpHitObjects(hitObjects)
                 self.maniaLane,
                 self.maniaMode,
                 hitObject.initialSVTime,
+                hitObject.initialSVEndTime,
                 self
             ))
         end
@@ -58,7 +59,7 @@ function maniaLane:update(dt)
 end
 
 function maniaLane:isOnScreen(note)
-    return note.startTime - MusicTime <= 5000
+    return note.startTime - MusicTime <= 10000
 end
 
 function maniaLane:handleInput()

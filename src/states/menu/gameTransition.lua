@@ -1,7 +1,7 @@
 local transition = State("transition")
 local BGImage
 local background
-local uhmmode, uhmchart
+local uhmmode, uhmchart, fullchart
 local songInfo
 local timebar
 local time
@@ -9,7 +9,7 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim)
     self.logoH = logoH
     time = 2
     uhmmode, uhmchart = mode, chart
-    chart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
+    fullchart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
    printToConsole(image)
     timebar = {0}
     background = sharedBackground(image)
@@ -25,11 +25,11 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim)
     self.quickSettings = quickSettings(baseScreenRatio.x-500,0,10000,baseScreenRatio.y, baseScreenRatio.x-1000)
     self.quickSettings.baseX = self.quickSettings.x
     songInfo = {
-        songName = chart.meta.title or "Unknown",
-        diffName = chart.meta.difficultyName or "Unknown",
-        mode = chart.meta.gameMode or "Unknown",
-        artist = chart.meta.artist or "Unknown",
-        charter = chart.meta.creator or "Unknown",
+        songName = fullchart.meta.title or "Unknown",
+        diffName = fullchart.meta.difficultyName or "Unknown",
+        mode = fullchart.meta.gameMode or "Unknown",
+        artist = fullchart.meta.artist or "Unknown",
+        charter = fullchart.meta.creator or "Unknown",
         mods = "the game doesnt even have mods..",
         notes = "if its not obvious enough, this is a placeholder",
     }
@@ -75,7 +75,11 @@ function transition:switchToGame(mode,chart)
     background:changeDimness(gameplayBackgroundDim, 0.1)
     --State.switch(States.game.gameModeManager, uhmmode, uhmchart)
     Timer.tween(time, self, {textAlpha = 0})
-        Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear", function() State.switch(States.game.gameModeManager, uhmmode, uhmchart) end)
+        Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear",
+        function()
+            State.switch(States.game.gameModeManager, uhmmode, uhmchart, fullchart)
+        end
+    )
 
 end
 
