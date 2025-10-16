@@ -74,7 +74,7 @@ function resultsState:expandRectangle()
 end
 
 function resultsState:draw()
-    
+
     love.graphics.draw(self.background)
     love.graphics.push()
         love.graphics.translate(self.x, self.y)

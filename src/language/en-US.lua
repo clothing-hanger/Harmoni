@@ -40,7 +40,10 @@ Language = {
         ["Trigger warnings"] = "This chart includes the following content warnings and may not be suitable for everyone:",
         ["Language"] = "This song features language that might not be suitable for all users."
     },
-    Errors = {
+    TriggerWarngings = {
+
+    },
+    ErrorHandler = {
         ["Unknown"] = "???",
         ["Error"] = "Error",
         ["Something Wrong"] = "Something went wrong...",
@@ -48,5 +51,13 @@ Language = {
         ["Details Important"] = "This is important! Please include this in your crash report!",
         ["System Information"] = "System Information",
         ["Copy Error"] = "Press CTRL+C to copy this error."
-    }
+    },
+    GeneralErrors = {
+        ["No Song Name"] = "Error! No current song name!",
+        ["No Difficulty Name"] = "Error! No current Difficulty name!",
+        ["Audio Not Found"] = "Error! Audio file not found!",
+        ["Chart Not Found"] = "Error! Chart file not found!",
+        ["Error"] = "Error!",
+        ["Unknown"] = "???"
+    },
 }
