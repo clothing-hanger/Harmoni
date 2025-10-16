@@ -1,4 +1,7 @@
 Language = {
+    Misc = {
+        ["Placeholder"] = "PLACEHOLDER",
+    },
     Menu = {
         ["Play"] = "Play",
         ["Jukebox"] = "Jukebox",
@@ -8,14 +11,16 @@ Language = {
         ["Exit"] = "Exit",
         ["Now Playing"] = "Now Playing",
         ["Song"] = "Song",
-        ["Song by"] = "Song by",
-        ["Charted by"] = "Charted by",
-        ["Length"] = "Length",
+        ["Song By"] = "Song by: ",
+        ["Charted By"] = "Charted by: ",
+        ["Length"] = "Length: ",
         ["Artist"] = "Artist",
         ["Charter"] = "Charter",
         ["Difficulty"] = "Difficulty",
         ["Search"] = "Search",
-        ["Click Search"] = "Click here to search."
+        ["Click Search"] = "Click here to search.",
+        ["BPM"] = "BPM: ",
+        ["LN%"] = "LN%: "
     },
     Results = {
         ["Accuracy"] = "Accuracy",
