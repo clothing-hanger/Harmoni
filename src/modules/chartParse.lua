@@ -17,7 +17,7 @@ function ChartParse.harmc(harmc)
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then
-        printToConsole("ERROR: ChartParse.harmc(): file not found: " .. harmc)
+        printToConsole("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file " .. harmc)
         return false
     end
 
