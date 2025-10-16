@@ -108,7 +108,11 @@ function mania:setUpChart(chart)
 
     end
     for i, SliderVelocity in ipairs(parsed.sliderVelocities) do
-        
+               -- print(i, SliderVeloticy.startTime, SliderVeloticy.multiplier)
+       -- table.insert(maniaChart.scrollVelocities, {
+       --         startTime = SliderVelocity.startTime,
+       --         multiplier = SliderVelocity.multiplier
+       -- })
     end
     for _, obj in ipairs(parsed.hitObjects) do
 
@@ -170,7 +174,7 @@ function mania:updateObjects(dt)
     self.HUD:sendValues(ScoreHandler:getScore("printable"))
 
     if self.healthBar.health <= 0 then
-        self:endSong()
+       -- self:endSong()
     end
 end
 

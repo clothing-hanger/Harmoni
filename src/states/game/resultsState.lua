@@ -45,7 +45,7 @@ end
 function resultsState:onGradeReached(grade)
     self.bump = 1.05
     if self.bumpTimer then Timer.cancel(self.bumpTimer) end
-   -- self.bumpTimer = Timer.tween(0.5, self, {bump = 1}, "out-quad")
+    self.bumpTimer = Timer.tween(0.25, self, {bump = 1}, "out-quad")
     self.printableGrade = grade
     local hitClone = self.hitSound:clone()
     hitClone:setPitch(self.printableAccuracy / 100)
@@ -55,22 +55,22 @@ function resultsState:onGradeReached(grade)
 end
 
 function resultsState:tweenArc(amount)
-    Timer.tween(2, self, {printableAccuracy = self.accuracy}, "out-expo", function() 
+    Timer.tween(1, self, {printableAccuracy = self.accuracy}, "out-quad", function() 
     self:expandRectangle()
         self.printableAccuracy = self.accuracy -- we do this because the fucking tween doesnt get it the whole way for some reason
     end)
 end
 
 function resultsState:moveArcUp(amount)
-    Timer.tween(1,self, {arcY = self.arcY-amount}, "out-quad")
+    Timer.tween(0.3,self, {arcY = self.arcY-amount}, "out-circ")
 end
 
 function resultsState:expandRectangle()
-    local newHeight = 1120
+    local newHeight = 1112
     local difference = newHeight - self.height
         self:moveArcUp(difference/2)
 
-    Timer.tween(1,self,{height = newHeight}, "out-quad")
+    Timer.tween(0.3,self,{height = newHeight}, "out-circ")
 end
 
 function resultsState:draw()
@@ -117,7 +117,7 @@ function resultsState:drawSmallRectangles()
         local smallRectHeights = 130 
         local smallRectSpacing = 20     
         
-        local cornerRadius = 60
+        local cornerRadius = 70
                             
         
                                    -- this is the worst code in the entire game. but it works. and i am scared to touch it 
