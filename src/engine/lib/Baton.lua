@@ -22,6 +22,11 @@ local baton = {
 		SOFTWARE.
 	]]
 }
+-- Patched by Guglio for ASyncInput support on Windows
+
+local ASyncInput = require("engine.lib.ASyncInput.ASyncInput")
+if ASyncInput then ASyncInput.thread:start() end
+local asyncKeys = {}
 
 local function warn(msg, args)
 	if args then
@@ -68,7 +73,12 @@ local sourceFunction = {keyboardMouse = {}, joystick = {}}
 
 -- checks whether a keyboard key is down or not
 function sourceFunction.keyboardMouse.key(key)
-	return (love.keyboard and love.keyboard.isDown(key)) and 1 or 0
+	--[[ return (love.keyboard and love.keyboard.isDown(key)) and 1 or 0 ]]
+	if asyncKeys[key] ~= nil then
+		return asyncKeys[key] and 1 or 0
+	else
+		return (love.keyboard and love.keyboard.isDown(key)) and 1 or 0
+	end
 end
 
 -- checks whether a keyboard key is down or not,
@@ -356,11 +366,22 @@ end
 -- public API --
 
 -- checks for changes in inputs
+function Player:_updateASyncInput()
+	if not ASyncInput then return end
+	while true do
+		local e = love.thread.getChannel("AsyncInput.Out"):pop()
+		if not e then break end
+		asyncKeys[e.key] = e.state
+	end
+end
+
 function Player:update()
+	self:_updateASyncInput()
 	self:_setActiveDevice()
 	self:_updateControls()
 	self:_updatePairs()
 end
+
 
 -- keyboard presses handler
 function Player:onKeyPress(source, ...)
