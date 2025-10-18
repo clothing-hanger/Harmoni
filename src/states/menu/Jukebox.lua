@@ -1,3 +1,4 @@
+---@diagnostic disable: inject-field
 local jukebox = State("jukebox")
 
 function jukebox:enter(parent)
@@ -8,13 +9,9 @@ function jukebox:enter(parent)
     self.songButtonWidth = 475
     self.songButtonHeight = 75
     self.songButtonSpacing = 10
-
     self.songButtons = {}
 
-
-
     self:setupSongList()
-
 end
 
 function jukebox:switchSong(songInfo)
@@ -80,23 +77,33 @@ function jukebox:setupSongList()
 end
 
 function jukebox:update(dt)
-   if self.lyricsDisplay then self.lyricsDisplay:update(dt, self.audio:tell("seconds")) end
-    self:checkForSongButtonClicks()
-    if Input:pressed("menuClickLeft") then
-        if not self.lyricsDisplay then return end
+    local audioTime = 0
+    if self.audio and self.audio:isPlaying() then
+        audioTime = self.audio:tell("seconds")
+    end
 
-        local lyricClickShit = self.lyricsDisplay:clickLyric()
-        if lyricClickShit and lyricClickShit.lyricClick then
-            self.audio:seek(lyricClickShit.time)
-            if self.video then
-                self.songBG:seek(lyricClickShit.time)
-                self.songBG.forcedUpdate = true
+    if self.lyricsDisplay then
+        self.lyricsDisplay:update(dt, audioTime)
+    end
+
+    self:checkForSongButtonClicks()
+
+    if Input:pressed("menuClickLeft") then
+        if self.lyricsDisplay then
+            local lyricClick = self.lyricsDisplay:clickLyric()
+            if lyricClick and lyricClick.lyricClick then
+                self.audio:seek(lyricClick.time)
+                if self.video then
+                    self.songBG:seek(lyricClick.time)
+                    self.songBG.forcedUpdate = true
+                end
             end
         end
     end
 
-
-    if self.video then self.songBG:update(dt) end
+    if self.video then
+        self.songBG:update(dt)
+    end
 end
 
 function jukebox:checkForSongButtonClicks()

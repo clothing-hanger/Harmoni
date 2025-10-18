@@ -30,16 +30,20 @@ function lyricsDisplay:setUpLyrics()
 end
 
 function lyricsDisplay:update(dt, musicTime)
-    for i, Lyric in ipairs(self.lyrics) do
-        local CX,CY = cursor:getPosition()
+    self.lastLyricHitByTime = self.lastLyricHitByTime or 0
 
-        if type(Lyric.time) == "number" and musicTime > Lyric.time and not Lyric.hit then
+    for i = self.lastLyricHitByTime + 1, #self.lyrics do
+        local Lyric = self.lyrics[i]
+        if musicTime > Lyric.time then
             Lyric.hit = true
             self:hitLyric(i)
+            self.lastLyricHitByTime = i
+        else
+            break
         end
     end
-
 end
+
 function lyricsDisplay:clickLyric()
     local CX, CY = cursor:getPosition()
     if Input:pressed("menuClickLeft") then
@@ -47,29 +51,47 @@ function lyricsDisplay:clickLyric()
             local rect = Lyric.rectangle
             if CX >= rect.x and CX <= rect.x + rect.width and CY >= rect.y and CY <= rect.y + rect.height then
                 self.currentLyric = i
-                for j, fuckingLyric in ipairs(self.lyrics) do
-                    if j >= self.currentLyric then
-                        fuckingLyric.hit = false  -- prob a better way to do this but 2 nested fors of the same table is fine probably
+ 
+                for j, l in ipairs(self.lyrics) do
+                    if j >= i then
+                        l.hit = false
                     end
                 end
+
+                self.lastLyricHitByTime = i - 1
+
                 return {lyricClick = true, time = Lyric.time}
             end
         end
     end
 end
 
-
 function lyricsDisplay:hitLyric(lyricIndex)
     self.currentLyric = lyricIndex
+    local clicked = self.lyrics[lyricIndex]
 
-    local currentLyric = self.lyrics[lyricIndex]
-    local targetY = self.y + self.height / 2 - currentLyric.rectangle.height / 2
-    local offset = targetY - currentLyric.rectangle.y
+    local centerY = self.y + self.height / 2 - clicked.rectangle.height / 2
+    local offset = centerY - clicked.rectangle.y
 
-    for i, Lyric in ipairs(self.lyrics) do
+    local topY = math.huge
+    local bottomY = -math.huge
+    for _, Lyric in ipairs(self.lyrics) do
+        local yAfter = Lyric.rectangle.y + offset
+        if yAfter < topY then topY = yAfter end
+        if yAfter + Lyric.rectangle.height > bottomY then bottomY = yAfter + Lyric.rectangle.height end
+    end
+
+    if topY > self.y then
+        offset = offset - (topY - self.y)
+    elseif bottomY < self.y + self.height then
+        offset = offset + (self.y + self.height - bottomY)
+    end
+
+    for _, Lyric in ipairs(self.lyrics) do
         Timer.tween(0.1, Lyric.rectangle, { y = Lyric.rectangle.y + offset }, "in-out-quad")
     end
 end
+
 
 function lyricsDisplay:draw()
 

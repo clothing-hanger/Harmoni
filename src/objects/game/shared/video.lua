@@ -1,3 +1,4 @@
+---@type table
 local video = Class:extend("video")
 
 function video:new(video,x,y,scaleX,scaleY,fr)
@@ -100,8 +101,6 @@ function video:seek(time)
         self.time = time
         self.previousFrameTime = love.timer.getTime()
         self.forcedUpdate = false
-
-        print("TARGET: " .. tostring(time) .. " | ACTUAL: " .. tostring(self.video:tell()))
     end
 end
 

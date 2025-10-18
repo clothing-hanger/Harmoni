@@ -177,6 +177,7 @@ function CHE:mousereleased(x, y, b)
 end
 
 function CHE:draw(dt)
+    local lastFont = defaultFont
     love.graphics.push()
         love.graphics.setCanvas({CHECanvas, stencil = true})
             love.graphics.clear(0, 0, 0, 1)
@@ -213,9 +214,6 @@ function CHE:draw(dt)
 
     cursor:draw()
 
-    local baseFont = love.graphics.getFont()
-
-    love.graphics.setFont(baseFont)
     local DPS, UPS = love.timer.getFPS()
     love.graphics.setColor(0, 0, 0)
 
@@ -232,6 +230,8 @@ function CHE:draw(dt)
     end
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
+
+    love.graphics.setFont(lastFont)
 end
 
 function CHE:exit() end
