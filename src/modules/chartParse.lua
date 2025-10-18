@@ -81,6 +81,7 @@ end
 ---@return table|boolean harmc returns a table with the meta data, or false if there was an error
 --- Like ChartParse.harmc, but stops when it escapes the meta section
 function ChartParse.harmcMeta(harmc)
+    print("harmc",harmc)
     local chart = {}
     local section = "meta"  -- we only want the meta section, so we set it to meta
 

@@ -1,0 +1,18 @@
+return {
+    {text = "Piece by piece", time = 19},
+    {text = "You're leaving me in pieces on display", time = 21},
+    {text = "for good while I'm fine and understood", time = 23},
+    {text = "As I rattle my cell", time = 26},
+    {text = "and recomputing molecules", time = 27},
+    {text = "in prison bars", time = 29},
+    {text = "Shot at my foot and not the stars", time = 30},
+    {text = "OH!", time = 32},
+    {text = "Ain't that a shame?", time = 33},
+    {text = "My illness, a game?", time = 34},
+    {text = "You've set yourself as queen and me as the pawn", time = 35},
+    {text = "A move to the right", time = 38},
+    {text = "and you're out of sight", time = 40},
+    {text = "well, isn't that a pain you're finally gone!", time = 42},
+    {text = "(oooh my god!)", time = 45},
+    {text = "(music)", time = 46},
+}
