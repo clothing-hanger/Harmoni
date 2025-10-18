@@ -292,7 +292,7 @@ static int Video_seek(lua_State *L) {
     avcodec_flush_buffers(video->codecContext);
 
     AVPacket pkt;
-    av_init_packet(&pkt);
+	av_packet_unref(&pkt);
 
     while (av_read_frame(video->formatContext, &pkt) >= 0) {
         if (pkt.stream_index == video->streamIndex) {
