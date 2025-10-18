@@ -5,8 +5,8 @@ function jukebox:enter(parent)
     self.background = self.parent.BG
 
     self.songButtonX = 10
-    self.songButtonWidth = 780
-    self.songButtonHeight = 97
+    self.songButtonWidth = 475
+    self.songButtonHeight = 75
     self.songButtonSpacing = 10
 
     self.songButtons = {}
@@ -24,13 +24,32 @@ function jukebox:switchSong(songInfo)
     self.currentSongInfo = songInfo
     self.audio = love.audio.newSource(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audio, "stream")
     self.audio:play()
+    if getFileExtension(self.currentSongInfo.bg) ~= "mp4" then
+        print(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
+        self.video = false
+        self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
+    else
+    self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, 520, 30, 1, 1)
+    self.songBG:play()
+    self.video = true
+
+    self.songBG.scaleX = 1430 / self.songBG.image:getWidth()
+    self.songBG.scaleY = 804 / self.songBG.image:getHeight()
+    self.songBG.x = 520 + (1430 / 2)
+    self.songBG.y = 30 + (804 / 2)
+
+        
+    end
 
     -- check for lyrics in the current song 
     if love.filesystem.getInfo(self.currentSongInfo.path .. "/lyrics.lua", "file") then
             local lyrics = require(self.currentSongInfo.path .. ".lyrics")
 
-            self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-800,0,800,baseScreenRatio.y,lyrics)
+            self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
+
+    
+
 end
 
 
@@ -41,6 +60,7 @@ function jukebox:setupSongList()
         local width, height = self.songButtonWidth, self.songButtonHeight
         local name, artist, audio
         local songInfo = nil
+        local bg
         local songContents = love.filesystem.getDirectoryItems(musicPath .. Song)
         for _, File in ipairs(songContents) do
             if getFileExtension(File) == "harmc" then
@@ -56,7 +76,8 @@ function jukebox:setupSongList()
         name = songInfo.title or "???"
         artist = songInfo.artist or "???"
         audio = songInfo.audioFile or ""
-        table.insert(self.songButtons,jukeboxSongButton(x, y, width, height, name, artist, audio, musicPath .. Song .. "/"))
+        if songInfo.backgroundVideo then bg = songInfo.backgroundVideo else bg = songInfo.backgroundFile end
+        table.insert(self.songButtons,jukeboxSongButton(x, y, width, height, name, artist, audio, musicPath .. Song .. "/", bg))
         ::continue::
     end
 end
@@ -69,7 +90,11 @@ function jukebox:update(dt)
 
         local lyricClickShit = self.lyricsDisplay:clickLyric()
         if lyricClickShit and lyricClickShit.lyricClick then  self.audio:seek(lyricClickShit.time) end
+        if lyricClickShit and lyricClickShit.lyricClick then if self.video then self.songBG:seek(lyricClickShit.time) end end
     end
+
+
+    if self.video then self.songBG:update(dt) end
 end
 
 function jukebox:checkForSongButtonClicks()
@@ -93,6 +118,33 @@ function jukebox:draw()
     for i, Button in ipairs(self.songButtons) do
         Button:draw()
     end
+
+
+
+    --lyrics skeleton
+   if not self.lyricsDisplay then love.graphics.rectangle("fill",baseScreenRatio.x-570,30,540,baseScreenRatio.y-200) end
+
+   --songBG skeleton
+   love.graphics.rectangle("fill", 520, 30, 1430, 804)
+
+   --song info skeleton 
+   --love.graphics.rectangle("fill", 520, 1070, 1430, 200)
+
+   --scrubber and button skeleton
+   love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
+
+   self:drawBG()
+end
+
+
+function jukebox:drawBG()
+
+    if self.video then 
+        self.songBG:draw()
+    elseif self.songBG then
+        love.graphics.draw(self.songBG,520, 30,nil,1430 / self.songBG:getWidth(),804 / self.songBG:getHeight())
+    end
+
 end
 
 return jukebox

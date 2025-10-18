@@ -1,7 +1,7 @@
 local jukeboxSongButton = Class:extend("jukeboxSongButton")
 
-function jukeboxSongButton:new(x,y,width,height,name,artist,audio,path)
-    self.x,self.y,self.width,self.height,self.name,self.artist,self.audio,self.path = x,y,width,height,name,artist,audio,path
+function jukeboxSongButton:new(x,y,width,height,name,artist,audio,path,bg)
+    self.x,self.y,self.width,self.height,self.name,self.artist,self.audio,self.path,self.bg = x,y,width,height,name,artist,audio,path,bg
     print("PATH", self.path)
 end
 
@@ -10,7 +10,7 @@ function jukeboxSongButton:update(dt)
 end
 
 function jukeboxSongButton:onClick()
-    return {name = self.name, audio = self.audio, artist = self.artist, path = self.path}
+    return {name = self.name, audio = self.audio, artist = self.artist, path = self.path, bg = self.bg}
 end
 
 function jukeboxSongButton:draw()
