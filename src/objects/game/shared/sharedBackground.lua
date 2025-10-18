@@ -4,8 +4,9 @@ local sharedBackground = Class:extend("sharedBackground")
 local bumpTween
 
 function sharedBackground:new(imagePath, dimness, size)
-    if type(imagePath) == "string" then
-        self.image = love.graphics.newImage(imagePath)
+    if type(imagePath) == "string" then  -- what was this even for? im not gonna edit it cuz i dont know why its here
+        if love.filesystem.getInfo(imagePath, "file") then self.image = love.graphics.newImage(imagePath) else
+        self.image = SkinHandler:getImage("Menu", "Background") end
     else
         self.image = imagePath
     end

@@ -2,7 +2,7 @@ local titleScreen = State("titleScreen")
 
 function titleScreen:enter()
    -- self.realLogo = love.graphics.newImage("Skins/Default Arrow/TEMP/real logo"..tostring(love.math.random(1,2))..".png")
-   self.BG = love.graphics.newImage("Skins/Default Arrow Batched/MENU/TITLEBG/1.png")
+   self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
 
     self.buttonWidth = 500

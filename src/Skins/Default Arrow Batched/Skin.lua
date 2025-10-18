@@ -178,6 +178,7 @@ Skin = {   -- i need to remove lots of these tbh..
         ["H"] = newImage("MENU/H.png"),
         ["Icon Logo"] = newImage("MENU/logoH.png"),
         ["Loading Spinner"] = newImage("MENU/logoH.png"),
+        ["Background"] = newImage("MENU/TITLEBG/1.png")
     },
 
     Sounds = {
