@@ -6,7 +6,6 @@ function logoH:new(x,y,scale)
     self.image = SkinHandler:getImage("Menu", "H")
     self.x, self.y = x,y
     self.sx, self.sy = scale,scale
-    
 end
 
 function logoH:update(dt)

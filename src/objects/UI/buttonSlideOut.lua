@@ -31,11 +31,10 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 
     self.isPressed = false
     self.wasPressedInside = false
-
 end
 
 function buttonSlideOut:update(dt)
-        if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
+if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
     self.hovered = mouseOver(self)
 
@@ -85,9 +84,6 @@ function buttonSlideOut:update(dt)
             self.scale = tween.from + (tween.to - tween.from) * tween.easing(t)
         end
     end
-
-         --   if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
-
 end
 
 function buttonSlideOut:startTween(targetWidth)
@@ -158,7 +154,6 @@ function buttonSlideOut:draw()
         }
     )
 
-
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
         local remappedX = remap(mouseX, self.x, self.x + self.slideWidth, 0, 1)
@@ -190,8 +185,6 @@ function buttonSlideOut:draw()
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2
     love.graphics.printf(self.text, textX, textY, self.width, "left")
     love.graphics.pop()
-
-
 end
 
 return buttonSlideOut

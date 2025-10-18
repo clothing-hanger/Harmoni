@@ -4,7 +4,7 @@ local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
 local difficultyButtons = {}
 local songButtonWidth = 600 * 1.3    -- why???? why would we do this??
-local songButtonHeight = 75 * 1.3
+local songButtonHeight = 75 * 1.3    -- because its fucking FUNNY
 local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 0
@@ -24,9 +24,8 @@ local switchingState
 function songSelect:enter()
     self.debug = true
 
-
     self.currentSongInfo = {}
-   -- selectedSong = 1
+    -- selectedSong = 1
     switchingState = false
     self.colors = {
         light = {0, 0, 0, 0},
@@ -177,9 +176,6 @@ end
     self.logoH = UIlogoH(90,1300,0.17)
 
     self.coverBG = {alpha = 0}
-
---    self.logoH = SkinHandler:getImage("Menu", "H")
-
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -197,7 +193,7 @@ function songSelect:setUpThoseBubblesThatIHate(numberOfBubbles)
 
     local colors = SkinHandler:getRandomColors()
 
-    for i = 1,20 do 
+    for i = 1,20 do
         ::start::
         local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
@@ -370,7 +366,6 @@ end
 
 function songSelect:update(dt)
     if Input:pressed("menuBack") then
-
         if self.menuState == "difficulty" then self.menuState = "song"; return end
         if switchingState then return end
 
@@ -397,20 +392,20 @@ function songSelect:update(dt)
     BGDarkness = BGDarkness + (BGDimTarget - BGDarkness) * 10 * dt
 
     self.logoCircle:update(dt)
-        self.logoCircleFill:update(dt)
+    self.logoCircleFill:update(dt)
 
     self.logoCircle.rotation = self.logoCircle.rotation +5*dt
-        self.logoCircleFill.rotation = self.logoCircle.rotation +5*dt
+    self.logoCircleFill.rotation = self.logoCircle.rotation +5*dt
 
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
         Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
-        if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
+        if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100
+        elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100
+        end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
     end
-
-
 end
 
 function songSelect:mousemoved()
@@ -427,9 +422,6 @@ end
 
 function songSelect:updateSongButtons(dt)
     local speed = 10
-    local slope = 0
-    local baseX = songButtonX
-    local baseY = 0
 
     for i, SongButton in ipairs(songButtons) do
         local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
@@ -468,19 +460,10 @@ function songSelect:updateBGImage()
 end
 
 function songSelect:updateDifficultyButtons(dt)
-            local speed = 10
-
-    local function fadeBG()
-        BGAlpha = {0}
-        if BGFade then Timer.cancel(BGFade) end
-        BGFade = Timer.tween(0.25, BGAlpha, {1})
-    end
-
-    
-    for i, DifficultyButton in ipairs(difficultyButtons) do
+    local speed = 10
+    for _, DifficultyButton in ipairs(difficultyButtons) do
         local targetX = (self.menuState == "difficulty" and songButtonX) or (baseScreenRatio.x + songButtonSpacing)
         DifficultyButton.x = DifficultyButton.x + (targetX - DifficultyButton.x) * speed * dt
-
     end
 end
 
@@ -505,9 +488,8 @@ end
 
 function songSelect:checkForDifficultyButtonClicks() 
     local buttonInfo = false
-    local additionalInfo
     if self.uglyDiffButtonIssueFix then self.uglyDiffButtonIssueFix = false; return end  -- fucking disgusting fix 
-    for i, SongButton in ipairs(difficultyButtons) do
+    for _, SongButton in ipairs(difficultyButtons) do
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
                 --selectedSong = i
@@ -529,7 +511,7 @@ function songSelect:switchToPlaystate(buttonInfo)
     State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG, self.logoH, BGDarkness)
 
     end)
-    
+
     switchingState = true
 end
 
@@ -541,23 +523,23 @@ function songSelect:draw(dt)
         love.graphics.setColor(1,1,1,BGAlpha[1])
         if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
     end
-        love.graphics.setColor(0,0,0,BGDarkness or 0)
+
+    love.graphics.setColor(0,0,0,BGDarkness or 0)
+
     if not switchingState then love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y) end
-
         love.graphics.setColor(11,1,1)
-
-    for i, Bubble in ipairs(self.bubbles) do
+    for _, Bubble in ipairs(self.bubbles) do
         Bubble:draw()
     end
+
     love.graphics.setColor(1,1,1,0.05)
     for _, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:draw(dt)
     end
 
-        love.graphics.setColor(1,1,1)
+    love.graphics.setColor(1,1,1)
     love.graphics.setLineWidth(5)
-    
-        love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
+    love.graphics.line(songButtonX-songButtonSpacing, songButtonSpacing*2, songButtonX-songButtonSpacing, baseScreenRatio.y-songButtonSpacing*2)
 
     for _, SongButton in ipairs(songButtons) do
         SongButton:draw()
@@ -566,47 +548,41 @@ function songSelect:draw(dt)
     if songSelect.difficultyListDraw then songSelect:difficultyListDraw() end
     self:drawSongInfo(20,20,15)
 
-
     self:drawCircleWithContents()
-    
 
     -- this is a sorta ugly hack but it works 
     if switchingState then
-    love.graphics.setColor(1,1,1,self.coverBG.alpha)
-    if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
-    love.graphics.setColor(0,0,0,BGDarkness or 0)
-    love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
-    love.graphics.setColor(1,1,1)
+        love.graphics.setColor(1,1,1,self.coverBG.alpha)
+        if currentDisplayedBG then love.graphics.draw(currentDisplayedBG,0,0, nil, baseScreenRatio.x/currentDisplayedBG:getWidth(), baseScreenRatio.y/currentDisplayedBG:getHeight()) end
+        love.graphics.setColor(0,0,0,BGDarkness or 0)
+        love.graphics.rectangle("fill", 0,0,baseScreenRatio.x,baseScreenRatio.y)
+        love.graphics.setColor(1,1,1)
     end
     self.logoH:draw()
-
-
-
-
-   -- if self.debug then love.graphics.print("DEBUG SHIT\n"..selectedSong, 50,50) end
-
-
 end
 
 
 function songSelect:drawSongInfo(x, y, spacing)
+    local fontHeightExtra = SkinHandler:getFontLegacy("Menu Extra Extra Large"):getHeight()
+    local fontHeight = SkinHandler:getFontLegacy("Menu Large"):getHeight()
+    local fontHeightSmall = SkinHandler:getFontLegacy("Menu Small"):getHeight()
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Extra Large"))
     love.graphics.printf(self.currentSongInfo.name or (LocaleHandler:getText("GeneralErrors", "No Song Name")), x, y, 2000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Extra Extra Large"):getHeight() + spacing
+    y = y + fontHeightExtra + spacing
 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
     love.graphics.printf(LocaleHandler:getText("Menu","Song By").. (self.currentSongInfo.artist or (LocaleHandler:getText("GeneralErrors", "No Artist Name"))), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
+    y = y + fontHeight:getHeight() + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","Charted By").. (self.currentSongInfo.charter or LocaleHandler:getText("GeneralErrors", "No Charter Name")), x,y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
+    y = y + fontHeight:getHeight() + spacing
 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Small"))
     love.graphics.printf(LocaleHandler:getText("Menu", "Length") .. LocaleHandler:getText("Misc", "Placeholder"), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
+    y = y + fontHeightSmall + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","BPM") .. (self.currentSongInfo.bpm or LocaleHandler:getText("GeneralErrors", "unknown")), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
+    y = y + fontHeightSmall + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","LN%") .. LocaleHandler:getText("Misc", "Placeholder"), x, y, 1000, "left")
 end

@@ -10,14 +10,13 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim)
     time = 2
     uhmmode, uhmchart = mode, chart
     fullchart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
-   printToConsole(image)
+    printToConsole(image)               -- This is actually a good way to do it im ngl you thought good
     timebar = {0}
     background = sharedBackground(image)
     background.dimness = backgroundDim
     self.textAlpha = 0
     background:changeDimness(0.8, time*0.1, function() end) 
     Timer.after(0.15, function () self:raiseH()end)
-    --self:raiseH()
 
     self.initiatedSwitch = false
 
@@ -35,17 +34,12 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim)
     }
 end
 
-
-
 function transition:raiseH()
     Timer.tween(0.5, self.logoH, {y = self.logoH.y - 250}, "in-out-quad", function()    
     end)
 
     Timer.tween(0.3, self, {textAlpha = 1})
 end
-
-
-
 
 function transition:update(dt)
     background:update(dt)
@@ -54,7 +48,7 @@ function transition:update(dt)
     self:checkForQuickSettingsHover()
 
     self.countdownBar:update(dt)
-    
+
     if self.countdownBar.complete and not self.initiatedSwitch then self:switchToGame() end 
 
     if Input:pressed("menuBack") then State.switch(States.menu.songSelect) end
@@ -71,9 +65,9 @@ end
 function transition:switchToGame(mode,chart)
     self.initiatedSwitch = true
     self.quickSettings.freezeX = true
+    ---@diagnostic disable-next-line: redefined-local
     local time = 0.1
     background:changeDimness(gameplayBackgroundDim, 0.1)
-    --State.switch(States.game.gameModeManager, uhmmode, uhmchart)
     Timer.tween(time, self, {textAlpha = 0})
         Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear",
         function()
@@ -82,49 +76,6 @@ function transition:switchToGame(mode,chart)
     )
 
 end
-
-function transition:draw()
-        background:draw()
-            local progress = (self.quickSettings.x - self.quickSettings.closedX) /(self.quickSettings.openX - self.quickSettings.closedX)
-                     
-    if progress > 0 then
-        love.graphics.setColor(0, 0, 0, 0.5 * progress) 
-        love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
-        love.graphics.setColor(1, 1, 1)
-    end
-
-    local offsetX = self.quickSettings.x - self.quickSettings.closedX
-
-    love.graphics.push()
-    love.graphics.translate(offsetX, self.logoH.y - 500)
-
-    love.graphics.setFont(songButtonFontLarge)
-    local infoText = string.format(
-        "Song: %s\nDifficulty: %s\nMode: %s\nProduced by: %s\nCharted by: %s\nActive Modifiers: %s\n%s",
-        songInfo.songName,
-        songInfo.diffName,
-        songInfo.mode,
-        songInfo.artist,
-        songInfo.charter,
-        songInfo.mods,
-        songInfo.notes or "No notes available"
-    )
-    love.graphics.setColor(1,1,1,self.textAlpha)
-    love.graphics.printf(infoText, 0, baseScreenRatio.y / 2 , baseScreenRatio.x, "center")
-    love.graphics.setColor(1,1,1)
-    self.countdownBar:draw()
-    love.graphics.pop()
-
-    love.graphics.push()
-    love.graphics.translate(offsetX, 0)
-   self.logoH:draw()
-    love.graphics.pop()
-    self.quickSettings:draw()
-
-
-
-end
-
 
 function transition:draw()
     background:draw()
@@ -143,37 +94,33 @@ function transition:draw()
 
     -- info text + countdown
     love.graphics.push()
-    love.graphics.translate(offsetX, self.logoH.y - 500)
+        love.graphics.translate(offsetX, self.logoH.y - 500)
 
-    love.graphics.setFont(songButtonFontLarge)
-    local infoText = string.format(
-        "Song: %s\nDifficulty: %s\nMode: %s\nProduced by: %s\nCharted by: %s\nActive Modifiers: %s\n%s",
-        songInfo.songName,
-        songInfo.diffName,
-        songInfo.mode,
-        songInfo.artist,
-        songInfo.charter,
-        songInfo.mods,
-        songInfo.notes or "No notes available"
-    )
-    love.graphics.setColor(1,1,1,self.textAlpha)
-    love.graphics.printf(infoText, 0, baseScreenRatio.y / 2 , baseScreenRatio.x, "center")
-    love.graphics.setColor(1,1,1)
-    self.countdownBar:draw()
+        love.graphics.setFont(songButtonFontLarge)
+        local infoText = string.format(
+            "Song: %s\nDifficulty: %s\nMode: %s\nProduced by: %s\nCharted by: %s\nActive Modifiers: %s\n%s",
+            songInfo.songName,
+            songInfo.diffName,
+            songInfo.mode,
+            songInfo.artist,
+            songInfo.charter,
+            songInfo.mods,
+            songInfo.notes or "No notes available"
+        )
+        love.graphics.setColor(1,1,1,self.textAlpha)
+        love.graphics.printf(infoText, 0, baseScreenRatio.y / 2 , baseScreenRatio.x, "center")
+        love.graphics.setColor(1,1,1)
+        self.countdownBar:draw()
     love.graphics.pop()
 
     -- logo follows offsetX but keeps its own Y
     love.graphics.push()
-    love.graphics.translate(offsetX, 0)
-    self.logoH:draw()
+        love.graphics.translate(offsetX, 0)
+        self.logoH:draw()
     love.graphics.pop()
 
     -- quick settings menu still moves with its own x
     self.quickSettings:draw()
 end
-
-
-
-
 
 return transition

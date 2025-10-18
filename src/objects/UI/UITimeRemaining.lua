@@ -27,54 +27,27 @@ function UITimeRemaining:update(dt, progress)
     self.timer = (self.timer + dt) -- get the time in seconds
 
     self.squiglyLine:update(dt)
-
-
 end
 
 function UITimeRemaining:draw()
-
     love.graphics.setColor(1,1,1)
-
-    love.graphics.setScissor((self.width*self.percent)-self.width,self.y-100,self.width,200)
-    self.squiglyLine:draw()
-
-    love.graphics.setScissor()
-
-    -- draw the capsule thingy 
-
-    love.graphics.circle("fill", self.width*self.percent, self.y, 20)
-
-end
-
-function UITimeRemaining:draw()
-
-    love.graphics.setColor(1,1,1)
-
-
 
     love.graphics.stencil(function()
-            self.squiglyLine:draw()
-
+        self.squiglyLine:draw()
     end, "replace", 1)
     love.graphics.setStencilTest("equal", 1)
 
     love.graphics.setScissor((self.width*self.percent)-self.width,self.y-100,self.width,200)
     love.graphics.draw(self.gradient)
 
-
     love.graphics.setScissor()
 
 
     love.graphics.setStencilTest()
 
-
-    
     -- draw the capsule thingy 
     love.graphics.setColor(0,0,0)   
-     love.graphics.circle("fill", self.width*self.percent, self.y, 15)
-
-
-
+    love.graphics.circle("fill", self.width*self.percent, self.y, 15)
 end
 
 return UITimeRemaining

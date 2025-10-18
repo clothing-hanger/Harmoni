@@ -22,7 +22,6 @@ function getAverageColor(imageData)
     return {r / count, g / count, b / count}
 end
 
-
 function drawGradientRect(x, y, width, height, color1, color2, vertical)  -- stolen lol
     local vertices
     if vertical then

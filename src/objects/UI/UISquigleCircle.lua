@@ -19,8 +19,7 @@ function UISquigleCircle:new(mode, x, y, radius, amplitude, frequency, lineThick
 end
 
 function UISquigleCircle:update(dt)
-  
-  --  self.rotation = self.rotation + math.sin(love.timer.getTime())*0.01
+    --self.rotation = self.rotation + math.sin(love.timer.getTime())*0.01
 end
 
 function UISquigleCircle:draw()

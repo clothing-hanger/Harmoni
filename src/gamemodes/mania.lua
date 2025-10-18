@@ -5,10 +5,8 @@ function mania:new(chart, parent, fullChart)
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
 
-
     self.debug = false
     self.songStarted = false
-    
 
     self.chart = self:setUpChart(chart, fullChart)
     self.scoreHandler = ScoreHandler
@@ -17,7 +15,6 @@ function mania:new(chart, parent, fullChart)
     ScoreHandler:resetScore()
 
     self.scoresPerJudgements = ScoreHandler:getScorePerJudgment(self.totalNotes)
-
 
     printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
     printToConsole(self.chart)
@@ -30,8 +27,6 @@ function mania:new(chart, parent, fullChart)
     mania.judgements = require("Modules.maniaJudgements")
 
     self:setUpObjects()
-
-  --  Timer.after(0.15, function() self:startSong(2) end)
 end
 
 
@@ -42,7 +37,7 @@ end
 
 function mania:startSong(countdown)
     self.songStarted = true
-    self.parent:startSong(countdown) 
+    self.parent:startSong(countdown)
 end
 
 function mania:setUpObjects()
@@ -50,8 +45,7 @@ function mania:setUpObjects()
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     self.HUD = maniaHUD()
 
-        self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
-
+    self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
 
     local songLength = self.song and self.song:getDuration("seconds") or 0
     self.timeRemaingBar = UITimeRemaing(
@@ -104,17 +98,17 @@ function mania:setUpChart(chartpath, chart)
         )
     end
 
-    for i, BpmChange in ipairs(parsed.bpm) do
+    for _, BpmChange in ipairs(parsed.bpm) do
 
     end
-    for i, SliderVelocity in ipairs(parsed.sliderVelocities) do
+
+    for _, SliderVelocity in ipairs(parsed.sliderVelocities) do
         table.insert(maniaChart.scrollVelocities, {
             startTime = SliderVelocity.startTime,
             multiplier = SliderVelocity.multiplier
         })
     end
     for _, obj in ipairs(parsed.hitObjects) do
-
         table.insert(maniaChart.hitObjects, {
             type = obj.type,
             startTime = obj.startTime,
@@ -129,7 +123,6 @@ function mania:setUpChart(chartpath, chart)
 end
 
 function mania:update(dt)
-    
     self:updateObjects(dt)
 
     for _, playField in ipairs(self.playField) do
@@ -153,7 +146,7 @@ function mania:update(dt)
 end
 
 function mania:endSong()
-   printToConsole("mania:endSong()")
+    printToConsole("mania:endSong()")
     if self.song then self.song:stop();printToConsole("SONG END 3") end
     self.song = nil
     self.chart = nil

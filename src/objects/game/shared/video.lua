@@ -90,7 +90,7 @@ end
 function video:seek(time)
     if self.video then
         self.video:seek(time)
-        
+
         self.time = time
         self.previousFrameTime = love.timer.getTime()
         self.forcedUpdate = false

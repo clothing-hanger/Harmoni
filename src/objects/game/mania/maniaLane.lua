@@ -126,6 +126,7 @@ function maniaLane:checkHoldReleases()
                 note.released = true
                 table.remove(self.drawableNotes, i)
 
+                -- Uncomment this block to enable hold note release judgements -Guglio
                 --[[ local parentParent = self.parent.parent
                 parentParent.comboCount:incrementCombo()
                 parentParent.judgementObject:judge(bestJudgement.name)

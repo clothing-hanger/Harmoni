@@ -16,7 +16,7 @@ return {
     {text = "(oooh my god!)", time = 45},
     {text = "(Yay!)", time = 46},
     {text = "(music)", time = 47},
-    {text = "Recomputing, couting the hours", time = 60},
+    {text = "Recomputing, counting the hours", time = 60},
     {text = "by their watching, waiting for years", time = 61},
     {text = "while they're begging tearfully", time = 62},
     {text = "What's the point?", time = 63},

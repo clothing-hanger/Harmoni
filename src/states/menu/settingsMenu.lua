@@ -1,7 +1,6 @@
 local settingsMenu = State("settingsMenu")
 
 function settingsMenu:enter()
-
     self.testSettings = {
         toggleSettings(100,100,500,100,false,true)
     }

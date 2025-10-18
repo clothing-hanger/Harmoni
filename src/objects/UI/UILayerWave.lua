@@ -37,7 +37,7 @@ end
 
 function UILayerWave:createLayer(x,y,width,height,segments,amplitude,layerNumber,layerSpacing,color,transparency)
     local layer = {}
-    
+
     layer.layer = layer    --layer.layer = layer ❤️
     layer.x,layer.y = x,y 
     layer.width,layer.height = width, height 
@@ -49,7 +49,7 @@ function UILayerWave:createLayer(x,y,width,height,segments,amplitude,layerNumber
     layer.amplitude = amplitude or 20
 
     local points = {}
-layer.spacing = layerSpacing or 0
+    layer.spacing = layerSpacing or 0
 
     layer.phaseOffset = math.random() * 2 * math.pi
     layer.freqMultiplier = 1 + (math.random() - 0.5) * 0.5

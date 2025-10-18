@@ -38,7 +38,6 @@ function love.load(args)
 
     State.switch(States.menu.titleScreen)
 
-
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()
     printToConsole(SkinHandler:getRandomColors())

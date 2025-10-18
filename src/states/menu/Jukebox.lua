@@ -21,6 +21,7 @@ function jukebox:switchSong(songInfo)
     self.currentSongInfo = songInfo
     self.audio = love.audio.newSource(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audio, "stream")
     self.audio:play()
+
     if getFileExtension(self.currentSongInfo.bg) ~= "mp4" then
         print(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
         self.video = false
@@ -124,7 +125,7 @@ function jukebox:draw()
     love.graphics.draw(self.background)
     if self.lyricsDisplay then self.lyricsDisplay:draw() end
 
-    for i, Button in ipairs(self.songButtons) do
+    for _, Button in ipairs(self.songButtons) do
         Button:draw()
     end
 

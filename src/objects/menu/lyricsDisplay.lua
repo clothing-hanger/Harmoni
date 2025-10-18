@@ -18,14 +18,14 @@ function lyricsDisplay:setUpLyrics()
 
     local currentY = self.y
 
-    for i, Lyric in ipairs(self.lyrics) do
+    for _, Lyric in ipairs(self.lyrics) do
         local text = Lyric.text or ""
         local the, wrappedLines = font:getWrap(text, self.lyricRectWidth)
         local textHeight = #wrappedLines * font:getHeight()
 
         Lyric.rectangle = {x = self.x,y = currentY, width = self.lyricRectWidth, height = textHeight}
 
-            currentY = currentY + textHeight + self.lineSpacing
+        currentY = currentY + textHeight + self.lineSpacing
     end
 end
 
@@ -51,7 +51,6 @@ function lyricsDisplay:clickLyric()
             local rect = Lyric.rectangle
             if CX >= rect.x and CX <= rect.x + rect.width and CY >= rect.y and CY <= rect.y + rect.height then
                 self.currentLyric = i
- 
                 for j, l in ipairs(self.lyrics) do
                     if j >= i then
                         l.hit = false
@@ -111,7 +110,6 @@ function lyricsDisplay:draw()
 
         love.graphics.printf(Lyric.text,Lyric.rectangle.x + 30,Lyric.rectangle.y,Lyric.rectangle.width - 30, "left")
         love.graphics.setColor(1, 1, 1)
-
     end
 end
 

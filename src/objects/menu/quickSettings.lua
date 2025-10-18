@@ -30,11 +30,11 @@ function quickSettings:draw()
     love.graphics.print("hii!!\n I'm a placeholder!!\n pretend there are quick settings in this menu!!!!" ..
                         "\n\n\n\n\nDEBUG SHIT!!  :3\n" ..
                         tostring(self.hovered) .. "\n" ..
-                        self.x .. "\n" .. 
+                        self.x .. "\n" ..
                         self.y .. "\n" ..
-                        self.targetX 
-                        , self.x+100,self.y+100)
-    
+                        self.targetX, 
+                        self.x+100,self.y+100
+    )
 end
 
 return quickSettings

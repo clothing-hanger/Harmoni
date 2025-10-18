@@ -23,7 +23,6 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.x = x or 10
     self.y = y or 10
 
-
     self.onlySkeleton = false -- why did i even add this we wont use it
 
     self.mode = gameMode or "???"
@@ -84,7 +83,6 @@ local function remap(value, oldMin, oldMax, newMin, newMax)
 end
 
 function menuSongButton:draw()
-
     if self.x + self.width < 0 or self.x > baseScreenRatio.x or
        self.y + self.height < 0 or self.y > baseScreenRatio.y then
         return
@@ -139,7 +137,6 @@ function menuSongButton:draw()
     love.graphics.setColor(textColor)
     love.graphics.print(self.name, self.x + 3, self.y + 3)
 
-
     love.graphics.setFont(self.fontSmall)
     love.graphics.print(string.format("By: %s  Charted by: %s  BPM: %s", self.artist, self.charter, self.bpm), self.x + 3, self.y + self.height / 2)
 
@@ -152,7 +149,7 @@ function menuSongButton:draw()
 
     if not self.imageLoaded then
         local throbbertRadius = 30
-        
+
         throbbert:draw(self.x + self.width - (throbbertRadius*2), self.y+self.height/2, throbbertRadius, 15)
     end
     love.graphics.setColor(1, 1, 1, 1)

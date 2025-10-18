@@ -48,12 +48,12 @@ function SMWCloudThingyAnimation:new(rows, width, height, x, y, rowMinWidth, row
 
     for i = 1,#self.rows do
         if not self.rows[i].filled then -- we need to find halfway between the previous and the next rows centers
-           printToConsole(self.rows[i].filled)
+            printToConsole(self.rows[i].filled)
             local previousCenter = self.rows[i-1].center
             local nextCenter = self.rows[i+1] and self.rows[i+1].center or 1
-           printToConsole(previousCenter, nextCenter)
+            printToConsole(previousCenter, nextCenter)
             local halfwayCenter = (previousCenter + nextCenter) / 2
-           printToConsole(i)
+            printToConsole(i)
             self.rows[i].center = halfwayCenter
             self.rows[i].width = 10
         end
@@ -67,8 +67,6 @@ function SMWCloudThingyAnimation:draw(dt)
     love.graphics.setColor(0,0,0)
 
     for i, Row in ipairs(self.rows) do
-
-
         if Row.filled then goto filled else goto connecting end
 
         ::filled::

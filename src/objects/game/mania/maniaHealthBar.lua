@@ -2,7 +2,7 @@ local maniaHealthBar = Class:extend("maniaHealthBar")
 
 function maniaHealthBar:new(x,y,width,height,health,max)
     self.x,self.y = x or 0, y or 0
-    self.width,self.height = width or 10, height or 30 
+    self.width,self.height = width or 10, height or 30
     self.health = (health or 1)
 
     self.max = (max or 0.95)  -- i really like the health bar having this it looks nice

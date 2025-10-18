@@ -19,15 +19,13 @@ function countdownBar:countdown(dt)
 end
 
 function countdownBar:draw()
-
     -- first we will draw the right side 
     local width = (self.width/2)*(self.timeLeft/self.time) -- divide by 2 cuz the bar extends outward from center 
     love.graphics.rectangle("fill", self.x, self.y, width, self.height)
 
     -- first we will draw the left side 
-    local width = -((self.width/2)*(self.timeLeft/self.time) )-- divide by 2 cuz the bar extends outward from center 
+    width = -((self.width/2)*(self.timeLeft/self.time) )-- divide by 2 cuz the bar extends outward from center 
     love.graphics.rectangle("fill", self.x, self.y, width, self.height)
-
 end
 
 return countdownBar

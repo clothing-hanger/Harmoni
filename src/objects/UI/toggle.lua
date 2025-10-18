@@ -8,8 +8,6 @@ function toggle:new(x,y,width,height,text,hoverText,default)
     self.hoverText = hoverText or ""
     self.toggleState = default or false
 
-
-
     self.color = {}
     self.color.on,self.color.off = {1,0,0,1},{0,1,0,1}
 end

@@ -3,7 +3,6 @@ local toggleSetting = Class:extend("toggleSetting")
 function toggleSetting:new(x,y,width,height,default,setValue)
     self.x,self.y,self.width,self.height,self.default,self.setValue = x,y,width,height,default,setValue
 
-    
     self.toggle = setValue
 end
 
@@ -30,7 +29,6 @@ function toggleSetting:draw()
     -- first we draw the backdrop thingy
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)   -- add skinable corner radius
 
-
     -- next we draw the pill for the switch 
     love.graphics.setColor(0,0,0)
     local pillWidth,pillHeight = self.width/10,self.height/3
@@ -46,7 +44,6 @@ function toggleSetting:draw()
     love.graphics.circle("fill", circleX, circleY, circleRadius)
 
     love.graphics.setColor(1,1,1)
-
 end
 
 return toggleSetting

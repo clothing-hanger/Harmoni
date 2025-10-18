@@ -15,7 +15,6 @@ end
 
 function UISquiglyLine:update(dt)
     self.time = self.time + dt
-
 end
 
 function UISquiglyLine:draw()
@@ -47,8 +46,6 @@ function UISquiglyLine:draw()
 
     love.graphics.setLineWidth(self.lineWidth)
     love.graphics.line(points)
-
-
 
     love.graphics.setLineWidth(lastLineWidth)
 end

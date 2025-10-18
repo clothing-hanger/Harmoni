@@ -28,18 +28,15 @@ function resultsState:enter(s, parent, accuracy, image)
 end
 
 function resultsState:update(dt)
-        self.rectX, self.rectY = self.x - (self.width / 2), self.y - (self.height / 2)
-        self.accuracyCircleAngle = (self.printableAccuracy / 100) * 2 * math.pi
+    self.rectX, self.rectY = self.x - (self.width / 2), self.y - (self.height / 2)
+    self.accuracyCircleAngle = (self.printableAccuracy / 100) * 2 * math.pi
 
-
-
-        for i, Grade in ipairs (self.grades) do
-            if Grade.accuracy <= self.printableAccuracy and not Grade.hit then
-                Grade.hit = true
-                self:onGradeReached(Grade.grade)
-            end
+    for i, Grade in ipairs (self.grades) do
+        if Grade.accuracy <= self.printableAccuracy and not Grade.hit then
+            Grade.hit = true
+            self:onGradeReached(Grade.grade)
         end
-
+    end
 end
 
 function resultsState:onGradeReached(grade)
@@ -55,9 +52,10 @@ function resultsState:onGradeReached(grade)
 end
 
 function resultsState:tweenArc(amount)
-    Timer.tween(1, self, {printableAccuracy = self.accuracy}, "out-quad", function() 
+    Timer.tween(1, self, {printableAccuracy = self.accuracy}, "out-quad", function()
     self:expandRectangle()
         self.printableAccuracy = self.accuracy -- we do this because the fucking tween doesnt get it the whole way for some reason
+                                               -- nah it makes sense because floating point precision is lowkey doo-doo butt
     end)
 end
 
@@ -79,7 +77,7 @@ function resultsState:draw()
     love.graphics.push()
         love.graphics.translate(self.x, self.y)
         love.graphics.scale(self.bump or 1, self.bump or 1)
-                love.graphics.translate(-self.x, -self.y)
+        love.graphics.translate(-self.x, -self.y)
 
         love.graphics.setColor(0, 0, 0, 0.9)
         love.graphics.rectangle("fill", self.rectX, self.rectY, self.width, self.height, self.rectRC, self.rectRC)
@@ -89,14 +87,15 @@ function resultsState:draw()
         local function stencilFunc()
             love.graphics.circle("fill", self.arcX, self.arcY, self.arcR - 10)
         end
-        
+
         love.graphics.stencil(stencilFunc, "replace", 1)
         love.graphics.setStencilTest("less", 1)
 
         love.graphics.arc("line", self.arcX, self.arcY, self.arcR, -math.pi/2, -math.pi/2 + self.accuracyCircleAngle)
-            love.graphics.setStencilTest()
+        love.graphics.setStencilTest()
+
         love.graphics.setFont(SkinHandler:getFont("Menu", 400))
-            love.graphics.printf(self.printableGrade or "F", self.arcX-self.arcR, self.arcY-love.graphics.getFont():getHeight()/2, self.arcR*2, "center")
+        love.graphics.printf(self.printableGrade or "F", self.arcX-self.arcR, self.arcY-love.graphics.getFont():getHeight()/2, self.arcR*2, "center")
     love.graphics.pop()
 
         self:drawSmallRectangles()
@@ -105,47 +104,44 @@ end
 
 
 function resultsState:drawSmallRectangles()
-    
-
     local function stencilFunc()
-                love.graphics.rectangle("fill", self.rectX, self.rectY, self.width, self.height, self.rectRC, self.rectRC)
+        love.graphics.rectangle("fill", self.rectX, self.rectY, self.width, self.height, self.rectRC, self.rectRC)
     end
 
-        love.graphics.stencil(stencilFunc, "replace", 1)
-                love.graphics.setStencilTest("greater", 0)
+    love.graphics.stencil(stencilFunc, "replace", 1)
+    love.graphics.setStencilTest("greater", 0)
 
-        local smallRectHeights = 130 
-        local smallRectSpacing = 20     
-        
-        local cornerRadius = 70
-                            
-        
-                                   -- this is the worst code in the entire game. but it works. and i am scared to touch it 
+    local smallRectHeights = 130
+    local smallRectSpacing = 20
+
+    local cornerRadius = 70
+
+    -- this is the worst code in the entire game. but it works. and i am scared to touch it 
     -- score rectangle
-        love.graphics.setColor(234/255,234/255,234/255,0.5)
-        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
-        love.graphics.setFont(SkinHandler:getFont("Menu", 50))
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.printf(LocaleHandler:getText("Results", "Score") .. ": " .. self.score,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing)+love.graphics.getFont():getHeight()/2,self.width-20,"center")
-        
+    love.graphics.setColor(234/255,234/255,234/255,0.5)
+    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
+    love.graphics.setFont(SkinHandler:getFont("Menu", 50))
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.printf(LocaleHandler:getText("Results", "Score") .. ": " .. self.score,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing)+love.graphics.getFont():getHeight()/2,self.width-20,"center")
 
-        love.graphics.setColor(1,1,1)
+
+    love.graphics.setColor(1,1,1)
 
     -- accuracy rectangle 
-        love.graphics.setColor(234/255,234/255,234/255,0.5)
-        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.printf(LocaleHandler:getText("Results", "Accuracy") .. ": " .. self.accuracy .. "%",self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2)+(smallRectHeights+love.graphics.getFont():getHeight()/2),self.width-20,"center")
-        love.graphics.setColor(1,1,1)
+    love.graphics.setColor(234/255,234/255,234/255,0.5)
+    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.printf(LocaleHandler:getText("Results", "Accuracy") .. ": " .. self.accuracy .. "%",self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2)+(smallRectHeights+love.graphics.getFont():getHeight()/2),self.width-20,"center")
+    love.graphics.setColor(1,1,1)
 
 
-    -- highest combo rectagle
-        love.graphics.setColor(234/255,234/255,234/255,0.5)
-        love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.printf(LocaleHandler:getText("Results", "Highest Combo") .. ": " .. self.heighestCombo,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
-        love.graphics.setColor(1,1,1)
-        love.graphics.setStencilTest()
+    -- highest combo rectangle
+    love.graphics.setColor(234/255,234/255,234/255,0.5)
+    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.printf(LocaleHandler:getText("Results", "Highest Combo") .. ": " .. self.heighestCombo,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
+    love.graphics.setColor(1,1,1)
+    love.graphics.setStencilTest()
 end
 
 function resultsState:debugDraw()

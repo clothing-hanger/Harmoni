@@ -43,7 +43,6 @@ function gameModeManager:draw()
     for i, gameMode in ipairs(self.gameMode) do
         gameMode:draw()
     end
-
 end
 
 function gameModeManager:exit()

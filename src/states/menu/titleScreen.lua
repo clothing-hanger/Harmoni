@@ -1,8 +1,7 @@
 local titleScreen = State("titleScreen")
 
 function titleScreen:enter()
-   -- self.realLogo = love.graphics.newImage("Skins/Default Arrow/TEMP/real logo"..tostring(love.math.random(1,2))..".png")
-   self.BG = SkinHandler:getImage("Menu", "Background")
+    self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
 
     self.buttonWidth = 500
@@ -34,15 +33,7 @@ function titleScreen:enter()
 
     self:setUpThoseLinesThatIHate(10)
     self:setUpThoseWavesThatIHate(4)
-
-
-
-
-
     self:setUpThoseBubblesThatIHate(20)
-
-
- --   self.throbbert = throbbert(600,200,100, 1.9 , 5, SkinHandler:getRandomColors() )
 end
 
 
@@ -79,8 +70,7 @@ function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
     colorsREAL = {}
 
     -- we need to randomly choose numberOfWaves amount of these colors 
-
-    for i = 1,numberOfWaves do 
+    for _ = 1,numberOfWaves do
         table.insert(colorsREAL, colors[love.math.random(1,#colors)])
     end
     self.layerWaves = UILayerWave(0,baseScreenRatio.y+50,baseScreenRatio.x,500,#colorsREAL,300, 30, 50, colorsREAL)
@@ -100,7 +90,7 @@ function titleScreen:switchState(state)
     if state == "H" then
 
     elseif state == "logo" then
-        
+
     end
 end
 
@@ -118,10 +108,6 @@ function titleScreen:update(dt)
     end
 
     self.layerWaves:update(dt)
-
-   -- self.throbbert:update(dt)
-
-
 
     self:updateBubbles(dt) 
 end
@@ -158,22 +144,10 @@ function titleScreen:draw()
     love.graphics.setColor(1,1,1,1)
 
     self:drawLogo()
-   -- self.circcle:draw(0)
-
-
-
-   --self.throbbert:draw(200,200, 50, 5)
-  --throbbert:draw(200,200, 50, 5)
-
-  --local testFont = SkinHandler:getFont("Menu", 300)
-  --love.graphics.setFont(testFont)
-  --love.graphics.print("Hello!!!", 400, 400)
-
 end
 
 
 function titleScreen:drawLogo()
-    
     -- the logo drawing is complex so we move it to its own function
     local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
     local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later 
@@ -181,14 +155,15 @@ function titleScreen:drawLogo()
 
     local HOnlyX, HOnlyY = HOnlyStartingX, HOnlyStartingY
 
-  
-  --  love.graphics.draw(self.images["H"], )
+
+    -- love.graphics.draw(self.images["H"], )
 
     -- we need to draw the full logo first 
 
     -- logo variables 
     local fullLogo = self.images["logo"].image
     local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 0.3,0.3, baseScreenRatio.x/2, baseScreenRatio.y/2
+    ---@diagnostic disable-next-line: need-check-nil
     local fullLogoCenterX, fullLogoCenterY = fullLogo:getWidth()/2, fullLogo:getHeight()/2
 
     love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2-350, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
