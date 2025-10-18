@@ -20,7 +20,7 @@
         quickSettings = require("objects.menu.quickSettings")
         countdownBar = require("objects.menu.countdownBar")
     lyricsDisplay = require("Objects.Menu.lyricsDisplay")
-    jukeboxSongButton = require("src.Objects.Menu.jukeboxSongButton")
+    jukeboxSongButton = require("Objects.Menu.jukeboxSongButton")
 
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop
