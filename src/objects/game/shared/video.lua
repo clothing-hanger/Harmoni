@@ -90,14 +90,7 @@ end
 function video:seek(time)
     if self.video then
         self.video:seek(time)
-
-        tryExcept(function()
-            while self.video:tell() < time do
-                if not self.video:read(self.imageData:getPointer()) then break end
-            end
-            self.image:replacePixels(self.imageData)
-        end)
-
+        
         self.time = time
         self.previousFrameTime = love.timer.getTime()
         self.forcedUpdate = false
