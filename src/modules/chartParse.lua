@@ -56,7 +56,7 @@ function ChartParse.harmc(harmc)
         elseif section == "scrollSpeedFactors" then
             local _, startTime, factor = parts[1], parts[2], parts[3]
             if startTime and factor then
-                table.insert(chart[section], {startTime = tonumber(startTime), factor = tonumber(factor)})
+                table.insert(chart[section], {startTime = tonumber(startTime), multiplier = tonumber(factor)})
             end
 
         elseif section == "hitObjects" then
@@ -81,6 +81,7 @@ end
 ---@return table|boolean harmc returns a table with the meta data, or false if there was an error
 --- Like ChartParse.harmc, but stops when it escapes the meta section
 function ChartParse.harmcMeta(harmc)
+    print("harmc",harmc)
     local chart = {}
     local section = "meta"  -- we only want the meta section, so we set it to meta
 

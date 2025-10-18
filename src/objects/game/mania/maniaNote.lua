@@ -42,7 +42,6 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVE
     self.held = false
     self.released = false
 
-    self.visible = true
     self.debug = false
 end
 
