@@ -1,3 +1,9 @@
 tools/*
 !tools/*.py
 build/
+
+libs/**/*.a
+libs/**/*.dll
+
+libs/**/ffmpeg/
+libs/**/luajit

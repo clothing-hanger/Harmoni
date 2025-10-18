@@ -49,6 +49,9 @@ function CHE:init()
 
     tryExcept(function()
         DLL_Video = require("video")
+    end, function(err)
+        print("Warning: Could not load video DLL. Video playback will be disabled.")
+        print("Error message: " .. err)
     end)
 
     cursor = cursor()

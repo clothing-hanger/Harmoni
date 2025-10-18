@@ -29,33 +29,30 @@ function jukebox:switchSong(songInfo)
         self.video = false
         self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
     else
-    self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, 520, 30, 1, 1)
-    self.songBG:play()
-    self.video = true
+        self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, 520, 30, 1, 1)
+        self.songBG:play()
+        self.video = true
 
-    self.songBG.scaleX = 1430 / self.songBG.image:getWidth()
-    self.songBG.scaleY = 804 / self.songBG.image:getHeight()
-    self.songBG.x = 520 + (1430 / 2)
-    self.songBG.y = 30 + (804 / 2)
+        local targetSizeX = 1430
+        local targetSizeY = 804
 
-        
+        self.songBG.scaleX = targetSizeX / self.songBG.image:getWidth()
+        self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
+        self.songBG.x = 520 + (targetSizeX / 2)
+        self.songBG.y = 30 + (targetSizeY / 2)
     end
 
     -- check for lyrics in the current song 
     if love.filesystem.getInfo(self.currentSongInfo.path .. "/lyrics.lua", "file") then
-            local lyrics = require(self.currentSongInfo.path .. ".lyrics")
-
-            self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
+        local lyrics = require(self.currentSongInfo.path .. ".lyrics")
+        self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
-
-    
-
 end
 
 
 function jukebox:setupSongList()
     self.songList = SongListManager.getSongList(musicPath)  -- why does this function even take an argument? useless ass "feature"
-    for i, Song in ipairs(self.songList) do
+    for i, Song in ipairs(self.songList) do                 -- it doesn't NEED the argument, its an optional param
         local x, y = self.songButtonX, (self.songButtonHeight + self.songButtonSpacing) * i
         local width, height = self.songButtonWidth, self.songButtonHeight
         local name, artist, audio
@@ -77,7 +74,7 @@ function jukebox:setupSongList()
         artist = songInfo.artist or "???"
         audio = songInfo.audioFile or ""
         if songInfo.backgroundVideo then bg = songInfo.backgroundVideo else bg = songInfo.backgroundFile end
-        table.insert(self.songButtons,jukeboxSongButton(x, y, width, height, name, artist, audio, musicPath .. Song .. "/", bg))
+        table.insert(self.songButtons, jukeboxSongButton(x, y, width, height, name, artist, audio, musicPath .. Song .. "/", bg))
         ::continue::
     end
 end
@@ -86,11 +83,16 @@ function jukebox:update(dt)
    if self.lyricsDisplay then self.lyricsDisplay:update(dt, self.audio:tell("seconds")) end
     self:checkForSongButtonClicks()
     if Input:pressed("menuClickLeft") then
-            if not self.lyricsDisplay then return end
+        if not self.lyricsDisplay then return end
 
         local lyricClickShit = self.lyricsDisplay:clickLyric()
-        if lyricClickShit and lyricClickShit.lyricClick then  self.audio:seek(lyricClickShit.time) end
-        if lyricClickShit and lyricClickShit.lyricClick then if self.video then self.songBG:seek(lyricClickShit.time) end end
+        if lyricClickShit and lyricClickShit.lyricClick then
+            self.audio:seek(lyricClickShit.time)
+            if self.video then
+                self.songBG:seek(lyricClickShit.time)
+                self.songBG.forcedUpdate = true
+            end
+        end
     end
 
 
@@ -119,32 +121,28 @@ function jukebox:draw()
         Button:draw()
     end
 
-
-
     --lyrics skeleton
-   if not self.lyricsDisplay then love.graphics.rectangle("fill",baseScreenRatio.x-570,30,540,baseScreenRatio.y-200) end
+    if not self.lyricsDisplay then love.graphics.rectangle("fill",baseScreenRatio.x-570,30,540,baseScreenRatio.y-200) end
 
-   --songBG skeleton
-   love.graphics.rectangle("fill", 520, 30, 1430, 804)
+    --songBG skeleton
+    love.graphics.rectangle("fill", 520, 30, 1430, 804)
 
-   --song info skeleton 
-   --love.graphics.rectangle("fill", 520, 1070, 1430, 200)
+    --song info skeleton 
+    --love.graphics.rectangle("fill", 520, 1070, 1430, 200)
 
-   --scrubber and button skeleton
-   love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
+    --scrubber and button skeleton
+    love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
 
-   self:drawBG()
+    self:drawBG()
 end
 
 
 function jukebox:drawBG()
-
-    if self.video then 
+    if self.video then
         self.songBG:draw()
     elseif self.songBG then
         love.graphics.draw(self.songBG,520, 30,nil,1430 / self.songBG:getWidth(),804 / self.songBG:getHeight())
     end
-
 end
 
 return jukebox

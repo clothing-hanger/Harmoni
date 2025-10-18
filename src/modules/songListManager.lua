@@ -1,6 +1,7 @@
 local SongListManager = {}
 
 function SongListManager.getSongList(path)
+    path = path or "Music/"
     if not love.filesystem.getInfo(path, "directory") then
         return {}
     end

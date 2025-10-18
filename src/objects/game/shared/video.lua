@@ -33,21 +33,27 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.previousFrameTime = 0
 
     self.angle = 0  -- i guess this was handled by the sprite thingy in rit?? idk
-    self.origin = {x = 0, y = 0}
-    self.windowScale = {x = 1, y = 1}
-    self.scale = {x = 1, y = 1}
-    self.colour = {1, 1, 1}
-    self.alpha = 1
-    self.debug = false
-    self.drawX, self.drawY = self.x, self.y
     self.blendMode = "alpha"
     self.blendModeAlpha = "alphamultiply"
 
+    self.forcedUpdate = false
 end
 
 function video:update(dt)
+    if (self.playing or self.forcedUpdate) and self.video then
+        if self.forcedUpdate then
+            tryExcept(function()
+                if not self.video:read(self.imageData:getPointer()) then
+                    self.playing = false
+                else
+                    self.image:replacePixels(self.imageData)
+                end
+            end)
+            self.previousFrameTime = love.timer.getTime()
+            self.forcedUpdate = false
+            return
+        end
 
-    if self.playing and self.video then
         self.checkTimer = self.checkTimer + dt
         local interval = 1 / self.checkPerFrame
         if self.checkTimer >= interval then
@@ -83,24 +89,33 @@ end
 function video:seek(time)
     if self.video then
         self.video:seek(time)
+
+        tryExcept(function()
+            while self.video:tell() < time do
+                if not self.video:read(self.imageData:getPointer()) then break end
+            end
+            self.image:replacePixels(self.imageData)
+        end)
+
         self.time = time
         self.previousFrameTime = love.timer.getTime()
+        self.forcedUpdate = false
+
+        print("TARGET: " .. tostring(time) .. " | ACTUAL: " .. tostring(self.video:tell()))
     end
 end
 
 function video:draw()
     if not self.video or not self.visible or not self.image then return end
-   printToConsole("hiiii")
 
     love.graphics.push()
-        love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)
-        local sx = (baseScreenRatio.x / self.image:getWidth()) * self.scaleX
-        local sy = (baseScreenRatio.y / self.image:getHeight()) * self.scaleY
-        local ox, oy = self.image:getWidth() / 2, self.image:getHeight() / 2
-        local dontShowBG = false
+    love.graphics.setBlendMode(self.blendMode, self.blendModeAlpha)
 
-        if not dontShowBG then love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy) end
+    local sx = self.scaleX
+    local sy = self.scaleY
+    local ox, oy = self.image:getWidth() / 2, self.image:getHeight() / 2
 
+    love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy)
 
     love.graphics.pop()
 end
