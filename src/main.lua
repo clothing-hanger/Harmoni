@@ -1,5 +1,5 @@
 require("love.init")
-require("modules.things")
+--require("modules.things")
 
 -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
