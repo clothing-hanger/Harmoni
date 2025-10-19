@@ -20,8 +20,8 @@ function cursor:new()
     self.followSpeed = 10
 
     self.visible = true
-    self.scale = 0.5
-    self.tgtScale = 0.5
+    self.scale = 0.35
+    self.tgtScale = 0.35
 
     self.mouseDownFloatSpeed = 5
 
@@ -228,11 +228,11 @@ function cursor:mousereleased(x, y, button)
 end
 
 function cursor:scaleDown()
-    self.tgtScale = 0.45
+    self.tgtScale = 0.3
 end
 
 function cursor:scaleUp()
-    self.tgtScale = 0.5
+    self.tgtScale = 0.35
 end
 
 return cursor

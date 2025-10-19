@@ -57,10 +57,10 @@ function jukebox:switchSong(songInfo)
             break
         end
     end
-    if type ~= "lua" then
+    if type ~= "lua" and type ~= "" then
         local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
-    else
+    elseif type == "lua" then
         local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
