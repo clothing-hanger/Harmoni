@@ -15,7 +15,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     end
 
     if not video then return self, error("Video path not provided") end -- temp
-   printToConsole("Loading video: " .. tostring(video))
+    printToConsole("Loading video: " .. tostring(video))
     video = love.filesystem.newFileData(video)
     if not video then return self, error("Video file not found") end -- again, temp
     local vid = DLL_Video.open(video:getPointer(), video:getSize())

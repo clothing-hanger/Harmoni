@@ -51,11 +51,11 @@ Language = {
         ["System Information"] = "system infurmation~ uwu",
         ["Copy Error"] = "Hewwo! Pwease p-pwess C-Cwtrl+C to c-copy dis ewwow, nyaa~!"
     },
-        GeneralErrors = {
-        ["No Song Name"] = "oh ohh!! i cant find right song name",
-        ["No Difficulty Name"] = "aawhhh, i cant find the right difficulty namme",
-        ["Audio Not Found"] = "Error! Audio file not found!",
-        ["Chart Not Found"] = "Error! Chart file not found!",
+    GeneralErrors = {
+        ["No Song Name"] = "Owo! Error! Nu chuwnent songie wame yet!",
+        ["No Difficulty Name"] = "Owo! Error! Nuuu current difficulty namey~!",
+        ["Audio Not Found"] = "Owo no! Soundy wile is missing, master~!",
+        ["Chart Not Found"] = "Owo! Nuuu, the chart file went missing! >w<",
         ["Error"] = "oopsies :3",
         ["Unknown"] = "???"
     },
