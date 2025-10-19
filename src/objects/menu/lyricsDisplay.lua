@@ -93,24 +93,41 @@ end
 
 
 function lyricsDisplay:draw()
-
+    -- background
     love.graphics.setColor(0.5, 0.5, 0.5, 0.75)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, 50, 50)
 
+    -- define stencil mask
+    local function maskShape()
+        love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, 50, 50)
+    end
+
+    love.graphics.stencil(maskShape, "replace", 1)
+    love.graphics.setStencilTest("greater", 0)
+
+    -- draw lyrics inside mask only
     local font = SkinHandler:getFont("Menu", 50)
     love.graphics.setFont(font)
 
     for i, Lyric in ipairs(self.lyrics) do
-
         if self.currentLyric == i then
             love.graphics.setColor(1, 1, 1)
         else
             love.graphics.setColor(0, 0, 0, 0.5)
         end
 
-        love.graphics.printf(Lyric.text,Lyric.rectangle.x + 30,Lyric.rectangle.y,Lyric.rectangle.width - 30, "left")
-        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf(
+            Lyric.text,
+            Lyric.rectangle.x + 30,
+            Lyric.rectangle.y,
+            Lyric.rectangle.width - 30,
+            "left"
+        )
     end
+
+    -- reset
+    love.graphics.setStencilTest()
+    love.graphics.setColor(1, 1, 1)
 end
 
 return lyricsDisplay

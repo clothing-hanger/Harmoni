@@ -14,6 +14,15 @@ function jukebox:enter(parent)
     self:setupSongList()
 end
 
+local validTypes = {
+    "srt",
+    "vtt",
+    "sbv",
+    "stl",
+    "ass",
+    "lua"
+}
+
 function jukebox:switchSong(songInfo)
     if self.audio and self.audio:isPlaying() then self.audio:stop() end
     self.audio = nil
@@ -40,13 +49,22 @@ function jukebox:switchSong(songInfo)
         self.songBG.y = 30 + (targetSizeY / 2)
     end
 
-    -- check for lyrics in the current song 
-    if love.filesystem.getInfo(self.currentSongInfo.path .. "/lyrics.lua", "file") then
-        local lyrics = require(self.currentSongInfo.path .. ".lyrics")
+    local type = ""
+    local path = self.currentSongInfo.path .. "/lyrics."
+    for _, t in ipairs(validTypes) do
+        if love.filesystem.getInfo(path .. t, "file") then
+            type = t
+            break
+        end
+    end
+    if type ~= "lua" then
+        local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
+        self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
+    else
+        local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
 end
-
 
 function jukebox:setupSongList()
     self.songList = SongListManager.getSongList(musicPath)  -- why does this function even take an argument? useless ass "feature"

@@ -35,6 +35,7 @@ function love.load(args)
     MusicTimeManager = require("modules.musicTimeManager")
     ScoreHandler = require("modules.scoreHandler")
     SongListManager = require("modules.songListManager")
+    CaptionParser = require("modules.captionParser")
 
     State.switch(States.menu.titleScreen)
 
