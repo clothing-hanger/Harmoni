@@ -116,7 +116,6 @@ function CHE:init()
     print("Most preferred locale: " .. mostPreferred.language .. "-" .. mostPreferred.country)
     LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
     if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
-
     local id = 1
     if NOTIFICATIONS then
         NOTIFICATIONS.setAppID("com.ch.harmoni")

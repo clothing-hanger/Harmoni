@@ -150,11 +150,11 @@ function jukebox:draw()
     --lyrics skeleton
     if not self.lyricsDisplay then love.graphics.rectangle("fill",baseScreenRatio.x-570,30,540,baseScreenRatio.y-200) end
 
-    --songBG skeleton
+    --songBG skeleton        -- we have all these skeletons because its halloween so we gotta be spooky
     love.graphics.rectangle("fill", 520, 30, 1430, 804)
 
     --song info skeleton 
-    --love.graphics.rectangle("fill", 520, 1070, 1430, 200)
+    love.graphics.rectangle("fill", 520, 1070, 1430, 200)
 
     --scrubber and button skeleton
     love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
@@ -164,11 +164,22 @@ end
 
 
 function jukebox:drawBG()
+    local x,y,width,height = 520,30,1430,804
+    -- stencil 
+        -- define stencil mask
+    local function maskShape()
+        love.graphics.rectangle("fill", x, y, width, height, 50, 50)
+    end
+
+    love.graphics.stencil(maskShape, "replace", 1)
+    love.graphics.setStencilTest("greater", 0)
+
     if self.video then
         self.songBG:draw()
     elseif self.songBG then
-        love.graphics.draw(self.songBG,520, 30,nil,1430 / self.songBG:getWidth(),804 / self.songBG:getHeight())
+        love.graphics.draw(self.songBG,x, y,nil,width / self.songBG:getWidth(),height / self.songBG:getHeight())
     end
+    love.graphics.setStencilTest()
 end
 
 return jukebox
