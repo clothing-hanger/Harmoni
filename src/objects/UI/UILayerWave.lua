@@ -19,6 +19,7 @@ end
                 px = layer.x + t * layer.width
                 py = layer.y + math.sin(t * math.pi * 2 * layer.freqMultiplier + layer.phaseOffset + love.timer.getTime() * layer.speed) * layer.amplitude
                 table.insert(points, px)
+                ---@diagnostic disable-next-line: ambiguity-1
                 table.insert(points, py - _ * layer.spacing or 0)
             end
 
