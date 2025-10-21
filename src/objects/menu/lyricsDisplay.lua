@@ -8,6 +8,7 @@ function lyricsDisplay:new(x, y, width, height, lyrics)
     self.currentLyric = 0
     self.lyricRectWidth = self.width
     self.lineSpacing = 50
+    self.timers = {}
 
     self:setUpLyrics()
 end
@@ -17,13 +18,21 @@ function lyricsDisplay:setUpLyrics()
     love.graphics.setFont(font)
 
     local currentY = self.y
+    local lineHeight = font:getHeight()
+    local wrapLimit = self.lyricRectWidth - 30
 
     for _, Lyric in ipairs(self.lyrics) do
         local text = Lyric.text or ""
-        local the, wrappedLines = font:getWrap(text, self.lyricRectWidth)
-        local textHeight = #wrappedLines * font:getHeight()
+        local _, wrappedLines = font:getWrap(text, wrapLimit)
 
-        Lyric.rectangle = {x = self.x,y = currentY, width = self.lyricRectWidth, height = textHeight}
+        local textHeight = #wrappedLines * lineHeight
+
+        Lyric.rectangle = {
+            x = self.x,
+            y = currentY,
+            width = self.lyricRectWidth,
+            height = textHeight
+        }
 
         currentY = currentY + textHeight + self.lineSpacing
     end
@@ -31,10 +40,38 @@ end
 
 function lyricsDisplay:update(dt, musicTime)
     self.lastLyricHitByTime = self.lastLyricHitByTime or 0
+    self.lastMusicTime = self.lastMusicTime or 0
+
+    if musicTime < self.lastMusicTime then
+        for i, Lyric in ipairs(self.lyrics) do
+            if Lyric.time > musicTime then
+                Lyric.hit = false
+            else
+                Lyric.hit = true
+                self.lastLyricHitByTime = i
+            end
+        end
+
+        local latest = 0
+        for i, Lyric in ipairs(self.lyrics) do
+            if musicTime >= Lyric.time then
+                latest = i
+            else
+                break
+            end
+        end
+
+        if latest > 0 then
+            self:hitLyric(latest)
+        end
+
+        self.lastMusicTime = musicTime
+        return
+    end
 
     for i = self.lastLyricHitByTime + 1, #self.lyrics do
         local Lyric = self.lyrics[i]
-        if musicTime > Lyric.time then
+        if musicTime >= Lyric.time then
             Lyric.hit = true
             self:hitLyric(i)
             self.lastLyricHitByTime = i
@@ -42,7 +79,10 @@ function lyricsDisplay:update(dt, musicTime)
             break
         end
     end
+
+    self.lastMusicTime = musicTime
 end
+
 
 function lyricsDisplay:clickLyric()
     local CX, CY = cursor:getPosition()
@@ -86,8 +126,11 @@ function lyricsDisplay:hitLyric(lyricIndex)
         offset = offset + (self.y + self.height - bottomY)
     end
 
-    for _, Lyric in ipairs(self.lyrics) do
-        Timer.tween(0.1, Lyric.rectangle, { y = Lyric.rectangle.y + offset }, "in-out-quad")
+    for i, Lyric in ipairs(self.lyrics) do
+        if self.timers[i] then
+            Timer.cancel(self.timers[i])
+        end
+        self.timers[i] = Timer.tween(0.1, Lyric.rectangle, { y = Lyric.rectangle.y + offset }, "in-out-quad")
     end
 end
 

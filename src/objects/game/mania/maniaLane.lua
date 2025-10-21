@@ -63,24 +63,24 @@ function maniaLane:isOnScreen(note)
 end
 
 function maniaLane:handleInput()
-    if not Input then return end
+    if not Input then return end -- why would input be nil???????????
     if not Input:pressed(self.inputBind) then return end
 
     local bestJudgement = nil
     local bestTimeDiff = math.huge
     local note = self.drawableNotes[1]
-    if not note then goto continue end
+    if not note then return end
 
     local timeDiff = math.abs(MusicTime - note.startTime)
     for _, judgement in ipairs(mania.judgements) do
-        if timeDiff <= judgement.timing*1.15 and timeDiff < bestTimeDiff then
+        if timeDiff <= judgement.timing*1.35 and timeDiff < bestTimeDiff then
             bestTimeDiff = timeDiff
-            bestJudgement = judgement 
+            bestJudgement = judgement
         end
     end
 
     if bestJudgement then
-        local parentParent = self.parent.parent
+        local state = self.parent.parent
         if not note.holdLength then
             table.remove(self.drawableNotes, 1)
         else
@@ -88,13 +88,11 @@ function maniaLane:handleInput()
             note.holdStartTime = MusicTime
         end
 
-        parentParent.judgementObject:judge(bestJudgement.name)
-        parentParent.scoreHandler:addScore(bestJudgement.score)
-        parentParent.healthBar:changeHealth(bestJudgement.health)
-        parentParent.comboCount:incrementCombo()
+        state.judgementObject:judge(bestJudgement.name)
+        state.scoreHandler:addScore(bestJudgement.score)
+        state.healthBar:changeHealth(bestJudgement.health)
+        state.comboCount:incrementCombo()
     end
-
-    ::continue::
 end
 
 function maniaLane:checkHoldReleases()
@@ -127,10 +125,10 @@ function maniaLane:checkHoldReleases()
                 table.remove(self.drawableNotes, i)
 
                 -- Uncomment this block to enable hold note release judgements -Guglio
-                --[[ local parentParent = self.parent.parent
+                local parentParent = self.parent.parent
                 parentParent.comboCount:incrementCombo()
                 parentParent.judgementObject:judge(bestJudgement.name)
-                parentParent.healthBar:changeHealth(bestJudgement.health) ]]
+                parentParent.healthBar:changeHealth(bestJudgement.health)
             end
         end
     end

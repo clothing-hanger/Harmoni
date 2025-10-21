@@ -23,10 +23,14 @@ function UITimeRemaining:new(startTime, endTime, x,y,widht,parent,lineWidth,spee
 end
 
 function UITimeRemaining:update(dt, progress)
-    self.percent = progress 
+    self.percent = progress
     self.timer = (self.timer + dt) -- get the time in seconds
 
     self.squiglyLine:update(dt)
+end
+
+function UITimeRemaining:getHeadData() -- x, y, radius
+    return self.width*self.percent, self.y, 15
 end
 
 function UITimeRemaining:draw()
@@ -46,8 +50,9 @@ function UITimeRemaining:draw()
     love.graphics.setStencilTest()
 
     -- draw the capsule thingy 
-    love.graphics.setColor(0,0,0)   
+    love.graphics.setColor(0,0,0)
     love.graphics.circle("fill", self.width*self.percent, self.y, 15)
+    love.graphics.setColor(1,1,1)
 end
 
 return UITimeRemaining

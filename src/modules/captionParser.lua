@@ -3,6 +3,10 @@
 --- Parses various caption formats into a lua table
 --- Supports the following:
 --- - SubRip (.srt)
+--- - WebVTT (.vtt)
+--- - YouTube SBV (.sbv)
+--- - EBU STL (.stl)
+--- - ASS (.ass)
 
 --- Output example:
 --[[

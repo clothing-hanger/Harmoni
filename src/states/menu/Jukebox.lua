@@ -1,6 +1,10 @@
 ---@diagnostic disable: inject-field
 local jukebox = State("jukebox")
 
+local function distance(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
 function jukebox:enter(parent)
     self.parent = parent
     self.background = self.parent.BG
@@ -10,6 +14,8 @@ function jukebox:enter(parent)
     self.songButtonHeight = 75
     self.songButtonSpacing = 10
     self.songButtons = {}
+    self.scrubber = nil
+    self.frametimer = 0
 
     self:setupSongList()
 end
@@ -32,7 +38,6 @@ function jukebox:switchSong(songInfo)
     self.audio:play()
 
     if getFileExtension(self.currentSongInfo.bg) ~= "mp4" then
-        print(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
         self.video = false
         self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
     else
@@ -64,6 +69,20 @@ function jukebox:switchSong(songInfo)
         local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
+
+    -- genuinely the easiest way that I thought of
+    self.scrubBack = UIsquiglyLine(
+        0, baseScreenRatio.y - 50,
+        baseScreenRatio.x, baseScreenRatio.y - 50,
+        30, 5, 1000, -5, 5
+    )
+    self.scrubber = UITimeRemaing(
+        0, self.audio:getDuration(),
+        0, baseScreenRatio.y - 50,
+        baseScreenRatio.x,
+        self,
+        5, -5, 5, 30
+    )
 end
 
 function jukebox:setupSongList()
@@ -96,6 +115,11 @@ function jukebox:setupSongList()
 end
 
 function jukebox:update(dt)
+    if self.scrubberHeld then
+        self.frametimer = self.frametimer + 1
+    else
+        self.frametimer = 0
+    end
     local audioTime = 0
     if self.audio and self.audio:isPlaying() then
         audioTime = self.audio:tell("seconds")
@@ -105,8 +129,120 @@ function jukebox:update(dt)
         self.lyricsDisplay:update(dt, audioTime)
     end
 
-    self:checkForSongButtonClicks()
+    if self.video and not self.scrubberHeld then
+        self.songBG:update(dt)
+    end
+    if self.audio and self.scrubber then
+        self.scrubBack:update(dt)
+        self.scrubber:update(dt, self.audio:tell()/self.audio:getDuration())
+    end
 
+    local dontContinue = self:checkForSongButtonClicks()
+    if dontContinue then return end
+    dontContinue = self:checkForLyricClick()
+    if dontContinue then return end
+    dontContinue = self:checkForScrubberHead()
+    if dontContinue then return end
+    dontContinue = self:checkForScrubberHeadRelease()
+    if dontContinue then return end
+    dontContinue = self:checkForScrubber()
+    if dontContinue then return end
+end
+
+function jukebox:checkForSongButtonClicks()
+    local MX,MY = cursor:getPosition()
+    local ok = false
+
+    for i,Button in ipairs(self.songButtons) do
+        if Input:pressed("menuClickLeft") then
+            if MX >= Button.x and MX <= Button.x+Button.width then
+                if MY >= Button.y and MY <= Button.y+Button.height then
+                    self:switchSong(Button:onClick())
+                    ok = true
+                end
+            end
+        end
+    end
+
+    return ok
+end
+
+function jukebox:checkForScrubberHead()
+    if not self.scrubber or not self.audio then return false end
+
+    local mx, my = cursor:getPosition()
+    local headX, headY, headRadius = self.scrubber:getHeadData()
+
+    if Input:pressed("menuClickLeft") then
+        if distance(mx, my, headX, headY) <= headRadius then
+            self.scrubberHeld = true
+        end
+    end
+
+    if self.scrubberHeld and Input:down("menuClickLeft") then
+        local percent = math.max(0, math.min(1, mx / baseScreenRatio.x))
+        local seekTime = percent * self.audio:getDuration()
+        self.audio:seek(seekTime)
+        return true
+    end
+
+    return false
+end
+
+function jukebox:checkForScrubberHeadRelease()
+    if not self.scrubberHeld then return false end
+
+    if not Input:down("menuClickLeft") then
+        local mx = cursor:getX()
+        local percent = math.max(0, math.min(1, mx / baseScreenRatio.x))
+        local seekTime = percent * self.audio:getDuration()
+        self.audio:seek(seekTime)
+        if self.video then
+            self.songBG:seek(seekTime)
+            self.songBG.forcedUpdate = true
+        end
+        self.scrubberHeld = false
+        return true
+    end
+
+    return false
+end
+
+
+function jukebox:checkForScrubber()
+    if not self.scrubber or not self.audio then return false end
+
+    local mx, my = cursor:getPosition()
+    local scrubberY = self.scrubber.y
+    local clickRadius = 50
+
+    if Input:pressed("menuClickLeft") and not self.scrubberHeld then
+        if math.abs(my - scrubberY) <= clickRadius then
+            local percent = math.max(0, math.min(1, mx / baseScreenRatio.x))
+            local seekTime = percent * self.audio:getDuration()
+            self.audio:seek(seekTime)
+
+            if self.video then
+                self.songBG:seek(seekTime)
+                self.songBG.forcedUpdate = true
+            end
+
+            self.scrubber.percent = percent
+            return true
+        end
+    end
+
+    return false
+end
+
+function jukebox:checkForLyricClick()
+    local ok = false
+    -- check if we're in the lyric box
+    local mx, my = cursor:getPosition()
+    if mx < baseScreenRatio.x - 570 or mx > baseScreenRatio.x - 30
+        and my < 30 or my > baseScreenRatio.y - 170 then
+        return false
+    end
     if Input:pressed("menuClickLeft") then
         if self.lyricsDisplay then
             local lyricClick = self.lyricsDisplay:clickLyric()
@@ -115,28 +251,13 @@ function jukebox:update(dt)
                 if self.video then
                     self.songBG:seek(lyricClick.time)
                     self.songBG.forcedUpdate = true
+                    ok = true
                 end
             end
         end
     end
 
-    if self.video then
-        self.songBG:update(dt)
-    end
-end
-
-function jukebox:checkForSongButtonClicks()
-    local MX,MY = cursor:getPosition()
-
-    for i,Button in ipairs(self.songButtons) do
-        if Input:pressed("menuClickLeft") then
-            if MX >= Button.x and MX <= Button.x+Button.width then
-                if MY >= Button.y and MY <= Button.y+Button.height then
-                    self:switchSong(Button:onClick())
-                end
-            end
-        end
-    end
+    return ok
 end
 
 function jukebox:draw()
@@ -151,22 +272,60 @@ function jukebox:draw()
     if not self.lyricsDisplay then love.graphics.rectangle("fill",baseScreenRatio.x-570,30,540,baseScreenRatio.y-200) end
 
     --songBG skeleton        -- we have all these skeletons because its halloween so we gotta be spooky
-    love.graphics.rectangle("fill", 520, 30, 1430, 804)
+    if not self.video and not self.songBG then
+        love.graphics.rectangle("fill", 520, 30, 1430, 804)
+    end
 
     --song info skeleton 
     love.graphics.rectangle("fill", 520, 1070, 1430, 200)
 
     --scrubber and button skeleton
-    love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
+    if not self.scrubber then
+        love.graphics.rectangle("fill", 0, 1305, baseScreenRatio.x, 200)
+    else
+        self:drawScrubber()
+    end
 
     self:drawBG()
 end
 
+function jukebox:drawScrubber()
+    love.graphics.setColor(.25, .25, .25, 0.4)
+    self.scrubBack:draw()
+    love.graphics.setColor(1, 1, 1, 1)
+    self.scrubber:draw()
+
+    if self.scrubberHeld and self.audio then
+        local mx, my = cursor:getPosition()
+        local headX, headY, headRadius = self.scrubber:getHeadData()
+        local currentTime = self.audio:tell()
+        local totalTime = self.audio:getDuration()
+        local timeString = string.format("%02d:%02d / %02d:%02d",
+            math.floor(currentTime / 60), math.floor(currentTime % 60),
+            math.floor(totalTime / 60), math.floor(totalTime % 60)
+        )
+        local padding = 10
+        local font = love.graphics.getFont()
+        local textWidth = font:getWidth(timeString)
+        local textHeight = font:getHeight()
+
+        local boxX = math.min(
+            math.max(mx - (textWidth / 2) - padding, 0),
+            baseScreenRatio.x - textWidth - (2 * padding)
+        )
+        local boxY = headY - headRadius - textHeight - (2 * padding) - 5
+
+        love.graphics.setColor(0, 0, 0, 0.75)
+        love.graphics.rectangle("fill", boxX, boxY, textWidth + (2 * padding), textHeight + (2 * padding), 10, 10)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print(timeString, boxX + padding, boxY + padding)
+    end
+end
 
 function jukebox:drawBG()
-    local x,y,width,height = 520,30,1430,804
+    local x, y, width, height = 520, 30, 1430, 804
     -- stencil 
-        -- define stencil mask
+    -- define stencil mask
     local function maskShape()
         love.graphics.rectangle("fill", x, y, width, height, 50, 50)
     end

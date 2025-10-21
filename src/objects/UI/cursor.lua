@@ -153,6 +153,16 @@ function cursor:update(dt)
     end
 end
 
+function cursor:getX()
+    local cx, _ = toCanvasCoords(self.x, self.y)
+    return cx
+end
+
+function cursor:getY()
+    local _, cy = toCanvasCoords(self.x, self.y)
+    return cy
+end
+
 function cursor:getPosition()
     local cx, cy = toCanvasCoords(self.x, self.y)
     return cx, cy, (self.dx or 0), (self.dy or 0)

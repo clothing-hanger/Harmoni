@@ -17,7 +17,6 @@ function gameModeManager:enter(s,mode,chart,fullchart)
                                      -- because its not like the cursor will only ever fade out in gamemodemanager
 
     gameModeManager:initializeSong()
-
 end
 
 
