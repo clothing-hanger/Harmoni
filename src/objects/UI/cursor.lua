@@ -4,8 +4,33 @@ local function lerp(a, b, t)
     return a + (b - a) * t
 end
 
+local rad, abs = math.rad, math.abs
+local max, min = math.max, math.min
+local getMousePos = love.mouse.getPosition
+
+local DEG45 = 45
+local function aproxAtan2Deg(y, x)
+    if x == 0 then
+        return (y > 0 and 90) or (y < 0 and -90) or 0
+    end
+
+    local absY = y >= 0 and y or -y
+    local r, angle
+
+    if x >= 0 then
+        r = (x - absY) / (x + absY)
+        angle = DEG45 - DEG45 * r
+    else
+        r = (x + absY) / (absY - x)
+        angle = 135 - DEG45 * r
+    end
+
+    if y < 0 then angle = -angle end
+    return angle
+end
+
 function cursor:new()
-    self.x, self.y = love.mouse.getPosition()
+    self.x, self.y = getMousePos()
     self.prevX, self.prevY = self.x, self.y
     self.mouseDownX, self.mouseDownY = nil, nil
     self.rotating = false
@@ -40,7 +65,7 @@ function cursor:new()
 end
 
 function cursor:update(dt)
-    self.x, self.y = love.mouse.getPosition()
+    self.x, self.y = getMousePos()
     if self.x ~= self.prevX or self.y ~= self.prevY then
         self.didMove = true
         self.fadeOutTimer = 0
@@ -53,7 +78,7 @@ function cursor:update(dt)
         if not self.didMove and not self.fadingBackIn then
             self.fadeOutTimer = self.fadeOutTimer + dt
             if self.fadeOutTimer >= self.fadeOutTime then
-                self.fadeOutAlpha = math.max(0, 1 - (self.fadeOutTimer - self.fadeOutTime) / self.fadeOutTime)
+                self.fadeOutAlpha = max(0, 1 - (self.fadeOutTimer - self.fadeOutTime) / self.fadeOutTime)
             end
         elseif self.fadingBackIn then
             self.fadeOutAlpha = self.fadeOutAlpha + dt * 5
@@ -76,11 +101,11 @@ function cursor:update(dt)
         end
 
         if self.rotating then
-            local angle = math.deg(math.atan2(-dx, dy)) + 24.3
+            local angle = aproxAtan2Deg(-dx, dy) + 24.3
             local diff = (angle - self.angle + 180) % 360 - 180
             self.targetAngle = self.angle + diff
 
-            local t = math.min(dt * self.followSpeed, 1)
+            local t = min(dt * self.followSpeed, 1)
             self.angle = self.angle + diff * t
 
             self.angularVelocity = 0
@@ -102,7 +127,7 @@ function cursor:update(dt)
 
         self.angle = self.angle + self.angularVelocity * dt
 
-        if math.abs(diff) < 0.5 and math.abs(self.angularVelocity) < 0.5 then
+        if abs(diff) < 0.5 and abs(self.angularVelocity) < 0.5 then
             self.angle = 0
             self.angularVelocity = 0
             self.angularAcceleration = 0
@@ -113,7 +138,7 @@ function cursor:update(dt)
         local scaleDelta = (self.tgtScale - self.scale) * dt * 25
         self.scale = self.scale + scaleDelta
 
-        if math.abs(self.tgtScale - self.scale) < 0.01 then
+        if abs(self.tgtScale - self.scale) < 0.01 then
             self.scale = self.tgtScale
         end
     end
@@ -138,11 +163,11 @@ function cursor:update(dt)
         self.weightAngle = self.weightAngle + 360
     end
 
-    if math.abs(self.weightAngle) < 0.01 then
+    if abs(self.weightAngle) < 0.01 then
         self.weightAngle = 0
     else
         self.weightAngle = lerp(self.weightAngle, 0, dt * 10)
-        if math.abs(self.weightAngle) < 0.01 then
+        if abs(self.weightAngle) < 0.01 then
             self.weightAngle = 0
         end
         if self.weightAngle > 180 then
@@ -196,7 +221,7 @@ function cursor:draw()
     love.graphics.draw(
         self.image,
         self.x, self.y,
-        math.rad(self.angle + self.weightAngle),
+        rad(self.angle + self.weightAngle),
         self.scale, self.scale
     )
     love.graphics.pop()

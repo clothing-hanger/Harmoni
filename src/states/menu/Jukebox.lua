@@ -153,7 +153,7 @@ function jukebox:checkForSongButtonClicks()
     local MX,MY = cursor:getPosition()
     local ok = false
 
-    for i,Button in ipairs(self.songButtons) do
+    for _, Button in ipairs(self.songButtons) do
         if Input:pressed("menuClickLeft") then
             if MX >= Button.x and MX <= Button.x+Button.width then
                 if MY >= Button.y and MY <= Button.y+Button.height then
@@ -274,6 +274,8 @@ function jukebox:draw()
     --songBG skeleton        -- we have all these skeletons because its halloween so we gotta be spooky
     if not self.video and not self.songBG then
         love.graphics.rectangle("fill", 520, 30, 1430, 804)
+    else
+        self:drawBG()
     end
 
     --song info skeleton 
@@ -285,8 +287,6 @@ function jukebox:draw()
     else
         self:drawScrubber()
     end
-
-    self:drawBG()
 end
 
 function jukebox:drawScrubber()
@@ -296,8 +296,8 @@ function jukebox:drawScrubber()
     self.scrubber:draw()
 
     if self.scrubberHeld and self.audio then
-        local mx, my = cursor:getPosition()
-        local headX, headY, headRadius = self.scrubber:getHeadData()
+        local mx, _ = cursor:getPosition()
+        local _, headY, headRadius = self.scrubber:getHeadData()
         local currentTime = self.audio:tell()
         local totalTime = self.audio:getDuration()
         local timeString = string.format("%02d:%02d / %02d:%02d",
