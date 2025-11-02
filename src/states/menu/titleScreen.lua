@@ -1,8 +1,13 @@
 local titleScreen = State("titleScreen")
-
-function titleScreen:enter()
+local fade = 0
+function titleScreen:enter(from, resetItems)
+    fade = 0
+    if resetItems == nil then resetItems = true end
     self.BG = SkinHandler:getImage("Menu", "Background")
-    self.wavesY = 0
+    if resetItems then self.wavesY = 0 end
+    if not self.wavesY then
+        self.wavesY = 0
+    end
 
     self.buttonWidth = 500
     self.buttonHeight = 100 
@@ -16,10 +21,12 @@ function titleScreen:enter()
         {label = LocaleHandler:getText("Menu", "Exit"), func = function() love.event.quit() end, color1 = {1,1,1,1}, color2 = {1,1,1,1}},
     }
 
-    self.images = {
-        ["H"] = {image = SkinHandler:getImage("Menu", "H"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
-        ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
-    }
+    if resetItems then
+        self.images = {
+            ["H"] = {image = SkinHandler:getImage("Menu", "H"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
+            ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
+        }
+    end
 
     buttonSpacing = 10
 
@@ -31,9 +38,11 @@ function titleScreen:enter()
         table.insert(self.buttons, buttonSlideOut(self.buttonX, 600 + (i-1) * (self.buttonHeight + buttonSpacing), self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, self.buttonLabels[i].color1, self.buttonLabels[i].color2))
     end
 
-    self:setUpThoseLinesThatIHate(10)
-    self:setUpThoseWavesThatIHate(4)
-    self:setUpThoseBubblesThatIHate(20)
+    if resetItems then
+        self:setUpThoseLinesThatIHate(10)
+        self:setUpThoseWavesThatIHate(4)
+        self:setUpThoseBubblesThatIHate(20)
+    end
 end
 
 
@@ -100,6 +109,7 @@ end
 
 
 function titleScreen:update(dt)
+    fade = math.min(fade + dt*5, 1)
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
     end
@@ -123,7 +133,7 @@ function titleScreen:updateBubbles(dt)
 end
 function titleScreen:draw()
     love.graphics.draw(self.BG) -- TEMP 
-       for i, Bubble in ipairs(self.bubbles) do
+    for i, Bubble in ipairs(self.bubbles) do
         Bubble:draw()
     end
     love.graphics.print("harmoni lol")
@@ -139,7 +149,7 @@ function titleScreen:draw()
     end
 
     for i, Button in ipairs(self.buttons) do
-        Button:draw()
+        Button:draw(fade)
     end
     love.graphics.setColor(1,1,1,1)
 

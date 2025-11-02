@@ -3,7 +3,7 @@ require("love.init")
 
 -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
-dontShowBG = true
+dontShowBG = false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
@@ -20,6 +20,7 @@ function love.load(args)
 
     SkinHandler = require("modules.skinHandler")
     LocaleHandler = require("Modules.localeHandler")
+    CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     CHE = require("engine.CHE")
@@ -37,7 +38,7 @@ function love.load(args)
     SongListManager = require("modules.songListManager")
     CaptionParser = require("modules.captionParser")
 
-    State.switch(States.menu.titleScreen)
+    State.switch(States.menu.preloadState)
 
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()

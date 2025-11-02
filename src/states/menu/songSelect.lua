@@ -406,6 +406,11 @@ function songSelect:update(dt)
         end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
     end
+
+    local totalSongListHeight = #songButtons * (songButtonHeight + songButtonSpacing)
+    local minHoveredSong = -totalSongListHeight + songButtonHeight + songButtonSpacing * 2
+    local maxHoveredSong = songButtonSpacing * 2
+    hoveredSong = math.max(math.min(hoveredSong, maxHoveredSong), minHoveredSong)
 end
 
 function songSelect:mousemoved()
@@ -452,6 +457,9 @@ function songSelect:updateBGImage()
                 if currentDisplayedBG ~= SongButton.image then -- its not the right image so we change it
                     previousBG = currentDisplayedBG
                     currentDisplayedBG = SongButton.image
+                    -- hell, just select the current song
+                    selectedSong = i
+                    self.currentSongInfo = SongButton:returnInfo()
                     fadeBG()
                 end
             end

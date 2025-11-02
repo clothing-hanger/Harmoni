@@ -66,7 +66,7 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Menu"] = "FONTS/astonpolizregular.ttf",
         ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
     },
-    
+
     Notes = {
         ["4K"] = {
             ["Left"] = newQuad("Arrows", 602, 0, 300, 300),

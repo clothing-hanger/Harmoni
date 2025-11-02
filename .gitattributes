@@ -1,0 +1,2 @@
+src/clibs/Windowsx64/avfilter-11.dll filter=lfs diff=lfs merge=lfs -text
+src/clibs/Windowsx64/avcodec-62.dll filter=lfs diff=lfs merge=lfs -text
