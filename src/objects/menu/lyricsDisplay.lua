@@ -134,6 +134,97 @@ function lyricsDisplay:hitLyric(lyricIndex)
     end
 end
 
+local function drawRichText(text, x, y, wrap)
+    text = tostring(text or "")
+
+    if not text:find("<") then
+        love.graphics.printf(text, x, y, wrap, "left")
+        return
+    end
+
+    local baseFont = SkinHandler:getFont("Menu", 50) or love.graphics.getFont()
+
+    local prevFont = love.graphics.getFont()
+    local prevR, prevG, prevB, prevA = love.graphics.getColor()
+
+    local lineHeight = baseFont:getHeight()
+    local curY = y
+    local activeColor = nil
+
+    for line in text:gmatch("([^\n]*)\n?") do
+        font = baseFont
+        love.graphics.setFont(font)
+
+        if line == "" and not text:find("^%s*$") then
+            curY = curY + lineHeight
+        else
+            if not line:find("<") then
+                love.graphics.setFont(baseFont)
+                love.graphics.setColor(prevR, prevG, prevB, prevA)
+                love.graphics.printf(line, x, curY, wrap, "left")
+            else
+                local cursorX = x
+                local s = line
+                while #s > 0 do
+                    local pre, tag, post = s:match("^(.-)(<[^>]+>)(.*)")
+                    if not tag then
+                        if s ~= "" then
+                            love.graphics.setFont(font)
+                            love.graphics.printf(s, cursorX, curY, wrap, "left")
+                            cursorX = cursorX + font:getWidth(s)
+                        end
+                        break
+                    end
+
+                    if pre ~= "" then
+                        love.graphics.setFont(font)
+                        love.graphics.printf(pre, cursorX, curY, wrap, "left")
+                        cursorX = cursorX + font:getWidth(pre)
+                    end
+
+                    if tag == "<i>" then
+                    elseif tag == "</i>" then
+                    elseif tag:match("^<c=#%x%x%x%x%x%x>$") then
+                        local hex = tag:match("^<c=(#%x+)>$")
+                        if hex then
+                            activeColor = hex
+                            local r = tonumber(hex:sub(2,3),16)/255
+                            local g = tonumber(hex:sub(4,5),16)/255
+                            local b = tonumber(hex:sub(6,7),16)/255
+                            if prevR ~= 1 then
+                                -- darken
+                                r = r * 0.6
+                                g = g * 0.6
+                                b = b * 0.6
+                            end
+                            love.graphics.setColor(r, g, b, 1)
+                        end
+                    elseif tag == "</c>" then
+                        activeColor = nil
+                        love.graphics.setColor(prevR, prevG, prevB, prevA)
+                    elseif tag == "<b>" then
+                    elseif tag == "</b>" then
+                    elseif tag == "<u>" then
+                        local underlineY = curY + lineHeight - 5
+                        love.graphics.line(cursorX, underlineY, cursorX + font:getWidth(post), underlineY)
+                    elseif tag == "</u>" then
+                    elseif tag == "<s>" then
+                        local strikeY = curY + lineHeight / 2
+                        love.graphics.line(cursorX, strikeY, cursorX + font:getWidth(post), strikeY)
+                    elseif tag == "</s>" then
+                    end
+
+                    s = post
+                end
+            end
+
+            curY = curY + lineHeight
+        end
+    end
+
+    love.graphics.setFont(prevFont)
+    love.graphics.setColor(prevR, prevG, prevB, prevA)
+end
 
 function lyricsDisplay:draw()
     -- background
@@ -159,12 +250,11 @@ function lyricsDisplay:draw()
             love.graphics.setColor(0, 0, 0, 0.5)
         end
 
-        love.graphics.printf(
+        drawRichText(
             Lyric.text,
             Lyric.rectangle.x + 30,
             Lyric.rectangle.y,
-            Lyric.rectangle.width - 30,
-            "left"
+            Lyric.rectangle.width - 30
         )
     end
 

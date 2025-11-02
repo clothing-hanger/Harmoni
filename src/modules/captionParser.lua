@@ -234,6 +234,57 @@ local function parseSTL(content)
     return captions
 end
 
+-- convert ASS formatting to simple tags
+---@param str string The string to convert
+---@return string The converted string
+local function convertASSTags(str) -- haha it says ass again
+    if not str then return "" end
+
+    str = str:gsub("{(.-)}", function(tagContent)
+        local output = ""
+
+        for cmd in tagContent:gmatch("\\[^\\]+") do
+            local iVal = cmd:match("\\i(%d)")
+            if iVal == "1" then
+                output = output .. "<i>"
+            elseif iVal == "0" then
+                output = output .. "</i>"
+            end
+
+            local bb, gg, rr = cmd:match("\\c&H(%x%x)(%x%x)(%x%x)&")
+            if bb and gg and rr then
+                output = output .. string.format("<c=#%s%s%s>", rr, gg, bb)
+            end
+
+            local bVal = cmd:match("\\b(%d+)")
+            if bVal == "1" then output = output .. "<b>"
+            elseif bVal == "0" then output = output .. "</b>" end
+            
+            local uVal = cmd:match("\\u(%d+)")
+            if uVal == "1" then output = output .. "<u>"
+            elseif uVal == "0" then output = output .. "</u>" end
+            
+            local sVal = cmd:match("\\s(%d+)")
+            if sVal == "1" then output = output .. "<s>"
+            elseif sVal == "0" then output = output .. "</s>" end
+            
+            if cmd:match("\\r") then output = output .. "</>" end
+
+            -- idk i might add more? idk... this doesn't need to be a full fledged .ass parser lmao
+        end
+
+        return output
+    end)
+
+    str = str:gsub("\\N", "\n")
+
+    if str:find("<c=#") and not str:find("</c>") then
+        str = str .. "</c>"
+    end
+
+    return str
+end
+
 --- Parses ASS formatted captions
 --- @param content string The content of the ASS file
 --- @return table A table of captions with text, time, and endTime
@@ -242,6 +293,7 @@ local function parseASS(content) -- haha it says ass
     -- Idk im too lazy for that tho
     local captions = {}
     local formatMap = {}
+    local formatCount = 0
     local inEvents = false
 
     for line in content:gmatch("[^\r\n]+") do
@@ -249,31 +301,49 @@ local function parseASS(content) -- haha it says ass
 
         if line:match("^%[Events%]") then
             inEvents = true
+
         elseif inEvents then
             local fmt = line:match("^Format:%s*(.+)")
             if fmt then
+                -- rebuild format map and count fields
                 formatMap = {}
+                formatCount = 0
                 local i = 1
-                for field in fmt:gmatch("[^,]+") do
-                    field = field:match("^%s*(.-)%s*$"):lower()
-                    formatMap[field] = i
+                for field in fmt:gmatch("([^,]+)") do
+                    local key = field:match("^%s*(.-)%s*$"):lower()
+                    formatMap[key] = i
                     i = i + 1
                 end
+                formatCount = i - 1
             else
                 local dia = line:match("^Dialogue:%s*(.+)")
                 if dia and next(formatMap) then
                     local parts = {}
-                    for field in dia:gmatch("([^,]*)") do
-                        table.insert(parts, field)
+                    local s = dia
+                    if formatCount > 1 then
+                        for i = 1, formatCount - 1 do
+                            local part, rest = s:match("^([^,]*),(.*)$")
+                            if not part then
+                                part = s
+                                rest = ""
+                            end
+                            table.insert(parts, part)
+                            s = rest
+                        end
+                    end
+                    table.insert(parts, s)
+
+                    -- trim each
+                    for i = 1, #parts do
+                        parts[i] = parts[i]:match("^%s*(.-)%s*$")
                     end
 
                     local startTime = parts[formatMap["start"]]
                     local endTime = parts[formatMap["end"]]
-                    local text = table.concat(parts, ",", formatMap["text"])
+                    local text = parts[formatMap["text"]]
 
                     if startTime and endTime and text then
-                        text = text:gsub("\\N", "\n")
-                        text = text:gsub("{.-}", "")
+                        text = convertASSTags(text)
 
                         table.insert(captions, {
                             text = text,
