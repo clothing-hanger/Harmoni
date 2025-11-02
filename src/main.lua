@@ -3,7 +3,7 @@ require("love.init")
 
 -- i can NOT work on this game anywhere people can see my laptop cuz these fucking weird 
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
-dontShowBG = true
+dontShowBG = false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 

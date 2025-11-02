@@ -120,6 +120,11 @@ function CHE:init()
     if NOTIFICATIONS then
         NOTIFICATIONS.setAppID("com.ch.harmoni")
     end
+
+    self.flashbangsound = love.audio.newSource("sounds/flashbang.mp3", "static")
+    self.flashbangimage = nil
+    self.flashbangalphas = {rect = 0, img = 0}
+    CHE:flashbangTrigger()
 end
 
 function CHE:update(dt)
@@ -174,6 +179,34 @@ function CHE:mousereleased(x, y, b)
     cursor:mousereleased(Mouse.x, Mouse.y, b)
     State.mousereleased(Mouse.x, Mouse.y, b)
 end
+
+function CHE:flashbangTrigger()
+    Timer.after(4, function() 
+        local num = love.math.random(1,3)
+        print("flashbang chance ", num)
+        if num == 3 and not self.doingflashbang then
+            CHE:flashbang()
+        end
+        CHE:flashbangTrigger()
+    end)
+end
+
+function CHE:flashbang()
+    self.doingflashbang = true
+    Timer.after(0.1, function() end)
+    love.graphics.captureScreenshot(function (capture)
+        self.flashbangsound:play()
+        self.flashbangalphas = {rect = 1, img = 1}
+        self.flashbangimage = love.graphics.newImage(capture)
+        self.flashrecttimer = Timer.after(2.7, function()
+            Timer.tween(1, self.flashbangalphas, {rect = 0})
+            Timer.tween(2, self.flashbangalphas, {img = 0}, "linear", function()
+                self.doingflashbang = false
+            end)
+        end)
+    end)
+end
+
 
 function CHE:draw(dt)
     local lastFont = defaultFont
@@ -231,6 +264,14 @@ function CHE:draw(dt)
     love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
 
     love.graphics.setFont(lastFont)
+
+    if self.doingflashbang then
+        love.graphics.setColor(1,1,1,self.flashbangalphas.img)
+        if self.flashbangimage then love.graphics.draw(self.flashbangimage) end
+        love.graphics.setColor(1,1,1,self.flashbangalphas.rect)
+        love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
+        love.graphics.setColor(1,1,1,1)
+    end
 end
 
 function CHE:exit() end
