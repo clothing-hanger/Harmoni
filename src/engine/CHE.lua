@@ -117,7 +117,7 @@ function CHE:init()
     self.flashbangsound = love.audio.newSource("sounds/flashbang.mp3", "static")
     self.flashbangimage = nil
     self.flashbangalphas = {rect = 0, img = 0}
-    CHE:flashbangTrigger()
+   -- CHE:flashbangTrigger()
 end
 
 function CHE:update(dt)
@@ -145,6 +145,7 @@ function CHE:updateTime()
 end
 
 function CHE:keypressed(k, sc, isrepeat)
+    if k == "q" then CHE:flashbang() end
     Console.keypressed(k)
 end
 
