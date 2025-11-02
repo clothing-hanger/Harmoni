@@ -47,13 +47,6 @@ function CHE:init()
     NOTIFICATIONS = require("engine.modules.notifications")
     require("modules.Objects")
 
-    tryExcept(function()
-        DLL_Video = require("video")
-    end, function(err)
-        print("Warning: Could not load video DLL. Video playback will be disabled.")
-        print("Error message: " .. err)
-    end)
-
     cursor = cursor()
 
     local screenMiddle = baseScreenRatio.x / 2

@@ -13,7 +13,7 @@ function love.conf(t)
     t.modules.physics = false
 
     if debug then 
-        t.window.title = "Harmoni Rewrite 0.2.0  |   LÖVE Version " .. (love.getVersion() or "UNKNOWN (how is this possible?")
+        t.window.title = "Harmoni Rewrite 0.2.0  |  LÖVE Version " .. (love.getVersion() or "UNKNOWN (how is this possible?")
                                                                                             -- I made this conf.lua when love12 didn't have a codename
                                                                                             -- idk how it ended up like this though? idk
     end

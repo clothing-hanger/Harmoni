@@ -11,7 +11,6 @@
 
     --shared game thingies
     sharedBackground = require("objects.game.shared.sharedBackground")
-    video = require("objects.game.shared.video")
 
     --menu
     menuSongButton = require("objects.menu.songButton")

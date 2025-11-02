@@ -1,6 +1,10 @@
 local mania = Class:extend("mania")
+local videoFade = 0
+local played = false
 
 function mania:new(chart, parent, fullChart)
+    videoFade = 0
+    played = false
     self.parent = parent
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
@@ -20,9 +24,9 @@ function mania:new(chart, parent, fullChart)
     printToConsole(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
-    self.playField = {maniaPlayField(self.chart, self)}
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "static")
     self.song:setLooping(false)
+    self.playField = {maniaPlayField(self.chart, self)}
 
     mania.judgements = require("Modules.maniaJudgements")
 
@@ -93,9 +97,10 @@ function mania:setUpChart(chartpath, chart)
         self.videoBackground = video(
             songPath .. "/" .. parsed.meta.backgroundVideo,
             baseScreenRatio.x / 2,
-            baseScreenRatio.y / 2,
-            1, 1
+            baseScreenRatio.y / 2
         )
+        self.videoBackground.scaleX = baseScreenRatio.x / self.videoBackground.image:getWidth()
+        self.videoBackground.scaleY = baseScreenRatio.y / self.videoBackground.image:getHeight()
     end
 
     for _, BpmChange in ipairs(parsed.bpm) do
@@ -129,14 +134,17 @@ function mania:update(dt)
         playField:update(dt)
     end
 
-    if self.song and MusicTime >= 0 and not self.song:isPlaying() then
-        self.song:play()
-        if self.videoBackground then self.videoBackground:play() end
+    if self.song and self.playField[1].finished then
+        printToConsole("SONG END 1")
+        if not self.song:isPlaying() then printToConsole("SONG END 2"); self:endSong() end
     end
 
-    if self.song and self.playField[1].finished then
-       printToConsole("SONG END 1")
-        if not self.song:isPlaying() then printToConsole("SONG END 2"); self:endSong() end
+    if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
+        self.song:play()
+        if self.videoBackground then self.videoBackground:play() end
+        played = true
+    else
+        videoFade = videoFade + dt * 1
     end
 
     if thething then
@@ -174,7 +182,10 @@ end
 
 function mania:draw()
     self.background:draw()
-    if self.videoBackground then self.videoBackground:draw() end
+    if self.videoBackground then 
+        self.videoBackground.alpha = math.min(videoFade, 1)
+        self.videoBackground:draw() 
+    end
 
     -- Prepare batches
     local arrowBatch = SkinHandler:getBatch("Arrows")

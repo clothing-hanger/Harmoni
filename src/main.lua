@@ -20,6 +20,7 @@ function love.load(args)
 
     SkinHandler = require("modules.skinHandler")
     LocaleHandler = require("Modules.localeHandler")
+    CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     CHE = require("engine.CHE")
@@ -37,7 +38,7 @@ function love.load(args)
     SongListManager = require("modules.songListManager")
     CaptionParser = require("modules.captionParser")
 
-    State.switch(States.menu.titleScreen)
+    State.switch(States.menu.preloadState)
 
     -- load objects
     GlobalNotificationsHandler = notificationsHandler()

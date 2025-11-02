@@ -36,6 +36,7 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.angle = 0  -- i guess this was handled by the sprite thingy in rit?? idk
     self.blendMode = "alpha"
     self.blendModeAlpha = "alphamultiply"
+    self.alpha = 1
 
     self.forcedUpdate = false
 end
@@ -98,6 +99,8 @@ function video:seek(time)
 end
 
 function video:draw()
+    local lastColor = {love.graphics.getColor()}
+    love.graphics.setColor(lastColor[1], lastColor[2], lastColor[3], self.alpha * lastColor[4])
     if not self.video or not self.visible or not self.image then return end
 
     love.graphics.push()
@@ -110,6 +113,7 @@ function video:draw()
     love.graphics.draw(self.image, self.x, self.y, math.rad(self.angle), sx, sy, ox, oy)
 
     love.graphics.pop()
+    love.graphics.setColor(lastColor)
 end
 
 return video

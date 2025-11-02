@@ -34,7 +34,7 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 end
 
 function buttonSlideOut:update(dt)
-if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
+    if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
     self.hovered = mouseOver(self)
 
