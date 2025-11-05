@@ -117,7 +117,7 @@ function CHE:init()
     self.flashbangsound = love.audio.newSource("sounds/flashbang.mp3", "static")
     self.flashbangimage = nil
     self.flashbangalphas = {rect = 0, img = 0}
-   -- CHE:flashbangTrigger()
+    --CHE:flashbangTrigger()
 end
 
 function CHE:update(dt)

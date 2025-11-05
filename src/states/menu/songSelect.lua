@@ -458,7 +458,7 @@ function songSelect:updateBGImage()
                     previousBG = currentDisplayedBG
                     currentDisplayedBG = SongButton.image
                     -- hell, just select the current song
-                    selectedSong = i
+                    selectedSong = i     -- for what tho
                     self.currentSongInfo = SongButton:returnInfo()
                     fadeBG()
                 end
