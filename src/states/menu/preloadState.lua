@@ -73,7 +73,7 @@ function preloadState:draw()
 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
-    local msg = "Preparing..."
+    local msg = "loading :3"
     love.graphics.printf(msg, 0, h*0.5, w, "center")
 
     local barW = w * 0.5
