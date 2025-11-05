@@ -11,6 +11,8 @@ function gameModeManager:enter(s,mode,chart,fullchart)
     printToConsole("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
         self.gameMode = {mania(chart, self, fullchart)}
+    elseif mode == "slider" then
+        self.gameMode = {slider(chart, self, fullchart)}
     end
 
     cursor.fadeOutWhenIdle = true    -- why dont we just add a check to the cursor to see if we are in gamemodemanager

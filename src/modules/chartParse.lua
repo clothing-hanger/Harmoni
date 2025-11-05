@@ -14,6 +14,10 @@ end
 function ChartParse.harmc(harmc)
     local chart = {}
     chart.scrollSpeedFactors = {} -- to be safe :3c
+    chart.meta = { -- safety first!! :3c
+        gameMode = "mania"
+    }
+    --chart.meta.gameMode = "mania"
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then
@@ -60,15 +64,27 @@ function ChartParse.harmc(harmc)
             end
 
         elseif section == "hitObjects" then
-            local key, startTime, endTime, lane = parts[1], parts[2], parts[3], parts[4]
-            if key and startTime and endTime and lane then
-                table.insert(chart[section], {
-                    type = key,
-                    startTime = tonumber(startTime),
-                    endTime = tonumber(endTime),
-                    lane = tonumber(lane)
-                })
+            if chart.meta.gameMode == "mania" then
+                local key, startTime, endTime, lane = parts[1], parts[2], parts[3], parts[4]
+                if key and startTime and endTime and lane then
+                    table.insert(chart[section], {
+                        type = key,
+                        startTime = tonumber(startTime),
+                        endTime = tonumber(endTime),
+                        lane = tonumber(lane)
+                    })
+                end
+            elseif chart.meta.gameMode == "slider" then
+                local key, time, knockback = parts[1], parts[2], parts[3]
+                if key and time and knockback then
+                    table.insert(chart[section], {
+                        type = key,
+                        time = tonumber(time),
+                        knockback = (knockback == "true")
+                    })
+                end
             end
+                
         end
 
         ::continue::

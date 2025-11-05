@@ -9,6 +9,10 @@
     maniaHealthBar = require("objects.game.mania.maniaHealthBar")
     maniaHUD = require("objects.game.mania.maniaHUD")
 
+    --slider
+    sliderField = require("objects.game.slider.sliderField")
+    sliderReceptor = require("objects.game.slider.sliderReceptor")
+
     --shared game thingies
     sharedBackground = require("objects.game.shared.sharedBackground")
 
