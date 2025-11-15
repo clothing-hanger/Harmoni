@@ -34,3 +34,5 @@
     throbbert = require("objects.UI.throbbert")
     toggleSettings = require("objects.UI.toggleSettings")
     UIlogoH = require("objects.UI.logoH")
+    window = require("objects.UI.window")
+    coolFuckingRectangle = require("objects.UI.coolFuckingRectangle")

@@ -64,7 +64,7 @@ while true do
         --songInfo = loadSongMetadata(path) 
         ok, err = pcall(function() songInfo = loadSongMetadata(path) end)
         if not ok then
-           printToConsole("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
+           print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
             goto continue
         end
     end
@@ -153,6 +153,18 @@ while true do
 end
 ]]
 
+
+   -- local sampleWindowMsg = LocaleHandler:getText("Warnings", "Trigger warnings") .."\n\n".. LocaleHandler:getText("TriggerWarnings", "placeholder")
+   -- self.window = window(LocaleHandler:getText("Warnings", "Hold Up"), sampleWindowMsg, 1000,600,{{text = "Play", func = function() print("yay!!") end}, {text = "Go back!", func = function() print("awhhhh :(") end}})
+
+    local popupbuttons = {}
+    for i = 1, 7 do
+        table.insert(popupbuttons, {text = tostring(i)})
+    end
+   -- self.window = window("i am a window title i guess", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 
+  --  1000,600,popupbuttons)
+
+
     self.bannerInputChannel = self.bannerInputChannel or love.thread.getChannel("thread.bannerLoader")
     self.bannerChannel = self.bannerChannel or love.thread.getChannel("thread.bannerLoader.out")
 
@@ -176,6 +188,8 @@ end
     self.logoH = UIlogoH(90,1300,0.17)
 
     self.coverBG = {alpha = 0}
+
+    
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -289,6 +303,9 @@ function songSelect:setupDifficultyList(path,color)
     for i = 1, #difficultyList do
         local songInfo = nil
         songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/")
+        print("hello!! i am the fucking thing that creates difficulty buttons")
+            print(songInfo.warnings)
+            print(songInfo.warnings and #songInfo.warnings)
 
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
@@ -310,7 +327,8 @@ function songSelect:setupDifficultyList(path,color)
                     songInfo.gameMode,
                     path .. "/" .. difficultyList[i],
                     7,
-                    color
+                    color,
+                    songInfo.warnings  -- this is just hacked in,,,, its so bad   there was absolutely NO planning for this when the song button object was made
                 )
             )
         end
@@ -411,6 +429,10 @@ function songSelect:update(dt)
     local minHoveredSong = -totalSongListHeight + songButtonHeight + songButtonSpacing * 2
     local maxHoveredSong = songButtonSpacing * 2
     hoveredSong = math.max(math.min(hoveredSong, maxHoveredSong), minHoveredSong)
+
+
+
+    if self.window then self.window:update(dt); self.window:checkForClicks() end
 end
 
 function songSelect:mousemoved()
@@ -503,7 +525,42 @@ function songSelect:checkForDifficultyButtonClicks()
                 --selectedSong = i
                 buttonInfo = SongButton:onClick()
                 if switchingState then return end
-                self:switchToPlaystate(buttonInfo)
+
+
+                -- first we check for warnings
+                if buttonInfo.warnings then
+                    -- then we make the warning window if any were found
+                    local warnings = {}
+                    local finalString = ""
+
+                    for i, Warning in ipairs(buttonInfo.warnings) do  -- get all the warnings and find their strings in the loaded locale
+                        local warningStr =LocaleHandler:getText("Warnings", "Warning " .. Warning.warning) .. "\n"
+                        table.insert(warnings,warningStr)
+                    end
+                    -- now we create the finalized message for the window
+                    for i = 1,#warnings do
+                        if i == 1 then -- this is the start, so we gotta add the main message thingy
+                            finalString = finalString .. LocaleHandler:getText("Warnings", "Content") .. "\n\n"
+                        end
+                        -- now we add the warnings themselves
+                        finalString = finalString .. warnings[i] -- no need to add a \n cuz we already added it to the string in the warnings table
+
+                        -- check if its the last one, if it is, we add the end part 
+                        if i == #warnings then 
+                            finalString = finalString .. "\n" .. LocaleHandler:getText("Warnings", "Still Wanna Play")
+                        end
+                    end
+                    -- now we make the window
+                    self.window = window(self,LocaleHandler:getText("Warnings","Hold Up"), 
+                    finalString, 1000, 600, 
+                    {
+                        {text = LocaleHandler:getText("UI", "Yes"), func = function () self:switchToPlaystate(buttonInfo); self.window:killYourself() end},
+                        {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
+                    })
+                else -- no warnings so just play the song
+                    self:switchToPlaystate(buttonInfo)
+                end
+                
 
             end
             -- why go through the rest? we already have a match so just break
@@ -567,6 +624,10 @@ function songSelect:draw(dt)
         love.graphics.setColor(1,1,1)
     end
     self.logoH:draw()
+
+
+        if self.window then self.window:draw() end
+
 end
 
 function songSelect:drawSongInfo(x, y, spacing)

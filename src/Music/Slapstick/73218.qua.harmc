@@ -8,6 +8,8 @@ audioFile:audio.mp3
 chartOrigin:Quaver
 initialSV:1
 
+
+
 artist:4-MP
 gameMode:mania
 source:s
@@ -15,6 +17,21 @@ songPreviewTime:63973
 tags:uhh
 title:Slapstick
 difficultyName:funny lol
+
+[warnings]
+content:language
+health:flashing
+content:selfharm
+content:suicide
+content:sexual
+content:gore
+content:violent
+health:loud
+content:drugs
+content:alcohol
+content:smoking
+
+
 [bpm]
 [sliderVelocities]
 [hitObjects]

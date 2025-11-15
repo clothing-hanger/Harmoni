@@ -1,6 +1,6 @@
 local menuSongButton = Class:extend("menuSongButton")
 
---- @param instance table -- The instance of the menu
+--- @param instance table -- The instance of the menu   -- what does this mean 
 --- @param width number
 --- @param height number
 --- @param x number
@@ -15,13 +15,15 @@ local menuSongButton = Class:extend("menuSongButton")
 --- @param path string
 --- @param cornerRadius number
 --- @param color table <number, number, number>
-function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color)
+function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings)
     self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
     self.width = width or 10
     self.height = height or 10
     self.x = x or 10
     self.y = y or 10
+
+    self.warnings = warnings
 
     self.onlySkeleton = false -- why did i even add this we wont use it
 
@@ -54,7 +56,7 @@ end
 
 function menuSongButton:onClick()
     if self.isDifficultyButton then
-        return {loadSong = true, mode = self.mode, path = self.path}
+        return {loadSong = true, mode = self.mode, path = self.path, warnings = self.warnings}
     else
         return {loadSong = false, mode = self.mode, path = self.path, color = self.color}
     end
@@ -70,7 +72,8 @@ function menuSongButton:returnInfo()
         image = self.image,
         path = self.path,
         isDifficultyButton = self.isDifficultyButton,
-        color = self.color
+        color = self.color,
+        warnings = self.warnings
     }
 end
 

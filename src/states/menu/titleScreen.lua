@@ -43,8 +43,10 @@ function titleScreen:enter(from, resetItems)
         self:setUpThoseWavesThatIHate(4)
         self:setUpThoseBubblesThatIHate(20)
     end
-end
 
+    self.coolrect = coolFuckingRectangle(200,200,800,300,40,90,{181/255, 235/255, 174/255}, {72/255, 181/255, 63/255})
+
+end
 
 function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
     self.bubbles = {}
@@ -154,13 +156,14 @@ function titleScreen:draw()
     love.graphics.setColor(1,1,1,1)
 
     self:drawLogo()
+--love.graphics.rectangle("fill", 0, 0 ,9999, 9999)
 end
 
 
 function titleScreen:drawLogo()
     -- the logo drawing is complex so we move it to its own function
     local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
-    local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later 
+    local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later      -- guess this was a lie (the logo no longer works this way so.... i should just remove all this)
     local HOnlyStartingX, HOnlyStartingY = 0,0
 
     local HOnlyX, HOnlyY = HOnlyStartingX, HOnlyStartingY
@@ -177,6 +180,8 @@ function titleScreen:drawLogo()
     local fullLogoCenterX, fullLogoCenterY = fullLogo:getWidth()/2, fullLogo:getHeight()/2
 
     love.graphics.draw(fullLogo, baseScreenRatio.x/2, baseScreenRatio.y/2-350, 0, fullLogoSizeX, fullLogoSizeY, fullLogoCenterX, fullLogoCenterY)
+
+--    self.coolFuckingRectangle:draw()
 end
 
 return titleScreen

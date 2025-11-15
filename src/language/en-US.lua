@@ -32,8 +32,8 @@ Language = {
     },
     UI = {
         ["Ok"] = "Ok",
-        ["Yes"] = "Yes",
-        ["No"] = "No",
+        ["Yes"] = "Yeah!",
+        ["No"] = "Nah...",
         ["Cancel"] = "Cancel",
         ["Back"] = "Back",     -- not sure if all of these will be used but im adding them in case
         ["Confirm"] = "Confirm",
@@ -41,12 +41,22 @@ Language = {
     },
     Warnings = {
         ["Hold Up"] = "Hold up!",
-        ["Flashing lights"] = "This chart has flashing lights and may not be suitable for people with photosensitive epilepsy.",
-        ["Trigger warnings"] = "This chart includes the following content warnings and may not be suitable for everyone:",
-        ["Language"] = "This song features language that might not be suitable for all users."
-    },
-    TriggerWarngings = {
-
+        ["Flashing lights"] = "This song contains flashing lights and may not be suitable for people with photosensitive epilepsy.",
+        ["Content"] = "This song has some content warnings!",
+        ["Still Wanna Play"] = "Are you sure you wanna play this song?",
+        ["Warning Type content"] = "Content",
+        ["Warning Type health"] = "Health",
+        ["Warning flashing"] = "Flashing Lights or Images",
+        ["Warning language"] = "Strong Language",
+        ["Warning selfharm"] = "References to Self Harm",
+        ["Warning suicide"] = "References to Suicide",
+        ["Warning sexual"] = "Sexually Explicit Language or Images",              -- i HIGHLY doubt we will need these but im just adding all the major ones i can think of
+        ["Warning gore"] = "References or Depictions of Blood or Gore",            -- the game would be crazy if we ended up using these all tho lmfao 
+        ["Warning violent"] = "References of Violence",
+        ["Warning loud"] = "Loud or Sudden Sounds",
+        ["Warning drugs"] = "References to Drug Use",
+        ["Warning alcohol"] = "References to Alcohol Use",
+        ["Warning smoking"] = "References to Smoking or Tobacco Use",
     },
     ErrorHandler = {
         ["Unknown"] = "???",

@@ -8,6 +8,7 @@ dontShowBG = false
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function love.load(args)
+
     Settings = require("modules.Settings")
     Settings.default = Settings:defaultSettings()
     Settings:loadSettings()
@@ -25,6 +26,7 @@ function love.load(args)
 
     CHE = require("engine.CHE")
     CHE:init()
+        _G.GlobalNotificationsHandler = notificationsHandler()
 
     require("modules.gamemodes")
 
@@ -41,7 +43,6 @@ function love.load(args)
     State.switch(States.menu.preloadState)
 
     -- load objects
-    GlobalNotificationsHandler = notificationsHandler()
     printToConsole(SkinHandler:getRandomColors())
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
@@ -49,8 +50,8 @@ end
 function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
-    GlobalNotificationsHandler:update(dt)
-end
+    _G.GlobalNotificationsHandler:update(dt)
+end 
 
 function love.mousepressed(x, y, b)
     CHE:mousepressed(x, y, b)
