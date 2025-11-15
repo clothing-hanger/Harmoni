@@ -39,7 +39,11 @@ function jukebox:switchSong(songInfo)
 
     if getFileExtension(self.currentSongInfo.bg) ~= "mp4" then
         self.video = false
-        self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
+        if love.filesystem.getInfo(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg, "file") then
+            self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
+        else
+            self.songBG = nil
+        end
     else
         self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, 520, 30, 1, 1)
         self.songBG:play()

@@ -52,6 +52,7 @@ function CHE:init()
     local screenMiddle = baseScreenRatio.x / 2
     musicPath = "Music/"
     maniaNoteSize = 180
+    sliderNoteSize = 180
     maninaLaneGap = 10
     maniaScrollSpeed = 2.85
     maniaLaneYOffset = 110
