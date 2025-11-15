@@ -57,6 +57,7 @@ Language = {
         ["Warning drugs"] = "References to Drug Use",
         ["Warning alcohol"] = "References to Alcohol Use",
         ["Warning smoking"] = "References to Smoking or Tobacco Use",
+        ["2arning tumbup"] = ":tumbup:"
     },
     ErrorHandler = {
         ["Unknown"] = "???",
