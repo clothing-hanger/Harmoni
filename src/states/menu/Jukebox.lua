@@ -47,7 +47,11 @@ function jukebox:switchSong(songInfo)
     else
         self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, 520, 30, 1, 1)
         self.songBG:play()
-        self.video = true
+        self.video = true   -- if time machines ever exist im going to go to the exact moment i wrote this and i am shooting myself in the face 
+                            -- WHY would i not make self.video just BE THE FUCKING VIDEO
+                            -- what the FUCK was i thinking
+                            -- fucking self.songBG can just be a video or an image??
+                            -- self.video = tru- SHUT THE FUCK UP!!!!!
 
         local targetSizeX = 1430
         local targetSizeY = 804
@@ -87,6 +91,29 @@ function jukebox:switchSong(songInfo)
         self,
         5, -5, 5, 30
     )
+end
+
+function jukebox:fullscreenVideo()
+    if not self.video then return end -- i hate myself so much why the fuck did i make it work this way 
+                                        -- looking at this by itself you would think this just checks that the video object self.video exists,, nope. self.video is a FUCKING BOOLEAN 
+    --save the original video size shit first
+    self.originalvideoScaleX = self.songBG.scaleX
+    self.originalvideoScaleY = self.songBG.scaleY
+    self.originalvideoX = self.songBG.x
+    self.originalvideoScaleY = self.songBG.y
+
+    self.fullscreened = true
+
+    -- now we just change the video's size and position to be fullscreened 
+    -- it draws from center, so we set it to the center of the screen
+    self.songBG.x, self.songBG.y = baseScreenRatio.x/2, baseScreenRatio.y/2
+
+    -- and finally, we just make it fullscreen 
+        local targetSizeX = baseScreenRatio.x
+        local targetSizeY = baseScreenRatio.y
+
+        self.songBG.scaleX = targetSizeX / self.songBG.image:getWidth()
+        self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
 end
 
 function jukebox:setupSongList()
@@ -139,6 +166,10 @@ function jukebox:update(dt)
     if self.audio and self.scrubber then
         self.scrubBack:update(dt)
         self.scrubber:update(dt, self.audio:tell()/self.audio:getDuration())
+    end
+
+    if Input:pressed("menuClickLeft") then
+        --self:fullscreenVideo()
     end
 
     local dontContinue = self:checkForSongButtonClicks()
@@ -343,6 +374,14 @@ function jukebox:drawBG()
         love.graphics.draw(self.songBG,x, y,nil,width / self.songBG:getWidth(),height / self.songBG:getHeight())
     end
     love.graphics.setStencilTest()
+
+    -- here we draw the video outside of the stencil if its fullscreened
+    if self.fullscreened then 
+        
+        if self.video then
+            self.songBG:draw()
+        end
+    end
 end
 
 return jukebox
