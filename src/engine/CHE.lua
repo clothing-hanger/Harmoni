@@ -10,7 +10,7 @@ function toCanvasCoords(mx, my)
 end
 
 function mouseOver(object)
-    local mx, my = toCanvasCoords(Mouse.x, Mouse.y)
+    local mx, my = cursor:getPosition()
     return mx >= object.x and mx <= object.x + object.width and
            my >= object.y and my <= object.y + object.height
 end

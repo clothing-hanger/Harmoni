@@ -89,7 +89,7 @@ function cursor:update(dt)
         end
     end
 
-    self.didMove = false
+    --self.didMove = false
 
     if self.mouseDownX then
         local dx = self.x - self.mouseDownX
