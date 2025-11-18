@@ -235,7 +235,7 @@ function jukebox:checkForFullscreenInput()
                 self:fullscreenVideo()
                 self:fade("in")
             end
-                        if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubber)) then self:fade("out", funct) end
+                        if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
 
             else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
                 cursor.fadeOutWhenIdle = false

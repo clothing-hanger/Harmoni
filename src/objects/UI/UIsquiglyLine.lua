@@ -11,6 +11,13 @@ function UISquiglyLine:new(x1,y1,x2,y2,frequency,amplitude,segments,speed,lineWi
     self.segments = segments
     self.lineWidth = lineWidth or 1
     self.color = color or {1,1,1}
+
+    -- stuff for mouseover function to work 
+        self.height = 100
+
+    self.x = self.x1 
+    self.y = self.y1- self.height/2
+    self.width = self.x2 - self.x1
 end
 
 function UISquiglyLine:update(dt)

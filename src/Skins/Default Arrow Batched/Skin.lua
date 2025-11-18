@@ -63,7 +63,7 @@ Skin = {   -- i need to remove lots of these tbh..
     Fonts = {
         ["HUD"] = "FONTS/Novamono-njdg.ttf",
         ["Combo"] = "FONTS/SourceCodePro-Medium.ttf",
-        ["Menu"] = "FONTS/astonpolizregular.ttf",
+        ["Menu"] = "FONTS/neweresterfont.ttf",
         ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
     },
 
