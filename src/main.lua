@@ -50,7 +50,7 @@ end
 function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
-    _G.GlobalNotificationsHandler:update(dt)
+    _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL
 end 
 
 function love.mousepressed(x, y, b)
