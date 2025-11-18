@@ -36,8 +36,12 @@ Language = {
         ["No"] = "Nah...",
         ["Cancel"] = "Cancel",
         ["Back"] = "Back",     -- not sure if all of these will be used but im adding them in case
-        ["Confirm"] = "Confirm",
-        ["Exit"] = "Exit" 
+        ["Confirm"] = "Confirm",                                                                                -- please push git
+        ["Exit"] = "Exit" ,
+        ["Click Fullscreen"] = "Click the video or press F to fullscreen.",
+        ["Click Unfullscreen"] = "Fullscreened. Click the video or press F to unfullscreen.",
+        ["Headphones Recommended"] = "Headphones Recommended",
+        ["Headphones Better"] = "The songs sound better with headphones on. So use them."
     },
     Warnings = {
         ["Hold Up"] = "Hold up!",
