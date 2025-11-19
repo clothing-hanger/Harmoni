@@ -84,9 +84,14 @@ function jukebox:switchSong(songInfo)
             break
         end
     end
+    self.assDisplay = nil
     if type ~= "lua" and type ~= "" then
         local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
+
+        if type == "ass" then
+            self.assDisplay = assRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
+        end
     elseif type == "lua" then
         local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
@@ -115,7 +120,7 @@ function jukebox:fullscreenVideo()
         Timer.after(3, function() 
             Timer.tween(1, self, {videoHudAlpha = 0})
         end)
---save the original video size shit first
+    --save the original video size shit first
     if self.fullscreened then  -- unfullscren
     self.fullscreened = false
         self.songBG.x, self.songBG.y, self.songBG.scaleX, self.songBG.scaleY = self.originalvideoX, self.originalvideoY, self.originalvideoScaleX, self.originalvideoScaleY
@@ -182,6 +187,9 @@ function jukebox:update(dt)
 
     if self.lyricsDisplay then
         self.lyricsDisplay:update(dt, audioTime)
+    end
+    if self.assDisplay then
+        self.assDisplay:update(dt, audioTime)
     end
 
     if self.video and not self.scrubberHeld then
@@ -380,13 +388,11 @@ function jukebox:draw()
     love.graphics.rectangle("fill", 520, 1070, 1430, 200)
 
     --songBG skeleton        -- we have all these skeletons because its halloween so we gotta be spooky
-    if not self.video and not self.songBG then
+    if not self.video and not self.songBG then -- its no longer halloween bro!!! skeletons can't be here anymore !!!
         love.graphics.rectangle("fill", self.songBGX, self.songBGY, self.songBGWidth, self.songBGHeight)
     else
         self:drawBG()
     end
-
-
 
     --scrubber and button skeleton
     if not self.scrubber then
@@ -394,7 +400,6 @@ function jukebox:draw()
     else
         self:drawScrubber()
     end
-
 
     -- draw screen cover
     love.graphics.setColor(0,0,0,self.screenCoverAlpha)
@@ -463,14 +468,17 @@ function jukebox:drawBG()
         if self.video then
             self.songBG:draw()
         end
+
+        if self.assDisplay then
+            self.assDisplay:draw(self.audio:tell())
+        end
     end
 
-            love.graphics.setColor(1,1,1,self.videoHudAlpha)
-            local text = (not self.fullscreened and LocaleHandler:getText("UI", "Click Fullscreen")) or LocaleHandler:getText("UI", "Click Unfullscreen")
-        love.graphics.printf(text, x, y, width, "center")
+    love.graphics.setColor(1,1,1,self.videoHudAlpha)
+    local text = (not self.fullscreened and LocaleHandler:getText("UI", "Click Fullscreen")) or LocaleHandler:getText("UI", "Click Unfullscreen")
+    love.graphics.printf(text, x, y, width, "center")
 
-        love.graphics.setColor(1,1,1,1)
-
+    love.graphics.setColor(1,1,1,1)
 end
 
 return jukebox

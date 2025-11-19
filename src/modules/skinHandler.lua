@@ -178,6 +178,9 @@ function SkinHandler:getFont(font,size)
     local fontR
     if self.__data.Skin.Fonts then
         if not self.loadedFonts[font] or not self.loadedFonts[font][size] then -- doesnt exist yet, so we make a new font
+            if not self.__path or not self.__data.Skin.Fonts[font] then
+                return love.graphics.newFont(size)
+            end
             fontR = love.graphics.newFont(self.__path..self.__data.Skin.Fonts[font],size)
             self.loadedFonts[font] = {}
             self.loadedFonts[font][size] = fontR

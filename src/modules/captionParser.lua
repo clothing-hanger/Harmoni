@@ -234,51 +234,105 @@ local function parseSTL(content)
     return captions
 end
 
--- convert ASS formatting to simple tags
+local function assColorToHex(ass)
+    if not ass then return nil end
+    local bb, gg, rr = ass:match("&H(%x%x)(%x%x)(%x%x)")
+    if not bb then return nil end
+    return string.format("#%s%s%s", rr, gg, bb)
+end
+
+-- convert ASS formatting to simple tags, now with arguments
 ---@param str string The string to convert
 ---@return string The converted string
-local function convertASSTags(str) -- haha it says ass again
+local function convertASSTags(str)
     if not str then return "" end
-
-    str = str:gsub("{(.-)}", function(tagContent)
-        local output = ""
-
-        for cmd in tagContent:gmatch("\\[^\\]+") do
-            local iVal = cmd:match("\\i(%d)")
-            if iVal == "1" then
-                output = output .. "<i>"
-            elseif iVal == "0" then
-                output = output .. "</i>"
-            end
-
-            local bb, gg, rr = cmd:match("\\c&H(%x%x)(%x%x)(%x%x)&")
-            if bb and gg and rr then
-                output = output .. string.format("<c=#%s%s%s>", rr, gg, bb)
-            end
-
-            local bVal = cmd:match("\\b(%d+)")
-            if bVal == "1" then output = output .. "<b>"
-            elseif bVal == "0" then output = output .. "</b>" end
-            
-            local uVal = cmd:match("\\u(%d+)")
-            if uVal == "1" then output = output .. "<u>"
-            elseif uVal == "0" then output = output .. "</u>" end
-            
-            local sVal = cmd:match("\\s(%d+)")
-            if sVal == "1" then output = output .. "<s>"
-            elseif sVal == "0" then output = output .. "</s>" end
-            
-            if cmd:match("\\r") then output = output .. "</>" end
-
-            -- idk i might add more? idk... this doesn't need to be a full fledged .ass parser lmao
-        end
-
-        return output
-    end)
 
     str = str:gsub("\\N", "\n")
 
-    if str:find("<c=#") and not str:find("</c>") then
+    str = str:gsub("{(.-)}", function(block)
+        local out = ""
+
+        for tag in block:gmatch("\\[^\\}]+") do
+            local b = tag:match("\\b(%d+)")
+            if b == "1" then out = out .. "<b>" elseif b == "0" then out = out .. "</b>" end
+
+            local i = tag:match("\\i(%d+)")
+            if i == "1" then out = out .. "<i>" elseif i == "0" then out = out .. "</i>" end
+
+            local u = tag:match("\\u(%d+)")
+            if u == "1" then out = out .. "<u>" elseif u == "0" then out = out .. "</u>" end
+
+            local s = tag:match("\\s(%d+)")
+            if s == "1" then out = out .. "<s>" elseif s == "0" then out = out .. "</s>" end
+
+            local fn = tag:match("\\fn([^\\]+)")
+            if fn then out = out .. string.format("<fontName=%q>", fn) end
+
+            local fs = tag:match("\\fs(%d+)")
+            if fs then out = out .. string.format("<fontSize=%d>", tonumber(fs)) end
+
+            local clr = tag:match("\\c(&H%x+&)") or tag:match("\\1c(&H%x+&)")
+            if clr then out = out .. "<c=" .. assColorToHex(clr) .. ">" end
+
+            for n = 2,4 do
+                local c2 = tag:match("\\"..n.."c(&H%x+&)")
+                if c2 then out = out .. string.format("<c%d=%s>", n, assColorToHex(c2)) end
+            end
+
+            local px, py = tag:match("\\pos%(([%d%.%-]+),([%d%.%-]+)%)")
+            if px then out = out .. string.format("<pos(%s,%s)>", px, py) end
+
+            local x1,y1,x2,y2,t1,t2 = block:match("<move%(([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+)%)")
+            if x1 then
+                x1, y1, x2, y2, t1, t2 = tonumber(x1), tonumber(y1), tonumber(x2), tonumber(y2), tonumber(t1), tonumber(t2)
+                if x1 then
+                    if t1 and t2 then
+                        out = out .. string.format("<move(%s,%s,%s,%s,%s,%s)>", x1, y1, x2, y2, t1, t2)
+                    else
+                        out = out .. string.format("<move(%s,%s,%s,%s)>", x1, y1, x2, y2)
+                    end
+                end
+            else
+                local x1,y1,x2,y2 = tag:match("\\move%(([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+)%)")
+                if x1 then
+                    x1, y1, x2, y2 = tonumber(x1), tonumber(y1), tonumber(x2), tonumber(y2)
+                    if x1 then
+                        out = out .. string.format("<move(%s,%s,%s,%s)>", x1, y1, x2, y2)
+                    end
+                end
+            end
+
+            local fa, fb = tag:match("\\fad%(([%d%.%-]+),([%d%.%-]+)%)")
+            if fa then out = out .. string.format("<fade(%s,%s)>", fa, fb) end
+
+            local f1,f2,f3,f4,f5,f6 = tag:match("\\fade%(([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+),([%d%.%-]+)%)") -- burp
+            if f1 then out = out .. string.format("<fade(%s,%s,%s,%s,%s,%s)>", f1,f2,f3,f4,f5,f6) end
+
+            local inside = tag:match("\\t%((.-)%)")
+            if inside then out = out .. string.format("<transform(%s)>", inside) end
+
+            local k = tag:match("\\k(%d+)")
+            if k then out = out .. string.format("<karaoke=%s>", k) end
+
+            if tag:match("\\ytvert") then out = out .. "<vertMove>" end
+            if tag:match("\\ytshake") then out = out .. "<shake>" end
+            if tag:match("\\ytchroma") then out = out .. "<chromatic>" end
+            if tag:match("\\ytktGlitch") then out = out .. "<ktGlitch>" end
+            if tag:match("\\ytsub") then out = out .. "<sub>" end
+            if tag:match("\\ytsup") then out = out .. "<sup>" end
+            if tag:match("\\ytpack") then out = out .. "<packed>" end
+
+            if tag:match("\\r") then out = out .. "</>" end
+        end
+
+        return out
+    end)
+
+    local open_c = 0
+    for _ in str:gmatch("<c=") do open_c = open_c + 1 end
+    local close_c = 0
+    for _ in str:gmatch("</c>") do close_c = close_c + 1 end
+    for i = 1, open_c - close_c do
         str = str .. "</c>"
     end
 
@@ -288,69 +342,96 @@ end
 --- Parses ASS formatted captions
 --- @param content string The content of the ASS file
 --- @return table A table of captions with text, time, and endTime
-local function parseASS(content) -- haha it says ass
-    -- Who knows? Maybe we can implement the cool looking captions...
-    -- Idk im too lazy for that tho
+local function parseASS(content)
     local captions = {}
+
+    local currentSection = ""
+    local styles = {}
+    local PlayResX, PlayResY = 0, 0
+
     local formatMap = {}
     local formatCount = 0
-    local inEvents = false
 
-    for line in content:gmatch("[^\r\n]+") do
-        line = line:match("^%s*(.-)%s*$")
+    for raw in content:gmatch("[^\r\n]+") do
+        local line = raw:match("^%s*(.-)%s*$")
 
-        if line:match("^%[Events%]") then
-            inEvents = true
+        if line:match("^%[.-%]$") then
+            currentSection = line
+        end
 
-        elseif inEvents then
+        if currentSection == "[Script Info]" then
+            local key, val = line:match("^(%S+):%s*(.+)")
+            if key == "PlayResX" then PlayResX = tonumber(val)
+            elseif key == "PlayResY" then PlayResY = tonumber(val) end
+        end
+
+        if currentSection == "[V4+ Styles]" then
             local fmt = line:match("^Format:%s*(.+)")
             if fmt then
-                -- rebuild format map and count fields
-                formatMap = {}
-                formatCount = 0
-                local i = 1
-                for field in fmt:gmatch("([^,]+)") do
-                    local key = field:match("^%s*(.-)%s*$"):lower()
-                    formatMap[key] = i
-                    i = i + 1
+                styles._format = {}
+                local i=1
+                for f in fmt:gmatch("([^,]+)") do
+                    styles._format[i] = f:lower():gsub("%s+","")
+                    i=i+1
                 end
-                formatCount = i - 1
-            else
-                local dia = line:match("^Dialogue:%s*(.+)")
-                if dia and next(formatMap) then
-                    local parts = {}
-                    local s = dia
-                    if formatCount > 1 then
-                        for i = 1, formatCount - 1 do
-                            local part, rest = s:match("^([^,]*),(.*)$")
-                            if not part then
-                                part = s
-                                rest = ""
-                            end
-                            table.insert(parts, part)
-                            s = rest
-                        end
-                    end
-                    table.insert(parts, s)
+            end
 
-                    -- trim each
-                    for i = 1, #parts do
-                        parts[i] = parts[i]:match("^%s*(.-)%s*$")
-                    end
+            local dat = line:match("^Style:%s*(.+)")
+            if dat and styles._format then
+                local parts = {}
+                local remain = dat
+                for i=1, #styles._format-1 do
+                    local part, rest = remain:match("^([^,]*),(.*)$")
+                    parts[i] = part
+                    remain = rest
+                end
+                parts[#styles._format] = remain
 
-                    local startTime = parts[formatMap["start"]]
-                    local endTime = parts[formatMap["end"]]
-                    local text = parts[formatMap["text"]]
+                local styleName = parts[1]
+                styles[styleName] = parts
+            end
+        end
 
-                    if startTime and endTime and text then
-                        text = convertASSTags(text)
+        if currentSection == "[Events]" then
+            local fmt = line:match("^Format:%s*(.+)")
+            if fmt then
+                formatMap = {}
+                local i=1
+                for f in fmt:gmatch("([^,]+)") do
+                    formatMap[f:lower():gsub("%s+","")] = i
+                    i=i+1
+                end
+                formatCount = i-1
+            end
 
-                        table.insert(captions, {
-                            text = text,
-                            time = assTimeToSeconds(startTime),
-                            endTime = assTimeToSeconds(endTime)
-                        })
-                    end
+            local dia = line:match("^Dialogue:%s*(.+)")
+            if dia and formatCount > 0 then
+                local parts = {}
+                local s = dia
+                for i=1, formatCount-1 do
+                    local p, r = s:match("^([^,]*),(.*)$")
+                    parts[i] = p or s
+                    s = r or ""
+                end
+                parts[formatCount] = s
+
+                for i=1, #parts do
+                    parts[i] = parts[i]:match("^%s*(.-)%s*$")
+                end
+
+                local startTime = parts[formatMap["start"]]
+                local endTime = parts[formatMap["end"]]
+                local text = parts[formatMap["text"]]
+
+                if startTime and endTime and text then
+                    table.insert(captions, {
+                        text = convertASSTags(text),
+                        time = assTimeToSeconds(startTime),
+                        endTime = assTimeToSeconds(endTime),
+                        style = parts[formatMap["style"]],
+                        playResX = PlayResX,
+                        playResY = PlayResY
+                    })
                 end
             end
         end

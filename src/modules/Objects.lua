@@ -23,6 +23,7 @@
         quickSettings = require("objects.menu.quickSettings")
         countdownBar = require("objects.menu.countdownBar")
     lyricsDisplay = require("Objects.Menu.lyricsDisplay")
+    assRenderer = require("objects.menu.assRenderer") -- haha it says ass
     jukeboxSongButton = require("Objects.Menu.jukeboxSongButton")
 
     --UI
