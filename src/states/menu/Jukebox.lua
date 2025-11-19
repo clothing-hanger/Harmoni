@@ -193,9 +193,11 @@ function jukebox:update(dt)
         self.scrubber:update(dt, self.audio:tell()/self.audio:getDuration())
     end
 
-    if Input:pressed("menuClickLeft") then
-        --self:fullscreenVideo()
+    if Input:pressed("menuBack") then
+        State.transition("waveDissolve", States.menu.titleScreen)
     end
+
+
 
 
 

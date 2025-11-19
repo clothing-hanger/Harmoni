@@ -61,7 +61,7 @@ function cursor:new()
     self.fadeOutAlpha = 1
     self.didMove = false
 
-    self.debug = false
+    self.debug = true
 end
 
 function cursor:update(dt)
@@ -231,6 +231,9 @@ function cursor:draw()
         love.graphics.circle("line", self.x, self.y, 5)
         love.graphics.print(string.format("Angle: %.2f, WeightAngle: %.2f", self.angle, self.weightAngle), self.x + 10, self.y - 10)
         love.graphics.print(string.format("Scale: %.2f", self.scale), self.x + 10, self.y + 10)
+        love.graphics.print(string.format("X: %.2f, Y: %.2f", self.x, self.y), self.x + 10, self.y + 40)
+
+
 
         if self.mouseDownX then
             love.graphics.print(string.format("Mouse Down: (%.2f, %.2f)", self.mouseDownX, self.mouseDownY), self.x + 10, self.y + 30)

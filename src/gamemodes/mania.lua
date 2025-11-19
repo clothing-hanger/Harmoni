@@ -176,7 +176,7 @@ function mania:updateObjects(dt)
     self.HUD:sendValues(ScoreHandler:getScore("printable"))
 
     if self.healthBar.health <= 0 then
-        --self:endSong()
+        self:endSong()
     end
 end
 
