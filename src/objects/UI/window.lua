@@ -3,7 +3,7 @@ local window = Class:extend()
 -- i have hardcoded this in a way that you cannot call the window in any state anything other than "window" and there can only be one of them.
 --i suck ass at coding
 
-function window:new(parent,title,msg,width,height,buttons)
+function window:new(parent,title,msg,buttons)
     -- these will be centered to their center (am i wording that right?) cuz it just seems like it should be idfk
     -- buttons should be a table,, i think ,,, idk im just making it up as i go
     if type(buttons) ~= "table" then GlobalNotificationsHandler:addNotification("window created with non-table buttons!", "error") self.buttons = {} end -- this is temp, itll just destroy the window if its not a table 
@@ -69,7 +69,7 @@ function window:new(parent,title,msg,width,height,buttons)
 end
 
 function window:update(dt) 
-
+    self:checkForClicks()
 end
 
 function window:checkForClicks()

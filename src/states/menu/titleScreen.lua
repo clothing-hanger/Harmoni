@@ -34,10 +34,83 @@ function titleScreen:enter(from, resetItems)
 
     self.socialButtons = {}
     self.socials = {
-        {label = "X", image = love.graphics.newImage("images/menu/X.png"), func = function() end},
-        --{label = "Twitter", image = love.graphics.newImage("images/menu/Twitter.png"), func = function() end},
-        {label = "Discord", image = love.graphics.newImage("images/menu/YouTube.png"), func = function() end},
-        {label = "YouTube", image = love.graphics.newImage("images/menu/Discord.png"), func = function() end}
+        --[[
+        {
+            label = "X", 
+            image = love.graphics.newImage("images/menu/X.png"), 
+            func = function() 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To X"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end
+        },
+        --]]
+        {
+            label = "Twitter",
+            image = love.graphics.newImage("images/menu/Twitter.png"),
+            color = {29/255, 161/255, 242/255},
+            func = function() 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end     -- there arent even words to explain how much i hate elon musk
+        },
+        {
+            label = "YouTube",
+            image = love.graphics.newImage("images/menu/YouTube.png"),
+            color = {1,0,51/255}, 
+            func = function() 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end
+        },
+        {
+            label = "Discord",
+            image = love.graphics.newImage("images/menu/Discord.png"),
+            color = {88/255,101/255,242/255},
+            func = function() 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end
+        }
     }
 
     for i, Social in ipairs(self.socials) do
@@ -46,7 +119,7 @@ function titleScreen:enter(from, resetItems)
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
-        table.insert(self.socialButtons,button({x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
+        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
     end
 
     buttonSpacing = 10
@@ -131,6 +204,7 @@ function titleScreen:raiseWaves()
 end
 
 
+
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
     for i, Button in ipairs(self.buttons) do
@@ -139,10 +213,19 @@ function titleScreen:update(dt)
     for i, squiglyLines in ipairs(self.squiglyLines) do
         squiglyLines:update(dt)
     end
+    for i, Button in ipairs(self.socialButtons) do
+        Button:update()
+    end
+    table.sort(self.socialButtons, function(a,b)
+        return a.scale < b.scale
+    end)
+    if self.window then self.window:update(dt) end
+
 
     self.layerWaves:update(dt)
 
     self:updateBubbles(dt) 
+
 end
 
 function titleScreen:updateBubbles(dt)
@@ -180,6 +263,7 @@ function titleScreen:draw()
         Button:draw()
     end
     self:drawLogo()
+    if self.window then self.window:draw() end
 --love.graphics.rectangle("fill", 0, 0 ,9999, 9999)
 end
 

@@ -432,7 +432,7 @@ function songSelect:update(dt)
 
 
 
-    if self.window then self.window:update(dt); self.window:checkForClicks() end
+    if self.window then self.window:update(dt) end
 end
 
 function songSelect:mousemoved()
@@ -552,7 +552,7 @@ function songSelect:checkForDifficultyButtonClicks()
                     end
                     -- now we make the window
                     self.window = window(self,LocaleHandler:getText("Warnings","Hold Up"), 
-                    finalString, 1000, 600, 
+                    finalString,  
                     {
                         {text = LocaleHandler:getText("UI", "Yes"), func = function () self:switchToPlaystate(buttonInfo); self.window:killYourself() end},
                         {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
