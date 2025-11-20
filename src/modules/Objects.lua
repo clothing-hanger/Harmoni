@@ -31,6 +31,7 @@
     cursor = require("objects.UI.cursor")
     SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")
     UITimeRemaing = require("objects.UI.UITimeRemaining")
+    button = require("objects.UI.button")
     toggle = require("objects.UI.toggle")
     buttonSlideOut = require("objects.UI.buttonSlideOut")
     notification = require("objects.UI.notification")

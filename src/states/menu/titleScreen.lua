@@ -29,20 +29,24 @@ function titleScreen:enter(from, resetItems)
     end
 
 
-    self.socialsX = 1020
-    self.socialsY = 700
+    self.socialsX = baseScreenRatio.x - (4*120)
+    self.socialsY = baseScreenRatio.y - 120
+
+    self.socialButtons = {}
     self.socials = {
         {label = "X", image = love.graphics.newImage("images/menu/X.png"), func = function() end},
-        {label = "Twitter", image = love.graphics.newImage("images/menu/Twitter.png"), func = function() end},
-        {label = "Discord", image = love.graphics.newImage("images/menu/X.png"), func = function() end},
-        {label = "YouTube", image = love.graphics.newImage("images/menu/X.png"), func = function() end}
+        --{label = "Twitter", image = love.graphics.newImage("images/menu/Twitter.png"), func = function() end},
+        {label = "Discord", image = love.graphics.newImage("images/menu/YouTube.png"), func = function() end},
+        {label = "YouTube", image = love.graphics.newImage("images/menu/Discord.png"), func = function() end}
     }
 
     for i, Social in ipairs(self.socials) do
         local width, height = 100,100
         local spacing = 20
         local x,y = self.socialsX + ((width+spacing)*i)
-       -- button(x,y,) 
+        local y = self.socialsY
+        -- testing out doing arguments like this
+        table.insert(self.socialButtons,button({x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
     end
 
     buttonSpacing = 10
@@ -172,6 +176,9 @@ function titleScreen:draw()
     end
     love.graphics.setColor(1,1,1,1)
 
+    for i, Button in ipairs(self.socialButtons) do
+        Button:draw()
+    end
     self:drawLogo()
 --love.graphics.rectangle("fill", 0, 0 ,9999, 9999)
 end
