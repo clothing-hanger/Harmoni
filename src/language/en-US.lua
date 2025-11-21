@@ -1,6 +1,7 @@
 Language = {
     Misc = {
         ["Placeholder"] = "PLACEHOLDER",
+        ["Is Beta"] = "I'm still in beta! Expect bugs!\n\nPlease report any bugs you find on GitHub,\nand consider donating to help with development! \n\nAny help with this game is appreciated!!"
     },
     Menu = {
         ["Play"] = "Play",
@@ -45,8 +46,8 @@ Language = {
         ["Take To Discord"] = "This will open an invite to the Harmoni Discord server in your default browser.",
         ["Click Fullscreen"] = "Click the video or press F to fullscreen.",
         ["Click Unfullscreen"] = "Fullscreened. Click the video or press F to unfullscreen.",
-        ["Headphones Recommended"] = "Headphones Recommended",
-        ["Headphones Better"] = "The songs sound better with headphones on. So use them."
+        ["Headphones Recommended"] = "Headphones Recommended!",
+        ["Headphones Better"] = "The composers worked hard on these songs,\nand they sound better with headphones.\n\nSo use them."
     },
     Warnings = {
         ["Hold Up"] = "Hold up!",

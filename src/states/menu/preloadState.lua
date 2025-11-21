@@ -38,24 +38,25 @@ function preloadState:update(dt)
             States.menu.titleScreen.squiglyLines = self.squiglyLines
             States.menu.titleScreen.layerWaves = self.layerWaves
             States.menu.titleScreen.images = self.images
-            State.switch(States.menu.titleScreen, false)
+            State.switch(States.menu.splash)
         end)
     end
 
     local targetProgress = step / totalSteps
     progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
 
-    for i, squiglyLines in ipairs(self.squiglyLines) do
-        squiglyLines:update(dt)
-    end
-    self.layerWaves:update(dt)
+    --for i, squiglyLines in ipairs(self.squiglyLines) do
+   --     squiglyLines:update(dt)
+   -- end
+   -- self.layerWaves:update(dt)
 
     States.menu.titleScreen.updateBubbles(self, dt)
     self.throbbert:update(dt)
 end
 
 function preloadState:draw()
-    love.graphics.draw(self.BG)
+   -- love.graphics.draw(self.BG)
+    --[[
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:draw()
     end
@@ -68,6 +69,7 @@ function preloadState:draw()
     for i, squiglyLines in ipairs(self.squiglyLines) do
         squiglyLines:draw()
     end
+    --]]
     local w, h = baseScreenRatio.x, baseScreenRatio.y
     love.graphics.setColor(1,1,1,1)
 
@@ -80,32 +82,22 @@ function preloadState:draw()
     local barX = w/2 - barW/2
     local barY = h*0.6
     local segments = 300
-    local amp = 4
+    local amp = 15
     local speed = 5
     local points = {}
 
     local lastLineWidth = love.graphics.getLineWidth()
-    love.graphics.setLineWidth(30)
+    love.graphics.setLineWidth(15)
     love.graphics.setColor(1,1,1,0.10)
     local lastX, lastY
-    for i = 0, segments do
-        local x = barX + (i/segments)*barW
-        local y = barY + math.sin((i/segments)*math.pi*2 + t*speed) * amp
 
-        points[#points+1] = lastX
-        points[#points+1] = lastY
-        points[#points+1] = x
-        points[#points+1] = y
-        lastX, lastY = x, y
-    end
-    love.graphics.line(points)
 
     points = {}
     love.graphics.setColor(1,1,1,0.85)
     lastX, lastY = nil, nil
     for i = 0, segments * progress do
         local x = barX + (i/segments)*barW
-        local y = barY + math.sin((i/segments)*math.pi*2 + t*speed) * amp
+        local y = barY + math.sin((i/segments)*math.pi*15 + t*speed) * amp
 
         points[#points+1] = lastX
         points[#points+1] = lastY

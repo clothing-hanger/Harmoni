@@ -1,7 +1,8 @@
 local titleScreen = State("titleScreen")
 local fade = 0
-function titleScreen:enter(from, resetItems)
+function titleScreen:enter(from, resetItems, fadeIn)
     fade = 0
+    self.coverAlpha = (fadeIn and 1) or 0
     if resetItems == nil then resetItems = true end
     self.BG = SkinHandler:getImage("Menu", "Background")
     if resetItems then self.wavesY = 0 end
@@ -140,6 +141,11 @@ function titleScreen:enter(from, resetItems)
 
     self.coolrect = coolFuckingRectangle(200,200,800,300,40,90,{181/255, 235/255, 174/255}, {72/255, 181/255, 63/255})
 
+    if self.coverAlpha > 0 then self:fadeIn() end
+end
+
+function titleScreen:fadeIn()
+    Timer.tween(0.25, self, {coverAlpha = 0})
 end
 
 function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
@@ -264,7 +270,9 @@ function titleScreen:draw()
     end
     self:drawLogo()
     if self.window then self.window:draw() end
---love.graphics.rectangle("fill", 0, 0 ,9999, 9999)
+    love.graphics.setColor(0,0,0,self.coverAlpha)
+love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
+love.graphics.setColor(1,1,1,1)
 end
 
 
