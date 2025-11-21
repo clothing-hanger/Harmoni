@@ -16,7 +16,7 @@ function splash:setupShit()
     -- do the fade stuff 
         local func = function()
             
-            Timer.after(self.splashScreens[self.splashNumber].time or 3, function() self:fade("out", function() self.splashNumber = self.splashNumber+1;self:setupShit() end) end)
+            self.timerAfter = Timer.after(self.splashScreens[self.splashNumber].time or 3, function() self:fade("out", function() self.splashNumber = self.splashNumber+1;self:setupShit() end) end)
         end
         self:fade("in", func)
         self.currentMessageuhhhhhhh = love.graphics.newText(SkinHandler:getFont("Menu", 50),self.splashScreens[self.splashNumber].msg)  -- yes i know i can just draw this instead of using printf, im just too fucking lazy to edit the draw function
@@ -31,9 +31,15 @@ function splash:fade(dir, func)
     if func then funct = func else funct = function() end end   -- this goddamn line is the worse thing to ever come out of my mind and I KEEP PUTTING IT EVERYWHERE
 
     local value = (dir == "in" and 1) or 0
-    Timer.tween(0.25, self, {alpha = value}, "linear", function() funct() end)
+    self.timerTween = Timer.tween(0.25, self, {alpha = value}, "linear", function() funct() end)
 end
 function splash:update()
+    if Input:pressed("menuConfirm") then
+        if self.timerAfter then Timer.cancel(self.timerAfter) end
+        if self.timerTween then Timer.cancel(self.timerTween) end
+        self.splashNumber = self.splashNumber+1
+        self:setupShit()
+    end
 end
 
 function splash:draw()
