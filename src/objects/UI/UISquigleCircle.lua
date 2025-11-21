@@ -2,8 +2,9 @@ local UISquigleCircle = Class:extend("UISquigleCircle")
 
 function UISquigleCircle:new(mode, x, y, radius, amplitude, frequency, lineThickness, color)
     self.debug = false
-    self.mode, self.x, self.y, self.radius, self.amplitude, self.frequency, self.lineThickness, self.color =
-        mode, x, y, radius, amplitude, frequency, lineThickness, color
+    self.mode, self.x, self.y, self.radius, self.amplitude, self.frequency, self.lineThickness =
+        mode, x, y, radius, amplitude, frequency, lineThickness
+    self.color = {unpack(color)}
 
     self.rotation = 0
     self.points = {}
@@ -33,6 +34,7 @@ function UISquigleCircle:draw()
     love.graphics.polygon(self.mode, self.points)
 
     love.graphics.pop()
+    love.graphics.setColor(1,1,1,1)
 
 end
 

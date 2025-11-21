@@ -22,7 +22,8 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 
     self.tweenDuration = 1.5
     self.tweenEasingType = "out-elastic"
-    self.easeFunc = Ease[self.tweenEasingType] or Ease.linear
+    self.outElasticFunc = Ease["out-elastic"] or Ease.linear
+    self.linearFunc = Ease["linear"]
 
     self.scale = 1
     self.scaleTweens = {}
@@ -64,7 +65,7 @@ function buttonSlideOut:update(dt)
         local tween = self.activeTweens[i]
         tween.time = tween.time + dt
         local t = math.min(tween.time / tween.duration, 1)
-        self.slideWidth = tween.startWidth + (tween.targetWidth - tween.startWidth) * self.easeFunc(t)
+        self.slideWidth = tween.startWidth + (tween.targetWidth - tween.startWidth) * Ease[tween.type](t)
         if t >= 1 then
             table.remove(self.activeTweens, i)
         end
@@ -88,12 +89,16 @@ end
 
 function buttonSlideOut:startTween(targetWidth)
     self.activeTweens = {}
+    local type,time
+    print(targetWidth)
+    if targetWidth == self.slideInitialWidth then type = "out-bounce";time = 0.2 else type = "out-elastic"; time = 0 end
 
     table.insert(self.activeTweens, {
         startWidth = self.slideWidth,
         targetWidth = targetWidth,
         duration = self.tweenDuration,
-        time = 0
+        time = time,
+        type = type
     })
 end
 

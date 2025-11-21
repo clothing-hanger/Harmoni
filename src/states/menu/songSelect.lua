@@ -417,6 +417,8 @@ function songSelect:update(dt)
 
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
+                Bubble.rotation = Bubble.rotation + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
+
         Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100

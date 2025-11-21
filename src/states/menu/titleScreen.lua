@@ -10,15 +10,13 @@ function titleScreen:enter(from, resetItems, fadeIn)
         self.wavesY = 0
     end
 
-    self.buttonWidth = 500
+    self.buttonWidth = 300
     self.buttonHeight = 100 
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
         {label = LocaleHandler:getText("Menu", "Play"), func = function() self:raiseWaves(); State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
         {label = LocaleHandler:getText("Menu", "Jukebox"), func = function() State.transition("waveDissolve",States.menu.jukebox, self) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
         {label = LocaleHandler:getText("Menu", "Settings"), func = function() State.switch(States.menu.settingsMenu) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
-        {label = LocaleHandler:getText("Menu", "Discord"), func = function() love.system.openURL("https://discord.gg/bBcjrRAeh4") end, color1 = {131/255,119/255,209/255,1},color2 = {97/255,82/255,196/255,1}},
-        {label = LocaleHandler:getText("Menu", "Github"), func = function() love.system.openURL("https://github.com/clothhang/Harmoni") end, color1 = {109/255,90/255,114/255,1},color2 = {93/255,76/255,97/255,1}},
         {label = LocaleHandler:getText("Menu", "Exit"), func = function() love.event.quit() end, color1 = {1,1,1,1}, color2 = {1,1,1,1}},
     }
 
@@ -30,16 +28,19 @@ function titleScreen:enter(from, resetItems, fadeIn)
     end
 
 
-    self.socialsX = baseScreenRatio.x - (4*120)
+    self.socialsX = baseScreenRatio.x - (5*120)
     self.socialsY = baseScreenRatio.y - 120
 
     self.socialButtons = {}
+    self.clickedXCount = 0
     self.socials = {
-        --[[
         {
             label = "X", 
             image = love.graphics.newImage("images/menu/X.png"), 
             func = function() 
+                self.clickedXCount = self.clickedXCount + 1
+                if self.clickedXCount > 2 then self:fuckElon() else
+                
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To X"),
             {
                 {
@@ -52,9 +53,9 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 }
             })
                                     
-            end
+            end end
         },
-        --]]
+        --[[
         {
             label = "Twitter",
             image = love.graphics.newImage("images/menu/Twitter.png"),
@@ -74,11 +75,14 @@ function titleScreen:enter(from, resetItems, fadeIn)
                                     
             end     -- there arent even words to explain how much i hate elon musk
         },
+        --]]
         {
             label = "YouTube",
             image = love.graphics.newImage("images/menu/YouTube.png"),
             color = {1,0,51/255}, 
             func = function() 
+                self.clickedXCount = 0
+
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube"),
             {
                 {
@@ -98,7 +102,28 @@ function titleScreen:enter(from, resetItems, fadeIn)
             image = love.graphics.newImage("images/menu/Discord.png"),
             color = {88/255,101/255,242/255},
             func = function() 
+                self.clickedXCount = 0
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end
+        },
+        {
+            label = "GitHub",
+            image = love.graphics.newImage("images/menu/GitHub.png"),
+            color = {14/255,16/255,18/255},
+            func = function() 
+                self.clickedXCount = 0
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To GitHub"),
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
@@ -114,23 +139,12 @@ function titleScreen:enter(from, resetItems, fadeIn)
         }
     }
 
-    for i, Social in ipairs(self.socials) do
-        local width, height = 100,100
-        local spacing = 20
-        local x,y = self.socialsX + ((width+spacing)*i)
-        local y = self.socialsY
-        -- testing out doing arguments like this
-        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
-    end
-
+    self:setupSocialButtons()
     buttonSpacing = 10
-
-    self.buttons = {
-
-    }
+    self.buttons = {}
 
     for i = 1,#self.buttonLabels do
-        table.insert(self.buttons, buttonSlideOut(self.buttonX, 600 + (i-1) * (self.buttonHeight + buttonSpacing), self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, self.buttonLabels[i].color1, self.buttonLabels[i].color2))
+        table.insert(self.buttons, buttonSlideOut(self.buttonX, 820 + (i-1) * (self.buttonHeight + buttonSpacing), self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, self.buttonLabels[i].color1, self.buttonLabels[i].color2))
     end
 
     if resetItems then
@@ -142,6 +156,44 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.coolrect = coolFuckingRectangle(200,200,800,300,40,90,{181/255, 235/255, 174/255}, {72/255, 181/255, 63/255})
 
     if self.coverAlpha > 0 then self:fadeIn() end
+end
+
+function titleScreen:setupSocialButtons()
+    self.socialButtons = {}
+        for i, Social in ipairs(self.socials) do
+        local width, height = 100,100
+        local spacing = 20
+        local x,y = self.socialsX + ((width+spacing)*i)
+        local y = self.socialsY
+        -- testing out doing arguments like this
+        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
+    end
+
+end
+
+function titleScreen:fuckElon()
+    self.socials[1] =         {
+            label = "Twitter",
+            image = love.graphics.newImage("images/menu/Twitter.png"),
+            color = {29/255, 161/255, 242/255},
+            func = function() 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter"),
+            {
+                {
+                    text = LocaleHandler:getText("UI", "Ok"),
+                    func = function() self.window:killYourself() end
+                },
+                {
+                    text = LocaleHandler:getText("UI", "Cancel"),
+                    func = function() self.window:killYourself() end
+                }
+            })
+                                    
+            end     -- there arent even words to explain how much i hate elon musk
+        }
+
+            self:setupSocialButtons()
+
 end
 
 function titleScreen:fadeIn()
@@ -237,10 +289,26 @@ end
 function titleScreen:updateBubbles(dt)
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
+
+        Bubble.rotation = Bubble.rotation + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
         Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
+
+        if Input:pressed("menuClickLeft") then
+            local mx,my = cursor:getPosition()
+            if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
+                
+                Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
+
+                -- save original alpha 
+                if not Bubble.originalAlpha then Bubble.originalAlpha = Bubble.color[4] end
+                Bubble.color[4] = 1
+                if Bubble.poop then Timer.cancel(Bubble.poop) end
+                Bubble.poop = Timer.tween(2, Bubble.color, {[4] = Bubble.originalAlpha})
+            end
+        end
     end
 end
 function titleScreen:draw()
