@@ -84,14 +84,12 @@ function jukebox:switchSong(songInfo)
             break
         end
     end
-    self.assDisplay = nil
+    self.lyricsDisplay = nil
     if type ~= "lua" and type ~= "" then
         local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
 
-        if type == "ass" then
-            self.assDisplay = assRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
-        end
+        self.lyricsDisplay = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     elseif type == "lua" then
         local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
@@ -188,8 +186,8 @@ function jukebox:update(dt)
     if self.lyricsDisplay then
         self.lyricsDisplay:update(dt, audioTime)
     end
-    if self.assDisplay then
-        self.assDisplay:update(dt, audioTime)
+    if self.lyricsDisplay then
+        self.lyricsDisplay:update(dt, audioTime)
     end
 
     if self.video and not self.scrubberHeld then
@@ -469,8 +467,8 @@ function jukebox:drawBG()
             self.songBG:draw()
         end
 
-        if self.assDisplay then
-            self.assDisplay:draw(self.audio:tell())
+        if self.lyricsDisplay then
+            self.lyricsDisplay:draw(self.audio:tell())
         end
     end
 

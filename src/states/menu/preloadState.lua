@@ -106,7 +106,9 @@ function preloadState:draw()
         points[#points+1] = y
         lastX, lastY = x, y
     end
-    love.graphics.line(points)
+    if #points > 1 then
+        love.graphics.line(points)
+    end
 
     local r = 6
     for i = 1, 6 do
