@@ -90,8 +90,7 @@ end
 function buttonSlideOut:startTween(targetWidth)
     self.activeTweens = {}
     local type,time
-    print(targetWidth)
-    if targetWidth == self.slideInitialWidth then type = "out-bounce";time = 0.2 else type = "out-elastic"; time = 0 end
+    if targetWidth == self.slideInitialWidth then type = "out-expo";time = 0.2 else type = "out-elastic"; time = 0 end
 
     table.insert(self.activeTweens, {
         startWidth = self.slideWidth,

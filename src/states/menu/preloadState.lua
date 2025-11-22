@@ -20,10 +20,11 @@ function preloadState:enter()
     }
 
     self.throbbert = throbbert({{1,1,1,1}, {1,1,1,1}, {1,1,1,1}})
+    if not self.debug then CLibs:setupIfNeeded() end
 end
 
 function preloadState:update(dt)
-    if Input:pressed("menuConfirm") then     CLibs:setupIfNeeded()
+    if Input:pressed("menuConfirm") and self.debug then     CLibs:setupIfNeeded()
     end
     t = t + dt
 
