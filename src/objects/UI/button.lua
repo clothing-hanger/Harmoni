@@ -9,6 +9,7 @@ function button:new(args)  -- im trying out doing args this way cuz it seems bet
     self.width = args.width or 10
     self.height = args.height or 10 
 
+    self.link = args.link or nil
     self.hasImage = args.hasImage or false 
     self.scale = 1
     self.image = args.image or nil
@@ -47,7 +48,7 @@ function button:update()
 end
 
 function button:onClick()
-    self.func()
+    self.func(self)
 end
 
 function button:draw()

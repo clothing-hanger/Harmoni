@@ -35,17 +35,18 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.clickedXCount = 0
     self.socials = {
         {
-            label = "X", 
+            label = "X",
+            link = "https://x.com/clothinghanger_",  -- TEMP!!!
             image = love.graphics.newImage("images/menu/X.png"), 
-            func = function() 
+            func = function(button) 
                 self.clickedXCount = self.clickedXCount + 1
                 if self.clickedXCount > 2 then self:fuckElon() else
                 
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To X"),
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To X") .. "\n\n" .. button.link,
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
+                    func = function() love.system.openURL(button.link);self.window:killYourself() end
                 },
                 {
                     text = LocaleHandler:getText("UI", "Cancel"),
@@ -78,16 +79,17 @@ function titleScreen:enter(from, resetItems, fadeIn)
         --]]
         {
             label = "YouTube",
+            link = "https://www.youtube.com/@Harmoni-de7zk",
             image = love.graphics.newImage("images/menu/YouTube.png"),
             color = {1,0,51/255}, 
-            func = function() 
+            func = function(button) 
                 self.clickedXCount = 0
 
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube"),
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube")  .. "\n\n" .. button.link,
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
+                    func = function() love.system.openURL(button.link);self.window:killYourself() end
                 },
                 {
                     text = LocaleHandler:getText("UI", "Cancel"),
@@ -99,15 +101,16 @@ function titleScreen:enter(from, resetItems, fadeIn)
         },
         {
             label = "Discord",
+            link = "https://discord.gg/E2xc2YjADs",  -- TEMP!! the real link will be on a website and the game will open the website, which redirects to the invite (so if the invite breaks it wont stop working for people who arent updated)
             image = love.graphics.newImage("images/menu/Discord.png"),
             color = {88/255,101/255,242/255},
-            func = function() 
+            func = function(button) 
                 self.clickedXCount = 0
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord"),
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord")  .. "\n\n" .. button.link,
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
+                    func = function() love.system.openURL(button.link);self.window:killYourself() end
                 },
                 {
                     text = LocaleHandler:getText("UI", "Cancel"),
@@ -119,15 +122,16 @@ function titleScreen:enter(from, resetItems, fadeIn)
         },
         {
             label = "GitHub",
+            link = "https://github.com/clothhang/Harmoni",
             image = love.graphics.newImage("images/menu/GitHub.png"),
             color = {14/255,16/255,18/255},
-            func = function() 
+            func = function(button) 
                 self.clickedXCount = 0
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To GitHub"),
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To GitHub") .. "\n\n" .. button.link,
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
+                    func = function() love.system.openURL(button.link);self.window:killYourself() end
                 },
                 {
                     text = LocaleHandler:getText("UI", "Cancel"),
@@ -166,7 +170,7 @@ function titleScreen:setupSocialButtons()
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
-        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
+        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
     end
 
 end
@@ -174,14 +178,15 @@ end
 function titleScreen:fuckElon()
     self.socials[1] =         {
             label = "Twitter",
+            link = "https://twitter.com/clothinghanger_",  -- TEMP!!!
             image = love.graphics.newImage("images/menu/Twitter.png"),
             color = {29/255, 161/255, 242/255},
-            func = function() 
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter"),
+            func = function(button) 
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter") .. "\n\n" .. button.link,
             {
                 {
                     text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
+                    func = function() love.system.openURL(button.link);self.window:killYourself() end
                 },
                 {
                     text = LocaleHandler:getText("UI", "Cancel"),

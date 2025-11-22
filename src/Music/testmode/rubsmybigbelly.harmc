@@ -14,6 +14,10 @@ gameMode:slider
 source:Quaver
 songPreviewTime:10824
 
+[warnings]
+content:testSong
+content:unfinishedMode
+
 [bpm]
 BPM:200
 
