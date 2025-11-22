@@ -358,7 +358,12 @@ function songSelect:loadSongs()
                     musicPath .. data.folderPath .. (songInfo.backgroundFile or ""),
                     false,
                     songInfo.gameMode,
-                    musicPath .. data.folderPath
+                    musicPath .. data.folderPath,
+                    nil,
+                    nil,
+                    nil,
+                    songInfo.songPreviewTime,
+                    songInfo.audioFile
                 ))
             end
         end
@@ -404,6 +409,7 @@ function songSelect:update(dt)
     self:updateDifficultyButtons(dt)
     self:loadSongs()
     self:loadSongButtonImages()
+    self:checkForSongLoop()
     self.ignoreInterpolation = false
 
     local BGDimTarget = (self.menuState == "song" and 0) or 0.7
@@ -435,6 +441,18 @@ function songSelect:update(dt)
 
 
     if self.window then self.window:update(dt) end
+end
+
+function songSelect:checkForSongLoop()
+    if not self.currentLoopPoint then return end
+    if not self.currentAudio then return end
+
+    print(self.currentAudio:tell("seconds")*1000)
+
+    if self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint) then -- we need to seek to the loop point 
+        print("Loop to " .. self.currentLoopPoint/1000 .. " seconds")
+        self.currentAudio:seek(self.currentLoopPoint/1000)
+    end
 end
 
 function songSelect:mousemoved()
@@ -491,6 +509,32 @@ function songSelect:updateBGImage()
     end
 end
 
+
+function songSelect:loadAudio()  -- this needs to be threaded but im stupid 
+    self.currentAudio = nil
+    for i, SongButton in ipairs(songButtons) do
+        if i == selectedSong then
+            if not self.currentAudio then
+                local songInfo = SongButton:returnInfo()
+                local path = songInfo.path .. "/" .. songInfo.audioFile
+                self.currentLoopPoint = songInfo.songPreviewTime
+                if love.filesystem.getInfo(path, "file") then
+                    self.currentAudio = love.audio.newSource(path, "stream")
+                else
+                    GlobalNotificationsHandler:addNotification("Audio file not found for song " .. songInfo.title)
+                end
+            end
+        end
+    end
+
+    if self.currentAudio then self.currentAudio:play() else GlobalNotificationsHandler:addNotification("something broke,, idk what", "error"); return end
+
+    -- this is sorta hacky, but itll work 
+    -- we set the song to loop, and just check if its before the preview time, if it does, we seek to the preview time, itll play till the end, loop, then seek again
+    self.currentAudio:setLooping(true)
+end
+
+
 function songSelect:updateDifficultyButtons(dt)
     local speed = 10
     for _, DifficultyButton in ipairs(difficultyButtons) do
@@ -513,6 +557,7 @@ function songSelect:checkForSongButtonClicks()
                 self.menuState = "difficulty"
                 self.uglyDiffButtonIssueFix = true    -- this is gross
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
+                self:loadAudio()
             end
         end
     end

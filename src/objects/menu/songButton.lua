@@ -15,7 +15,7 @@ local menuSongButton = Class:extend("menuSongButton")
 --- @param path string
 --- @param cornerRadius number
 --- @param color table <number, number, number>
-function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings)
+function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings, songPreviewTime, audioFile)
     self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
     self.width = width or 10
@@ -24,6 +24,10 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.y = y or 10
 
     self.warnings = warnings
+    self.songPreviewTime = songPreviewTime or 0
+
+    self.audioFile = audioFile -- how was this not already here????????
+    print(self.songPreviewTime)
 
     self.onlySkeleton = false -- why did i even add this we wont use it
 
@@ -44,6 +48,7 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     end
 
     self.path = path or "???"
+    print(self.path)
     self.color = color or {1, 1, 1}
     self.cornerRadius = cornerRadius or 7
 
@@ -73,7 +78,9 @@ function menuSongButton:returnInfo()
         path = self.path,
         isDifficultyButton = self.isDifficultyButton,
         color = self.color,
-        warnings = self.warnings
+        warnings = self.warnings,
+        songPreviewTime = self.songPreviewTime,
+        audioFile = self.audioFile,  -- why the FUCK was this not already here??? its a fucking SONG BUTTON, of course it needs to have the fucking audio file name in it
     }
 end
 

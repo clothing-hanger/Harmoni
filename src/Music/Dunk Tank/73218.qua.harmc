@@ -7,13 +7,10 @@ laneCount:4
 audioFile:audio.mp3
 chartOrigin:Quaver
 initialSV:1
-
-
-
 artist:4-MP
 gameMode:mania
 source:s
-songPreviewTime:63973
+songPreviewTime:170000
 tags:uhh
 title:Dunk Tank
 difficultyName:funny lol
