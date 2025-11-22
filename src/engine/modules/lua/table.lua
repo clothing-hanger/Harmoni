@@ -10,3 +10,24 @@ function table.clone(t, deep)
     end
     return copy
 end
+
+function table.isarray(t)
+    if type(t) ~= "table" then return false end
+    local count = 0
+    for k, v in pairs(t) do
+        count = count + 1
+        if type(k) ~= "number" or k < 1 or k > count or math.floor(k) ~= k then
+            return false
+        end
+    end
+    return true
+end
+
+function table.nkeys(t)
+    if type(t) ~= "table" then return 0 end
+    local count = 0
+    for k, v in pairs(t) do
+        count = count + 1
+    end
+    return count
+end

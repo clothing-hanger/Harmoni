@@ -7,6 +7,12 @@ dontShowBG = false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
+if type(jit) ~= nil and love.system.getOS() ~= "OS X" then
+    jit.opt.start("maxtrace=8000", "maxrecord=16000")
+    jit.opt.start("minstitch=3")
+    jit.opt.start("maxmcode=40960")
+end
+
 function love.load(args)
 
     Settings = require("modules.Settings")
