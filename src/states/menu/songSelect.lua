@@ -441,13 +441,15 @@ function songSelect:update(dt)
 
 
     if self.window then self.window:update(dt) end
+
+    if self.previousSong then self.previousSong:setVolume(self.previousAudioVolume or 0) end
+    if self.currentAudio then self.currentAudio:setVolume(self.currentAudioVolume or 0) end
 end
 
 function songSelect:checkForSongLoop()
     if not self.currentLoopPoint then return end
     if not self.currentAudio then return end
 
-    print(self.currentAudio:tell("seconds")*1000)
 
     if self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint) then -- we need to seek to the loop point 
         print("Loop to " .. self.currentLoopPoint/1000 .. " seconds")
@@ -511,34 +513,40 @@ end
 
 
 function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid 
-    if self.currentAudio and self.currentAudio:isPlaying() then self.currentAudio:stop() end
+    self.currentAudioVolume = 1
+    self.previousAudioVolume = 1   
+    self.currentPlayingSong = selectedSong
+    
+
+    -- first we clone the current song, with its time and everything
+
+    self.previousSong = self.currentAudio
+    if self.previousSong then self.previousSong:seek(self.currentAudio:tell("seconds")) end
+    --if self.currentAudio and self.currentAudio:isPlaying() then self.currentAudio:stop() end
+
     self.currentAudio = nil
     if not path then GlobalNotificationsHandler("no path passed into loadAudio!", "error") end
-    if not love.filesystem.getInfo("path", "file") then GlobalNotificationsHandler(self.currentSongInfo.name .. " audio file not found!", "error") end
+    if not love.filesystem.getInfo(path, "file") then GlobalNotificationsHandler(self.currentSongInfo.name .. " audio file not found!", "error") end
     local audio = love.audio.newSource(path, "stream")
     self.currentAudio = audio
-    --[[
-    for i, SongButton in ipairs(songButtons) do
-        if i == selectedSong then
-            if not self.currentAudio then
-                local songInfo = SongButton:returnInfo()
-                local path = songInfo.path .. "/" .. songInfo.audioFile
-                self.currentLoopPoint = songInfo.songPreviewTime
-                if love.filesystem.getInfo(path, "file") then
-                    self.currentAudio = love.audio.newSource(path, "stream")
-                else
-                    GlobalNotificationsHandler:addNotification("Audio file not found for song " .. songInfo.title)
-                end
-            end
-        end
-    end
-    --]]
+    --self.currentAudio:setVolume(0)
+    if self.previousSong then self.previousSong:setVolume(1) end
     if self.currentAudio then self.currentAudio:play() else GlobalNotificationsHandler:addNotification("something broke,, idk what", "error"); return end
+    if self.previousSong then self.previousSong:play() end
+    -- now we fade the previus one out, and fade the current one in 
+
+
+    -- there is a massive bug here but we just ignore it lmao   switching songs faster than the tween finishes makes the previous song never stop (oopsies)
+    if self.previousSongFade then Timer.cancel(self.previousSongFade) end
+    self.previousSongFade = Timer.tween(0.1, self, {previousAudioVolume = 0, currentAudioVolume = 1}, "linear", function() if self.previousSong then self.previousSong:stop(); self.previousSong = nil end end)
 
     -- this is sorta hacky, but itll work 
     -- we set the song to loop, and just check if its before the preview time, if it does, we seek to the preview time, itll play till the end, loop, then seek again
     self.currentAudio:setLooping(true)
+    if self.previousSong and self.previousSong:isPlaying() then print(self.previousSong:getVolume()) end
 end
+
+
 
 
 function songSelect:updateDifficultyButtons(dt)
@@ -558,7 +566,12 @@ function songSelect:checkForSongButtonClicks()
             if Input:pressed("menuClickLeft") then
                 self.currentSongInfo = SongButton:returnInfo()
                 buttonInfo = SongButton:onClick()
-                self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)
+                local uhhhOtherStuffIdk = SongButton:returnInfo()
+                if self.currentPlayingSong ~= i then self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile) end
+                                self.currentPlayingSong = i
+
+                print("loop point ", self.currentLoopPoint)
+                self.currentLoopPoint = uhhhOtherStuffIdk.songPreviewTime
                 if selectedSong ~= i then selectedSong = i return end
                 printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self.menuState = "difficulty"
@@ -578,11 +591,20 @@ function songSelect:checkForDifficultyButtonClicks()
             if Input:pressed("menuClickLeft") then
                 --selectedSong = i
                 buttonInfo = SongButton:onClick()
+                    local switchStateFunc = function()
+                        if self.previousSong then self.previousSong:stop(); self.previousSong = nil end
+                        if self.currentAudio then self.currentAudio:stop(); self.currentAudio = nil end
+                        self:switchToPlaystate(buttonInfo)
+                    end
+
                 if switchingState then return end
 
 
                 -- first we check for warnings
                 if buttonInfo.warnings then
+
+
+
                     -- then we make the warning window if any were found
                     local warnings = {}
                     local finalString = ""
@@ -608,11 +630,11 @@ function songSelect:checkForDifficultyButtonClicks()
                     self.window = window(self,LocaleHandler:getText("Warnings","Hold Up"), 
                     finalString,  
                     {
-                        {text = LocaleHandler:getText("UI", "Yes"), func = function () self:switchToPlaystate(buttonInfo); self.window:killYourself() end},
+                        {text = LocaleHandler:getText("UI", "Yes"), func = function () switchStateFunc(); self.window:killYourself() end},
                         {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
                     })
                 else -- no warnings so just play the song
-                    self:switchToPlaystate(buttonInfo)
+                    switchStateFunc()
                 end
                 
 
