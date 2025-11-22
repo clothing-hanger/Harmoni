@@ -19,11 +19,12 @@ function preloadState:enter()
         ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
     }
 
-    CLibs:setupIfNeeded()
     self.throbbert = throbbert({{1,1,1,1}, {1,1,1,1}, {1,1,1,1}})
 end
 
 function preloadState:update(dt)
+    if Input:pressed("menuConfirm") then     CLibs:setupIfNeeded()
+    end
     t = t + dt
 
     if not installing then

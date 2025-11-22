@@ -510,8 +510,14 @@ function songSelect:updateBGImage()
 end
 
 
-function songSelect:loadAudio()  -- this needs to be threaded but im stupid 
+function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid 
+    if self.currentAudio and self.currentAudio:isPlaying() then self.currentAudio:stop() end
     self.currentAudio = nil
+    if not path then GlobalNotificationsHandler("no path passed into loadAudio!", "error") end
+    if not love.filesystem.getInfo("path", "file") then GlobalNotificationsHandler(self.currentSongInfo.name .. " audio file not found!", "error") end
+    local audio = love.audio.newSource(path, "stream")
+    self.currentAudio = audio
+    --[[
     for i, SongButton in ipairs(songButtons) do
         if i == selectedSong then
             if not self.currentAudio then
@@ -526,7 +532,7 @@ function songSelect:loadAudio()  -- this needs to be threaded but im stupid
             end
         end
     end
-
+    --]]
     if self.currentAudio then self.currentAudio:play() else GlobalNotificationsHandler:addNotification("something broke,, idk what", "error"); return end
 
     -- this is sorta hacky, but itll work 
@@ -551,13 +557,14 @@ function songSelect:checkForSongButtonClicks()
         if mouseOver(SongButton) then
             if Input:pressed("menuClickLeft") then
                 self.currentSongInfo = SongButton:returnInfo()
-                if selectedSong ~= i then selectedSong = i return end
                 buttonInfo = SongButton:onClick()
+                self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)
+                if selectedSong ~= i then selectedSong = i return end
                 printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self.menuState = "difficulty"
                 self.uglyDiffButtonIssueFix = true    -- this is gross
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
-                self:loadAudio()
+                
             end
         end
     end
