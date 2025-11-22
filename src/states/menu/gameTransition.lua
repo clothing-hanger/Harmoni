@@ -5,7 +5,11 @@ local uhmmode, uhmchart, fullchart
 local songInfo
 local timebar
 local time
-function transition:enter(parent,mode,chart,image,logoH, backgroundDim)
+function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio)
+    self.audio = audio
+    self.audio.audio:seek(self.audio.time)
+    self.audio.audio:setVolume(self.audio.volume)
+    self.audio.audio:play()
     self.logoH = logoH
     time = 2
     uhmmode, uhmchart = mode, chart
@@ -44,6 +48,7 @@ end
 function transition:update(dt)
     background:update(dt)
     self.quickSettings:update(dt)
+    self.audio.audio:setVolume(self.audio.volume)
 
     self:checkForQuickSettingsHover()
 
@@ -67,7 +72,9 @@ function transition:switchToGame(mode,chart)
     self.quickSettings.freezeX = true
     ---@diagnostic disable-next-line: redefined-local
     local time = 0.1
-    background:changeDimness(gameplayBackgroundDim, 0.1)
+    background:changeDimness(gameplayBackgroundDim, time)
+        Timer.tween(time, self.audio, {volume = 0}, "linear", function() love.audio.stop() end)
+
     Timer.tween(time, self, {textAlpha = 0})
         Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear",
         function()

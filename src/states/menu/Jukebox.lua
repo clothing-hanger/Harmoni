@@ -6,6 +6,7 @@ local function distance(x1, y1, x2, y2)
 end
 
 function jukebox:enter(parent)
+    love.audio.stop()   
     self.parent = parent
     self.background = self.parent.BG
 

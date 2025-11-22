@@ -189,7 +189,7 @@ end
 
     self.coverBG = {alpha = 0}
 
-    
+  --  self:checkForSongButtonClicks(false)
 end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
@@ -366,6 +366,12 @@ function songSelect:loadSongs()
                     songInfo.audioFile
                 ))
             end
+            if not self.currentAudio and #songButtons == 1 then    -- this whole thing is so hacky but it works
+                -- now that we have created the first button, we call checkforsongbuttonclicks and i guess we just hope it works lmao 
+                self:checkForSongButtonClicks(false)
+                -- now we do smth even more hacky, just set the menustate to song
+                self.menuState = "song"
+            end
         end
     end
 end
@@ -390,7 +396,7 @@ end
 function songSelect:update(dt)
     if Input:pressed("menuBack") then
         if self.menuState == "difficulty" then self.menuState = "song"; return end
-        if switchingState then return end
+      --  if switchingState then return end
 
         State.transition("waveDissolve", States.menu.titleScreen, function()
             self:clearBanners()
@@ -403,7 +409,7 @@ function songSelect:update(dt)
 
     self.layerWaves:update(dt)
     self:updateBGImage()
-    self:checkForSongButtonClicks()
+    self:checkForSongButtonClicks(true)
     self:checkForDifficultyButtonClicks()
     self:updateSongButtons(dt)
     self:updateDifficultyButtons(dt)
@@ -436,7 +442,7 @@ function songSelect:update(dt)
     local totalSongListHeight = #songButtons * (songButtonHeight + songButtonSpacing)
     local minHoveredSong = -totalSongListHeight + songButtonHeight + songButtonSpacing * 2
     local maxHoveredSong = songButtonSpacing * 2
-    hoveredSong = math.max(math.min(hoveredSong, maxHoveredSong), minHoveredSong)
+  --  hoveredSong = math.max(math.min(hoveredSong, maxHoveredSong), minHoveredSong)
 
 
 
@@ -502,7 +508,7 @@ function songSelect:updateBGImage()
                     previousBG = currentDisplayedBG
                     currentDisplayedBG = SongButton.image
                     -- hell, just select the current song
-                    selectedSong = i     -- for what tho
+                   -- selectedSong = i     -- for what tho
                     self.currentSongInfo = SongButton:returnInfo()
                     fadeBG()
                 end
@@ -558,17 +564,18 @@ function songSelect:updateDifficultyButtons(dt)
 end
 
 
-function songSelect:checkForSongButtonClicks()
+function songSelect:checkForSongButtonClicks(requireClick)
     local buttonInfo = false
     if self.menuState == "difficulty" then return end
     for i, SongButton in ipairs(songButtons) do
-        if mouseOver(SongButton) then
-            if Input:pressed("menuClickLeft") then
+        local thething = function()
                 self.currentSongInfo = SongButton:returnInfo()
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()
+                print(self.currentPlayingSong)
                 if self.currentPlayingSong ~= i then self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile) end
-                                self.currentPlayingSong = i
+                print("HIIIIIII")
+                self.currentPlayingSong = i
 
                 print("loop point ", self.currentLoopPoint)
                 self.currentLoopPoint = uhhhOtherStuffIdk.songPreviewTime
@@ -577,8 +584,16 @@ function songSelect:checkForSongButtonClicks()
                 self.menuState = "difficulty"
                 self.uglyDiffButtonIssueFix = true    -- this is gross
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
-                
+        end
+        if requireClick then
+            if mouseOver(SongButton) then
+                if Input:pressed("menuClickLeft") then
+
+                    thething()
+                end
             end
+        else
+            thething()
         end
     end
 end
@@ -592,8 +607,7 @@ function songSelect:checkForDifficultyButtonClicks()
                 --selectedSong = i
                 buttonInfo = SongButton:onClick()
                     local switchStateFunc = function()
-                        if self.previousSong then self.previousSong:stop(); self.previousSong = nil end
-                        if self.currentAudio then self.currentAudio:stop(); self.currentAudio = nil end
+
                         self:switchToPlaystate(buttonInfo)
                     end
 
@@ -646,10 +660,15 @@ function songSelect:checkForDifficultyButtonClicks()
 end
 
 function songSelect:switchToPlaystate(buttonInfo)
-    Timer.tween(0.4,self.logoH, {x = baseScreenRatio.x/2, y = baseScreenRatio.y/2}, "out-quad")
+    local time = 0.4
+    Timer.tween(time,self.logoH, {x = baseScreenRatio.x/2, y = baseScreenRatio.y/2}, "out-quad")
+    Timer.tween(time, self, {currentAudioVolume = 0.25})
 
-    Timer.tween(0.4,self.coverBG, {alpha = 1}, "out-quad", function() 
-    State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, currentDisplayedBG, self.logoH, BGDarkness)
+    Timer.tween(time,self.coverBG, {alpha = 1}, "out-quad", function() 
+    State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, 
+    currentDisplayedBG, self.logoH, BGDarkness, 
+    {audio = self.currentAudio, volume = self.currentAudio:getVolume(), time = self.currentAudio:tell("seconds")})
+
 
     end)
 
