@@ -32,15 +32,8 @@ function love.errorhandler(msg)
 		return errorTexts
 	end
 
---	local errorTexts = setUpErrorText()
+	local errorTexts = setUpErrorText()
 
-
-			    local errorTexts = {
-					header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
-					crashMessage = "Error: ",
-					traceback = "Traceback: (This is important! Please include this in your crash report!)",
-					system = "System Information:",
-    			}
 
     local deviceInfo = {
         --OS

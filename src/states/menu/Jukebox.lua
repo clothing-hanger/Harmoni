@@ -8,6 +8,7 @@ end
 function jukebox:enter(parent)
     love.audio.stop()   
     self.parent = parent
+    error()
     self.background = self.parent.BG
 
     self.songButtonX = 10
