@@ -243,7 +243,7 @@ end
 
 function LyricsRenderer:new(x, y, width, height, events)
     self.x, self.y, self.width, self.height = x or 0, y or 0, width or 0, height or 0
-    self.events = events or {}
+    self.events = table.clone(events or {}, true)
     self.currentLine = 0
     self.lastAudioTime = 0
     self.defaultFont = SkinHandler and SkinHandler.getFont and SkinHandler:getFont("Menu", 40) or love.graphics.getFont()

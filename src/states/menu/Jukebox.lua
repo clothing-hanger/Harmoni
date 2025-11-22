@@ -88,12 +88,12 @@ function jukebox:switchSong(songInfo)
     if type ~= "lua" and type ~= "" then
         local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
-
-        self.lyricsDisplay = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     elseif type == "lua" then
         local lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
+
+    self.lyricsRenderer = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
 
     -- genuinely the easiest way that I thought of
     self.scrubBack = UIsquiglyLine(
@@ -186,8 +186,8 @@ function jukebox:update(dt)
     if self.lyricsDisplay then
         self.lyricsDisplay:update(dt, audioTime)
     end
-    if self.lyricsDisplay then
-        self.lyricsDisplay:update(dt, audioTime)
+    if self.lyricsRenderer then
+        self.lyricsRenderer:update(dt, audioTime)
     end
 
     if self.video and not self.scrubberHeld then
@@ -202,12 +202,6 @@ function jukebox:update(dt)
     if Input:pressed("menuBack") then
         State.transition("waveDissolve", States.menu.titleScreen)
     end
-
-
-
-
-
-
 
     local dontContinue = self:checkForSongButtonClicks()
     if dontContinue then return end
@@ -467,8 +461,8 @@ function jukebox:drawBG()
             self.songBG:draw()
         end
 
-        if self.lyricsDisplay then
-            self.lyricsDisplay:draw(self.audio:tell())
+        if self.lyricsRenderer then
+            self.lyricsRenderer:draw(self.audio:tell())
         end
     end
 
@@ -477,6 +471,20 @@ function jukebox:drawBG()
     love.graphics.printf(text, x, y, width, "center")
 
     love.graphics.setColor(1,1,1,1)
+end
+
+function jukebox:exit()
+    if self.audio and self.audio:isPlaying() then self.audio:stop() end
+    self.audio = nil
+    self.lyricsDisplay = nil
+    if self.video then
+        self.songBG = nil
+        self.video = false
+    end
+
+    if self.fullscreened then
+        self.fullscreened = false
+    end
 end
 
 return jukebox

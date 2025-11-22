@@ -28,6 +28,7 @@ function CHE:init()
     require("modules.controls")
     Input = setupControls()
 
+    require("engine.modules.lua")
     Class = require("engine.class.class")
     State = require("engine.state.State")
     require("modules.Transitions")
