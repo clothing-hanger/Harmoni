@@ -1,0 +1,22 @@
+[meta]
+creator:none lol
+backgroundFile:image.png
+bpm:150
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:kuru
+gameMode:mania
+source:s
+songPreviewTime:105500
+tags:uhh
+title:Broke (as in no money)
+difficultyName:funny lol
+
+[warnings]
+content:unfinishedSong
+
+[bpm]
+[sliderVelocities]
+[hitObjects]
