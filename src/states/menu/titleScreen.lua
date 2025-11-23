@@ -2,6 +2,7 @@ local titleScreen = State("titleScreen")
 local fade = 0
 function titleScreen:enter(from, resetItems, fadeIn)
     fade = 0
+    self.bubbleClickedCount = 0
     self.coverAlpha = (fadeIn and 1) or 0
     if resetItems == nil then resetItems = true end
     self.BG = SkinHandler:getImage("Menu", "Background")
@@ -284,6 +285,11 @@ function titleScreen:update(dt)
     end)
     if self.window then self.window:update(dt) end
 
+    if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
+        self.shownOsuWindow = true
+        self.window = window(self,"This isn't Osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
+    end
+
 
     self.layerWaves:update(dt)
 
@@ -306,6 +312,7 @@ function titleScreen:updateBubbles(dt)
             if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
                 
                 Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
+                self.bubbleClickedCount = self.bubbleClickedCount + 1
 
                 -- save original alpha 
                 if not Bubble.originalAlpha then Bubble.originalAlpha = Bubble.color[4] end
