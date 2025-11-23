@@ -356,6 +356,7 @@ love.graphics.setColor(1,1,1,1)
 end
 
 
+
 function titleScreen:drawLogo()
     -- the logo drawing is complex so we move it to its own function
     local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
