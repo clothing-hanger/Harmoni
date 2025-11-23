@@ -297,6 +297,7 @@ function jukebox:checkForScrubberHeadRelease()
         self.audio:seek(seekTime)
         if self.video then
             self.songBG:seek(seekTime)
+            love.timer.step()
             self.songBG.forcedUpdate = true
         end
         self.scrubberHeld = false
