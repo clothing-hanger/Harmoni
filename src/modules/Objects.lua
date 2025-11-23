@@ -22,9 +22,9 @@
         notificationsHandler = require("objects.menu.notificationsHandler")
         quickSettings = require("objects.menu.quickSettings")
         countdownBar = require("objects.menu.countdownBar")
-    lyricsDisplay = require("Objects.Menu.lyricsDisplay")
+    lyricsDisplay = require("objects.menu.lyricsDisplay")
     lyricsRenderer = require("objects.menu.lyricsRenderer") -- haha it says ass
-    jukeboxSongButton = require("Objects.Menu.jukeboxSongButton")
+    jukeboxSongButton = require("objects.menu.jukeboxSongButton")
 
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop

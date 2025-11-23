@@ -4,6 +4,7 @@ local window = Class:extend()
 --i suck ass at coding
 
 function window:new(parent,title,msg,buttons)
+    print("WINDOW")
     -- these will be centered to their center (am i wording that right?) cuz it just seems like it should be idfk
     -- buttons should be a table,, i think ,,, idk im just making it up as i go
     if type(buttons) ~= "table" then GlobalNotificationsHandler:addNotification("window created with non-table buttons!", "error") self.buttons = {} end -- this is temp, itll just destroy the window if its not a table 
@@ -27,7 +28,8 @@ function window:new(parent,title,msg,buttons)
     self.titleBarHeight = 90 -- idk, im just gonna hardcode this cuz it doesnt matter
 
     self.buttons = {}
-
+    self.buttonFont = SkinHandler:getFont("Menu", 35)
+    self.font = SkinHandler:getFont("Menu", 50)
 
     self.buttonSpacing = 100
     self.buttonHeight = 50
@@ -154,10 +156,9 @@ function window:animation(type,func)
 end
 --]]
 function window:draw()
-    love.graphics.push()
-    love.graphics.translate(self.COCK or 0, 0)
-    love.graphics.push()
+    
 
+    love.graphics.push()
 
     love.graphics.setColor(1,1,1,self.alpha)
     -- center-scaling
@@ -165,14 +166,8 @@ function window:draw()
     love.graphics.scale(self.scale)
     love.graphics.translate(-self.x, -self.y)
 
-    
-
-
     -- the fucking font. 
-    love.graphics.setFont(SkinHandler:getFont("Menu", 50))
-
-
-
+    love.graphics.setFont(self.font)
 
     --stencil shit
     love.graphics.stencil(function()
@@ -180,15 +175,12 @@ function window:draw()
     end, "replace", 1)
     love.graphics.setStencilTest("equal", 1)
 
-
-
-
-
     -- draw the cool fucking rectangle as the window background
     self.coolFuckingRectangle:draw()
 
 
-
+    
+    
     --draw the title bar bg
     local r,g,b = unpack(self.coolFuckingRectangle.color2)
     love.graphics.setColor(r,g,b,self.alpha)
@@ -204,10 +196,9 @@ function window:draw()
     love.graphics.setColor(r,g,b,self.alpha)
     love.graphics.printf(self.msg, self.rectX, self.rectY + self.titleBarHeight+self.coolFuckingRectangle.padding, self.width, "center")
 
-
-
     -- now we draw the buttons
-    love.graphics.setFont(SkinHandler:getFont("Menu", 35))
+    
+    love.graphics.setFont(self.buttonFont)
     for i, Button in ipairs(self.buttons) do
         --draw the button background
         local r,g,b = unpack(self.coolFuckingRectangle.color2)
@@ -215,17 +206,15 @@ function window:draw()
         love.graphics.rectangle("fill", Button.x, Button.y, Button.btnWidthWithPadding, Button.height, 10)
         love.graphics.setColor(1,1,1,self.alpha)
         love.graphics.printf(Button.text,Button.x,Button.y+(Button.height/2)-love.graphics.getFont():getHeight()/2,Button.btnWidthWithPadding,"center")
+
     end
 
-
-
-
-
-
     love.graphics.setStencilTest()
+    
     love.graphics.setColor(1,1,1,1)
+    
     love.graphics.pop()
-    love.graphics.pop()
+    
 end
 
 return window

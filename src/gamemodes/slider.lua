@@ -26,7 +26,7 @@ function slider:new(chart, parent, fullChart)
     self.song:setLooping(false)
     self.playField = {sliderField(self.chart, self)}
 
-    slider.judgements = require("Modules.maniaJudgements")
+    slider.judgements = require("modules.maniaJudgements")
 
     self:setUpObjects()
 end

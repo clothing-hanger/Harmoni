@@ -28,7 +28,7 @@ function mania:new(chart, parent, fullChart)
     self.song:setLooping(false)
     self.playField = {maniaPlayField(self.chart, self)}
 
-    mania.judgements = require("Modules.maniaJudgements")
+    mania.judgements = require("modules.maniaJudgements")
 
     self:setUpObjects()
 end
