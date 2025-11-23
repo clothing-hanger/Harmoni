@@ -101,13 +101,13 @@ function preloadState:draw()
         local x = barX + (i/segments)*barW
         local y = barY + math.sin((i/segments)*math.pi*15 + t*speed) * amp
 
-        points[#points+1] = lastX
-        points[#points+1] = lastY
+        points[#points+1] = lastX or x
+        points[#points+1] = lastY or y
         points[#points+1] = x
         points[#points+1] = y
         lastX, lastY = x, y
     end
-    if #points > 1 then
+    if #points > 2 then
         love.graphics.line(points)
     end
 

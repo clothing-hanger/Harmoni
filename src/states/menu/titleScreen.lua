@@ -171,7 +171,7 @@ function titleScreen:setupSocialButtons()
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
-        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100}) )
+        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100, scaleLARGE = 1.25}) )
     end
 
 end
@@ -312,7 +312,7 @@ function titleScreen:updateBubbles(dt)
             if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
                 
                 Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
-                self.bubbleClickedCount = self.bubbleClickedCount + 1
+                self.bubbleClickedCount = (self.bubbleClickedCount or 0) + 1
 
                 -- save original alpha 
                 if not Bubble.originalAlpha then Bubble.originalAlpha = Bubble.color[4] end

@@ -14,7 +14,6 @@ if type(jit) ~= nil and love.system.getOS() ~= "OS X" then
 end
 
 function love.load(args)
-
     Settings = require("modules.Settings")
     Settings.default = Settings:defaultSettings()
     Settings:loadSettings()
