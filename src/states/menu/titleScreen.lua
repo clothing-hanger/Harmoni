@@ -287,7 +287,7 @@ function titleScreen:update(dt)
 
     if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
         self.shownOsuWindow = true
-        self.window = window(self,"This isn't Osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
+        self.window = window(self,"This isn't osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
     end
 
 
