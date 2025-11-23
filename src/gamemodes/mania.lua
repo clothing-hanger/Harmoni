@@ -97,7 +97,11 @@ function mania:setUpChart(chartpath, chart)
         self.videoBackground = video(
             songPath .. "/" .. parsed.meta.backgroundVideo,
             baseScreenRatio.x / 2,
-            baseScreenRatio.y / 2
+            baseScreenRatio.y / 2,
+            nil,
+            nil,
+            nil,
+            gameplayBackgroundDim
         )
         self.videoBackground.scaleX = baseScreenRatio.x / self.videoBackground.image:getWidth()
         self.videoBackground.scaleY = baseScreenRatio.y / self.videoBackground.image:getHeight()
@@ -176,7 +180,7 @@ function mania:updateObjects(dt)
     self.HUD:sendValues(ScoreHandler:getScore("printable"))
 
     if self.healthBar.health <= 0 then
-        self:endSong()
+        --self:endSong()
     end
 end
 

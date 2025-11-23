@@ -1,7 +1,7 @@
 ---@type table
 local video = Class:extend("video")
 
-function video:new(video,x,y,scaleX,scaleY,fr)
+function video:new(video,x,y,scaleX,scaleY,fr,dimness)
     self.path = video
     self.visible = true
     self.x, self.y = x,y
@@ -23,6 +23,8 @@ function video:new(video,x,y,scaleX,scaleY,fr)
 
     self.video = vid
     self.filedata = video
+        self.dimness = dimness or 0
+
     self.imageData = love.image.newImageData(self.video:getDimensions())
     self.image = love.graphics.newImage(self.imageData)
 
@@ -39,6 +41,30 @@ function video:new(video,x,y,scaleX,scaleY,fr)
     self.alpha = 1
 
     self.forcedUpdate = false
+end
+
+function video:changeDimness(targetDimness, time, callback)
+    targetDimness = targetDimness or 1
+    if not time then
+        self.dimness = targetDimness
+        if callback then callback() end
+        return
+    end
+
+    local start = self.dimness
+    local change = targetDimness - start
+    local t = 0
+    local easing = Ease.linear
+
+    table.insert(self.activeTweens, {
+        update = function(dt)
+            t = t + dt
+            local progress = math.min(t / time, 1)
+            self.dimness = start + change * easing(progress)
+            return progress >= 1
+        end,
+        callback = callback
+    })
 end
 
 function video:update(dt)
@@ -114,6 +140,11 @@ function video:draw()
 
     love.graphics.pop()
     love.graphics.setColor(lastColor)
+
+        -- Draw dimness overlay
+    love.graphics.setColor(0, 0, 0, self.dimness)
+    love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return video
