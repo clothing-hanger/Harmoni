@@ -1,6 +1,6 @@
 local gameModeManager = State()
 
-function gameModeManager:enter(s,mode,chart,fullchart)
+function gameModeManager:enter(s,mode,chart,fullchart,mods)
     self.gameMode = {} -- i hate that this has to be a table 😭😭      -ch
                        -- Literally why does it have to be a table?
                        -- because its FUNNY guglio,,,,, but you would never understand   -ch
@@ -10,7 +10,7 @@ function gameModeManager:enter(s,mode,chart,fullchart)
                        -- ok       -ch
     printToConsole("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
-        self.gameMode = {mania(chart, self, fullchart)}
+        self.gameMode = {mania(chart, self, fullchart, mods)}
     elseif mode == "slider" then
         self.gameMode = {slider(chart, self, fullchart)}
     end

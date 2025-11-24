@@ -9,6 +9,7 @@ local installing = false
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
+    self.debug = false
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)
     States.menu.titleScreen.setUpThoseWavesThatIHate(self, 4)

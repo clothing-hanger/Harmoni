@@ -189,6 +189,8 @@ end
 
     self.coverBG = {alpha = 0}
 
+    self.modifiersMenu = modifiersMenu(20,400,700,1000)
+
   --  self:checkForSongButtonClicks(false)
 end
 
@@ -416,6 +418,7 @@ function songSelect:update(dt)
     self:loadSongs()
     self:loadSongButtonImages()
     self:checkForSongLoop()
+    self.modifiersMenu:update()
     self.ignoreInterpolation = false
 
     local BGDimTarget = (self.menuState == "song" and 0) or 0.7
@@ -661,15 +664,14 @@ end
 
 function songSelect:switchToPlaystate(buttonInfo)
     local time = 0.4
+    local mods = self.modifiersMenu:returnMods()
     Timer.tween(time,self.logoH, {x = baseScreenRatio.x/2, y = baseScreenRatio.y/2}, "out-quad")
     Timer.tween(time, self, {currentAudioVolume = 0.25})
 
     Timer.tween(time,self.coverBG, {alpha = 1}, "out-quad", function() 
-    State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, 
-    currentDisplayedBG, self.logoH, BGDarkness, 
-    {audio = self.currentAudio, volume = self.currentAudio:getVolume(), time = self.currentAudio:tell("seconds")})
-
-
+        State.switch(States.menu.gameTransition, buttonInfo.mode, buttonInfo.path, 
+        currentDisplayedBG, self.logoH, BGDarkness, 
+        {audio = self.currentAudio, volume = self.currentAudio:getVolume(), time = self.currentAudio:tell("seconds")},mods)
     end)
 
     switchingState = true
@@ -720,7 +722,7 @@ function songSelect:draw(dt)
     end
     self.logoH:draw()
 
-
+self.modifiersMenu:draw()
         if self.window then self.window:draw() end
 
 end

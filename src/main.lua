@@ -45,6 +45,12 @@ function love.load(args)
     SongListManager = require("modules.songListManager")
     CaptionParser = require("modules.captionParser")
 
+
+
+
+    -- seems to be the best place to load these so,,, we load modifiers in main lol 
+    modifiersTable = require("modules.modifiers")
+
     State.switch(States.menu.preloadState)
 
     -- load objects

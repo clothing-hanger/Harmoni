@@ -5,7 +5,8 @@ local uhmmode, uhmchart, fullchart
 local songInfo
 local timebar
 local time
-function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio)
+function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, mods)
+    self.mods = mods
     self.audio = audio
     self.audio.audio:seek(self.audio.time)
     self.audio.audio:setVolume(self.audio.volume)
@@ -78,7 +79,7 @@ function transition:switchToGame(mode,chart)
     Timer.tween(time, self, {textAlpha = 0})
         Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear",
         function()
-            State.switch(States.game.gameModeManager, uhmmode, uhmchart, fullchart)
+            State.switch(States.game.gameModeManager, uhmmode, uhmchart, fullchart, self.mods)
         end
     )
 

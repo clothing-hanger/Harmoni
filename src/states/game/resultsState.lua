@@ -14,7 +14,7 @@ function resultsState:enter(s, parent, accuracy, image)
     self.arcX, self.arcY = self.x, self.y
     self.arcR = 300
     self.rectRC = 90
-    self.background = self.parent.BG
+    self.background = self.parent.background
     self.bump = 1
     self.hitSound = love.audio.newSource("sounds/hit.mp3", "static")     --THIS SOUND IS A PLACEHOLDER
     self.arcLineWidth = 20
@@ -37,6 +37,9 @@ function resultsState:update(dt)
             self:onGradeReached(Grade.grade)
         end
     end
+
+
+    if Input:pressed("menuConfirm") then State.switch(States.menu.songSelect) end
 end
 
 function resultsState:onGradeReached(grade)
@@ -44,9 +47,9 @@ function resultsState:onGradeReached(grade)
     if self.bumpTimer then Timer.cancel(self.bumpTimer) end
     self.bumpTimer = Timer.tween(0.25, self, {bump = 1}, "out-quad")
     self.printableGrade = grade
-    local hitClone = self.hitSound:clone()
-    hitClone:setPitch(self.printableAccuracy / 100)
-    hitClone:play()
+   -- local hitClone = self.hitSound:clone()
+    --hitClone:setPitch(self.printableAccuracy / 100)
+    --hitClone:play()
 
     print(grade)
 end
@@ -73,7 +76,7 @@ end
 
 function resultsState:draw()
 
-    love.graphics.draw(self.background)
+    self.background:draw()
     love.graphics.push()
         love.graphics.translate(self.x, self.y)
         love.graphics.scale(self.bump or 1, self.bump or 1)

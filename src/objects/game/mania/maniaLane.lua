@@ -90,7 +90,18 @@ function maniaLane:handleInput()
 
         state.judgementObject:judge(bestJudgement.name)
         state.scoreHandler:addScore(bestJudgement.score)
-        state.healthBar:changeHealth(bestJudgement.health)
+        local healthChange
+
+        if self.parent.parent.mods["EZ"] and bestJudgement.name == "Miss" then
+            healthChange = bestJudgement.health/2   -- i have no clue if this works or not honestly
+        else
+            healthChange = bestJudgement.health
+        end
+
+        print(self, self.parent, self.parent.parent, self.parent.parent.mods, self.parent.parent.mods["SD"])
+        if self.parent.parent.mods["SD"] then healthChange = -99999 end   -- i dont understand why the print above seems fine but this doesnt work..
+
+        state.healthBar:changeHealth(healthChange)
         state.comboCount:incrementCombo()
     end
 end

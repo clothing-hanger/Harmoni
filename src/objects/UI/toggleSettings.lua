@@ -14,7 +14,10 @@ function toggleSetting:onClick()
 end
 
 function toggleSetting:toggleFunction()
+    print("HIIIIIII")
     self.toggle = not self.toggle
+
+    print(self.toggle)
 end
 
 function toggleSetting:getValue(str)
@@ -43,6 +46,37 @@ function toggleSetting:draw()
     local circleY = pillHeight+circleRadius*2
     love.graphics.circle("fill", circleX, circleY, circleRadius)
 
+    love.graphics.setColor(1,1,1)
+end
+
+function toggleSetting:draw()
+    -- backdrop
+    love.graphics.setColor(1,1,1)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+    local pillWidth  = self.width/10
+    local pillHeight = self.height/3
+    local pillX      = self.x + self.width - pillWidth * 1.5
+    local pillY      = self.y + self.height/2 - pillHeight/2
+    local pillCornerRadius = pillHeight/2
+    
+    -- draw pill
+    love.graphics.setColor(0,0,0)
+    love.graphics.rectangle("line", pillX, pillY, pillWidth, pillHeight, pillCornerRadius, pillCornerRadius)
+
+    -- circle
+    love.graphics.setColor(1,0,0)
+    local circleRadius = pillHeight/2 - 4
+
+    local circleX = self.toggle
+        and (pillX + circleRadius + 2)
+        or  (pillX + pillWidth - circleRadius - 2)
+
+    local circleY = pillY + pillHeight/2
+
+    love.graphics.circle("fill", circleX, circleY, circleRadius)
+
+    -- reset
     love.graphics.setColor(1,1,1)
 end
 

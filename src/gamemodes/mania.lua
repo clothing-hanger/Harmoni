@@ -2,9 +2,11 @@ local mania = Class:extend("mania")
 local videoFade = 0
 local played = false
 
-function mania:new(chart, parent, fullChart)
+function mania:new(chart, parent, fullChart, mods)
     videoFade = 0
     played = false
+    self.mods = mods
+
     self.parent = parent
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
@@ -112,12 +114,15 @@ function mania:setUpChart(chartpath, chart)
     end
 
     for _, SliderVelocity in ipairs(parsed.sliderVelocities) do
+       -- if not modifiersTable.
         table.insert(maniaChart.scrollVelocities, {
             startTime = SliderVelocity.startTime,
             multiplier = SliderVelocity.multiplier
         })
     end
+    if self.mods["NSV"] then maniaChart.scrollVelocities = {} end
     for _, obj in ipairs(parsed.hitObjects) do
+        if self.mods["NLN"] then obj.endTime = nil end
         table.insert(maniaChart.hitObjects, {
             type = obj.type,
             startTime = obj.startTime,
@@ -158,13 +163,15 @@ function mania:update(dt)
 end
 
 function mania:endSong()
-    printToConsole("mania:endSong()")
+    print("mania:endSong()")
     if self.song then self.song:stop();printToConsole("SONG END 3") end
+  --  love.audio.stop()
     self.song = nil
     self.chart = nil
     self.playField = {}
-    State.switch(States.menu.songSelect)
+    State.switch(States.game.resultsState, self)
 end
+
 
 function mania:updateObjects(dt)
     if self.videoBackground then self.videoBackground:update(dt) end
@@ -172,14 +179,14 @@ function mania:updateObjects(dt)
     self.countdownBar:update(dt)
     if self.countdownBar.complete and not self.songStarted then self:startSong(1) end
     self.judgementObject:update(dt)
-    self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration())
+    if self.song then self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration()) end
     self.comboCount:update(dt)
     self.healthBar:update(dt)
 
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(ScoreHandler:getScore("printable"))
 
-    if self.healthBar.health <= 0 then
+    if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:endSong()
     end
 end
