@@ -57,7 +57,6 @@ function jukebox:switchSong(songInfo)
         end
     else
         self.songBG = video(self.currentSongInfo.path .. "/" .. self.currentSongInfo.bg, self.songBGX, self.songBGY, 1, 1)
-        love.timer.step() -- basically uhh im too tired to explain rn,,,, it helps prevent desyncs though
         self.videoHudAlpha = 1
         Timer.after(3, function() 
             Timer.tween(1, self, {videoHudAlpha = 0})
@@ -297,7 +296,6 @@ function jukebox:checkForScrubberHeadRelease()
         self.audio:seek(seekTime)
         if self.video then
             self.songBG:seek(seekTime)
-            love.timer.step()
             self.songBG.forcedUpdate = true
         end
         self.scrubberHeld = false

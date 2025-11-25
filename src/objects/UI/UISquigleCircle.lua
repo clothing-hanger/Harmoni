@@ -1,21 +1,28 @@
 local UISquigleCircle = Class:extend("UISquigleCircle")
 
 function UISquigleCircle:new(mode, x, y, radius, amplitude, frequency, lineThickness, color)
-    self.debug = false
-    self.mode, self.x, self.y, self.radius, self.amplitude, self.frequency, self.lineThickness =
-        mode, x, y, radius, amplitude, frequency, lineThickness
-    self.color = {unpack(color)}
+    self.mode = mode
+    self.x = x
+    self.y = y
+    self.radius = radius
+    self.amplitude = amplitude
+    self.frequency = frequency
+    self.lineThickness = lineThickness
+    self.color = table.clone(color)
 
-    self.rotation = 0
-    self.points = {}
+    self.rotation  = 0
 
-    for i = 0, 365, 1 do
-        local angle = math.rad(i)
-        local r = self.radius + math.sin(angle * self.frequency) * self.amplitude
-        local px = r * math.cos(angle)
-        local py = r * math.sin(angle)
-        table.insert(self.points, px)
-        table.insert(self.points, py)
+    local points = {}
+    self.points = points
+
+    local p = 1
+    for deg = 0, 359 do
+        local angle = math.rad(deg)
+        local r = radius + math.sin(angle * frequency) * amplitude
+
+        points[p] = r * math.cos(angle)
+        points[p + 1] = r * math.sin(angle)
+        p = p + 2
     end
 end
 
@@ -28,14 +35,12 @@ function UISquigleCircle:draw()
     love.graphics.setColor(self.color)
     love.graphics.translate(self.x, self.y)
     love.graphics.rotate(math.rad(self.rotation))
-    
 
     love.graphics.setLineWidth(self.lineThickness)
     love.graphics.polygon(self.mode, self.points)
 
     love.graphics.pop()
-    love.graphics.setColor(1,1,1,1)
-
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 return UISquigleCircle

@@ -1,95 +1,104 @@
 local UILayerWave = Class:extend("UILayerWave")
 
+local tpi = math.pi * 2
+
 function UILayerWave:new(x,y,width,height,layerCount,segments,amplitude,layerSpacing,layerColors)
     if not type(layerColors) == "table" then error("Bad argument #9 (layerColors) to UILayerWave! Table expected, got " .. type(layerColors)) end 
-    self.layers = {}
 
-    for i = 1,layerCount do
-        self:createLayer(x,y,width,height,segments,amplitude,i,layerSpacing,(layerColors[i] or {1,1,1}), 0.8)
+    self.layers = {}
+    segments = segments or 20
+    amplitude = amplitude or 20
+    layerSpacing = layerSpacing or 0
+
+    for i = 1, layerCount do
+        self:createLayer(
+            x, y, width, height,
+            segments, amplitude, i,
+            layerSpacing,
+            layerColors[i] or {1, 1, 1}
+        )
     end
 end
 
-    function UILayerWave:update(dt)
-        for _, layer in ipairs(self.layers) do
-            local points = {}
-            local t, px, py
+function UILayerWave:createLayer(x, y, width, height, segments, amplitude, index, spacing, color)
+    local layer = {
+        x = x,
+        y = y,
+        width = width,
+        height = height,
+        color = color,
+        segments = segments,
+        amplitude = amplitude,
+        spacing = spacing * index,
+        phaseOffset = love.math.random() * tpi,
+        freqMultiplier = 1 + (love.math.random() - 0.5) * 0.5,
+        speed = 1 + love.math.random(),
+        points = {}
+    }
 
-            for i = 0, layer.segments do
-                t = i --/ layer.segments
-                px = layer.x + t * layer.width
-                py = layer.y + math.sin(t * math.pi * 2 * layer.freqMultiplier + layer.phaseOffset + love.timer.getTime() * layer.speed) * layer.amplitude
-                table.insert(points, px)
-                ---@diagnostic disable-next-line: ambiguity-1
-                table.insert(points, py - _ * layer.spacing or 0)
-            end
+    local pts = layer.points
+    local count = segments + 1
+    local p = 1
 
-            -- Bottom right
-            table.insert(points, layer.x + layer.width)
-            table.insert(points, layer.y + layer.height)
-
-            -- Bottom left
-            table.insert(points, layer.x)
-            table.insert(points, layer.y + layer.height)
-
-            layer.points = points
-        end
+    for i = 0, segments do
+        local t = i / segments
+        pts[p] = x + t * width
+        p = p + 1
+        pts[p] = y + math.sin(t * tpi * layer.freqMultiplier + layer.phaseOffset) * amplitude - layer.spacing
+        p = p + 1
     end
 
+    pts[p] = x + width
+    p = p + 1
+    pts[p] = y + height
+    p = p + 1
 
-function UILayerWave:createLayer(x,y,width,height,segments,amplitude,layerNumber,layerSpacing,color,transparency)
-    local layer = {}
-
-    layer.layer = layer    --layer.layer = layer ❤️
-    layer.x,layer.y = x,y 
-    layer.width,layer.height = width, height 
-
-    layer.color = color
-    -- how the fuck do i make the top wavy 
-
-    layer.segments = segments or 20    -- i am not gonna pretend that chatgpt didnt write this lmfao,, i have no idea what it happening here 
-    layer.amplitude = amplitude or 20
-
-    local points = {}
-    layer.spacing = layerSpacing or 0
-
-    layer.phaseOffset = math.random() * 2 * math.pi
-    layer.freqMultiplier = 1 + (math.random() - 0.5) * 0.5
-    layer.speed = 1 + math.random() -- how fast the wave moves
-
-    -- Top edge (wavy)
-    local phaseOffset = math.random() * 2 * math.pi        -- random horizontal shift
-    local freqMultiplier = 1 + (math.random() - 0.5) * 0.5 -- slight frequency variation
-
-    for i = 0, layer.segments do
-        local t = i / layer.segments
-        local px = x + t * width
-        local py = y + math.sin(t * math.pi * 2 * freqMultiplier + phaseOffset) * layer.amplitude
-        table.insert(points, px)
-        table.insert(points, py - layerNumber * layerSpacing)
-    end
-
-    -- Bottom right
-    table.insert(points, x + width)
-    table.insert(points, y + height)
-
-    -- Bottom left
-    table.insert(points, x)
-    table.insert(points, y + height)
-
-    layer.points = points
+    pts[p] = x
+    p = p + 1
+    pts[p] = y + height
 
     table.insert(self.layers, layer)
+end
 
+function UILayerWave:update(dt)
+    local time = love.timer.getTime()
+
+    for _, layer in ipairs(self.layers) do
+        local pts = layer.points
+        local x = layer.x
+        local y = layer.y
+        local width = layer.width
+        local freq = layer.freqMultiplier
+        local amp = layer.amplitude
+        local seg = layer.segments
+        local spacing = layer.spacing
+        local basePhase = layer.phaseOffset + time * layer.speed
+
+        local p = 1
+
+        for i = 0, seg do
+            local t = i / seg
+            pts[p] = x + t * width; p = p + 1
+            pts[p] = y + math.sin(t * tpi * freq + basePhase) * amp - spacing
+            p = p + 1
+        end
+
+        pts[p] = x + width
+        p = p + 1
+        pts[p] = y + layer.height
+        p = p + 1
+
+        pts[p] = x
+        pts[p + 1] = y + layer.height
+    end
 end
 
 function UILayerWave:draw()
     for _, layer in ipairs(self.layers) do
-        local color = layer.color 
         love.graphics.setColor(layer.color)
         love.graphics.polygon("fill", layer.points)
     end
-
-    love.graphics.setColor(1,1,1,1)
+    love.graphics.setColor(1, 1, 1)
 end
 
 return UILayerWave

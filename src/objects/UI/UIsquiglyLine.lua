@@ -1,23 +1,40 @@
 local UISquiglyLine = Class:extend("UISquiglyLine")
 
-function UISquiglyLine:new(x1,y1,x2,y2,frequency,amplitude,segments,speed,lineWidth,color)    -- i will not lie GPT saved me with this one this shit did NOT work before i asked GPT 
-    self.wave = {}                                                            --   usually it would just break things lol but no with this it actually made it work, it was just a straight line when i made it 😭
-    self.x1, self.y1 = x1,y1
-    self.x2, self.y2 = x2,y2
+local tpi = math.pi * 2
+
+function UISquiglyLine:new(x1, y1, x2, y2, frequency, amplitude, segments, speed, lineWidth, color)
+    self.x1, self.y1 = x1, y1
+    self.x2, self.y2 = x2, y2
+
     self.frequency = frequency
     self.amplitude = amplitude
+    self.segments  = segments
     self.speed = speed or 1
-    self.time = 0
-    self.segments = segments
+    self.time  = 0
+
     self.lineWidth = lineWidth or 1
     self.color = color or {1,1,1}
 
-    -- stuff for mouseover function to work 
-        self.height = 100
-
-    self.x = self.x1 
-    self.y = self.y1- self.height/2
+    self.height = 100
+    self.x = self.x1
+    self.y = self.y1 - self.height/2
     self.width = self.x2 - self.x1
+
+    local dx = x2 - x1
+    local dy = y2 - y1
+    local length = math.sqrt(dx*dx + dy*dy)
+
+    self.dir_x = dx / length
+    self.dir_y = dy / length
+
+    self.perp_x = -self.dir_y
+    self.perp_y =  self.dir_x
+
+    self.points = {}
+    local count = (segments + 1) * 2
+    for i = 1, count do
+        self.points[i] = 0
+    end
 end
 
 function UISquiglyLine:update(dt)
@@ -25,36 +42,43 @@ function UISquiglyLine:update(dt)
 end
 
 function UISquiglyLine:draw()
-    local lastLineWidth = love.graphics.getLineWidth()
-    local points = {}
+    local points = self.points
+    local p = 1
+    local seg = self.segments
 
-    local dx = self.x2 - self.x1
-    local dy = self.y2 - self.y1
-    local length = math.sqrt(dx * dx + dy * dy)
+    local x1 = self.x1
+    local y1 = self.y1
 
-    local dir_x = dx / length
-    local dir_y = dy / length
+    local dx = self.x2 - x1
+    local dy = self.y2 - y1
 
-    local perp_x = -dir_y
-    local perp_y = dir_x
+    local perp_x = self.perp_x
+    local perp_y = self.perp_y
 
-    for i = 0, self.segments do
-        local t = i / self.segments
-        local px = self.x1 + dx * t
-        local py = self.y1 + dy * t
+    local freq = self.frequency
+    local amp  = self.amplitude
+    local t0   = self.time * self.speed
 
-        local offset = math.sin(t * self.frequency * 2 * math.pi - self.time * self.speed) * self.amplitude
-        local ox = perp_x * offset
-        local oy = perp_y * offset
+    for i = 0, seg do
+        local t = i / seg
+        local px = x1 + dx * t
+        local py = y1 + dy * t
 
-        table.insert(points, px + ox)
-        table.insert(points, py + oy)
+        local offset = math.sin(t * freq * tpi - t0) * amp
+
+        points[p]     = px + perp_x * offset
+        points[p + 1] = py + perp_y * offset
+
+        p = p + 2
     end
 
+    love.graphics.setColor(self.color)
+    local last = love.graphics.getLineWidth()
     love.graphics.setLineWidth(self.lineWidth)
+
     love.graphics.line(points)
 
-    love.graphics.setLineWidth(lastLineWidth)
+    love.graphics.setLineWidth(last)
 end
 
 return UISquiglyLine

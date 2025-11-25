@@ -14,8 +14,7 @@ function splash:setupShit()
     -- first we check if theres any more splashes to show
     if self.splashNumber <= #self.splashScreens then -- we continue
     -- do the fade stuff 
-        local func = function()
-            
+        local function func()
             self.timerAfter = Timer.after(self.splashScreens[self.splashNumber].time or 3, function() self:fade("out", function() self.splashNumber = self.splashNumber+1;self:setupShit() end) end)
         end
         self:fade("in", func)

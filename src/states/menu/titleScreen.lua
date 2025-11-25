@@ -1,5 +1,7 @@
 local titleScreen = State("titleScreen")
 local fade = 0
+
+local btnStrEasterEgg = "X"
 function titleScreen:enter(from, resetItems, fadeIn)
     fade = 0
     self.bubbleClickedCount = 0
@@ -39,45 +41,29 @@ function titleScreen:enter(from, resetItems, fadeIn)
             label = "X",
             link = "https://x.com/clothinghanger_",  -- TEMP!!!
             image = love.graphics.newImage("images/menu/X.png"), 
+            image2 = love.graphics.newImage("images/menu/Twitter.png"),
             func = function(button) 
                 self.clickedXCount = self.clickedXCount + 1
-                if self.clickedXCount > 2 then self:fuckElon() else
-                
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To X") .. "\n\n" .. button.link,
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() love.system.openURL(button.link);self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
-            end end
+                if self.clickedXCount > 2 then 
+                    self:fuckElon() 
+                    self.clickedXCount = 0
+                    button.func(button)
+                else
+                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. "\n\n" .. button.link,
+                        {
+                            {
+                                text = LocaleHandler:getText("UI", "Ok"),
+                                func = function() love.system.openURL(button.link);self.window:killYourself() end
+                            },
+                            {
+                                text = LocaleHandler:getText("UI", "Cancel"),
+                                func = function() self.window:killYourself() end
+                            }
+                        }
+                    )                    
+                end
+            end
         },
-        --[[
-        {
-            label = "Twitter",
-            image = love.graphics.newImage("images/menu/Twitter.png"),
-            color = {29/255, 161/255, 242/255},
-            func = function() 
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter"),
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
-            end     -- there arent even words to explain how much i hate elon musk
-        },
-        --]]
         {
             label = "YouTube",
             link = "https://www.youtube.com/@Harmoni-de7zk",
@@ -87,17 +73,17 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 self.clickedXCount = 0
 
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube")  .. "\n\n" .. button.link,
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() love.system.openURL(button.link);self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
+                    {
+                        {
+                            text = LocaleHandler:getText("UI", "Ok"),
+                            func = function() love.system.openURL(button.link);self.window:killYourself() end
+                        },
+                        {
+                            text = LocaleHandler:getText("UI", "Cancel"),
+                            func = function() self.window:killYourself() end
+                        }
+                    }
+                )
             end
         },
         {
@@ -108,17 +94,17 @@ function titleScreen:enter(from, resetItems, fadeIn)
             func = function(button) 
                 self.clickedXCount = 0
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord")  .. "\n\n" .. button.link,
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() love.system.openURL(button.link);self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
+                    {
+                        {
+                            text = LocaleHandler:getText("UI", "Ok"),
+                            func = function() love.system.openURL(button.link);self.window:killYourself() end
+                        },
+                        {
+                            text = LocaleHandler:getText("UI", "Cancel"),
+                            func = function() self.window:killYourself() end
+                        }
+                    }
+                )
             end
         },
         {
@@ -129,17 +115,17 @@ function titleScreen:enter(from, resetItems, fadeIn)
             func = function(button) 
                 self.clickedXCount = 0
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To GitHub") .. "\n\n" .. button.link,
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() love.system.openURL(button.link);self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
+                    {
+                        {
+                            text = LocaleHandler:getText("UI", "Ok"),
+                            func = function() love.system.openURL(button.link);self.window:killYourself() end
+                        },
+                        {
+                            text = LocaleHandler:getText("UI", "Cancel"),
+                            func = function() self.window:killYourself() end
+                        }
+                    }
+                )
             end
         }
     }
@@ -177,29 +163,13 @@ function titleScreen:setupSocialButtons()
 end
 
 function titleScreen:fuckElon()
-    self.socials[1] =         {
-            label = "Twitter",
-            link = "https://twitter.com/clothinghanger_",  -- TEMP!!!
-            image = love.graphics.newImage("images/menu/Twitter.png"),
-            color = {29/255, 161/255, 242/255},
-            func = function(button) 
-                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Twitter") .. "\n\n" .. button.link,
-            {
-                {
-                    text = LocaleHandler:getText("UI", "Ok"),
-                    func = function() love.system.openURL(button.link);self.window:killYourself() end
-                },
-                {
-                    text = LocaleHandler:getText("UI", "Cancel"),
-                    func = function() self.window:killYourself() end
-                }
-            })
-                                    
-            end     -- there arent even words to explain how much i hate elon musk
-        }
+    self.socials[1].image = self.socials[1].image2
+    btnStrEasterEgg = "Twitter"
+    self.socials[1].label = "Twitter"
+    self.socials[1].link = "https://twitter.com/clothinghanger_"
+    self.socials[1].color = {29/255, 161/255, 242/255}
 
-            self:setupSocialButtons()
-
+    self:setupSocialButtons()
 end
 
 function titleScreen:fadeIn()
@@ -267,7 +237,9 @@ function titleScreen:raiseWaves()
     Timer.tween(0.5, self, {wavesY = -500}, "in-quad")
 end
 
-
+local function sortByScale(a,b)
+    return a.scale < b.scale
+end
 
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
@@ -280,9 +252,9 @@ function titleScreen:update(dt)
     for i, Button in ipairs(self.socialButtons) do
         Button:update()
     end
-    table.sort(self.socialButtons, function(a,b)
-        return a.scale < b.scale
-    end)
+
+    table.sort(self.socialButtons, sortByScale)
+
     if self.window then self.window:update(dt) end
 
     if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
@@ -298,12 +270,16 @@ function titleScreen:update(dt)
 end
 
 function titleScreen:updateBubbles(dt)
+    local t = love.timer.getTime() * 0.5
     for i, Bubble in ipairs(self.bubbles) do
+        local ang = t + i
+        local sinv = math.sin(ang)
+        local cosv = math.cos(ang)
         Bubble:update(dt)
 
-        Bubble.rotation = Bubble.rotation + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
-        Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
-        Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
+        Bubble.rotation = Bubble.rotation + cosv * 30 * dt
+        Bubble.x, Bubble.y = Bubble.x + sinv * 30 * dt, Bubble.y - 50 * dt
+        Bubble.y = Bubble.y + cosv * 30 * dt
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
 
@@ -323,12 +299,13 @@ function titleScreen:updateBubbles(dt)
         end
     end
 end
+
 function titleScreen:draw()
     love.graphics.draw(self.BG) -- TEMP 
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:draw()
     end
-    love.graphics.print("harmoni lol")
+    --love.graphics.print("harmoni lol")
 
     love.graphics.setColor(1,1,1,0.1)
     love.graphics.push()
@@ -351,11 +328,9 @@ function titleScreen:draw()
     self:drawLogo()
     if self.window then self.window:draw() end
     love.graphics.setColor(0,0,0,self.coverAlpha)
-love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
-love.graphics.setColor(1,1,1,1)
+    love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
+    love.graphics.setColor(1,1,1,1)
 end
-
-
 
 function titleScreen:drawLogo()
     -- the logo drawing is complex so we move it to its own function

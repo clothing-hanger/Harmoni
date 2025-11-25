@@ -1,11 +1,23 @@
+require("love.window")
+
+local w, h = love.window.getDesktopDimensions()
+local targetAspectRatio = 16 / 9
+local targetW, targetH = w * 0.8, h * 0.8
+if (w / h) > targetAspectRatio then
+    targetW = targetH * targetAspectRatio
+else
+    targetH = targetW / targetAspectRatio
+end
+
 HarmoniVersion = "R-0.2.0"
+
 function love.conf(t)
     local debug = true
     t.console = true
     t.window.title = "Harmoni V." .. HarmoniVersion
     t.identity = "CH/Harmoni"  -- we gotta change this eventually. why did i even think putting the version number in identity was a good idea 
-    t.window.width =  1280     -- why did you even put "Rewrite" in it even ?? Just keep it as Harmoni brah
-    t.window.height = 720      -- its changed now
+    t.window.width =  targetW      -- why did you even put "Rewrite" in it even ?? Just keep it as Harmoni brah
+    t.window.height = targetH      -- its changed now
     t.window.resizable = true
     t.window.highdpi = true
     t.window.msaa = 8
