@@ -189,7 +189,7 @@ end
 
     self.coverBG = {alpha = 0}
 
-    self.modifiersMenu = modifiersMenu(20,400,700,1000)
+    self.modifiersMenu = modifiersMenu(20,400,600,670)
 
   --  self:checkForSongButtonClicks(false)
 end
@@ -418,9 +418,11 @@ function songSelect:update(dt)
     self:loadSongs()
     self:loadSongButtonImages()
     self:checkForSongLoop()
-    self.modifiersMenu:update()
+    self.modifiersMenu:update(dt)
     self.ignoreInterpolation = false
 
+    local modMenuTargetX = (self.menuState == "song" and -600) or 10
+    self.modifiersMenu.x = self.modifiersMenu.x + (modMenuTargetX - self.modifiersMenu.x) * 10 * dt
     local BGDimTarget = (self.menuState == "song" and 0) or 0.7
     BGDarkness = BGDarkness + (BGDimTarget - BGDarkness) * 10 * dt
 
@@ -511,7 +513,7 @@ function songSelect:updateBGImage()
                     previousBG = currentDisplayedBG
                     currentDisplayedBG = SongButton.image
                     -- hell, just select the current song
-                   -- selectedSong = i     -- for what tho
+                    selectedSong = i     -- for what tho
                     self.currentSongInfo = SongButton:returnInfo()
                     fadeBG()
                 end
