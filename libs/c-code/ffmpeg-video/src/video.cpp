@@ -2,6 +2,8 @@
 #include <cstring>
 #include <cstdlib>
 #include <stdexcept>
+#include <thread>
+#include <algorithm>
 
 #define FILE_BUFFER_SIZE 1048576
 
@@ -19,11 +21,29 @@ int Video::fileRead(void* ptr, uint8_t* buf, int len) {
 
 int64_t Video::fileSeek(void* ptr, int64_t pos, int whence) {
     auto* video = reinterpret_cast<Video*>(ptr);
+
     if (whence == AVSEEK_SIZE)
         return video->fileSize;
 
+    if (whence == SEEK_SET) {
+        if (pos < 0) return -1;
+        video->fileOffset = pos;
+        return video->fileOffset;
+    } else if (whence == SEEK_CUR) {
+        int64_t newOff = video->fileOffset + pos;
+        if (newOff < 0) return -1;
+        video->fileOffset = newOff;
+        return video->fileOffset;
+    } else if (whence == SEEK_END) {
+        int64_t newOff = video->fileSize + pos;
+        if (newOff < 0) return -1;
+        video->fileOffset = newOff;
+        return video->fileOffset;
+    }
+
+    if (pos < 0 || pos > video->fileSize) return -1;
     video->fileOffset = pos;
-    return pos;
+    return video->fileOffset;
 }
 
 bool Video::open(std::string& error) { // straight up rubbin' my belly
@@ -36,6 +56,8 @@ bool Video::open(std::string& error) { // straight up rubbin' my belly
         avio_alloc_context(fileBuffer, FILE_BUFFER_SIZE, 0, this, fileRead, nullptr, fileSeek)
     );
     if (!ioContext) { error = "Can't allocate AVIOContext"; return false; }
+
+    ioContext->seekable = 1;
 
     formatContext.reset(nullptr);
 
@@ -68,6 +90,9 @@ bool Video::open(std::string& error) { // straight up rubbin' my belly
         error = "Can't fill codec context"; return false;
     }
 
+    codecContext->thread_count = std::thread::hardware_concurrency();
+    codecContext->thread_type = FF_THREAD_FRAME;
+
     if (avcodec_open2(codecContext.get(), codec, nullptr) != 0) {
         error = "Can't open codec"; return false;
     }
@@ -77,7 +102,7 @@ bool Video::open(std::string& error) { // straight up rubbin' my belly
     if (!frame || !frameRGB) { error = "Can't allocate frames"; return false; }
 
     imageSize = av_image_get_buffer_size(AV_PIX_FMT_RGBA, codecContext->width, codecContext->height, 1);
-    image = static_cast<uint8_t*>(malloc(imageSize));
+    image = static_cast<uint8_t*>(av_malloc(imageSize));
     if (!image) { error = "Can't allocate image buffer"; return false; }
 
     if (av_image_fill_arrays(
@@ -87,12 +112,20 @@ bool Video::open(std::string& error) { // straight up rubbin' my belly
         error = "Can't fill image arrays"; return false;
     }
 
-    swsContext.reset(sws_getContext(
-        codecContext->width, codecContext->height, codecContext->pix_fmt,
-        codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
-        SWS_FAST_BILINEAR, nullptr, nullptr, nullptr
-    ));
-    if (!swsContext) { error = "Can't allocate SwsContext"; return false; }
+    if (codecContext->pix_fmt != AV_PIX_FMT_RGBA) {
+        swsContext.reset(sws_getContext(
+            codecContext->width, codecContext->height, codecContext->pix_fmt,
+            codecContext->width, codecContext->height, AV_PIX_FMT_RGBA,
+            SWS_FAST_BILINEAR, nullptr, nullptr, nullptr
+        ));
+        if (!swsContext) { error = "Can't allocate SwsContext"; return false; }
+    } else {
+        swsContext.reset(nullptr);
+    }
+
+    av_init_packet(&reusablePkt);
+    reusablePkt.data = nullptr;
+    reusablePkt.size = 0;
 
     return true;
 }
@@ -103,6 +136,8 @@ void Video::close() {
 
     if (image) { av_free(image); image = nullptr; }
 
+    av_packet_unref(&reusablePkt);
+
     frame.reset();
     frameRGB.reset();
     codecContext.reset();
@@ -111,8 +146,7 @@ void Video::close() {
 }
 
 bool Video::readFrame(void* dst, double& timestamp) { // this could probably be better but i lowkey dgaf
-    AVPacket pkt;
-    av_new_packet(&pkt, 0);
+    AVPacket& pkt = reusablePkt;
 
     while (av_read_frame(formatContext.get(), &pkt) >= 0) {
         if (pkt.stream_index != streamIndex) {
@@ -126,14 +160,56 @@ bool Video::readFrame(void* dst, double& timestamp) { // this could probably be 
         }
 
         while (avcodec_receive_frame(codecContext.get(), frame.get()) == 0) {
-            sws_scale(
-                swsContext.get(),
-                frame->data, frame->linesize,
-                0, codecContext->height,
-                frameRGB->data, frameRGB->linesize
-            );
+            if (dst) {
+                if (av_image_fill_arrays(
+                        frameRGB->data, frameRGB->linesize,
+                        static_cast<uint8_t*>(dst),
+                        AV_PIX_FMT_RGBA,
+                        codecContext->width, codecContext->height, 1) < 0) {
+                    av_image_fill_arrays(frameRGB->data, frameRGB->linesize, image, AV_PIX_FMT_RGBA,
+                                         codecContext->width, codecContext->height, 1);
+                }
+            } else {
+                av_image_fill_arrays(frameRGB->data, frameRGB->linesize, image, AV_PIX_FMT_RGBA,
+                                     codecContext->width, codecContext->height, 1);
+            }
 
-            if (dst) std::memcpy(dst, image, imageSize);
+            if (swsContext) {
+                sws_scale(
+                    swsContext.get(),
+                    frame->data, frame->linesize,
+                    0, codecContext->height,
+                    frameRGB->data, frameRGB->linesize
+                );
+            } else {
+                if (dst) {
+                    int srcLinesize = frame->linesize[0];
+                    int dstLinesize = frameRGB->linesize[0];
+                    uint8_t* srcPtr = frame->data[0];
+                    uint8_t* dstPtr = frameRGB->data[0];
+                    if (srcLinesize == dstLinesize) {
+                        std::memcpy(dstPtr, srcPtr, static_cast<size_t>(dstLinesize) * codecContext->height);
+                    } else {
+                        int copyWidth = std::min(srcLinesize, dstLinesize);
+                        for (int y = 0; y < codecContext->height; ++y) {
+                            std::memcpy(dstPtr + y * dstLinesize, srcPtr + y * srcLinesize, copyWidth);
+                        }
+                    }
+                } else {
+                    int srcLinesize = frame->linesize[0];
+                    int dstLinesize = frameRGB->linesize[0];
+                    uint8_t* srcPtr = frame->data[0];
+                    uint8_t* dstPtr = frameRGB->data[0];
+                    if (srcLinesize == dstLinesize) {
+                        std::memcpy(dstPtr, srcPtr, static_cast<size_t>(dstLinesize) * codecContext->height);
+                    } else {
+                        int copyWidth = std::min(srcLinesize, dstLinesize);
+                        for (int y = 0; y < codecContext->height; ++y) {
+                            std::memcpy(dstPtr + y * dstLinesize, srcPtr + y * srcLinesize, copyWidth);
+                        }
+                    }
+                }
+            }
 
             int64_t pts = frame->best_effort_timestamp;
             AVRational base = stream->time_base;
@@ -158,14 +234,41 @@ bool Video::seek(double time, std::string& error) {
     if (stream->start_time != AV_NOPTS_VALUE)
         target_pts += stream->start_time;
 
-    int flags = AVSEEK_FLAG_ANY;
-
-    if (av_seek_frame(formatContext.get(), streamIndex, target_pts, flags) < 0) {
+    if (av_seek_frame(formatContext.get(), streamIndex, target_pts, AVSEEK_FLAG_BACKWARD) < 0) {
         error = "Seek failed";
         return false;
     }
 
     avcodec_flush_buffers(codecContext.get());
+
+    AVPacket& pkt = reusablePkt;
+
+    double decoded_ts = 0.0;
+
+    while (av_read_frame(formatContext.get(), &pkt) >= 0) {
+        if (pkt.stream_index != streamIndex) {
+            av_packet_unref(&pkt);
+            continue;
+        }
+
+        if (avcodec_send_packet(codecContext.get(), &pkt) < 0) {
+            av_packet_unref(&pkt);
+            continue;
+        }
+
+        while (avcodec_receive_frame(codecContext.get(), frame.get()) == 0) {
+            int64_t pts = frame->best_effort_timestamp;
+            decoded_ts = pts * (double)tb.num / tb.den;
+
+            if (decoded_ts >= time) {
+                av_packet_unref(&pkt);
+                return true;
+            }
+        }
+
+        av_packet_unref(&pkt);
+    }
+
     return true;
 }
 

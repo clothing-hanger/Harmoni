@@ -34,7 +34,7 @@ local function getenv(name)
     return ffi.string(ffi.C.getenv(name))
 end
 
-local CURRENT_VIDEO_VERSION = "1.0"
+local CURRENT_VIDEO_VERSION = "1.1"
 
 local installThread = love.thread.newThread([[
 require("love.system")

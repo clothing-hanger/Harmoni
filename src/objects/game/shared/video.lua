@@ -87,10 +87,9 @@ function video:update(dt)
         if self.checkTimer >= interval then
             self.checkTimer = self.checkTimer - interval
             tryExcept(function()
-                while self.time >= self.video:tell() do
+                if self.time >= self.video:tell() then
                     if not self.video:read(self.imageData:getPointer()) then
                         self.playing = false
-                        break
                     end
                 end
                 self.image:replacePixels(self.imageData)
@@ -117,7 +116,10 @@ end
 function video:seek(time)
     if self.video then
         self.video:seek(time)
-
+        tryExcept(function()
+            self.video:read(self.imageData:getPointer())
+            self.image:replacePixels(self.imageData)
+        end)
         self.time = time
         self.previousFrameTime = love.timer.getTime()
         self.forcedUpdate = false
