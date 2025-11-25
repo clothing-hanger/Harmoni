@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <stdexcept>
 
-#define FILE_BUFFER_SIZE 65536
+#define FILE_BUFFER_SIZE 1048576
 
 Video::Video(uint8_t* content, int64_t size)
     : fileContent(content), fileSize(size), fileOffset(0) {}
