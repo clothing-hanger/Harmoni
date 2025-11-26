@@ -186,7 +186,7 @@ function titleScreen:setupSocialButtons()
     self.socialButtons = {}
         for i, Social in ipairs(self.socials) do
         local width, height = 100,100
-        local spacing = 20
+        local spacing = 10
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
@@ -194,7 +194,7 @@ function titleScreen:setupSocialButtons()
             button({
                 hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, 
                 image = Social.image, text = Social.label, func = Social.func, width = 100, 
-                height = 100, scaleLARGE = 1.25
+                height = 100, scaleLARGE = 1.3
             }) 
         )
     end
@@ -205,7 +205,7 @@ function titleScreen:fuckElon()
     self.socials[1].image = self.socials[1].image2
     btnStrEasterEgg = "Twitter"
     self.socials[1].label = "Twitter"
-    self.socials[1].link = "https://twitter.com/clothinghanger_"
+    self.socials[1].link = "https://twitter.com/clothinghanger_"  -- knowing how dumb X is they might end up making this link not work 
     self.socials[1].color = {29/255, 161/255, 242/255}
 
     self:setupSocialButtons()
