@@ -101,6 +101,18 @@ end
 
 function love.quit()
     CHE:exit()
+
+    if State.current() == States.menu.titleScreen then
+        if not States.menu.titleScreen.quitInProgress then
+            States.menu.titleScreen.quitInProgress = true
+            States.menu.titleScreen:raiseWaves()
+            States.menu.titleScreen:fadeScreen()
+            Timer.after(0.8, function() love.event.quit() end)
+            return true
+        else
+            return false
+        end
+    end
 end
 
 
