@@ -5,8 +5,9 @@ function toggleSetting:new(x,y,width,height,default,setValue)
     self.x,self.y,self.width,self.height,self.default,self.setValue = x,y,width,height,default,setValue
     self.pillWidth  = self.width/10  -- i really need to move the rest of the pill stuff here,, idk why i put it all in Draw
 
-    self.handleCount = 10
+    self.handleCount = 2
     self.handles = {}
+    self.handletween = {}
 
     self.pillHeight = self.height/3
     self.pillX      = self.x + self.width - self.pillWidth * 1.5
@@ -56,15 +57,11 @@ end
 
 function toggleSetting:tweenHandle()
     for i, Handle in ipairs(self.handles) do
-        local delay = (i * 0.1)
-        local time = 0
-        local shortTime = 0.3
-        local longTime = 1
-
-        local type = ""
-        if i == 1 then type = "out-expo"; time = shortTime else type = "in-expo"; time = time+i*0.02 end
+        local delay = (i * 1)
+        local time = 1
         local x = not self.toggle  and (self.pillX + self.circleRadius + 2) or  (self.pillX + self.pillWidth - self.circleRadius - 2)
-        Timer.tween(time, Handle, {x = x}, type)
+        if self.handletween[i] then Timer.cancel(self.handletween[i]) end
+        self.handletween[i] = Timer.tween(time+delay, Handle, {x = x}, "out-elastic")
     end
 end
 
@@ -94,14 +91,8 @@ function toggleSetting:draw()
     love.graphics.setColor(194/255,194/255,194/255,0.7)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.pillCornerRadius, self.pillCornerRadius)
 
-    -- draw pill
-  --  love.graphics.setColor(0,0,0)
-  --  love.graphics.rectangle("line", pillX, pillY, pillWidth, pillHeight, pillCornerRadius, pillCornerRadius)
-
     -- we are going to just steal Android's design for this lol
 
-  --  self.pillLineWidthTarget = (self.toggle and 0) or 10
-    --self.pillLineWidth = self.pillLineWidth + (self.pillLineWidthTarget - self.pillLineWidth) * 10 --* love.timer.getDelta()
     love.graphics.setLineWidth(self.pillLineWidth)
     love.graphics.setColor(0,0,0)
     love.graphics.rectangle("line", self.pillX, self.pillY, self.pillWidth, self.pillHeight, self.pillCornerRadius, self.pillCornerRadius)
@@ -116,18 +107,16 @@ function toggleSetting:draw()
     -- handle
     love.graphics.setColor(self.pillCircleColor,self.pillCircleColor,self.pillCircleColor)
 
-    --local circleX = not self.toggle  and (self.pillX + circleRadius + 2) or  (self.pillX + self.pillWidth - circleRadius - 2)
 
-    --local circleY = self.pillY + self.pillHeight/2
+    local leftX  = math.min(self.handles[1].x, self.handles[2].x)
+    local rightX = math.max(self.handles[1].x, self.handles[2].x)
 
-    --love.graphics.circle("fill", circleX, circleY, self.pillCircleRadius)
-    for i, Handle in ipairs(self.handles) do
-        love.graphics.circle("fill", Handle.x,Handle.y, self.pillCircleRadius)
-    end
+    local pillCircleLeftEdgge  = leftX - self.pillCircleRadius
+    local width = (rightX - leftX) +self.pillCircleRadius * 2
 
-    -- reset
+    love.graphics.rectangle("fill", pillCircleLeftEdgge, self.handles[1].y-self.pillCircleRadius, width,self.pillCircleRadius * 2,self.pillCircleRadius,self.pillCircleRadius)
+
     love.graphics.setColor(1,1,1)
-    --]]
 end
 
 return toggleSetting
