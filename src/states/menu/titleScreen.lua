@@ -63,34 +63,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.socialButtons = {}
     self.clickedXCount = 0
     self.socials = {
-        {
-            label = "X",
-            link = "https://x.com/clothinghanger_",  -- TEMP!!!
-            image = love.graphics.newImage("images/menu/X.png"), 
-            image2 = love.graphics.newImage("images/menu/Twitter.png"),
-            func = function(button) 
-                self.clickedXCount = self.clickedXCount + 1
-                if self.clickedXCount > 2 then 
-                    self:fuckElon() 
-                    self.clickedXCount = 0
-                    button.func(button)
-                else
-                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. 
-                        "\n\n" .. button.link,
-                        {
-                            {
-                                text = LocaleHandler:getText("UI", "Ok"),
-                                func = function() love.system.openURL(button.link);self.window:killYourself() end
-                            },
-                            {
-                                text = LocaleHandler:getText("UI", "Cancel"),
-                                func = function() self.window:killYourself() end
-                            }
-                        }
-                    )                    
-                end
-            end
-        },
+
         {
             label = "YouTube",
             link = "https://www.youtube.com/@Harmoni-de7zk",
@@ -135,6 +108,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 )
             end
         },
+        
         {
             label = "GitHub",
             link = "https://github.com/clothhang/Harmoni",
@@ -155,7 +129,35 @@ function titleScreen:enter(from, resetItems, fadeIn)
                     }
                 )
             end
-        }
+        },
+                {
+            label = "X",
+            link = "https://x.com/clothinghanger_",  -- TEMP!!!
+            image = love.graphics.newImage("images/menu/X.png"), 
+            image2 = love.graphics.newImage("images/menu/Twitter.png"),
+            func = function(button) 
+                self.clickedXCount = self.clickedXCount + 1
+                if self.clickedXCount > 2 then 
+                    self:fuckElon() 
+                    self.clickedXCount = 0
+                    button.func(button)
+                else
+                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. 
+                        "\n\n" .. button.link,
+                        {
+                            {
+                                text = LocaleHandler:getText("UI", "Ok"),
+                                func = function() love.system.openURL(button.link);self.window:killYourself() end
+                            },
+                            {
+                                text = LocaleHandler:getText("UI", "Cancel"),
+                                func = function() self.window:killYourself() end
+                            }
+                        }
+                    )                    
+                end
+            end
+        },
     }
 
     self:setupSocialButtons()
@@ -187,6 +189,7 @@ function titleScreen:setupSocialButtons()
         for i, Social in ipairs(self.socials) do
         local width, height = 100,100
         local spacing = 10
+        if i == 4 then spacing = 5 end
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
@@ -202,11 +205,12 @@ function titleScreen:setupSocialButtons()
 end
 
 function titleScreen:fuckElon()
-    self.socials[1].image = self.socials[1].image2
+    self.socialButtons[4].x = self.socialButtons[4].x+5 -- i have no idea why this doesnt work? 
+    self.socials[4].image = self.socials[4].image2
     btnStrEasterEgg = "Twitter"
-    self.socials[1].label = "Twitter"
-    self.socials[1].link = "https://twitter.com/clothinghanger_"  -- knowing how dumb X is they might end up making this link not work 
-    self.socials[1].color = {29/255, 161/255, 242/255}
+    self.socials[4].label = "Twitter"
+    self.socials[4].link = "https://twitter.com/clothinghanger_"  -- knowing how dumb X is they might end up making this link not work 
+    self.socials[4].color = {29/255, 161/255, 242/255}
 
     self:setupSocialButtons()
 end
