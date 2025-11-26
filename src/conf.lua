@@ -15,7 +15,7 @@ function love.conf(t)
     local debug = true
     t.console = true
     t.window.title = "Harmoni V." .. HarmoniVersion
-    t.identity = "CH/Harmoni"  -- we gotta change this eventually. why did i even think putting the version number in identity was a good idea 
+    t.identity = "Harmoni"  
     t.window.width =  targetW      -- why did you even put "Rewrite" in it even ?? Just keep it as Harmoni brah
     t.window.height = targetH      -- its changed now
     t.window.resizable = true
@@ -26,7 +26,7 @@ function love.conf(t)
     t.modules.physics = false
 
     if debug then 
-        t.window.title = "Harmoni " .. HarmoniVersion .. " |  LOVE Version " .. (love.getVersion() or "UNKNOWN (how is this possible?")
+        t.window.title = "Harmoni V." .. HarmoniVersion .. " |  LOVE Version " .. (love.getVersion() or "UNKNOWN (how is this possible?")
                                                                                             -- I made this conf.lua when love12 didn't have a codename
                                                                                             -- idk how it ended up like this though? idk
     end
