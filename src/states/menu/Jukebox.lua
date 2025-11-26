@@ -145,35 +145,80 @@ function jukebox:fullscreenVideo()
 end
 
 function jukebox:setupSongList()
-    self.songList = SongListManager.getSongList(musicPath)  -- why does this function even take an argument? useless ass "feature"
-    for i, Song in ipairs(self.songList) do                 -- it doesn't NEED the argument, its an optional param
-        local x, y = self.songButtonX, (self.songButtonHeight + self.songButtonSpacing) * i
-        local width, height = self.songButtonWidth, self.songButtonHeight
-        local name, artist, audio
-        local songInfo = nil
-        local bg
-        local songContents = love.filesystem.getDirectoryItems(musicPath .. Song)
-        for _, File in ipairs(songContents) do
-            if getFileExtension(File) == "harmc" then
-                local path = musicPath .. Song .. "/" .. File
-                songInfo = ChartParse.harmcMeta(path)
-                break
-            end
+    self.songButtons = {}
+
+    self.songLoadChannel = love.thread.getChannel("jukebox_song_load")
+    self.songDoneChannel = love.thread.getChannel("jukebox_song_done")
+
+    self.songLoadChannel:clear()
+    self.songDoneChannel:clear()
+
+    self.songThread = love.thread.newThread([[
+local ChartParse = require("modules.chartParse")
+local musicPath = ...
+
+local loadChannel = love.thread.getChannel("jukebox_song_load")
+local doneChannel = love.thread.getChannel("jukebox_song_done")
+
+local function getExtension(path)
+    return path:match("^.+%.(.+)$")
+end
+
+local function loadHarmc(directory)
+    local items = love.filesystem.getDirectoryItems(directory)
+    for _, f in ipairs(items) do
+        if getExtension(f) == "harmc" then
+            local ok, meta = pcall(function()
+                return ChartParse.harmcMeta(directory .. "/" .. f)
+            end)
+            if ok then return meta end
         end
-        if not songInfo then
-            print("oopsies :3 no valid harmc file found for song- " .. Song)
-            goto continue
-        end
-        name = songInfo.title or "???"
-        artist = songInfo.artist or "???"
-        audio = songInfo.audioFile or ""
-        if songInfo.backgroundVideo then bg = songInfo.backgroundVideo else bg = songInfo.backgroundFile end
-        table.insert(self.songButtons, jukeboxSongButton(x, y, width, height, name, artist, audio, musicPath .. Song .. "/", bg))
-        ::continue::
+    end
+    return nil
+end
+
+local songs = love.filesystem.getDirectoryItems(musicPath)
+for _, folder in ipairs(songs) do
+    local fullPath = musicPath .. folder .. "/"
+
+    local meta = loadHarmc(fullPath)
+    if meta then
+        local bg = meta.backgroundVideo or meta.backgroundFile
+        loadChannel:push({
+            name   = meta.title or "???",
+            artist = meta.artist or "???",
+            audio  = meta.audioFile or "",
+            bg     = bg,
+            path   = fullPath
+        })
     end
 end
 
+doneChannel:push(true)
+]])
+    self.songThread:start(musicPath)
+
+    self.songLoadTimer = 0
+end
+
 function jukebox:update(dt)
+    if self.songLoadChannel then
+        local info = self.songLoadChannel:peek()
+        if info then
+            self.songLoadChannel:pop()
+
+            local x = self.songButtonX
+            local y = (self.songButtonHeight + self.songButtonSpacing) * (#self.songButtons + 1)
+
+            table.insert(self.songButtons, jukeboxSongButton(
+                x, y,
+                self.songButtonWidth, self.songButtonHeight,
+                info.name, info.artist, info.audio,
+                info.path, info.bg
+            ))
+        end
+    end
+
     if self.scrubberHeld then
         self.frametimer = self.frametimer + 1
     else
@@ -481,6 +526,10 @@ function jukebox:exit()
     if self.video then
         self.songBG = nil
         self.video = false
+    end
+
+    if self.songThread and self.songThread:isRunning() then
+        self.songThread:kill()
     end
 
     if self.fullscreened then
