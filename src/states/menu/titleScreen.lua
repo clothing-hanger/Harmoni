@@ -1,5 +1,6 @@
 local titleScreen = State("titleScreen")
 local fade = 0
+local screenFade = {0}
 
 local btnStrEasterEgg = "X"
 function titleScreen:enter(from, resetItems, fadeIn)
@@ -17,10 +18,35 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.buttonHeight = 100 
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
-        {label = LocaleHandler:getText("Menu", "Play"), func = function() self:raiseWaves(); State.transition("waveDissolve", States.menu.songSelect) end, color1 = {94/255,252/255,141/255,1},color2 = {44/255,251/255,106/255,0}},
-        {label = LocaleHandler:getText("Menu", "Jukebox"), func = function() State.transition("waveDissolve",States.menu.jukebox, self) end, color1 = {142/255,249/255,243/255,1},color2 = {88/255,246/255,238/255,1}},
-        {label = LocaleHandler:getText("Menu", "Settings"), func = function() State.switch(States.menu.settingsMenu) end, color1 = {147/255,190/255,223/255,1},color2 = {106/255,165/255,210/255,1}},
-        {label = LocaleHandler:getText("Menu", "Exit"), func = function() love.event.quit() end, color1 = {1,1,1,1}, color2 = {1,1,1,1}},
+        {
+            label = LocaleHandler:getText("Menu", "Play"), 
+            func = function() 
+                self:raiseWaves()
+                State.transition("waveDissolve", States.menu.songSelect) 
+            end, 
+            color1 = {94/255,252/255,141/255,1},
+            color2 = {44/255,251/255,106/255,0}
+        },
+        {
+            label = LocaleHandler:getText("Menu", "Jukebox"), 
+            func = function() State.transition("waveDissolve",States.menu.jukebox, self) end, 
+            color1 = {142/255,249/255,243/255,1},
+            color2 = {88/255,246/255,238/255,1}
+        },
+        {
+            label = LocaleHandler:getText("Menu", "Settings"), 
+            func = function() State.switch(States.menu.settingsMenu) end, 
+            color1 = {147/255,190/255,223/255,1},
+            color2 = {106/255,165/255,210/255,1}
+        },
+        {
+            label = LocaleHandler:getText("Menu", "Exit"), 
+            func = function() 
+                love.event.quit()
+            end, 
+            color1 = {1,1,1,1}, 
+            color2 = {1,1,1,1}
+        },
     }
 
     if resetItems then
@@ -49,7 +75,8 @@ function titleScreen:enter(from, resetItems, fadeIn)
                     self.clickedXCount = 0
                     button.func(button)
                 else
-                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. "\n\n" .. button.link,
+                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. 
+                        "\n\n" .. button.link,
                         {
                             {
                                 text = LocaleHandler:getText("UI", "Ok"),
@@ -88,7 +115,8 @@ function titleScreen:enter(from, resetItems, fadeIn)
         },
         {
             label = "Discord",
-            link = "https://discord.gg/E2xc2YjADs",  -- TEMP!! the real link will be on a website and the game will open the website, which redirects to the invite (so if the invite breaks it wont stop working for people who arent updated)
+            link = "https://discord.gg/E2xc2YjADs",  -- TEMP!! the real link will be on a website and the game will open the website, which redirects to the invite
+                                                     -- (so if the invite breaks it wont stop working for people who arent updated)
             image = love.graphics.newImage("images/menu/Discord.png"),
             color = {88/255,101/255,242/255},
             func = function(button) 
@@ -135,7 +163,12 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.buttons = {}
 
     for i = 1,#self.buttonLabels do
-        table.insert(self.buttons, buttonSlideOut(self.buttonX, 820 + (i-1) * (self.buttonHeight + buttonSpacing), self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, self.buttonLabels[i].color1, self.buttonLabels[i].color2))
+        table.insert(self.buttons, 
+            buttonSlideOut(self.buttonX, 820 + (i-1) * (self.buttonHeight + buttonSpacing), 
+                            self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
+                            self.buttonLabels[i].color1, self.buttonLabels[i].color
+            )
+        )
     end
 
     if resetItems then
@@ -157,7 +190,13 @@ function titleScreen:setupSocialButtons()
         local x,y = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
-        table.insert(self.socialButtons,button({hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, image = Social.image, text = Social.label, func = Social.func, width = 100, height = 100, scaleLARGE = 1.25}) )
+        table.insert(self.socialButtons, 
+            button({
+                hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, 
+                image = Social.image, text = Social.label, func = Social.func, width = 100, 
+                height = 100, scaleLARGE = 1.25
+            }) 
+        )
     end
 
 end
@@ -235,6 +274,10 @@ end
 
 function titleScreen:raiseWaves()
     Timer.tween(0.5, self, {wavesY = -500}, "in-quad")
+end
+
+function titleScreen:fadeScreen()
+    Timer.tween(0.5, screenFade, {1}, "in-quad")
 end
 
 local function sortByScale(a,b)
@@ -327,7 +370,7 @@ function titleScreen:draw()
     end
     self:drawLogo()
     if self.window then self.window:draw() end
-    love.graphics.setColor(0,0,0,self.coverAlpha)
+    love.graphics.setColor(0,0,0,self.coverAlpha + screenFade[1])
     love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)
 end
