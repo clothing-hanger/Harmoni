@@ -2,7 +2,7 @@ local preloadState = State("preloadState")
 
 local t = 0
 local progress = 0
-local step = 0
+local step = -10
 local totalSteps = 2
 local installing = false
 
@@ -27,33 +27,33 @@ end
 function preloadState:update(dt)
 
     t = t + dt
+        if step < 0 then
+        if not installing then
+            installing = true
+            step = step + 1
+        elseif installing and CLibs:isInstallationDone() then
+            step = step + 1
+            CLibs:after()
+            Timer.after(1, function()
+                States.menu.titleScreen.bubbles = self.bubbles
+                States.menu.titleScreen.wavesY = self.wavesY
+                States.menu.titleScreen.squiglyLines = self.squiglyLines
+                States.menu.titleScreen.layerWaves = self.layerWaves
+                States.menu.titleScreen.images = self.images
+                State.switch(States.menu.titleScreen, false, true)
+            end)
+        end
 
-    if not installing then
-        installing = true
-        step = step + 1
-    elseif installing and CLibs:isInstallationDone() then
-        step = step + 1
-        CLibs:after()
-        Timer.after(1, function()
-            States.menu.titleScreen.bubbles = self.bubbles
-            States.menu.titleScreen.wavesY = self.wavesY
-            States.menu.titleScreen.squiglyLines = self.squiglyLines
-            States.menu.titleScreen.layerWaves = self.layerWaves
-            States.menu.titleScreen.images = self.images
-            State.switch(States.menu.titleScreen, false, true)
-        end)
-    end
-
-    local targetProgress = step / totalSteps
-    progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
-
+        local targetProgress = step / totalSteps
+        progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
+    else step = step + 1 end
 end
 
 function preloadState:draw()
     
     local w, h = baseScreenRatio.x, baseScreenRatio.y
     love.graphics.setColor(1,1,1,1)
-
+ 
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
     local msg = "loading :3"
