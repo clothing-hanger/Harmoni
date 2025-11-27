@@ -71,6 +71,8 @@ function toggleSetting:getValue(str)
 end
 
 function toggleSetting:draw()
+    love.graphics.push()
+    love.graphics.translate(self.x, 0)
     -- backdrop
     love.graphics.setColor(194/255,194/255,194/255,0.7)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.pillCornerRadius, self.pillCornerRadius)
@@ -99,6 +101,7 @@ function toggleSetting:draw()
     )
 
     love.graphics.setColor(1,1,1)
+    love.graphics.pop()
 end
 
 return toggleSetting
