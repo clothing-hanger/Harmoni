@@ -168,7 +168,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
         table.insert(self.buttons, 
             buttonSlideOut(self.buttonX, 820 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
-                            self.buttonLabels[i].color1, self.buttonLabels[i].color
+                            self.buttonLabels[i].color1, self.buttonLabels[i].color2
             )
         )
     end
