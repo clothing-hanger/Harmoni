@@ -25,8 +25,7 @@ function preloadState:enter()
 end
 
 function preloadState:update(dt)
-    if Input:pressed("menuConfirm") and self.debug then     CLibs:setupIfNeeded()
-    end
+
     t = t + dt
 
     if not installing then
