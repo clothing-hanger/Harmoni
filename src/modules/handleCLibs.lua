@@ -36,7 +36,8 @@ end
 
 local CURRENT_VIDEO_VERSION = "1.2"
 
-local installThread = love.thread.newThread([[
+local installThread
+local installThreadCode = love.thread.newThread([[
 require("love.system")
 require("love.filesystem")
 
@@ -74,6 +75,7 @@ local CLibs = {}
 
 function CLibs:setupIfNeeded()
     love.filesystem.createDirectory("clibs")
+    installThread = love.thread.newThread(installThreadCode)
     installThread:start()
 end
 
