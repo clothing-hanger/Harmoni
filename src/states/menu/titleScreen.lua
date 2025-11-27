@@ -205,14 +205,14 @@ function titleScreen:setupSocialButtons()
 end
 
 function titleScreen:fuckElon()
-    self.socialButtons[4].x = self.socialButtons[4].x+5 -- i have no idea why this doesnt work? 
     self.socials[4].image = self.socials[4].image2
     btnStrEasterEgg = "Twitter"
     self.socials[4].label = "Twitter"
     self.socials[4].link = "https://twitter.com/clothinghanger_"  -- knowing how dumb X is they might end up making this link not work 
     self.socials[4].color = {29/255, 161/255, 242/255}
-
+    
     self:setupSocialButtons()
+    self.socialButtons[4].x = self.socialButtons[4].x+20
 end
 
 function titleScreen:fadeIn()
