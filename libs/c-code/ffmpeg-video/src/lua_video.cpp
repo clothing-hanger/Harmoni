@@ -104,6 +104,12 @@ static int lua_Video_tell(lua_State* L) {
     return 1;
 }
 
+static int lua_Video_getFPS(lua_State* L) {
+    auto* video = checkVideo(L, 1);
+    lua_pushnumber(L, video->getFPS());
+    return 1;
+}
+
 static const luaL_Reg video_methods[] = {
     {"close", lua_Video_close},
     {"read", lua_Video_read},
@@ -111,6 +117,8 @@ static const luaL_Reg video_methods[] = {
     {"getDimensions", lua_Video_getDimensions},
     {"getDuration", lua_Video_getDuration},
     {"tell", lua_Video_tell},
+    {"getFPS", lua_Video_getFPS},
+    {"__gc", lua_Video_gc},
     {NULL, NULL}
 };
 
