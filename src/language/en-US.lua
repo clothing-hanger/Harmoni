@@ -1,7 +1,8 @@
 Language = {
     Misc = {
         ["Placeholder"] = "PLACEHOLDER",
-        ["Is Beta"] = "I'm still in beta! Expect bugs!\n\nPlease report any bugs you find on GitHub,\nand consider donating to help with development! \n\nAny help with this game is appreciated!!"
+        ["Is Beta"] = "I'm still in beta! Expect bugs!\n\nPlease report any bugs you find on GitHub,\nand consider donating to help with development! \n\nAny help with this game is appreciated!!",
+        ["might fucking die"] = "THE GAME MIGHT CRASH RIGHT AFTER THIS!!! IDK WHY BUT IF IT HAPPENS JUST RELAUNCH IT\n\n 😭😭😭😭 sorrry :("
     },
     Menu = {
         ["Play"] = "Play",

@@ -75,7 +75,7 @@ function love.load(args)
     -- seems to be the best place to load these so,,, we load modifiers in main lol 
     modifiersTable = require("modules.modifiers")
 
-    State.switch(States.menu.preloadState)
+    State.switch(States.menu.splash)
 
     -- load objects
     printToConsole(SkinHandler:getRandomColors())

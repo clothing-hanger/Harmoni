@@ -40,7 +40,7 @@ function preloadState:update(dt)
             States.menu.titleScreen.squiglyLines = self.squiglyLines
             States.menu.titleScreen.layerWaves = self.layerWaves
             States.menu.titleScreen.images = self.images
-            State.switch(States.menu.splash)
+            State.switch(States.menu.titleScreen, false, true)
         end)
     end
 
@@ -103,7 +103,7 @@ function preloadState:draw()
     love.graphics.setColor(1,1,1,1)
 
     States.menu.titleScreen.drawLogo(self)
-    self.throbbert:draw()
+    --self.throbbert:draw()
     
 end
 

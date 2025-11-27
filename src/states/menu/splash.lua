@@ -5,7 +5,9 @@ function splash:enter()
     self.alpha = 0
     self.splashScreens = {
         {screen = "beta", time = 2, msg = LocaleHandler:getText("Misc", "Is Beta")},
-        {screen = "headphones", time = 5, msg = LocaleHandler:getText("UI", "Headphones Recommended") .. "\n\n" .. LocaleHandler:getText("UI","Headphones Better"), img = love.graphics.newImage("images/menu/headphones.png")}
+        {screen = "headphones", time = 5, msg = LocaleHandler:getText("UI", "Headphones Recommended") .. "\n\n" .. LocaleHandler:getText("UI","Headphones Better"), img = love.graphics.newImage("images/menu/headphones.png")},
+        {screen = "crash", time = 5, msg = LocaleHandler:getText("Misc", "might fucking die")}
+
     }
     self:setupShit()
 end
@@ -22,7 +24,7 @@ function splash:setupShit()
         self.currentMessage = self.splashScreens[self.splashNumber].msg
         if self.splashScreens[self.splashNumber].img then self.currentImage = self.splashScreens[self.splashNumber].img end
     else -- no more splashes, go to the title screen
-    State.switch(States.menu.titleScreen, false, true) 
+    State.switch(States.menu.preloadState, false, true) 
     end
 end
 
@@ -45,7 +47,7 @@ function splash:draw()
     love.graphics.setColor(1,1,1,self.alpha)
     love.graphics.setFont(SkinHandler:getFont("Menu", 50))
     love.graphics.printf(self.currentMessage or "", 0, baseScreenRatio.y/2-100, baseScreenRatio.x, "center")
-    if self.currentImage then
+    if self.currentImage and self.splashScreens[self.splashNumber].img then
         local image = self.currentImage
         local x,y = baseScreenRatio.x/2, image:getHeight()/2+50
         love.graphics.draw(image, x, y, nil, 1, 1, image:getWidth()/2, image:getHeight()/2)
