@@ -2,8 +2,8 @@ local preloadState = State("preloadState")
 
 local t = 0
 local progress = 0
-local step = 0
-local totalSteps = 2
+local step = -10
+local totalSteps = 12
 local installing = false
 
 function preloadState:enter()
