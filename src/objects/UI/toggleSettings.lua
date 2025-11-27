@@ -4,7 +4,7 @@ function toggleSetting:new(x,y,width,height,default,setValue)
     self.x, self.y = x, y
     self.width, self.height = width, height
     self.default, self.setValue = default, setValue
-    self.pillWidth  = self.width/10  -- i really need to move the rest of the pill stuff here,, idk why i put it all in Draw
+    self.pillWidth = self.width/10  -- i really need to move the rest of the pill stuff here,, idk why i put it all in Draw
 
     self.handleCount = 2
     self.handles = {}

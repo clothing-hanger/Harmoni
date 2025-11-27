@@ -87,6 +87,8 @@ function cursor:update(dt)
                 self.fadingBackIn = false
             end
         end
+    elseif not self.fadeOutWhenIdle and self.fadeOutAlpha < 1 then
+        self.fadeOutAlpha = self.fadeOutAlpha + dt * 5
     end
 
     --self.didMove = false
