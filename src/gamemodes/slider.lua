@@ -175,10 +175,11 @@ function slider:draw()
     end
 
     for _, playField in ipairs(self.playField) do
-        playField:draw(dt)
+        playField:draw()
     end
 
     self.judgementObject:draw()
+    ---@diagnostic disable-next-line: undefined-global
     if judgementBatch then love.graphics.draw(judgementBatch) end
 
     self.comboCount:draw()
@@ -188,7 +189,7 @@ function slider:draw()
 
     self.countdownBar:draw()
 
-    if self.debug then 
+    if self.debug then
         love.graphics.print(MusicTime, 250, 400)
     end
 end

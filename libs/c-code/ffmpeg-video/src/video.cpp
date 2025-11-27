@@ -287,3 +287,10 @@ double Video::tell() const {
     AVRational base = stream->time_base;
     return (effort < 0) ? 0.0 : (double)effort * base.num / base.den;
 }
+
+double Video::getFPS() const {
+    if (!stream) return 0.0;
+    AVRational avgFrameRate = stream->avg_frame_rate;
+    if (avgFrameRate.den == 0) return 0.0;
+    return static_cast<double>(avgFrameRate.num) / static_cast<double>(avgFrameRate.den);
+}

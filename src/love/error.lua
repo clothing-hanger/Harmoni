@@ -94,6 +94,7 @@ function love.errorhandler(msg)
 	for char in msg:gmatch(utf8.charpattern) do
 		table.insert(sanitizedmsg, char)
 	end
+	---@diagnostic disable-next-line: cast-local-type
 	sanitizedmsg = table.concat(sanitizedmsg)
 
 	local err = {}

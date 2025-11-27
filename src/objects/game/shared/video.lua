@@ -1,12 +1,11 @@
 ---@type table
 local video = Class:extend("video")
 
-function video:new(video,x,y,scaleX,scaleY,fr,dimness)
+function video:new(video,x,y,scaleX,scaleY,dimness)
     self.path = video
     self.visible = true
     self.x, self.y = x,y
     self.scaleX, self.scaleY = scaleX or 1,scaleY or 1
-    self.checkPerFrame = fr or 60 -- only <num> checks per second
     self.checkTimer = 0
     if not DLL_Video then
         error("Video not supported on this platform") --temp until logging is added
@@ -23,7 +22,8 @@ function video:new(video,x,y,scaleX,scaleY,fr,dimness)
 
     self.video = vid
     self.filedata = video
-        self.dimness = dimness or 0
+    self.checkPerFrame = vid:getFPS() or 30
+    self.dimness = dimness or 0
 
     self.imageData = love.image.newImageData(self.video:getDimensions())
     self.image = love.graphics.newImage(self.imageData)
@@ -65,6 +65,14 @@ function video:changeDimness(targetDimness, time, callback)
         end,
         callback = callback
     })
+end
+
+function video:getFPS()
+    if self.video then
+        return self.video:getFPS()
+    end
+    
+    return 0
 end
 
 function video:update(dt)

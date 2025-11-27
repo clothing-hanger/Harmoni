@@ -1,8 +1,9 @@
 local toggleSetting = Class:extend("toggleSetting")
 
 function toggleSetting:new(x,y,width,height,default,setValue)
-    
-    self.x,self.y,self.width,self.height,self.default,self.setValue = x,y,width,height,default,setValue
+    self.x, self.y = x, y
+    self.width, self.height = width, height
+    self.default, self.setValue = default, setValue
     self.pillWidth  = self.width/10  -- i really need to move the rest of the pill stuff here,, idk why i put it all in Draw
 
     self.handleCount = 2
@@ -15,7 +16,7 @@ function toggleSetting:new(x,y,width,height,default,setValue)
     self.pillCornerRadius = self.pillHeight/2
     self.circleRadius = self.pillHeight/2 - 4
 
-    for i = 1,self.handleCount do
+    for _ = 1,self.handleCount do
         local circleX = self.pillX + self.circleRadius + 2
         local circleY = self.pillY + self.pillHeight/2
         table.insert(self.handles, {x = circleX, y = circleY, radius = self.circleRadius})
@@ -26,7 +27,6 @@ function toggleSetting:new(x,y,width,height,default,setValue)
     self.pillCircleRadius = 0
     self.pillCircleColor = 0
     self.toggle = setValue
-    
 end
 
 function toggleSetting:update(dt)
@@ -42,6 +42,13 @@ function toggleSetting:update(dt)
     self.pillCircleColorTarget = (self.toggle and 1) or 0
     self.pillCircleColor = self.pillCircleColor + (self.pillCircleColorTarget - self.pillCircleColor) * 10 *dt
 
+<<<<<<< HEAD
+=======
+    -- i dont know a great way to do what im trying to do,,,, so we just do this instead lol
+
+    --local targetX = not self.toggle and (self.pillX + self.circleRadius + 2) or (self.pillX + self.pillWidth - self.circleRadius - 2)
+    -- now we lerp them to the target, but we like change the speed depending on i, i think this will sorta look like its stretching,, maybe
+>>>>>>> e915a9829a1be58bb345dc1dc6afd3f405ecee98
 end
 function toggleSetting:onClick()
     self:toggleFunction()
@@ -52,9 +59,9 @@ function toggleSetting:tweenHandle()
     for i, Handle in ipairs(self.handles) do
         local delay = (i * 1)
         local time = 1
-        local x = not self.toggle  and (self.pillX + self.circleRadius + 2) or  (self.pillX + self.pillWidth - self.circleRadius - 2)
+        local x = not self.toggle and (self.pillX + self.circleRadius + 2) or (self.pillX + self.pillWidth - self.circleRadius - 2)
         if self.handletween[i] then Timer.cancel(self.handletween[i]) end
-        self.handletween[i] = Timer.tween(time+delay, Handle, {x = x}, "out-elastic")
+        self.handletween[i] = Timer.tween(time + delay, Handle, { x = x }, "out-elastic")
     end
 end
 
@@ -70,14 +77,8 @@ function toggleSetting:getValue(str)
     end
 end
 
-
 function toggleSetting:draw()
-
---[
-    
     -- backdrop
-
-
     love.graphics.setColor(194/255,194/255,194/255,0.7)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.pillCornerRadius, self.pillCornerRadius)
 
@@ -87,24 +88,22 @@ function toggleSetting:draw()
     love.graphics.setColor(0,0,0)
     love.graphics.rectangle("line", self.pillX, self.pillY, self.pillWidth, self.pillHeight, self.pillCornerRadius, self.pillCornerRadius)
 
-    
     --now we draw the fill
     love.graphics.setColor(46/255,47/255,49/255, self.pillFillAlpha)  -- thank you Google Maps settings page for having such a stealable color palette
     love.graphics.rectangle("fill", self.pillX, self.pillY, self.pillWidth, self.pillHeight, self.pillCornerRadius, self.pillCornerRadius)
 
-
-
     -- handle
     love.graphics.setColor(self.pillCircleColor,self.pillCircleColor,self.pillCircleColor)
-
 
     local leftX  = math.min(self.handles[1].x, self.handles[2].x)
     local rightX = math.max(self.handles[1].x, self.handles[2].x)
 
-    local pillCircleLeftEdgge  = leftX - self.pillCircleRadius
-    local width = (rightX - leftX) +self.pillCircleRadius * 2
+    local pillCircleLeftEdge = leftX - self.pillCircleRadius
+    local width = (rightX - leftX) + self.pillCircleRadius * 2
 
-    love.graphics.rectangle("fill", pillCircleLeftEdgge, self.handles[1].y-self.pillCircleRadius, width,self.pillCircleRadius * 2,self.pillCircleRadius,self.pillCircleRadius)
+    love.graphics.rectangle("fill", pillCircleLeftEdge, self.handles[1].y - self.pillCircleRadius,
+                            width,self.pillCircleRadius * 2, self.pillCircleRadius, self.pillCircleRadius
+    )
 
     love.graphics.setColor(1,1,1)
 end

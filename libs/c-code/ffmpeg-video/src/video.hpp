@@ -47,6 +47,7 @@ public:
     int getHeight() const;
     double getDuration() const;
     double tell() const;
+    double getFPS() const;
 
     bool isOpen() const { return isOpened; }
 

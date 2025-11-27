@@ -102,7 +102,6 @@ function mania:setUpChart(chartpath, chart)
             baseScreenRatio.y / 2,
             nil,
             nil,
-            nil,
             gameplayBackgroundDim
         )
         self.videoBackground.scaleX = baseScreenRatio.x / self.videoBackground.image:getWidth()
