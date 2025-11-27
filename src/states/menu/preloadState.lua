@@ -32,32 +32,38 @@ function preloadState:update(dt)
             installing = true
             step = step + 1
         elseif installing and CLibs:isInstallationDone() then
-           -- step = step + 1
+            step = step + 1
             CLibs:after()
-            Timer.after(3, function()
+            Timer.after(5, function()
                 States.menu.titleScreen.bubbles = self.bubbles
                 States.menu.titleScreen.wavesY = self.wavesY
                 States.menu.titleScreen.squiglyLines = self.squiglyLines
                 States.menu.titleScreen.layerWaves = self.layerWaves
                 States.menu.titleScreen.images = self.images
-                State.switch(States.menu.titleScreen, false, true)
+                State.switch(States.menu.splash)
             end)
         end
  
-        local targetProgress = step / totalSteps
-        progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
-    else step = step + 1 end
+    else step = step + 1 end 
+           -- local targetProgress = math.abs(step / totalSteps)       -- i am literally fucking guessing
+
+        --    progress = progress + (targetProgress - math.abs(progress)) * math.min(dt * 10, 1)
+
 end
 
 function preloadState:draw()
     
     local w, h = baseScreenRatio.x, baseScreenRatio.y
     love.graphics.setColor(1,1,1,1)
- 
+        
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
     local msg = "loading :3"
+
     love.graphics.printf(msg, 0, h*0.5, w, "center")
+
+
+
 
     local barW = w * 0.5
     local barX = w/2 - barW/2
@@ -76,8 +82,9 @@ function preloadState:draw()
     points = {}
     love.graphics.setColor(1,1,1,0.85)
     lastX, lastY = nil, nil
+    --[[
     for i = 0, segments * progress do
-        local x = barX + (i/segments)*barW
+        local x = barX + (i/segments)*barW                                      commented out in case it was the line actually crashing (it wasnt)
         local y = barY + math.sin((i/segments)*math.pi*15 + t*speed) * amp
 
         points[#points+1] = lastX or x
@@ -86,9 +93,10 @@ function preloadState:draw()
         points[#points+1] = y
         lastX, lastY = x, y
     end
-    if #points > 2 then
-        love.graphics.line(points)
-    end
+    --]]
+    --if #points > 2 then
+   --     love.graphics.line(points)
+  --  end
 
     local r = 6
     for i = 1, 6 do

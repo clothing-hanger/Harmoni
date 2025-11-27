@@ -6,7 +6,7 @@ function splash:enter()
     self.splashScreens = {
         {screen = "beta", time = 2, msg = LocaleHandler:getText("Misc", "Is Beta")},
         {screen = "headphones", time = 5, msg = LocaleHandler:getText("UI", "Headphones Recommended") .. "\n\n" .. LocaleHandler:getText("UI","Headphones Better"), img = love.graphics.newImage("images/menu/headphones.png")},
-        {screen = "crash", time = 5, msg = LocaleHandler:getText("Misc", "might fucking die")}
+   --     {screen = "crash", time = 5, msg = LocaleHandler:getText("Misc", "might fucking die")}
 
     }
     self:setupShit()
@@ -24,7 +24,7 @@ function splash:setupShit()
         self.currentMessage = self.splashScreens[self.splashNumber].msg
         if self.splashScreens[self.splashNumber].img then self.currentImage = self.splashScreens[self.splashNumber].img end
     else -- no more splashes, go to the title screen
-    State.switch(States.menu.preloadState, false, true) 
+    State.switch(States.menu.titleScreen, false, true) 
     end
 end
 
@@ -38,7 +38,7 @@ function splash:update()
     if Input:pressed("menuConfirm") then
         if self.timerAfter then Timer.cancel(self.timerAfter) end
         if self.timerTween then Timer.cancel(self.timerTween) end
-        self.splashNumber = self.splashNumber+1
+        self.splashNumber = self.splashNumber+1           -- math.min(self.splashNumber+1, #self.splashScreens)
         self:setupShit()
     end
 end
