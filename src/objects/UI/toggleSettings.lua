@@ -81,7 +81,7 @@ function toggleSetting:draw()
     love.graphics.setColor(194/255,194/255,194/255,0.7)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.pillCornerRadius, self.pillCornerRadius)
 
-    -- we are going to just steal Android's design for this lol
+    -- we are going to just steal Android's design for this lol     we ended up closer to iOS 💔💔
 
     love.graphics.setLineWidth(self.pillLineWidth)
     love.graphics.setColor(0,0,0)

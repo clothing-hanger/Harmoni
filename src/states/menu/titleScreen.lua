@@ -131,31 +131,25 @@ function titleScreen:enter(from, resetItems, fadeIn)
             end
         },
                 {
-            label = "X",
-            link = "https://x.com/clothinghanger_",  -- TEMP!!!
-            image = love.graphics.newImage("images/menu/X.png"), 
-            image2 = love.graphics.newImage("images/menu/Twitter.png"),
+            label = "Bluesky",    -- fuck you Elon
+            link = "https://bsky.app/profile/ch-1.bsky.social",  -- TEMP!!!
+            image = love.graphics.newImage("images/menu/Bluesky.png"),
+            color = {0,133/255,1},
             func = function(button) 
-                self.clickedXCount = self.clickedXCount + 1
-                if self.clickedXCount > 2 then 
-                    self:fuckElon() 
-                    self.clickedXCount = 0
-                    button.func(button)
-                else
-                    self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To " .. btnStrEasterEgg) .. 
-                        "\n\n" .. button.link,
+            self.clickedXCount = self.clickedXCount + 1
+                self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Bluesky") .. 
+                    "\n\n" .. button.link,
+                    {
                         {
-                            {
-                                text = LocaleHandler:getText("UI", "Ok"),
-                                func = function() love.system.openURL(button.link);self.window:killYourself() end
-                            },
-                            {
-                                text = LocaleHandler:getText("UI", "Cancel"),
-                                func = function() self.window:killYourself() end
-                            }
+                            text = LocaleHandler:getText("UI", "Ok"),
+                            func = function() love.system.openURL(button.link);self.window:killYourself() end
+                        },
+                        {
+                            text = LocaleHandler:getText("UI", "Cancel"),
+                            func = function() self.window:killYourself() end
                         }
-                    )                    
-                end
+                    }
+                ) 
             end
         },
     }
@@ -189,7 +183,7 @@ function titleScreen:setupSocialButtons()
         for i, Social in ipairs(self.socials) do
         local width, height = 100,100
         local spacing = 10
-        if i == 4 then spacing = 5 end
+
         local x = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
@@ -204,7 +198,7 @@ function titleScreen:setupSocialButtons()
 
 end
 
-function titleScreen:fuckElon()
+function titleScreen:fuckElon()   -- the fuckElon function can stay just because i REALLY hate him 
     self.socials[4].image = self.socials[4].image2
     btnStrEasterEgg = "Twitter"
     self.socials[4].label = "Twitter"
