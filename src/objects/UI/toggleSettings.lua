@@ -42,13 +42,6 @@ function toggleSetting:update(dt)
     self.pillCircleColorTarget = (self.toggle and 1) or 0
     self.pillCircleColor = self.pillCircleColor + (self.pillCircleColorTarget - self.pillCircleColor) * 10 *dt
 
-<<<<<<< HEAD
-=======
-    -- i dont know a great way to do what im trying to do,,,, so we just do this instead lol
-
-    --local targetX = not self.toggle and (self.pillX + self.circleRadius + 2) or (self.pillX + self.pillWidth - self.circleRadius - 2)
-    -- now we lerp them to the target, but we like change the speed depending on i, i think this will sorta look like its stretching,, maybe
->>>>>>> e915a9829a1be58bb345dc1dc6afd3f405ecee98
 end
 function toggleSetting:onClick()
     self:toggleFunction()
