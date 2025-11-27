@@ -25,13 +25,25 @@ function love.load(args)
     love.filesystem.createDirectory("Settings")
 
     SkinHandler = require("modules.skinHandler")
+    SDL2 = require("engine.modules.SDL2")
     LocaleHandler = require("modules.localeHandler")
+    local preferredLocales
+    if SDL2 then
+        preferredLocales = SDL2.getPreferredLocales()
+    else
+        preferredLocales = { { language = "en", country = "US" } }
+    end
+    local mostPreferred = preferredLocales[1] or {language = "en", country = "US"}
+    if mostPreferred.language == "en" and mostPreferred.country ~= "US" then mostPreferred.country = "US" end
+    print("Most preferred locale: " .. mostPreferred.language .. "-" .. mostPreferred.country)
+    LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
+    if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
     CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     CHE = require("engine.CHE")
     CHE:init()
-        _G.GlobalNotificationsHandler = notificationsHandler()
+    _G.GlobalNotificationsHandler = notificationsHandler()
 
     require("modules.gamemodes")
 

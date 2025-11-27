@@ -35,7 +35,6 @@ function CHE:init()
     States = require("modules.States")
     Timer = require("engine.lib.Timer")
     Ease = require("engine.lib.Ease")
-    SDL2 = require("engine.modules.SDL2")
     WINDOW = require("engine.modules.window")
     if WINDOW then
         local ok = WINDOW.setDarkMode(WINDOW.isDarkMode())
@@ -100,17 +99,6 @@ function CHE:init()
     }
 
     SkinHandler:loadSkin("Default Arrow Batched")
-    local preferredLocales
-    if SDL2 then
-        preferredLocales = SDL2.getPreferredLocales()
-    else
-        preferredLocales = { { language = "en", country = "US" } }
-    end
-    local mostPreferred = preferredLocales[1] or {language = "en", country = "US"}
-    if mostPreferred.language == "en" and mostPreferred.country ~= "US" then mostPreferred.country = "US" end
-    print("Most preferred locale: " .. mostPreferred.language .. "-" .. mostPreferred.country)
-    LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
-    if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
     local id = 1
     if NOTIFICATIONS then
         NOTIFICATIONS.setAppID("com.ch.harmoni")
