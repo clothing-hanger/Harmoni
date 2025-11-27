@@ -190,15 +190,15 @@ function titleScreen:setupSocialButtons()
         local width, height = 100,100
         local spacing = 10
         if i == 4 then spacing = 5 end
-        local x,y = self.socialsX + ((width+spacing)*i)
+        local x = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
         table.insert(self.socialButtons, 
             button({
-                hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link, 
-                image = Social.image, text = Social.label, func = Social.func, width = 100, 
+                hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link,
+                image = Social.image, text = Social.label, func = Social.func, width = 100,
                 height = 100, scaleLARGE = 1.3
-            }) 
+            })
         )
     end
 

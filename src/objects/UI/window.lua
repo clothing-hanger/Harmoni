@@ -11,15 +11,13 @@ function window:new(parent,title,msg,buttons)
     if type(parent) ~= "table" then GlobalNotificationsHandler:addNotification("window created with no parent!", "error") return end
     self.parent = parent
 
-    self.title,self.msg = title, msg 
-    self.width,self.height = width or 0, height or 0
-    self.x,self.y = baseScreenRatio.x/2,baseScreenRatio.y/2 -- might make this able to change later,, idk 
-    
+    self.title, self.msg = title, msg
+    self.x, self.y = baseScreenRatio.x/2, baseScreenRatio.y/2 -- might make this able to change later,, idk 
 
     self.bodyText = love.graphics.newText(SkinHandler:getFont("Menu", 50), self.msg)    -- we dont even end up drawing this lol, we just use it for its size (i was too lazy to redo the draw func)
     self.width, self.height = self.bodyText:getDimensions()
-    self.width = self.width+ 150   -- hardcoded value!!! everyone's favorite!!!!!
-    self.height = self.height +250
+    self.width = self.width + 150   -- hardcoded value!!! everyone's favorite!!!!!
+    self.height = self.height + 250
 
     --if self.width == 0 then -- we will deal with this later
     self.rectX,self.rectY = self.x - self.width/2, self.y - self.height/2
@@ -70,7 +68,7 @@ function window:new(parent,title,msg,buttons)
     
 end
 
-function window:update(dt) 
+function window:update(dt)
     self:checkForClicks()
 end
 
@@ -156,8 +154,6 @@ function window:animation(type,func)
 end
 --]]
 function window:draw()
-    
-
     love.graphics.push()
 
     love.graphics.setColor(1,1,1,self.alpha)
@@ -178,14 +174,10 @@ function window:draw()
     -- draw the cool fucking rectangle as the window background
     self.coolFuckingRectangle:draw()
 
-
-    
-    
     --draw the title bar bg
     local r,g,b = unpack(self.coolFuckingRectangle.color2)
     love.graphics.setColor(r,g,b,self.alpha)
     love.graphics.rectangle("fill",self.rectX,self.rectY,self.width,self.titleBarHeight)
-
 
     -- draw window text 
     love.graphics.setColor(1,1,1,self.alpha)
@@ -197,7 +189,6 @@ function window:draw()
     love.graphics.printf(self.msg, self.rectX, self.rectY + self.titleBarHeight+self.coolFuckingRectangle.padding, self.width, "center")
 
     -- now we draw the buttons
-    
     love.graphics.setFont(self.buttonFont)
     for i, Button in ipairs(self.buttons) do
         --draw the button background
@@ -206,15 +197,13 @@ function window:draw()
         love.graphics.rectangle("fill", Button.x, Button.y, Button.btnWidthWithPadding, Button.height, 10)
         love.graphics.setColor(1,1,1,self.alpha)
         love.graphics.printf(Button.text,Button.x,Button.y+(Button.height/2)-love.graphics.getFont():getHeight()/2,Button.btnWidthWithPadding,"center")
-
     end
 
     love.graphics.setStencilTest()
-    
+
     love.graphics.setColor(1,1,1,1)
-    
+
     love.graphics.pop()
-    
 end
 
 return window

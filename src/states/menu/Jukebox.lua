@@ -86,15 +86,16 @@ function jukebox:switchSong(songInfo)
         end
     end
     self.lyricsDisplay = nil
+    local lyrics
     if type ~= "lua" and type ~= "" then
-        local lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
+        lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     elseif type == "lua" then
-        local lyrics = CaptionParser.parse(path .. type, type)
+        lyrics = CaptionParser.parse(path .. type, type)
         self.lyricsDisplay = lyricsDisplay(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
     end
 
-    self.lyricsRenderer = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200,lyrics)
+    self.lyricsRenderer = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200, lyrics)
 
     -- genuinely the easiest way that I thought of
     self.scrubBack = UIsquiglyLine(
@@ -114,8 +115,7 @@ end
 function jukebox:fullscreenVideo()
     if not self.video then return end -- i hate myself so much why the fuck did i make it work this way 
                                         -- looking at this by itself you would think this just checks that the video object self.video exists,, nope. self.video is a FUCKING BOOLEAN 
-    
-                                                self.videoHudAlpha = 1
+        self.videoHudAlpha = 1
         Timer.after(3, function() 
             Timer.tween(1, self, {videoHudAlpha = 0})
         end)
@@ -136,11 +136,11 @@ function jukebox:fullscreenVideo()
         self.songBG.x, self.songBG.y = baseScreenRatio.x/2, baseScreenRatio.y/2
 
         -- and finally, we just make it fullscreen 
-            local targetSizeX = baseScreenRatio.x
-            local targetSizeY = baseScreenRatio.y
+        local targetSizeX = baseScreenRatio.x
+        local targetSizeY = baseScreenRatio.y
 
-            self.songBG.scaleX = targetSizeX / self.songBG.image:getWidth()
-            self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
+        self.songBG.scaleX = targetSizeX / self.songBG.image:getWidth()
+        self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
     end
 end
 
@@ -283,7 +283,7 @@ function jukebox:checkForFullscreenInput()
                 self:fullscreenVideo()
                 self:fade("in")
             end
-                        if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
+            if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
 
             else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
                 cursor.fadeOutWhenIdle = false

@@ -15,8 +15,8 @@ function button:new(args)  -- im trying out doing args this way cuz it seems bet
     self.image = args.image or nil
     self.scaleLARGE = args.scaleLARGE or 1.5
     self.scaleSMALL = args.scaleSMALL or 1
-    self.func = args.func or function() end   
-    
+    self.func = args.func or function() end 
+
     self.hoverColor = args.hoverColor or {0,0,0}
     self.nonhoverColor = args.nonhoverColor or {1,1,1}
     self.color = {self.nonhoverColor[1],self.nonhoverColor[2],self.nonhoverColor[3]} -- do it this way cuz setting it to self.nonhoverColor wont clone the table
@@ -27,11 +27,12 @@ function button:update()
     local mx,my = cursor:getPosition()
     if mx >= self.x and mx <= self.x+self.width and my >= self.y and my<= self.y+self.height then
         self.hovered = true
-    else self.hovered = false end
+    else
+        self.hovered = false
+    end
     if self.hovered and Input:pressed("menuClickLeft") then
         self:onClick()
     end
-
 
     if self.scaleTimer then Timer.cancel(self.scaleTimer) end
     if self.colorTimer then Timer.cancel(self.colorTimer) end 
@@ -53,23 +54,19 @@ end
 
 function button:draw()
     love.graphics.push()
-love.graphics.translate(self.x+self.width/2, self.y+self.height/2)
-love.graphics.scale(self.scale)
-love.graphics.translate(-(self.x+self.width/2), -(self.y+self.height/2))
-
+    love.graphics.translate(self.x+self.width/2, self.y+self.height/2)
+    love.graphics.scale(self.scale)
+    love.graphics.translate(-(self.x+self.width/2), -(self.y+self.height/2))
 
     if self.hasImage then
-            local scaleX,scaleY = self.width/self.image:getWidth(), self.height/self.image:getHeight()
+        local scaleX,scaleY = self.width/self.image:getWidth(), self.height/self.image:getHeight()
 
         love.graphics.setColor(self.color)
         if self.image then love.graphics.draw(self.image, self.x,self.y ,nil,scaleX,scaleY) end
-
     end
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.pop()
 end
-
-
 
 return button

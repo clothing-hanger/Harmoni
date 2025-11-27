@@ -3,7 +3,8 @@
         "undefined-field",
         "deprecated",
         "param-type-mismatch",
-        "lowercase-global"
+        "lowercase-global",
+        "redundant-parameter"
     ],
     "pixelbyte.love2d.srcDir": "./src/",
     "Lua.diagnostics.globals": [
