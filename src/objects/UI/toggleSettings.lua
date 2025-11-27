@@ -51,7 +51,7 @@ end
 function toggleSetting:tweenHandle()
     for i, Handle in ipairs(self.handles) do
         local delay = (i * 1)
-        local time = 1
+        local time = 0.4
         local x = not self.toggle and (self.pillX + self.circleRadius + 2) or (self.pillX + self.pillWidth - self.circleRadius - 2)
         if self.handletween[i] then Timer.cancel(self.handletween[i]) end
         self.handletween[i] = Timer.tween(time + delay, Handle, { x = x }, "out-elastic")

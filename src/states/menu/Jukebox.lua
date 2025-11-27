@@ -20,7 +20,7 @@ function jukebox:enter(parent)
 
     self.songBGX = 520
     self.songBGY = 30
-    self.songBGWidth = 1430 
+    self.songBGWidth = 1430
     self.songBGHeight = 804
 
     self:setupSongList()

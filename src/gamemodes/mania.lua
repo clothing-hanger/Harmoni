@@ -152,7 +152,9 @@ function mania:update(dt)
         if self.videoBackground then self.videoBackground:play() end
         played = true
     else
-        videoFade = videoFade + dt * 1
+        if self.videoBackground and played then
+            videoFade = math.min(videoFade + dt*5, 1)
+        end
     end
 
     if thething then
@@ -192,9 +194,9 @@ end
 
 function mania:draw()
     self.background:draw()
-    if self.videoBackground then 
-        self.videoBackground.alpha = math.min(videoFade, 1)
-        self.videoBackground:draw() 
+    if self.videoBackground then
+        self.videoBackground.alpha = videoFade
+        self.videoBackground:draw()
     end
 
     -- Prepare batches
@@ -225,7 +227,6 @@ function mania:draw()
     self.healthBar:draw()
 
     self.countdownBar:draw()
-
 
     if self.debug then 
         love.graphics.print(MusicTime, 250, 400)
