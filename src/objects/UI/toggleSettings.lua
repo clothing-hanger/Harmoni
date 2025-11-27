@@ -42,13 +42,6 @@ function toggleSetting:update(dt)
     self.pillCircleColorTarget = (self.toggle and 1) or 0
     self.pillCircleColor = self.pillCircleColor + (self.pillCircleColorTarget - self.pillCircleColor) * 10 *dt
 
-
-    -- i dont know a great way to do what im trying to do,,,, so we just do this instead lol
-
-        local targetX = not self.toggle  and (self.pillX + self.circleRadius + 2) or  (self.pillX + self.pillWidth - self.circleRadius - 2)
-        -- now we lerp them to the target, but we like change the speed depending on i, i think this will sorta look like its stretching,, maybe
-
-   -- end
 end
 function toggleSetting:onClick()
     self:toggleFunction()
@@ -66,10 +59,7 @@ function toggleSetting:tweenHandle()
 end
 
 function toggleSetting:toggleFunction()
-    print("HIIIIIII")
     self.toggle = not self.toggle
-
-    print(self.toggle)
 end
 
 function toggleSetting:getValue(str)
