@@ -30,4 +30,4 @@ function love.conf(t)
                                                                                             -- I made this conf.lua when love12 didn't have a codename
                                                                                             -- idk how it ended up like this though? idk
     end
-end
+end 

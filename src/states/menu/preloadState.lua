@@ -3,7 +3,7 @@ local preloadState = State("preloadState")
 local t = 0
 local progress = 0
 local step = -10
-local totalSteps = 2
+local totalSteps = 12
 local installing = false
 
 function preloadState:enter()
@@ -32,9 +32,9 @@ function preloadState:update(dt)
             installing = true
             step = step + 1
         elseif installing and CLibs:isInstallationDone() then
-            step = step + 1
+           -- step = step + 1
             CLibs:after()
-            Timer.after(1, function()
+            Timer.after(3, function()
                 States.menu.titleScreen.bubbles = self.bubbles
                 States.menu.titleScreen.wavesY = self.wavesY
                 States.menu.titleScreen.squiglyLines = self.squiglyLines
@@ -43,7 +43,7 @@ function preloadState:update(dt)
                 State.switch(States.menu.titleScreen, false, true)
             end)
         end
-
+ 
         local targetProgress = step / totalSteps
         progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
     else step = step + 1 end
