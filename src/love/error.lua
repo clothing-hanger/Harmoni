@@ -13,22 +13,22 @@ function love.errorhandler(msg)
 
 	local function setUpErrorText()
 		local errorTexts
-		local ok, test = pcall(LocaleHandler:getText("ErrorHandler", "Something Wrong"))
-		if not ok then
+		--[[ local ok, test = pcall(LocaleHandler:getText("ErrorHandler", "Something Wrong")) ]]
+		--[[ if not ok then ]]
 			    errorTexts = {
 					header = "Something went wrong...\nHelp us improve Harmoni! Please report this error!",
 					crashMessage = "Error: ",
 					traceback = "Traceback: (This is important! Please include this in your crash report!)",
 					system = "System Information:",
     			}
-			else
+			--[[ else
 				errorTexts = {
 					header = LocaleHandler:getText("ErrorHandler", "Something Wrong"),
 					crashMessage = LocaleHandler:getText("ErrorHandler", "Error"),
 					traceback = LocaleHandler:getText("ErrorHandler", "traceback"),
 					system = LocaleHandler:getText("errorhandler", "System Information")
 				}
-			end
+			end ]]
 		return errorTexts
 	end
 
