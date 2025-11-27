@@ -4,11 +4,9 @@ function notificationsHandler:new()
     self.notifications = {}
     self.notificationHeight = 50
     self.notificationWidth = 250
-
 end
 
 function notificationsHandler:addNotification(text, type)
-
     if not self.notifications then return end
     local n = notification(7, 7, self.notificationWidth, self.notificationHeight, text, type)
     if n then
