@@ -7,6 +7,18 @@ dontShowBG = false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
+function ithink(nums, whatDoYouThink)
+    if type(nums) ~= "table" then return "i think you messed up the function call" end
+    local count = 0
+    for i = 1,#nums do
+        if type(nums[i]) == "number" then
+            count = count + nums[i]
+        end
+    end
+    -- is the count within like 3 of the thinknumber? 
+    return (math.abs(count - whatDoYouThink) <3 and "yeah i think so") or "nah probably not"
+end
+
 if type(jit) ~= nil and love.system.getOS() ~= "OS X" then
     jit.opt.start("maxtrace=8000", "maxrecord=16000")
     jit.opt.start("minstitch=3")
