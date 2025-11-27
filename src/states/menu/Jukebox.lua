@@ -263,32 +263,32 @@ function jukebox:update(dt)
 end
 
 function jukebox:checkForFullscreenInput()
-        local mx,my = cursor:getPosition()
-        local x,y,width,height = self.songBGX,self.songBGY,self.songBGWidth,self.songBGHeight
-        if mx >= x and mx <= x+width and my >= y and my <= y+height then -- cursor is over the video
-            local funct = function() 
-                self:fullscreenVideo()
-                self:fade("in")
-            end
-            if Input:pressed("menuClickLeft") then self:fade("out",funct) end
-            cursor.fadeOutWhenIdle = true
-            if cursor.didMove then
-                self.videoHudAlpha = 1
-                if self.fadeTimerVideo then Timer.cancel(self.fadeTimerVideo) end
-                self.fadeTimerVideo = Timer.after(1, function() Timer.tween(1, self, {videoHudAlpha = 0}) end)
-            end
-        else
-            if self.fullscreened then -- we need to fade the cursor and also let the user unfullscreen when they click anywhere
-            cursor.fadeOutWhenIdle = true
-            local funct = function() 
-                self:fullscreenVideo()
-                self:fade("in")
-            end
-            if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
+    local mx,my = cursor:getPosition()
+    local x,y,width,height = self.songBGX,self.songBGY,self.songBGWidth,self.songBGHeight
+    if mx >= x and mx <= x+width and my >= y and my <= y+height then -- cursor is over the video
+        local funct = function() 
+            self:fullscreenVideo()
+            self:fade("in")
+        end
+        if Input:pressed("menuClickLeft") then self:fade("out",funct) end
+        cursor.fadeOutWhenIdle = true
+        if cursor.didMove then
+            self.videoHudAlpha = 1
+            if self.fadeTimerVideo then Timer.cancel(self.fadeTimerVideo) end
+            self.fadeTimerVideo = Timer.after(1, function() Timer.tween(1, self, {videoHudAlpha = 0}) end)
+        end
+    else
+        if self.fullscreened then -- we need to fade the cursor and also let the user unfullscreen when they click anywhere
+        cursor.fadeOutWhenIdle = true
+        local funct = function() 
+            self:fullscreenVideo()
+            self:fade("in")
+        end
+        if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
 
-            else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
-                cursor.fadeOutWhenIdle = false
-            end
+        else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
+            cursor.fadeOutWhenIdle = false
+        end
         end
 end
 
