@@ -47,31 +47,10 @@ function preloadState:update(dt)
     local targetProgress = step / totalSteps
     progress = progress + (targetProgress - progress) * math.min(dt * 10, 1)
 
-    --for i, squiglyLines in ipairs(self.squiglyLines) do
-   --     squiglyLines:update(dt)
-   -- end
-   -- self.layerWaves:update(dt)
-
-    States.menu.titleScreen.updateBubbles(self, dt)
-    self.throbbert:update(dt)
 end
 
 function preloadState:draw()
-   -- love.graphics.draw(self.BG)
-    --[[
-    for i, Bubble in ipairs(self.bubbles) do
-        Bubble:draw()
-    end
-    love.graphics.setColor(1,1,1,0.1)
-    love.graphics.push()
-        love.graphics.translate(0, self.wavesY)
-        self.layerWaves:draw()
-    love.graphics.pop()
-    love.graphics.setColor(1,1,1,0.05)
-    for i, squiglyLines in ipairs(self.squiglyLines) do
-        squiglyLines:draw()
-    end
-    --]]
+    
     local w, h = baseScreenRatio.x, baseScreenRatio.y
     love.graphics.setColor(1,1,1,1)
 
@@ -125,6 +104,7 @@ function preloadState:draw()
 
     States.menu.titleScreen.drawLogo(self)
     self.throbbert:draw()
+    
 end
 
 return preloadState
