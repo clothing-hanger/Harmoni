@@ -82,9 +82,9 @@ function preloadState:draw()
     points = {}
     love.graphics.setColor(1,1,1,0.85)
     lastX, lastY = nil, nil
-    --[[
+    
     for i = 0, segments * progress do
-        local x = barX + (i/segments)*barW                                      commented out in case it was the line actually crashing (it wasnt)
+        local x = barX + (i/segments)*barW         --                             commented out in case it was the line actually crashing (it wasnt)
         local y = barY + math.sin((i/segments)*math.pi*15 + t*speed) * amp
 
         points[#points+1] = lastX or x
@@ -93,10 +93,10 @@ function preloadState:draw()
         points[#points+1] = y
         lastX, lastY = x, y
     end
-    --]]
-    --if #points > 2 then
-   --     love.graphics.line(points)
-  --  end
+    
+    if #points > 2 then
+     love.graphics.line(points)
+    end
 
     local r = 6
     for i = 1, 6 do

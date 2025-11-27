@@ -8,6 +8,7 @@ function UISquigleCircle:new(mode, x, y, radius, amplitude, frequency, lineThick
     self.amplitude = amplitude
     self.frequency = frequency
     self.lineThickness = lineThickness
+    self.squishX, self.squishY = 0,0
     self.color = table.clone(color)
 
     self.rotation  = 0
@@ -35,6 +36,7 @@ function UISquigleCircle:draw()
     love.graphics.setColor(self.color)
     love.graphics.translate(self.x, self.y)
     love.graphics.rotate(math.rad(self.rotation))
+    love.graphics.scale(1+self.squishX, 1+self.squishY)
 
     love.graphics.setLineWidth(self.lineThickness)
     love.graphics.polygon(self.mode, self.points)

@@ -228,7 +228,7 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         end
 
         local color = colors[love.math.random(1,#colors)]
-        table.insert(self.bubbles, UISquigleCircle("fill", x, y, 100, 5, 5, 3, color))
+        table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
     end
 
 end
@@ -318,6 +318,9 @@ function titleScreen:updateBubbles(dt)
         local cosv = math.cos(ang)
         Bubble:update(dt)
 
+                       -- Bubble.squishX, Bubble.squishY = Bubble.rotation/10000, Bubble.rotation/10000
+
+
         Bubble.rotation = Bubble.rotation + cosv * 30 * dt
         Bubble.x, Bubble.y = Bubble.x + sinv * 30 * dt, Bubble.y - 50 * dt
         Bubble.y = Bubble.y + cosv * 30 * dt
@@ -329,6 +332,9 @@ function titleScreen:updateBubbles(dt)
             if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
                 
                 Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
+               -- Bubble.squishX, Bubble.squishY = Bubble.rotation/100, Bubble.rotation/100
+              --  Bubble.squishX, Bubble.squishY = 0.25, 0.25
+              --  Timer.tween(3, Bubble, {squishX = 0, squishY = 0}, "out-elastic")
                 self.bubbleClickedCount = (self.bubbleClickedCount or 0) + 1
 
                 -- save original alpha 
