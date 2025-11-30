@@ -102,7 +102,7 @@ function window:animation(type,func)
         self.scale = 0.9
         local time = 0.15
         Timer.tween(time/2, self, {alpha = 1})
-        Timer.tween(time, self, {scale = 1}, "linear", function()funct()end)
+        Timer.tween(time, self, {scale = 1}, "out-elastic", function()funct()end)
 
         -- cant forget the cool fucking rectangle's alpha too!
         Timer.tween(time, self.coolFuckingRectangle, {alpha = 1})

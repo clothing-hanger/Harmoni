@@ -10,6 +10,7 @@ function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
     self.debug = false
+    self.skipSafetyTimer = true
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)
     States.menu.titleScreen.setUpThoseWavesThatIHate(self, 4)
@@ -34,7 +35,7 @@ function preloadState:update(dt)
         elseif installing and CLibs:isInstallationDone() then
             step = step + 1
             CLibs:after()
-            Timer.after(5, function()
+            Timer.after(self.skipSafetyTimer and 1 or 5, function()
                 States.menu.titleScreen.bubbles = self.bubbles
                 States.menu.titleScreen.wavesY = self.wavesY
                 States.menu.titleScreen.squiglyLines = self.squiglyLines
