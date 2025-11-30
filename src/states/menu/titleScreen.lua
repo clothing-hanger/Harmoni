@@ -231,6 +231,13 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
     end
 
+    for i, Bubble in ipairs(self.bubbles) do
+        Bubble.type = "Spinner"
+        if love.math.random(1,1) == 1 then
+            Bubble.type = "Squisher"
+        end
+    end
+
 end
 
 
@@ -323,19 +330,34 @@ function titleScreen:updateBubbles(dt)
 
         Bubble.rotation = Bubble.rotation + cosv * 30 * dt
         Bubble.x = Bubble.x + sinv * 30 * dt
-        --Bubble.y =  Bubble.y - 50 * dt
-       -- Bubble.y = Bubble.y + cosv* dt
+        Bubble.x = Bubble.x +20 * dt
+
+        Bubble.y =  Bubble.y - 20 * dt
+        Bubble.y = Bubble.y + cosv* dt*50
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
 
         if Input:pressed("menuClickLeft") then
             local mx,my = cursor:getPosition()
             if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
-                
-                Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
-               -- Bubble.squishX, Bubble.squishY = Bubble.rotation/100, Bubble.rotation/100
-              --  Bubble.squishX, Bubble.squishY = 0.25, 0.25
-              --  Timer.tween(3, Bubble, {squishX = 0, squishY = 0}, "out-elastic")
+                local unsquish
+                local loop
+
+                local squish = function()
+                    unsquish = function(l)     -- i added all this shit to try to pre
+                        loop = loop or l
+                        loop = loop - 1
+                        Timer.tween(1, Bubble, {squishX = 0,squishY = 0, }, "out-elastic", function() if (loop > 0) then  unsquish();print("end unsquish",loop) else loop = nil end end)
+                    end
+                    Timer.tween(0.5, Bubble, {squishX = love.math.random(-0.5,0.5),squishY = love.math.random(-0.5,0.5)}, "out-back", function()unsquish(2)end)
+                end
+
+                local spin = function()
+                    Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
+                end
+
+                if Bubble.type == "Spinner" then spin() end
+                if Bubble.type == "Squisher" then squish() end
                 self.bubbleClickedCount = (self.bubbleClickedCount or 0) + 1
 
                 -- save original alpha 
