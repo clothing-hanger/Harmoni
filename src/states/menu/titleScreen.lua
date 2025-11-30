@@ -344,7 +344,7 @@ function titleScreen:updateBubbles(dt)
                 local loop
 
                 local squish = function()
-                    unsquish = function(l)     -- i added all this shit to try to pre
+                    unsquish = function(l)
                         loop = loop or l
                         loop = loop - 1
                         Timer.tween(1, Bubble, {squishX = 0,squishY = 0, }, "out-elastic", function() if (loop > 0) then  unsquish();print("end unsquish",loop) else loop = nil end end)
