@@ -4,7 +4,7 @@ local modifiersMenu = Class:extend()
 function modifiersMenu:new(x,y,width,height,paddingX,paddingY)
     self.modifiers = modifiersTable
 
-    self.modnamefont = SkinHandler:getFont("Menu", 40)
+ --   self.modnamefont = SkinHandler:getFont("Menu", 40)
     self.x,self.y = x or 0, y or 0
     self.width,self.height = width or 10, height or 10
 
@@ -25,7 +25,7 @@ function modifiersMenu:setupModifiers()
         Modifier.x, Modifier.y = x,y
 
         if type(Modifier.default) == "boolean" then -- we know its a toggle
-            Modifier.toggle = toggleSettings(x, y, self.modifierWidth,self.modifierHeight, Modifier.default, Modifier.default)
+            Modifier.toggle = toggleSettings(x, y, self.modifierWidth,self.modifierHeight, Modifier.default, Modifier.default, Modifier.name)
         end
     end
 end
@@ -33,7 +33,10 @@ end
 function modifiersMenu:update(dt)
     for _, Modifier in ipairs(self.modifiers) do
         if Modifier.toggle then -- this ones a toggle one (obviously) so we do the toggle shit with it i guess idk 
-            if mouseOver(Modifier.toggle) and Input:pressed("menuClickLeft") then Modifier.toggle:onClick() end
+            if mouseOver(Modifier.toggle) and Input:pressed("menuClickLeft") then
+                Modifier.toggle:onClick() 
+                
+            end
             Modifier.toggle:update(dt)
             Modifier.value = Modifier.toggle:getValue("set")
         end
@@ -63,9 +66,9 @@ function modifiersMenu:draw()
         if Modifier.toggle then Modifier.toggle:draw() end
         love.graphics.setColor(0,0,0)
         -- get the Y for the text 
-        love.graphics.setFont(self.modnamefont)
-        local textY = Modifier.y+self.modifierHeight/2-love.graphics.getFont():getHeight()/2
-        love.graphics.print(Modifier.name, Modifier.toggle.x+30, textY)
+        --love.graphics.setFont(self.modnamefont)
+      --  local textY = Modifier.y+self.modifierHeight/2-love.graphics.getFont():getHeight()/2
+       -- love.graphics.print(Modifier.name, Modifier.toggle.x+30, textY)
         love.graphics.setColor(1,1,1)
     end
 

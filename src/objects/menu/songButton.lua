@@ -23,6 +23,7 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.x = x or 10
     self.y = y or 10
 
+    print("HIHIHIHIIIIIIIIIIIIIIIIIII")
     self.warnings = warnings
     self.songPreviewTime = songPreviewTime or 0
 
@@ -54,6 +55,7 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     self.fontLarge = songButtonFontLarge
     self.fontSmall = songButtonFontSmall
+    self.sizeXOffset,self.sizeYOffset = 0,0
 
     self.borderHoverAlpha = 0
     self.hovered = false
@@ -65,6 +67,10 @@ function menuSongButton:onClick()
     else
         return {loadSong = false, mode = self.mode, path = self.path, color = self.color}
     end
+    local time = 0.4   
+    self.sizeXOffset,self.sizeYOffset = -30,-30
+    print("HIHIHHI")
+    self.sizeTween = Timer.tween(time*3, self, {sizeXOffset = 0, sizeYOffset = 0}, "out-elastic")
 end
 
 function menuSongButton:returnInfo()
@@ -99,7 +105,7 @@ function menuSongButton:draw()
     end
 
     local function stencilShape()
-        love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+        love.graphics.rectangle("fill", self.x, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset, self.cornerRadius, self.cornerRadius)
     end
     love.graphics.stencil(stencilShape, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
@@ -114,7 +120,7 @@ function menuSongButton:draw()
     love.graphics.rectangle("fill", self.x, self.y, self.width / 7, self.height)
 
     drawGradientRect(
-        self.x + self.width / 7, self.y, self.width, self.height,
+        self.x + self.width / 7, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset,
         {self.color[1], self.color[2], self.color[3], 1},
         {self.color[1], self.color[2], self.color[3], 0},
         false
@@ -140,7 +146,7 @@ function menuSongButton:draw()
     end
 
     love.graphics.setColor(1, 1, 1, self.borderHoverAlpha)
-    love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+    love.graphics.rectangle("line", self.x, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset, self.cornerRadius, self.cornerRadius)
 
     love.graphics.setFont(self.fontLarge)
     local textColor = getTextColor(self.color[1], self.color[2], self.color[3])

@@ -1,16 +1,18 @@
 local toggleSetting = Class:extend("toggleSetting")
 
-function toggleSetting:new(x,y,width,height,default,setValue)
+function toggleSetting:new(x,y,width,height,default,setValue,text)
     self.x, self.y = x, y
     self.width, self.height = width, height
     self.default, self.setValue = default, setValue
     self.pillWidth = self.width/10  -- i really need to move the rest of the pill stuff here,, idk why i put it all in Draw
-
+    self.text = text or ""
     self.handleCount = 2
     self.handles = {}
     self.handletween = {}
 
     self.pillSizeOffset = 0
+
+        self.font = SkinHandler:getFont("Menu", 40)
 
     self.pillHeight = self.height/3
     self.pillX      = self.x + self.width - self.pillWidth * 1.5
@@ -26,6 +28,8 @@ function toggleSetting:new(x,y,width,height,default,setValue)
     end
 
     self.pillLineWidth = 0
+        self.backDropLineWidth = 0
+
     self.pillFillAlpha = 0
     self.pillCircleRadius = 0
     self.pillCircleColor = 0
@@ -36,11 +40,16 @@ function toggleSetting:update(dt)
     self.pillLineWidthTarget = (self.toggle and 0) or 5
     self.pillLineWidth = self.pillLineWidth + (self.pillLineWidthTarget - self.pillLineWidth) * 10 *dt
 
+    self.backDropLineWidthTarget = (self.toggle and 5) or 0
+    self.backDropLineWidth = self.backDropLineWidth + (self.backDropLineWidthTarget - self.backDropLineWidth) * 10 *dt
+
     self.pillFillAlphaTarget = (self.toggle and 1) or 0
     self.pillFillAlpha = self.pillFillAlpha + (self.pillFillAlphaTarget - self.pillFillAlpha) * 10 *dt
 
     self.pillCircleColorTarget = (self.toggle and 1) or 0
     self.pillCircleColor = self.pillCircleColor + (self.pillCircleColorTarget - self.pillCircleColor) * 10 *dt
+
+    self.mouseDown = Input:down("menuClickLeft")
 
 end
 function toggleSetting:onClick()
@@ -56,10 +65,27 @@ function toggleSetting:tweenHandle()
         local radius = (self.toggle and (self.height/4)) or ((self.height/10))
         if self.handletween[i] then Timer.cancel(self.handletween[i]) end
         self.handletween[i] = Timer.tween(time + delay, Handle, { x = x, radius = radius }, "out-elastic")
+
     end
     self.pillSizeOffset = 15
     if self.pilltween then Timer.cancel(self.pilltween) end
     self.pilltween = Timer.tween(time*3, self, {pillSizeOffset = 0}, "out-elastic")
+    
+        -- we are gonna do the backdrop stuff here too because its convienent
+
+        if self.backdropTween then Timer.cancel(self.backdropTween) end
+        if self.textTween then Timer.cancel(self.textTween) end
+        
+        local value
+        value = (self.toggle and -30) or 30
+        self.backDropOffsetY,self.backDropOffsetX = value,value
+
+        self.backdropTween = Timer.tween(time*3, self, {backDropOffsetY = 0, backDropOffsetX = 0}, "out-elastic")
+
+        self.textSizeOffsetX = 0.2
+        self.textSizeOffsetY = 0.1
+        self.textTween = Timer.tween(time*3, self, {textSizeOffsetX = 0, textSizeOffsetY = 0}, "out-elastic")
+
 end
 
 function toggleSetting:toggleFunction()
@@ -79,7 +105,17 @@ function toggleSetting:draw()
     love.graphics.translate(self.x, 0)
     -- backdrop
     love.graphics.setColor(194/255,194/255,194/255,0.7)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height, self.pillCornerRadius, self.pillCornerRadius)
+    love.graphics.rectangle("fill", self.x+((self.backDropOffsetX or 0)/2 or 0), self.y+((self.backDropOffsetY or 0)/2 or 0), self.width - (self.backDropOffsetX or 0), self.height - (self.backDropOffsetY or 0), self.pillCornerRadius, self.pillCornerRadius)
+    love.graphics.setLineWidth(self.backDropLineWidth)
+    love.graphics.setColor(0,0,0 , (self.backDropLineWidth < 1) and 0 or 1)
+
+        love.graphics.rectangle("line", self.x+((self.backDropOffsetX or 0)/2 or 0), self.y+((self.backDropOffsetY or 0)/2 or 0), self.width - (self.backDropOffsetX or 0), self.height - (self.backDropOffsetY or 0), self.pillCornerRadius, self.pillCornerRadius)
+
+
+    -- text
+    love.graphics.setFont(self.font)
+    love.graphics.setColor(0,0,0)
+    love.graphics.printf(self.text, self.x+30, self.y+self.height/2-love.graphics.getFont():getHeight()/2, self.width, "left", nil, 1+(self.textSizeOffsetX or 0),1+(self.textSizeOffsetY or 0))
 
     -- we are going to just steal Android's design for this lol     we ended up closer to iOS 💔💔
 
