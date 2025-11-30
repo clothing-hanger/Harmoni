@@ -396,6 +396,7 @@ function songSelect:loadSongButtonImages()
 end
 
 function songSelect:update(dt)
+    local mx,my = cursor:getPosition()
     if Input:pressed("menuBack") then
         if self.menuState == "difficulty" then self.menuState = "song"; return end
       --  if switchingState then return end
@@ -430,8 +431,14 @@ function songSelect:update(dt)
     self.logoCircleFill:update(dt)
 
     self.logoCircle.rotation = self.logoCircle.rotation +5*dt
-    self.logoCircleFill.rotation = self.logoCircle.rotation +5*dt
 
+    if math.abs(mx - self.logoCircle.x) < self.logoCircle.radius and math.abs(my - self.logoCircle.y) < self.logoCircle.radius then
+        if Input:pressed("menuClickLeft") then
+            Timer.tween(2, self.logoCircle, {rotation = self.logoCircle.rotation + 30}, "out-quad")
+        end
+    end
+
+    self.logoCircleFill.rotation = self.logoCircle.rotation -- why do the calculations twice?
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
                 Bubble.rotation = Bubble.rotation + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt

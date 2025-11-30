@@ -322,8 +322,9 @@ function titleScreen:updateBubbles(dt)
 
 
         Bubble.rotation = Bubble.rotation + cosv * 30 * dt
-        Bubble.x, Bubble.y = Bubble.x + sinv * 30 * dt, Bubble.y - 50 * dt
-        Bubble.y = Bubble.y + cosv * 30 * dt
+        Bubble.x = Bubble.x + sinv * 30 * dt
+        --Bubble.y =  Bubble.y - 50 * dt
+       -- Bubble.y = Bubble.y + cosv* dt
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
         if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
 
