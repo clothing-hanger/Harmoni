@@ -42,11 +42,14 @@ require("love.system")
 require("love.filesystem")
 
 local os = love.system.getOS()
-local arch = love.system.getProcessorCount() > 4 and "x64" or "x86"
+local arch = jit and jit.arch or love.system.getProcessorCount() > 4 and "x64" or "x86"
 
 local function copyToSave(src, dst)
-    local data = love.filesystem.read("data", src)
-    love.filesystem.write(dst, data)
+    local data, err = love.filesystem.read("data", src)
+    if not data then
+        error("Failed to read " .. src .. ": " .. err)
+    end
+    assert(love.filesystem.write(dst, data))
 end
 
 -- Check version
@@ -77,6 +80,7 @@ function CLibs:setupIfNeeded()
     love.filesystem.createDirectory("clibs")
     installThread = love.thread.newThread(installThreadCode)
     installThread:start()
+    print("Setting up C Libraries...")
 end
 
 function CLibs:isInstallationDone()
@@ -84,6 +88,7 @@ function CLibs:isInstallationDone()
 end
 
 function CLibs:after()
+    print("Finalizing C Libraries setup...")
     outchannel:pop()
     local save = love.filesystem.getSaveDirectory()
     local sep = package.config:sub(1,1)
