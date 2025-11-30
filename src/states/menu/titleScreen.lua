@@ -223,17 +223,13 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         ::start::
         local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
-        if x > 0 and y < baseScreenRatio.y then -- its on the screen, we gotta start over 
-         --   goto start
-        end
-
         local color = colors[love.math.random(1,#colors)]
         table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
     end
 
     for i, Bubble in ipairs(self.bubbles) do
         Bubble.type = "Spinner"
-        if love.math.random(1,1) == 1 then
+        if love.math.random(1,10) == 1 then
             Bubble.type = "Squisher"
         end
     end
@@ -324,8 +320,6 @@ function titleScreen:updateBubbles(dt)
         local sinv = math.sin(ang)
         local cosv = math.cos(ang)
         Bubble:update(dt)
-
-                       -- Bubble.squishX, Bubble.squishY = Bubble.rotation/10000, Bubble.rotation/10000
 
 
         Bubble.rotation = Bubble.rotation + cosv * 30 * dt
