@@ -38,10 +38,8 @@ function CHE:init()
     WINDOW = require("engine.modules.window")
     if WINDOW then
         local ok = WINDOW.setDarkMode(WINDOW.isDarkMode())
-        if ok then
-            print("Enabled dark mode for window title bar.")
-            WINDOW.hideWindow()
-            WINDOW.showWindow()
+        if not ok then
+            print("Failed to set dark mode for window.")
         end
     end
     NOTIFICATIONS = require("engine.modules.notifications")
