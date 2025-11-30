@@ -341,15 +341,13 @@ function titleScreen:updateBubbles(dt)
             local mx,my = cursor:getPosition()
             if math.abs(mx - Bubble.x) < Bubble.radius and math.abs(my - Bubble.y) < Bubble.radius then
                 local unsquish
-                local loop
 
                 local squish = function()
                     unsquish = function(l)
-                        loop = loop or l
-                        loop = loop - 1
-                        Timer.tween(1, Bubble, {squishX = 0,squishY = 0, }, "out-elastic", function() if (loop > 0) then  unsquish();print("end unsquish",loop) else loop = nil end end)
+                        if self.unsquishTimer then Timer.cancel(self.unsquishTimer) end
+                        self.unsquishTimer = Timer.tween(1, Bubble, {squishX = 0,squishY = 0, }, "out-elastic", function() unsquish() end)
                     end
-                    Timer.tween(0.5, Bubble, {squishX = love.math.random(-0.5,0.5),squishY = love.math.random(-0.5,0.5)}, "out-back", function()unsquish(2)end)
+                    Timer.tween(0.5, Bubble, {squishX = love.math.random(-0.5,0.5),squishY = love.math.random(-0.5,0.5)}, "out-back", function()unsquish()end)
                 end
 
                 local spin = function()
