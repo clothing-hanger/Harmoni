@@ -98,7 +98,7 @@ function maniaLane:handleInput()
             healthChange = bestJudgement.health
         end
 
-        print(self, self.parent, self.parent.parent, self.parent.parent.mods, self.parent.parent.mods["SD"])
+      --  print(self, self.parent, self.parent.parent, self.parent.parent.mods, self.parent.parent.mods["SD"])
         if self.parent.parent.mods["SD"] then healthChange = -99999 end   -- i dont understand why the print above seems fine but this doesnt work..
 
         state.healthBar:changeHealth(healthChange)
