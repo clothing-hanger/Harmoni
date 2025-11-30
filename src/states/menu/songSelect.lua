@@ -21,8 +21,17 @@ local difficultyButtonX = songButtonX
 
 local switchingState
 
+function songSelect:resetBpmShit(newBpm)
+    print("songSelect:resetBpmShit", newBpm)
+    self.bpmHandler:init()
+    self.bpmHandler:setBpm(newBpm)
+end
+
 function songSelect:enter()
     self.debug = true
+
+    self.bpmHandler = require("modules.bpm")
+
 
     self.currentSongInfo = {}
     -- selectedSong = 1
@@ -396,6 +405,8 @@ function songSelect:loadSongButtonImages()
 end
 
 function songSelect:update(dt)
+    self.bpmHandler:update(dt)
+    if self.currentAudio and self.currentAudio:isPlaying() then MusicTime = MusicTimeManager.updateMusicTime(MusicTime,dt) end
     local mx,my = cursor:getPosition()
     if Input:pressed("menuBack") then
         if self.menuState == "difficulty" then self.menuState = "song"; return end
@@ -406,8 +417,13 @@ function songSelect:update(dt)
         end)
         return
     end
+    local lineBeatTimers = {}
     for i, squiglyLine in ipairs(self.squiglyLines) do
         squiglyLine:update(dt)
+        if self.bpmHandler:wasBeatHit() then
+            if lineBeatTimers[i] then Timer.cancel(lineBeatTimers[i]) end
+            lineBeatTimers[i] = Timer.tween(0.5, squiglyLine, {time = squiglyLine.time + 1}, "out-quad")
+        end
     end
 
     self.layerWaves:update(dt)
@@ -432,18 +448,34 @@ function songSelect:update(dt)
 
     self.logoCircle.rotation = self.logoCircle.rotation +5*dt
 
+    if self.bpmHandler:wasBeatHit() then
+        if self.beatLogoCircleTween then Timer.cancel(self.beatLogoCircleTween);Timer.cancel(self.logoHSizeBeatTween) end
+        self.beatLogoCircleTween = Timer.tween(0.5, self.logoCircle, {rotation = self.logoCircle.rotation + 10}, "out-quad")
+        self.logoH.sx, self.logoH.sy = 0.18, 0.18
+        self.logoHSizeBeatTween = Timer.tween(0.5, self.logoH, {sx = 0.17, sy = 0.17}, "out-quad")
+
+    end
+
     if math.abs(mx - self.logoCircle.x) < self.logoCircle.radius and math.abs(my - self.logoCircle.y) < self.logoCircle.radius then
         if Input:pressed("menuClickLeft") then
             Timer.tween(2, self.logoCircle, {rotation = self.logoCircle.rotation + 30}, "out-quad")
         end
     end
-
+    local bubbleBeatTimers = {}
     self.logoCircleFill.rotation = self.logoCircle.rotation -- why do the calculations twice?
     for i, Bubble in ipairs(self.bubbles) do
         Bubble:update(dt)
                 Bubble.rotation = Bubble.rotation + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
 
-        Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 50 * dt
+        Bubble.x, Bubble.y = Bubble.x + math.sin(love.timer.getTime() * 0.5 + i) * 30 * dt, Bubble.y - 10 * dt
+
+        if self.bpmHandler:wasBeatHit() then
+            self.bubbleTimerBooleanIdk = self.bubbleTimerBooleanIdk or false
+            if bubbleBeatTimers[i] then Timer.cancel(bubbleBeatTimers[i]) end
+
+                bubbleBeatTimers[i] = Timer.tween(0.5, Bubble, {y = Bubble.y - 30}, "out-quad")
+
+        end
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
         if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100
         elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100
@@ -471,7 +503,9 @@ function songSelect:checkForSongLoop()
 
     if self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint) then -- we need to seek to the loop point 
         print("Loop to " .. self.currentLoopPoint/1000 .. " seconds")
+        self:resetBpmShit(self.currentSongInfo.bpm)
         self.currentAudio:seek(self.currentLoopPoint/1000)
+        MusicTime = self.currentAudio:tell()
     end
 end
 
@@ -520,7 +554,7 @@ function songSelect:updateBGImage()
                     previousBG = currentDisplayedBG
                     currentDisplayedBG = SongButton.image
                     -- hell, just select the current song
-                    selectedSong = i     -- for what tho
+                    selectedSong = i     -- for what tho  
                     self.currentSongInfo = SongButton:returnInfo()
                     fadeBG()
                 end
@@ -551,6 +585,8 @@ function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid
     if self.previousSong then self.previousSong:setVolume(1) end
     if self.currentAudio then self.currentAudio:play() else GlobalNotificationsHandler:addNotification("something broke,, idk what", "error"); return end
     if self.previousSong then self.previousSong:play() end
+   -- self:resetBpmShit(self.currentSongInfo.bpm)
+    MusicTime = self.currentAudio:tell()
     -- now we fade the previus one out, and fade the current one in 
 
 
@@ -582,6 +618,8 @@ function songSelect:checkForSongButtonClicks(requireClick)
     for i, SongButton in ipairs(songButtons) do
         local thething = function()
                 self.currentSongInfo = SongButton:returnInfo()
+                print("checkForSongButtonClicks",self.currentSongInfo.bpm)
+                self:resetBpmShit(self.currentSongInfo.bpm)
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()
                 print(self.currentPlayingSong)
