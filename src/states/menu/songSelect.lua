@@ -212,22 +212,25 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
     end
 end
 
-
 function songSelect:setUpThoseBubblesThatIHate(numberOfBubbles)
     self.bubbles = {}
 
+    transparency = 0.1
     local colors = SkinHandler:getRandomColors()
 
-    for i = 1,20 do
+    for i = 1,numberOfBubbles do 
         ::start::
         local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
-        if x > 0 and y < baseScreenRatio.y then -- its on the screen, we gotta start over 
-         --   goto start
-        end
-
         local color = colors[love.math.random(1,#colors)]
-        table.insert(self.bubbles, UISquigleCircle("fill", x, y, 100, 5, 5, 3, color))
+        table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
+    end
+
+    for i, Bubble in ipairs(self.bubbles) do
+        Bubble.type = "Spinner"
+        if love.math.random(1,10) == 1 then
+            Bubble.type = "Squisher"
+        end
     end
 
 end
@@ -477,10 +480,10 @@ function songSelect:update(dt)
 
         end
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
-        if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100
-        elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100
+        if Bubble.x > baseScreenRatio.x + Bubble.radius+10 then Bubble.x = -Bubble.radius+10
+        elseif Bubble.x < -Bubble.radius+10 then Bubble.x = baseScreenRatio.x + Bubble.radius+10
         end
-        if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
+        if Bubble.y < -Bubble.radius+10 then Bubble.y = baseScreenRatio.y + Bubble.radius+10 end
     end
 
     local totalSongListHeight = #songButtons * (songButtonHeight + songButtonSpacing)

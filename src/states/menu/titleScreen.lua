@@ -328,8 +328,8 @@ function titleScreen:updateBubbles(dt)
 
         Bubble.y =  Bubble.y - 20 * dt
         Bubble.y = Bubble.y + cosv* dt*50
-        if Bubble.x > baseScreenRatio.x + 100 then Bubble.x = -100 elseif Bubble.x < -100 then Bubble.x = baseScreenRatio.x + 100 end
-        if Bubble.y < -100 then Bubble.y = baseScreenRatio.y + 100 end
+        if Bubble.x > baseScreenRatio.x + Bubble.radius+10 then Bubble.x = -Bubble.radius+10 elseif Bubble.x < -Bubble.radius+10 then Bubble.x = baseScreenRatio.x + Bubble.radius+10 end
+        if Bubble.y < -Bubble.radius+10 then Bubble.y = baseScreenRatio.y + Bubble.radius+10 end
 
         if Input:pressed("menuClickLeft") then
             local mx,my = cursor:getPosition()
