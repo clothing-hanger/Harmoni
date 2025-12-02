@@ -33,7 +33,7 @@
     UITimeRemaing = require("objects.UI.UITimeRemaining")
     button = require("objects.UI.button")
     toggle = require("objects.UI.toggle")
-    buttonSlideOut = require("objects.UI.buttonSlideOut")
+    buttonSlideOut = require("objects.UI.buttonSlideOutNew")
     notification = require("objects.UI.notification")
     UILayerWave = require("objects.UI.UILayerWave")  -- UIslop the fucking sequel 
     UISquigleCircle = require("objects.UI.UISquigleCircle")  -- i dont even need to say it again

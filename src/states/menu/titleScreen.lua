@@ -14,8 +14,8 @@ function titleScreen:enter(from, resetItems, fadeIn)
         self.wavesY = 0
     end
 
-    self.buttonWidth = 300
-    self.buttonHeight = 100 
+    self.buttonWidth = 350
+    self.buttonHeight = 120
     self.buttonX = 300 - self.buttonWidth / 2 
     self.buttonLabels = {
         {
@@ -163,7 +163,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
 
     for i = 1,#self.buttonLabels do
         table.insert(self.buttons, 
-            buttonSlideOut(self.buttonX, 820 + (i-1) * (self.buttonHeight + buttonSpacing), 
+            buttonSlideOut(self.buttonX, 770 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
                             self.buttonLabels[i].color1, self.buttonLabels[i].color2
             )
