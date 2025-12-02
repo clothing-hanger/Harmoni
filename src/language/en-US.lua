@@ -24,6 +24,37 @@ Language = {
         ["BPM"] = "BPM: ",
         ["LN%"] = "LN%: "
     },
+    Modifiers = {
+        ["NSVL"] = "No Scroll Velocities",
+        ["NSVS"] = "NSV",
+        ["NSVD"] = "Disables all Scroll Velocites",
+        ["NSVH"] = "Fun to watch, not always as fun to play",
+
+        ["NLNL"] = "No Long Notes",
+        ["NLNS"] = "NLN",
+        ["NLND"] = "Turns all Long Notes into normal Notes",
+        ["NLNH"] = "Not everyone likes LNs, we get it",
+
+        ["NFL"] = "No Fail",
+        ["NFS"] = "NF",
+        ["NFD"] = "You can't lose, no matter what",
+        ["NFH"] = "I'm bad at the game too, don't feel too bad",
+
+        ["EZL"] = "Easy",
+        ["EZS"] = "EZ",
+        ["EZD"] = "Halves health loss when missing notes",
+        ["EZH"] = "We aren't all good at rhythm games",
+
+        ["SDL"] = "Sudden Death",
+        ["SDS"] = "SD",
+        ["SDD"] = "Fail when you miss a note",
+        ["SDH"] = "Do you hate yourself?",
+
+        ["BPL"] = "Botplay",
+        ["BPS"] = "BP",
+        ["BPD"] = "Watch a perfect playthrough of the song",
+        ["BPH"] = "It's fun to just watch sometimes",
+    },
     Results = {
         ["Accuracy"] = "Accuracy",
         ["Score"] = "Score",

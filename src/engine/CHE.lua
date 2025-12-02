@@ -96,7 +96,7 @@ function CHE:init()
         [7] = { "lane17K", "lane27K", "lane37K", "lane47K", "lane57K", "lane67K", "lane77K" }
     }
 
-    SkinHandler:loadSkin("Default Arrow Batched")
+    SkinHandler:loadSkin("AMERICA")
     local id = 1
     if NOTIFICATIONS then
         NOTIFICATIONS.setAppID("com.ch.harmoni")
@@ -105,7 +105,7 @@ function CHE:init()
     self.flashbangsound = love.audio.newSource("sounds/flashbang.mp3", "static")
     self.flashbangimage = nil
     self.flashbangalphas = {rect = 0, img = 0}
-    --CHE:flashbangTrigger()
+   -- CHE:flashbangTrigger()
 end
 
 function CHE:update(dt)
@@ -120,6 +120,7 @@ function CHE:update(dt)
     CHETime.real, CHETime.session = self:updateTime()
 
     love.mouse.setVisible(false)
+    NOTIFICATIONS.update()
 end
 
 function CHE:updateTime()

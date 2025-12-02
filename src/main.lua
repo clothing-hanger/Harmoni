@@ -53,6 +53,8 @@ function love.load(args)
     CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
+    LocaleHandler:loadLocale("AMERICAN!!!.lua")
+
     CHE = require("engine.CHE")
     CHE:init()
     _G.GlobalNotificationsHandler = notificationsHandler()

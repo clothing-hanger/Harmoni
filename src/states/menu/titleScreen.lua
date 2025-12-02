@@ -56,6 +56,9 @@ function titleScreen:enter(from, resetItems, fadeIn)
         }
     end
 
+   -- module.showNotification(title, text, timeout_ms, opts)
+    NOTIFICATIONS.showNotification("HI", "HELLO", 1000)
+
 
     self.socialsX = baseScreenRatio.x - (5*120)
     self.socialsY = baseScreenRatio.y - 120
@@ -287,6 +290,8 @@ end
 
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
+        NOTIFICATIONS.showNotification("HI", "HELLO", 1000)
+
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
     end

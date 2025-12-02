@@ -1,8 +1,44 @@
 return {
-    {name = "No Scroll Velocities", short = "NSV", description = "Disables all Scroll Velocites", hover = "Fun to watch, not always as fun to play", default = false},
-    {name = "No Long Notes", short = "NLN", description = "Turns all Long Notes into normal Notes", hover = "Not everyone likes LNs, we get it", default = false},
-    {name = "No Fail", short = "NF", description = "You can't lose, no matter what", hover = "I'm bad at the game too, don't feel too bad", default = false},
-    {name = "Easy", short = "EZ", description = "Halves health loss when missing notes", hover = "We aren't all good at rhythm games", default = false},
-    {name = "Sudden Death", short = "SD", description = "Fail when you miss a note", hover = "Do you hate yourself?", default = false},
-    {name = "Botplay", short = "BP", description = "Watch a perfect playthrough of the song", hover = "It's fun to just watch sometimes", default = false},
+    {
+        name = LocaleHandler:getText("Modifiers", "NSVL"),
+        short = LocaleHandler:getText("Modifiers", "NSVS"),
+        description = LocaleHandler:getText("Modifiers", "NSVD"),
+        hover = LocaleHandler:getText("Modifiers", "NSVH"),
+        default = false
+    },
+    {
+        name = LocaleHandler:getText("Modifiers", "NLNL"),
+        short = LocaleHandler:getText("Modifiers", "NLNS"),
+        description = LocaleHandler:getText("Modifiers", "NLND"),
+        hover = LocaleHandler:getText("Modifiers", "NLNH"),
+        default = false
+    },
+    {
+        name = LocaleHandler:getText("Modifiers", "NFL"),   --- FOOTBALL NO WAYYYYY 🏈🏈🏈🦅🦅🦅🦅🍔🍔🍔🍔
+        short = LocaleHandler:getText("Modifiers", "NFS"),
+        description = LocaleHandler:getText("Modifiers", "NFSD"),
+        hover = LocaleHandler:getText("Modifiers", "NFSH"),
+        default = false
+    },
+    {
+        name = LocaleHandler:getText("Modifiers", "EZL"),
+        short = LocaleHandler:getText("Modifiers", "EZS"),
+        description = LocaleHandler:getText("Modifiers", "EZD"),
+        hover = LocaleHandler:getText("Modifiers", "EZH"),
+        default = false
+    },
+    {
+        name = LocaleHandler:getText("Modifiers", "SDL"),
+        short = LocaleHandler:getText("Modifiers", "SDS"),
+        description = LocaleHandler:getText("Modifiers", "SDD"),
+        hover = LocaleHandler:getText("Modifiers", "SDH"),
+        default = false
+    },
+    {
+        name = LocaleHandler:getText("Modifiers", "BPL"),
+        short = LocaleHandler:getText("Modifiers", "BPS"),
+        description = LocaleHandler:getText("Modifiers", "BPD"),
+        hover = LocaleHandler:getText("Modifiers", "BPH"),
+        default = false
+    },
 }
