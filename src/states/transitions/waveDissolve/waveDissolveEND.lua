@@ -25,16 +25,17 @@ end
 
 function t:update(dt) end
 
+local lastShader = nil
 function t:startDraw()
     shader:send("progress", time[1])
     shader:send("amplitude", 0.03)
     shader:send("frequency", 30)
-
+    lastShader = love.graphics.getShader()
     love.graphics.setShader(shader)
 end
 
 function t:stopDraw()
-    love.graphics.setShader()
+    love.graphics.setShader(lastShader)
 end
 
 return t

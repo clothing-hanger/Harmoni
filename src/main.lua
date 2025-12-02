@@ -53,7 +53,7 @@ function love.load(args)
     CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
-    --LocaleHandler:loadLocale("AMERICAN!!!.lua")
+    LocaleHandler:loadLocale("AMERICAN!!!.lua")
 
     CHE = require("engine.CHE")
     CHE:init()
@@ -81,10 +81,16 @@ function love.load(args)
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
 
+--murica = love.graphics.newShader("shaders/murica.glsl")
+local t = 0
 function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
     _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL
+    t = t + dt
+    if murica then
+        murica:send("time", t)
+    end
 end
 
 function love.mousepressed(x, y, b)
@@ -118,7 +124,11 @@ function love.resize(w, h) end
 function love.draw(dt)
     love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
 
+    if murica then
+        love.graphics.setShader(murica)
+    end
     CHE:draw(dt)
+    love.graphics.setShader()
     GlobalNotificationsHandler:draw()
 end
 
