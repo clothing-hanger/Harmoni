@@ -83,7 +83,7 @@ function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
     _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL
-end 
+end
 
 function love.mousepressed(x, y, b)
     CHE:mousepressed(x, y, b)

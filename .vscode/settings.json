@@ -59,7 +59,8 @@
         "xloctime": "cpp",
         "xmemory": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "thread": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.ignoreCMakeListsMissing": true,

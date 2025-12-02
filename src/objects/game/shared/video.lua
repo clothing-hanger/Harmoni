@@ -157,4 +157,11 @@ function video:draw()
     love.graphics.setColor(1, 1, 1)
 end
 
+function video:close()
+    if self.video then
+        self.video:close()
+        self.video = nil
+    end
+end
+
 return video
