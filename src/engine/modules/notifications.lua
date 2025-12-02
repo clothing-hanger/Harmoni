@@ -44,12 +44,22 @@ int MultiByteToWideChar(
 );
 
 HRESULT SetCurrentProcessExplicitAppUserModelID(const wchar_t *AppID);
+
+HWND CreateWindowExW(unsigned long, const wchar_t*, const wchar_t*, unsigned long,
+                     int, int, int, int,
+                     HWND, void*, void*, void*);
+HWND GetActiveWindow();
+
+void* LoadIconW(void*, const wchar_t*);
 ]]
 
 local NIM_ADD    = 0x00000000
 local NIM_MODIFY = 0x00000001
 local NIM_DELETE = 0x00000002
 local NIF_INFO   = 0x00000010
+local NIF_MESSAGE= 0x00000001
+local NIF_ICON   = 0x00000002
+local NIF_TIP    = 0x00000004
 
 local NIIF_NONE  = 0x00000000
 local NIIF_INFO  = 0x00000001
@@ -88,6 +98,20 @@ function module.setAppID(appid)
     end
 end
 
+local function getHWND()
+    if module.appid then
+        if not module.hwnd then
+            local wAppID, len = utf8ToWideFixed(module.appid, #module.appid*2 + 4)
+            module.hwnd = user32.CreateWindowExW(0, wAppID, wAppID, 0, 0, 0, 0, 0, nil, nil, nil, nil)
+        end
+        return module.hwnd
+    else
+        return user32.GetActiveWindow()
+    end
+end
+
+local WM_USER = 0x0400
+
 function module.showNotification(title, text, timeout_ms, opts)
     opts = opts or {}
     timeout_ms = timeout_ms or 5000
@@ -95,21 +119,33 @@ function module.showNotification(title, text, timeout_ms, opts)
     local uid = nextUID
     nextUID = nextUID + 1
 
+    local hwnd = getHWND()
+
     local nid = ffi.new("NOTIFYICONDATAW")
     nid.cbSize = ffi.sizeof(nid)
-    nid.hWnd = nil
+    nid.hWnd = hwnd
     nid.uID = uid
-    nid.uFlags = NIF_INFO
-    nid.uTimeout = timeout_ms
-    nid.dwInfoFlags = opts.infoFlags or NIIF_INFO
+    nid.uFlags = bit.bor(NIF_ICON, NIF_MESSAGE, NIF_TIP)
+    nid.uCallbackMessage = WM_USER + 1
+
+    nid.hIcon = user32.LoadIconW(nil, ffi.cast("const wchar_t*", 32512))
+
+    local ok = shell32.Shell_NotifyIconW(NIM_ADD, nid)
+    if ok == 0 then
+        return nil, "Shell_NotifyIconW failed to add notification"
+    end
 
     local wTitle, titleLen = utf8ToWideFixed(title or "Notification", 64)
     local wText, textLen = utf8ToWideFixed(text or "", 256)
 
-    ffi.copy(nid.szInfoTitle, wTitle, titleLen * ffi.sizeof("wchar_t"))
-    ffi.copy(nid.szInfo, wText, textLen * ffi.sizeof("wchar_t"))
+    nid.uFlags = NIF_INFO
+    nid.uTimeout = timeout_ms
+    nid.dwInfoFlags = opts.infoFlags or NIIF_INFO
 
-    local ok = shell32.Shell_NotifyIconW(NIM_ADD, nid)
+    ffi.copy(nid.szInfoTitle, wTitle, titleLen * 2)
+    ffi.copy(nid.szInfo, wText, textLen * 2)
+
+    shell32.Shell_NotifyIconW(NIM_MODIFY, nid)
 
     local now = (love and love.timer and love.timer.getTime and love.timer.getTime()) or os.time()
     local expiry = now + (timeout_ms / 1000)
@@ -117,6 +153,7 @@ function module.showNotification(title, text, timeout_ms, opts)
 
     return uid
 end
+
 
 function module.update()
     local now = (love and love.timer and love.timer.getTime and love.timer.getTime()) or os.time()
