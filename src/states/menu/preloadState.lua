@@ -9,7 +9,7 @@ local installing = false
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
-    self.debug = false
+    self.debug = true
     self.skipSafetyTimer = true
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)
@@ -27,6 +27,8 @@ end
 
 function preloadState:update(dt)
 
+    if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
+
     t = t + dt
         if step < 0 then
         if not installing then
@@ -42,6 +44,7 @@ function preloadState:update(dt)
                 States.menu.titleScreen.layerWaves = self.layerWaves
                 States.menu.titleScreen.images = self.images
                 State.switch(States.menu.splash)
+                if AMERICA then PATRIOTIC:play() end
             end)
         end
  

@@ -26,6 +26,7 @@ function notificationsHandler:update(dt)
         if Notification.timer<=0 then
             Notification.x = Notification.x + (Notification.targetX - Notification.x) * math.min(speed * dt, 1)
             if Notification.x <= Notification.targetX then table.remove(self.notifications, i) end
+            collectgarbage()
         end
     end
 end

@@ -14,6 +14,14 @@ function titleScreen:enter(from, resetItems, fadeIn)
         self.wavesY = 0
     end
 
+    self.icons = {
+        ["play"] = love.graphics.newImage("images/menu/play.png"),
+        ["jukebox"] = love.graphics.newImage("images/menu/jukebox.png"),
+        ["settings"] = love.graphics.newImage("images/menu/settings.png"),
+        ["exit"] = love.graphics.newImage("images/menu/exit.png")
+    }
+
+    print(self.icons["play"])
     self.buttonWidth = 350
     self.buttonHeight = 120
     self.buttonX = 300 - self.buttonWidth / 2 
@@ -25,19 +33,24 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 State.transition("waveDissolve", States.menu.songSelect) 
             end, 
             color1 = {94/255,252/255,141/255,1},
-            color2 = {44/255,251/255,106/255,0}
+            color2 = {44/255,251/255,106/255,0},
+            icon = self.icons["play"]
         },
         {
             label = LocaleHandler:getText("Menu", "Jukebox"), 
             func = function() State.transition("waveDissolve",States.menu.jukebox, self) end, 
             color1 = {142/255,249/255,243/255,1},
-            color2 = {88/255,246/255,238/255,1}
+            color2 = {88/255,246/255,238/255,1},
+            icon = self.icons["jukebox"]
+
         },
         {
             label = LocaleHandler:getText("Menu", "Settings"), 
             func = function() State.switch(States.menu.settingsMenu) end, 
             color1 = {147/255,190/255,223/255,1},
-            color2 = {106/255,165/255,210/255,1}
+            color2 = {106/255,165/255,210/255,1},
+            icon = self.icons["settings"]
+
         },
         {
             label = LocaleHandler:getText("Menu", "Exit"), 
@@ -45,7 +58,9 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 love.event.quit()
             end, 
             color1 = {1,1,1,1}, 
-            color2 = {1,1,1,1}
+            color2 = {1,1,1,1},
+            icon = self.icons["exit"]
+
         },
     }
 
@@ -162,10 +177,11 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.buttons = {}
 
     for i = 1,#self.buttonLabels do
+
         table.insert(self.buttons, 
             buttonSlideOut(self.buttonX, 770 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
-                            self.buttonLabels[i].color1, self.buttonLabels[i].color2
+                            self.buttonLabels[i].color1, self.buttonLabels[i].color2, self.buttonLabels[i].icon
             )
         )
     end

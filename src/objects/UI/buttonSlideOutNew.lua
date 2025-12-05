@@ -1,6 +1,6 @@
 local buttonSlideOut = Class:extend("buttonSlideOut")
 
-function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2)
+function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2, image)
     self.x = x
     self.y = y
     self.width = width
@@ -9,8 +9,14 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
     self.func = func or function() end
     self.hovered = false
 
+    self.image = image
+
     self.color1 = color1 or {1,1,1}
     self.color2 = color2 or {1,1,1}
+
+    self.colorIconOffset = 1.5
+
+    self.iconColor = {self.color2[1]/self.colorIconOffset, self.color2[2]/self.colorIconOffset, self.color2[3]/self.colorIconOffset}
 
     self.cornerRadius = cornerRadius or 7
     self.debug = false
@@ -39,6 +45,12 @@ function buttonSlideOut:update(dt)
     if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
     self.hovered = mouseOver(self)
+
+
+        self.colorIconOffsetTarget = self.hovered and 0 or 0.65
+        self.colorIconOffset = self.colorIconOffset + (self.colorIconOffsetTarget - self.colorIconOffset) * 10 * dt
+        self.iconColor = {self.color2[1]*self.colorIconOffset, self.color2[2]*self.colorIconOffset, self.color2[3]*self.colorIconOffset}
+
 
     local targetWidth = self.hovered and self.width or self.slideInitialWidth
 
@@ -141,7 +153,7 @@ function buttonSlideOut:draw()
     local cx, cy = self.x + self.width / 2, self.y + self.height / 2
     love.graphics.push()
     love.graphics.translate(cx, cy)
-    love.graphics.scale(self.scale)
+  --  love.graphics.scale(self.scale)
     love.graphics.translate(-cx, -cy)
 
     local function stencilShape()
@@ -158,6 +170,8 @@ function buttonSlideOut:draw()
             {self.color2[1], self.color2[2], self.color2[3], 1},
         }
     )
+    
+
 
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
@@ -174,6 +188,9 @@ function buttonSlideOut:draw()
             }
         )
     end
+
+    love.graphics.setColor(self.iconColor)
+        if self.image then love.graphics.draw(self.image, self.x+self.radius/2, self.y+self.radius/2, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) end
 
     local textColorPercent = self.slideWidth / self.width
     local textColor = {

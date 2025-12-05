@@ -1,6 +1,6 @@
 local buttonSlideOut = Class:extend("buttonSlideOut")
 
-function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2)
+function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2, image)
     self.x = x
     self.y = y
     self.width = width
@@ -9,6 +9,9 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
     self.func = func or function() end
     self.hovered = false
 
+    self.image = image
+
+    print(self.image)
     self.color1 = color1 or {1,1,1}
     self.color2 = color2 or {1,1,1}
 
@@ -157,6 +160,8 @@ function buttonSlideOut:draw()
             {self.color2[1], self.color2[2], self.color2[3], 1},
         }
     )
+
+    if self.image then print("fjhndifjsfji"); love.graphics.draw(self.image, self.x, self.y) end
 
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())

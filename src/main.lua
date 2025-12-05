@@ -5,6 +5,8 @@ require("love.init")
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 dontShowBG = false
 
+AMERICA =  true
+
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
 function ithink(nums, whatDoYouThink)
@@ -53,7 +55,9 @@ function love.load(args)
     CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
-    --LocaleHandler:loadLocale("AMERICAN!!!.lua")
+    if AMERICA then LocaleHandler:loadLocale("AMERICAN!!!.lua") end
+
+    if AMERICA then PATRIOTIC = love.audio.newSource("Skins/AMERICA/stars and stripes forever.mp3", "stream"); PATRIOTIC:setLooping(true) end
 
     CHE = require("engine.CHE")
     CHE:init()
@@ -81,7 +85,7 @@ function love.load(args)
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
 
---murica = love.graphics.newShader("shaders/murica.glsl")
+if AMERICA then murica = love.graphics.newShader("shaders/murica.glsl") end
 local t = 0
 function love.update(dt)
     CHE:update(dt)
