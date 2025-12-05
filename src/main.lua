@@ -5,7 +5,7 @@ require("love.init")
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 dontShowBG = false
 
-AMERICA =  true
+AMERICA =  false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
