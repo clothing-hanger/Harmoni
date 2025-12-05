@@ -34,7 +34,8 @@ function titleScreen:enter(from, resetItems, fadeIn)
             end, 
             color1 = {94/255,252/255,141/255,1},
             color2 = {44/255,251/255,106/255,0},
-            icon = self.icons["play"]
+            icon = self.icons["play"],
+            animate = "fill",
         },
         {
             label = LocaleHandler:getText("Menu", "Jukebox"), 
@@ -181,7 +182,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
         table.insert(self.buttons, 
             buttonSlideOut(self.buttonX, 770 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
-                            self.buttonLabels[i].color1, self.buttonLabels[i].color2, self.buttonLabels[i].icon
+                            self.buttonLabels[i].color1, self.buttonLabels[i].color2, self.buttonLabels[i].icon, self.buttonLabels[i].animate
             )
         )
     end

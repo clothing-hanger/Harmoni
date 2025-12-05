@@ -9,7 +9,7 @@ local installing = false
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
-    self.debug = true
+    self.debug = false
     self.skipSafetyTimer = true
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)

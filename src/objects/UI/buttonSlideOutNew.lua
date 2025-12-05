@@ -1,6 +1,6 @@
 local buttonSlideOut = Class:extend("buttonSlideOut")
 
-function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2, image)
+function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color1, color2, image, animate)
     self.x = x
     self.y = y
     self.width = width
@@ -9,6 +9,7 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
     self.func = func or function() end
     self.hovered = false
 
+    self.animate = animate
     self.image = image
 
     self.color1 = color1 or {1,1,1}
@@ -39,12 +40,15 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 
     self.isPressed = false
     self.wasPressedInside = false
+
+    self.imageX,self.imageY = self.x+self.radius/2, self.y+self.radius/2
 end
 
 function buttonSlideOut:update(dt)
     if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
     self.hovered = mouseOver(self)
+
 
 
         self.colorIconOffsetTarget = self.hovered and 0 or 0.65
@@ -98,6 +102,26 @@ function buttonSlideOut:update(dt)
             self.scale = tween.from + (tween.to - tween.from) * tween.easing(t)
         end
     end
+
+
+    if self.thingies then
+        for i, Thingy in ipairs(self.thingies) do
+          --  love.graphics.draw(self.image, Thingy.x+self.x, Thingy.y+self.y)
+          Thingy.y = Thingy.y-Thingy.speed*dt
+        end
+    end
+
+    if self.iconYmove then self.imageY = self.imageY - 1000*dt end
+end
+
+
+function buttonSlideOut:animateFill(thingies)
+    self.thingies = {}
+    for i = 1,thingies do
+        table.insert(self.thingies,{x = love.math.random(1,self.width), y = love.math.random(self.height,500), speed = love.math.random(1000,1200)})
+    end
+
+    self.iconYmove = true -- horrid but i do not care
 end
 
 function buttonSlideOut:startTween(targetWidth)
@@ -138,6 +162,7 @@ end
 function buttonSlideOut:onClick()
     self.func()
     self:startPressTween()
+    if self.animate == "fill" then self:animateFill(10) end
 end
 
 local function remap(value, oldMin, oldMax, newMin, newMax)
@@ -170,7 +195,6 @@ function buttonSlideOut:draw()
             {self.color2[1], self.color2[2], self.color2[3], 1},
         }
     )
-    
 
 
     if self.hovered then
@@ -190,8 +214,15 @@ function buttonSlideOut:draw()
     end
 
     love.graphics.setColor(self.iconColor)
-        if self.image then love.graphics.draw(self.image, self.x+self.radius/2, self.y+self.radius/2, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) end
+        if self.image then love.graphics.draw(self.image, self.imageX, self.imageY, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) end
 
+            
+    if self.thingies then
+        for i, Thingy in ipairs(self.thingies) do
+          --  love.graphics.draw(self.image, Thingy.x+self.x, Thingy.y+self.y)
+            love.graphics.draw(self.image, Thingy.x+self.x+self.radius/2, Thingy.y+self.y+self.radius/2, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) 
+        end
+    end
     local textColorPercent = self.slideWidth / self.width
     local textColor = {
         self.color1[1] + (0 - self.color1[1]) * textColorPercent,
@@ -207,6 +238,9 @@ function buttonSlideOut:draw()
     love.graphics.printf(self.text, textX, textY, self.width, "left")
     love.graphics.pop()
         love.graphics.setStencilTest()
+
+
+
 
 end
 
