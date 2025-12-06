@@ -179,7 +179,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
 
     for i = 1,#self.buttonLabels do
 
-        table.insert(self.buttons, 
+        table.insert(self.buttons,
             buttonSlideOut(self.buttonX, 770 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
                             self.buttonLabels[i].color1, self.buttonLabels[i].color2, self.buttonLabels[i].icon, self.buttonLabels[i].animate
@@ -307,7 +307,6 @@ end
 
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
-        NOTIFICATIONS.showNotification("HI", "HELLO", 1000)
 
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
