@@ -379,6 +379,7 @@ function titleScreen:updateBubbles(dt)
                 Bubble.color[4] = 1
                 if Bubble.poop then Timer.cancel(Bubble.poop) end
                 Bubble.poop = Timer.tween(2, Bubble.color, {[4] = Bubble.originalAlpha})
+                break  -- so you cant click multiple cuz it it just looks bad
             end
         end
     end
