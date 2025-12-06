@@ -21,13 +21,45 @@ float roundbox(vec2 p, vec2 size, float r) {
     return length(max(d, vec2(0.0))) - r;
 }
 
-float starSDF(vec2 p, float spikes, float innerRadius, float outerRadius) {
-    float r = length(p);
-    float a = atan(p.x, p.y);
-    float k = cos(spikes * a) * 0.5 + 0.5;
-    float t = r / outerRadius;
-    float shape = mix(innerRadius / outerRadius, 1.0, k);
-    return t - shape;
+// math from https://www.desmos.com/calculator/hzieb2nx1s
+float starSDF(vec2 p, vec2 center, float rOuter, float rotation) {
+    vec2 pp = p - center;
+
+    const float PI = 3.141592653589793;
+    const float TAU = 6.283185307179586;
+    const float INNER_RATIO = 0.3819660112501051;
+    float rInner = rOuter * INNER_RATIO;
+
+    vec2 verts[10];
+    for (int i = 0; i < 10; ++i) {
+        float ang = rotation + float(i) * (TAU / 10.0);
+        float rad = (mod(float(i), 2.0) == 0.0) ? rOuter : rInner;
+        verts[i] = vec2(cos(ang), sin(ang)) * rad;
+    }
+
+    float minDist = 1e20;
+    for (int i = 0; i < 10; ++i) {
+        vec2 a = verts[i];
+        vec2 b = verts[(i + 1) % 10];
+        vec2 ab = b - a;
+        vec2 ap = pp - a;
+        float t = dot(ap, ab) / dot(ab, ab);
+        t = clamp(t, 0.0, 1.0);
+        vec2 proj = a + ab * t;
+        float d = length(pp - proj);
+        minDist = min(minDist, d);
+    }
+
+    bool inside = false;
+    for (int i = 0, j = 9; i < 10; j = i++) {
+        vec2 vi = verts[i];
+        vec2 vj = verts[j];
+        bool intersect = ((vi.y > pp.y) != (vj.y > pp.y)) &&
+                         (pp.x < (vj.x - vi.x) * (pp.y - vi.y) / (vj.y - vi.y + 1e-12) + vi.x);
+        if (intersect) inside = !inside;
+    }
+
+    return inside ? -minDist : minDist;
 }
 
 vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords) {
@@ -56,7 +88,7 @@ vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords) {
         float padY = cantonH * 0.07;
         float areaW = cantonW - 2.0 * padX;
         float areaH = cantonH - 2.0 * padY;
-        vec2 inner = vec2((screen_coords.x - padX) / areaW, (screen_coords.y - padY) / areaH);
+        vec2 inner = vec2((p.x - padX) / areaW, (p.y - padY) / areaH);
         float fx = inner.x * float(cols);
         float fy = inner.y * float(rows);
         float cx = floor(fx);
@@ -73,9 +105,9 @@ vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords) {
         }
 
         if (star) {
-            vec2 starP = screen_coords - cellCenter + waveOffset(cellCenter);
-            float sr = starRadius;
-            float sdf = starSDF(starP / sr, 5.0, 0.25, 1.0);
+            const float PI = 3.141592653589793;
+            vec2 starP = p - cellCenter + waveOffset(cellCenter);
+            float sdf = starSDF(starP, vec2(0.0), starRadius, -PI/2.0);
             float s = smoothstep(0.02, -0.02, sdf);
             float tw = 0.85 + 0.25 * sin(dot(cellCenter, vec2(12.9898, 78.233)) + time*3.0);
             col = mix(col, colWHITE * tw, s);
@@ -85,7 +117,7 @@ vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords) {
             col = colRED;
         else
             col = colWHITE;
-        float fabric = 0.02 * sin((screen_coords.x + screen_coords.y) * 0.12 + time * 0.6);
+        float fabric = 0.02 * sin((p.x + p.y) * 0.12 + time * 0.6);
         col += fabric;
     }
 

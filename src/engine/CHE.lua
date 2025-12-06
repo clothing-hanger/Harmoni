@@ -214,12 +214,20 @@ function CHE:draw(dt)
         love.graphics.getHeight() / baseScreenRatio.y
     )
 
+    if murica then
+        love.graphics.setShader(murica)
+    end
+
     love.graphics.draw(
         CHECanvas,
         love.graphics.getWidth() / 2, love.graphics.getHeight() / 2,
         0, ratio, ratio,
         baseScreenRatio.x / 2, baseScreenRatio.y / 2
     )
+
+    if murica then
+        love.graphics.setShader()
+    end
 
     if Console.isVisible then
         love.graphics.setColor(0, 0, 0, 0.5)

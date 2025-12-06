@@ -12,4 +12,7 @@ return {
         gameModeManager = require("states.game.gameModeManager"),
         resultsState = require("states.game.resultsState")
     },
+    extra = {
+        america = require("states.extra.america")
+    }
 }

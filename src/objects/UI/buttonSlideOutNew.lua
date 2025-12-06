@@ -49,12 +49,9 @@ function buttonSlideOut:update(dt)
 
     self.hovered = mouseOver(self)
 
-
-
-        self.colorIconOffsetTarget = self.hovered and 0 or 0.65
-        self.colorIconOffset = self.colorIconOffset + (self.colorIconOffsetTarget - self.colorIconOffset) * 10 * dt
-        self.iconColor = {self.color2[1]*self.colorIconOffset, self.color2[2]*self.colorIconOffset, self.color2[3]*self.colorIconOffset}
-
+    self.colorIconOffsetTarget = self.hovered and 0 or 0.65
+    self.colorIconOffset = self.colorIconOffset + (self.colorIconOffsetTarget - self.colorIconOffset) * 10 * dt
+    self.iconColor = {self.color2[1]*self.colorIconOffset, self.color2[2]*self.colorIconOffset, self.color2[3]*self.colorIconOffset}
 
     local targetWidth = self.hovered and self.width or self.slideInitialWidth
 
@@ -103,9 +100,8 @@ function buttonSlideOut:update(dt)
         end
     end
 
-
     if self.thingies then
-        for i, Thingy in ipairs(self.thingies) do
+        for _, Thingy in ipairs(self.thingies) do
           --  love.graphics.draw(self.image, Thingy.x+self.x, Thingy.y+self.y)
           Thingy.y = Thingy.y-Thingy.speed*dt
         end
@@ -195,8 +191,7 @@ function buttonSlideOut:draw()
             {self.color2[1], self.color2[2], self.color2[3], 1},
         }
     )
-
-
+    
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
         local remappedX = remap(mouseX, self.x, self.x + self.slideWidth, 0, 1)
@@ -214,9 +209,7 @@ function buttonSlideOut:draw()
     end
 
     love.graphics.setColor(self.iconColor)
-        if self.image then love.graphics.draw(self.image, self.imageX, self.imageY, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) end
-
-            
+    if self.image then love.graphics.draw(self.image, self.imageX, self.imageY, nil, self.radius/self.image:getWidth()*0.8, self.radius/self.image:getHeight()*0.8, self.image:getWidth()/2, self.image:getHeight()/2) end
     if self.thingies then
         for i, Thingy in ipairs(self.thingies) do
           --  love.graphics.draw(self.image, Thingy.x+self.x, Thingy.y+self.y)
@@ -237,11 +230,7 @@ function buttonSlideOut:draw()
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2
     love.graphics.printf(self.text, textX, textY, self.width, "left")
     love.graphics.pop()
-        love.graphics.setStencilTest()
-
-
-
-
+    love.graphics.setStencilTest()
 end
 
 return buttonSlideOut

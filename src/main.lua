@@ -128,9 +128,6 @@ function love.resize(w, h) end
 function love.draw(dt)
     love.graphics.draw(spongebirth, 0, 0, 0, 0.5, 0.5)
 
-    if murica then
-        love.graphics.setShader(murica)
-    end
     CHE:draw(dt)
     love.graphics.setShader()
     GlobalNotificationsHandler:draw()
@@ -140,14 +137,35 @@ function love.quit()
     CHE:exit()
 
     if State.current() == States.menu.titleScreen then
-        if not States.menu.titleScreen.quitInProgress then
+        if not States.menu.titleScreen.quitInProgress and not AMERICA then
             States.menu.titleScreen.quitInProgress = true
             States.menu.titleScreen:raiseWaves()
             States.menu.titleScreen:fadeScreen()
             Timer.after(0.8, function() love.event.quit() end)
             return true
+        elseif AMERICA then
+            if not AMERICA then
+                return false
+            else
+                if States.extra.america.finishedAnthem then
+                    return false
+                else
+                    State.switch(States.extra.america)
+                    return true
+                end
+            end
         else
             return false
+        end
+    else
+        if not AMERICA then
+            return false
+        else
+            if States.extra.america.finishedAnthem then
+                return false
+            else
+                return true
+            end
         end
     end
 end
