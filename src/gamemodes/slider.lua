@@ -139,6 +139,7 @@ function slider:update(dt)
         thething = false
         self:endSong()
     end
+    error("dont play this fucking mode")
 end
 
 function slider:endSong()

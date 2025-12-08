@@ -64,7 +64,12 @@ end
 
 function maniaLane:handleInput()
     if not Input then return end -- why would input be nil???????????
-    if not Input:pressed(self.inputBind) then return end
+
+    
+    if not self.parent.parent.mods["BP"] then
+        if not Input:pressed(self.inputBind) then return end
+    end
+    
 
     local bestJudgement = nil
     local bestTimeDiff = math.huge
@@ -72,10 +77,19 @@ function maniaLane:handleInput()
     if not note then return end
 
     local timeDiff = math.abs(MusicTime - note.startTime)
-    for _, judgement in ipairs(mania.judgements) do
-        if timeDiff <= judgement.timing*1.35 and timeDiff < bestTimeDiff then
+    if not self.parent.parent.mods["BP"] then
+        for _, judgement in ipairs(mania.judgements) do
+            if timeDiff <= judgement.timing and timeDiff < bestTimeDiff then
+                bestTimeDiff = timeDiff
+                bestJudgement = judgement
+            end
+        end
+    else
+        local judgement = mania.judgements[1] -- should always be perfect
+        if timeDiff <= judgement.timing and timeDiff < bestTimeDiff and not note.botplayhit then
             bestTimeDiff = timeDiff
             bestJudgement = judgement
+            note.botplayhit = true
         end
     end
 
@@ -108,7 +122,10 @@ end
 
 function maniaLane:checkHoldReleases()
     if not Input then return end
-    if not Input:released(self.inputBind) then return end
+
+    if not self.parent.parent.mods["BP"] then
+        if not Input:released(self.inputBind) then return end
+    end
 
     for i = #self.drawableNotes, 1, -1 do
         local note = self.drawableNotes[i]
@@ -119,27 +136,37 @@ function maniaLane:checkHoldReleases()
             local bestJudgement = nil
             local bestDiff = math.huge
 
-            for _, judgement in ipairs(mania.judgements) do
-                local holdWindow = judgement.timing * 1.5
-                if judgement.name == "Miss" then
-                    holdWindow = judgement.timing
-                end
-                if releaseDiff <= holdWindow and releaseDiff < bestDiff then
+            if self.parent.parent.mods["BP"] then
+                if math.abs(MusicTime - note.endTime) <= mania.judgements[1].timing then
                     bestDiff = releaseDiff
-                    bestJudgement = judgement
+                    bestJudgement = mania.judgements[1]
                 end
-            end
+            else
 
+                for _, judgement in ipairs(mania.judgements) do
+                    local holdWindow = judgement.timing * 1.5
+                    if judgement.name == "Miss" then
+                        holdWindow = judgement.timing
+                    end
+                    if releaseDiff <= holdWindow and releaseDiff < bestDiff then
+                        bestDiff = releaseDiff
+                        bestJudgement = judgement
+                    end
+                end
+
+            end
             if bestJudgement then
                 note.held = false
                 note.released = true
                 table.remove(self.drawableNotes, i)
 
                 -- Uncomment this block to enable hold note release judgements -Guglio
+                
                 local parentParent = self.parent.parent
                 parentParent.comboCount:incrementCombo()
                 parentParent.judgementObject:judge(bestJudgement.name)
                 parentParent.healthBar:changeHealth(bestJudgement.health)
+                
             end
         end
     end
