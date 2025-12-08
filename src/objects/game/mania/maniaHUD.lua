@@ -15,7 +15,6 @@ end
 
 function maniaHUD:sendValues(score)  -- will be called every frame (obviously) to pass shit to the hud 
     self.score = math.ceil(score)
-    if self.score > 1000000 then self.score = 1000000 end
 end
 
 function maniaHUD:draw()

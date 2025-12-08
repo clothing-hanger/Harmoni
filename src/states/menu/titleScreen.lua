@@ -21,6 +21,8 @@ function titleScreen:enter(from, resetItems, fadeIn)
         ["exit"] = love.graphics.newImage("images/menu/exit.png")
     }
 
+    self.noteImage = love.graphics.newImage("images/menu/note.png")
+
     print(self.icons["play"])
     self.buttonWidth = 350
     self.buttonHeight = 120
@@ -249,8 +251,11 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
 
     for i, Bubble in ipairs(self.bubbles) do
         Bubble.type = "Spinner"
-        if love.math.random(1,10) == 1 then
+        if chance(10) then
             Bubble.type = "Squisher"
+        end
+        if chance(10) then
+            Bubble.isNote = true   -- we do it like this instead of setting the type to note so we can have squisher notes (these are super rare so thats cool)
         end
     end
 
@@ -322,10 +327,7 @@ function titleScreen:update(dt)
 
     if self.window then self.window:update(dt) end
 
-    if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
-        self.shownOsuWindow = true
-        self.window = window(self,"This isn't osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
-    end
+
 
 
     self.layerWaves:update(dt)
@@ -373,6 +375,11 @@ function titleScreen:updateBubbles(dt)
                 if Bubble.type == "Squisher" then squish() end
                 self.bubbleClickedCount = (self.bubbleClickedCount or 0) + 1
 
+                    if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
+                        self.shownOsuWindow = true
+                        self.window = window(self,"This isn't osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
+                    end
+
                 -- save original alpha 
                 if not Bubble.originalAlpha then Bubble.originalAlpha = Bubble.color[4] end
                 Bubble.color[4] = 1
@@ -387,7 +394,12 @@ end
 function titleScreen:draw()
     love.graphics.draw(self.BG) -- TEMP 
     for i, Bubble in ipairs(self.bubbles) do
-        Bubble:draw()
+        if not Bubble.isNote then
+            Bubble:draw()
+        else
+            love.graphics.setColor(Bubble.color)
+            love.graphics.draw(self.noteImage,Bubble.x,Bubble.y, math.rad(Bubble.rotation), 1+Bubble.squishX, 1+Bubble.squishY, self.noteImage:getWidth()/2, self.noteImage:getHeight()/2)
+        end
     end
     --love.graphics.print("harmoni lol")
 

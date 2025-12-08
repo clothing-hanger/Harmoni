@@ -211,3 +211,7 @@ end
 function isEven(number)    -- borrring
     return number % 2 == 0
 end
+
+function chance(chance)
+    return love.math.random(1, 100) <= chance
+end

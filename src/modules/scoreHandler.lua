@@ -33,10 +33,11 @@ function scoreHandler:getScore(arg)
     end
 end
 function scoreHandler:addScore(score)
-    local score = score*self.valuesAndShitIDK.maxScorePerNote
-    self.Scores.trueScore = self.Scores.trueScore + score
+    local score = (score*self.valuesAndShitIDK.maxScorePerNote)
+    self.Scores.trueScore = math.min(scoreHandler.valuesAndShitIDK.maxScore, self.Scores.trueScore + score)
     self.tween = Timer.tween(0.8, self.Scores, {printableScore = self.Scores.trueScore}, "out-quad")
 
+    
 end
 
 
