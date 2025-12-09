@@ -32,6 +32,7 @@
     SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")
     UITimeRemaing = require("objects.UI.UITimeRemaining")
     button = require("objects.UI.button")
+    socialButton = require("objects.UI.socialButton")
     toggle = require("objects.UI.toggle")
     buttonSlideOut = require("objects.UI.buttonSlideOutNew")
     notification = require("objects.UI.notification")

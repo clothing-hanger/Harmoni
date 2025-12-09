@@ -88,9 +88,10 @@ function titleScreen:enter(from, resetItems, fadeIn)
         {
             label = "YouTube",
             link = "https://www.youtube.com/@Harmoni-de7zk",
-            image = love.graphics.newImage("images/menu/YouTube.png"),
-            color = {1,0,51/255}, 
-            func = function(button) 
+            images = {love.graphics.newImage("images/menu/YouTube.png")},
+            colors = {{1,0,51/255}},
+            scales = {{scaleLARGE = 1.2, scaleSMALL = 1}},
+            func = function(button)
                 self.clickedXCount = 0
 
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To YouTube")  .. "\n\n" .. button.link,
@@ -111,9 +112,10 @@ function titleScreen:enter(from, resetItems, fadeIn)
             label = "Discord",
             link = "https://discord.gg/E2xc2YjADs",  -- TEMP!! the real link will be on a website and the game will open the website, which redirects to the invite
                                                      -- (so if the invite breaks it wont stop working for people who arent updated)
-            image = love.graphics.newImage("images/menu/Discord.png"),
-            color = {88/255,101/255,242/255},
-            func = function(button) 
+            images = {love.graphics.newImage("images/menu/Discord.png")},
+            colors = {{88/255,101/255,242/255}},
+            scales = {{scaleLARGE = 1.2, scaleSMALL = 1}},
+            func = function(button)
                 self.clickedXCount = 0
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Discord")  .. "\n\n" .. button.link,
                     {
@@ -133,9 +135,10 @@ function titleScreen:enter(from, resetItems, fadeIn)
         {
             label = "GitHub",
             link = "https://github.com/clothhang/Harmoni",
-            image = love.graphics.newImage("images/menu/GitHub.png"),
-            color = {14/255,16/255,18/255},
-            func = function(button) 
+            images = {love.graphics.newImage("images/menu/GitHub.png")},
+            colors = {{14/255,16/255,18/255}},
+            scales = {{scaleLARGE = 1.2, scaleSMALL = 1}},
+            func = function(button)
                 self.clickedXCount = 0
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To GitHub") .. "\n\n" .. button.link,
                     {
@@ -151,12 +154,13 @@ function titleScreen:enter(from, resetItems, fadeIn)
                 )
             end
         },
-                {
+        { -- i find it fucking crazy you're making it a fucking bluesky link
             label = "Bluesky",    -- fuck you Elon
             link = "https://bsky.app/profile/ch-1.bsky.social",  -- TEMP!!!
-            image = love.graphics.newImage("images/menu/Bluesky.png"),
-            color = {0,133/255,1},
-            func = function(button) 
+            images = {love.graphics.newImage("images/menu/Bluesky.png")},
+            colors = {{0,133/255,1}},
+            scales = {{scaleLARGE = 1.2, scaleSMALL = 1}},
+            func = function(button)
             self.clickedXCount = self.clickedXCount + 1
                 self.window = window(self, LocaleHandler:getText("UI", "Leaving Harmoni"), LocaleHandler:getText("UI", "Take To Bluesky") .. 
                     "\n\n" .. button.link,
@@ -209,11 +213,11 @@ function titleScreen:setupSocialButtons()
         local x = self.socialsX + ((width+spacing)*i)
         local y = self.socialsY
         -- testing out doing arguments like this
-        table.insert(self.socialButtons, 
-            button({
-                hoverColor = Social.color, x = x, y = y, hasImage = true, link = Social.link,
-                image = Social.image, text = Social.label, func = Social.func, width = 100,
-                height = 100, scaleLARGE = 1.3
+        table.insert(self.socialButtons,
+            socialButton({
+                x = x, y = y, hasImage = true, link = Social.link,
+                parts = Social.images, text = Social.label, func = Social.func, width = 100,
+                height = 100, scales = Social.scales, colors = Social.colors
             })
         )
     end
@@ -307,7 +311,8 @@ function titleScreen:fadeScreen()
 end
 
 local function sortByScale(a,b)
-    return a.scale < b.scale
+    --[[ return a.scale < b.scale ]]
+    return a.scales[1].scale > b.scales[1].scale
 end
 
 function titleScreen:update(dt)
