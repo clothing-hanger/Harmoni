@@ -185,7 +185,7 @@ function mania:updateObjects(dt)
     self.healthBar:update(dt)
 
     self.HUD:update(dt) -- we also gotta send values to the hud
-    self.HUD:sendValues(ScoreHandler:getScore("printable"))
+    self.HUD:sendValues(ScoreHandler:getScore("printable"), ScoreHandler:getAccuracy("printable"))
 
     if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:endSong()

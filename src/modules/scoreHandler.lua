@@ -5,13 +5,15 @@ scoreHandler.valuesAndShitIDK = {maxScore = 1000000}
  local judgements = require("modules.maniaJudgements") -- lol this is bad i think
 
 function scoreHandler:resetScore()
-    self.Scores = {trueScore = 0,printableScore = 0}
+    self.Scores = {trueScore = 0,printableScore = 0,trueAccuracy = 0, printableAccuracy = 0,highestPossible = 0}
 end
 
 function scoreHandler:getScorePerJudgment(noteCount)
     local noteCount = noteCount or 1  
     local maxScorePerNote = self.valuesAndShitIDK.maxScore / noteCount
         self.valuesAndShitIDK.maxScorePerNote = maxScorePerNote
+
+           -- print("maxscorepernote",maxScorePerNote*judgements[1].score)
 
     return {
         perfect = maxScorePerNote*judgements[1].score,
@@ -27,15 +29,34 @@ function scoreHandler:getScore(arg)
     if arg == "true" then
         return self.Scores.trueScore
     elseif arg == "printable" then
-        return self.Scores.printableScore
+        return math.min(math.ceil(self.Scores.printableScore), self.valuesAndShitIDK.maxScore)
     else
         return self.Scores
     end
 end
+
+function scoreHandler:getAccuracy(arg)
+    if arg == "true" then
+        return self.Scores.trueAccuracy
+    elseif arg == "printable" then
+        return math.min(math.ceil(self.Scores.printableAccuracy),100)
+    else
+        return self.Scores
+    end
+end
+
 function scoreHandler:addScore(score)
     local score = (score*self.valuesAndShitIDK.maxScorePerNote)
+    self.Scores.highestPossible = self.Scores.highestPossible + self.valuesAndShitIDK.maxScorePerNote
+
+
     self.Scores.trueScore = math.min(scoreHandler.valuesAndShitIDK.maxScore, self.Scores.trueScore + score)
-    self.tween = Timer.tween(0.8, self.Scores, {printableScore = self.Scores.trueScore}, "out-quad")
+    self.Scores.trueAccuracy = (self.Scores.trueScore/self.Scores.highestPossible)*100
+
+    if self.scoreTween then
+        Timer.cancel(self.scoreTween)
+    end
+    self.scoreTween = Timer.tween(0.8, self.Scores, {printableScore = self.Scores.trueScore, printableAccuracy = self.Scores.trueAccuracy}, "out-quad")
 
     
 end
