@@ -49,7 +49,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
         },
         {
             label = LocaleHandler:getText("Menu", "Settings"), 
-            func = function() State.switch(States.game.sand) end, 
+            func = function() State.switch(States.menu.settingsMenu) end, 
             color1 = {147/255,190/255,223/255,1},
             color2 = {106/255,165/255,210/255,1},
             icon = self.icons["settings"]
