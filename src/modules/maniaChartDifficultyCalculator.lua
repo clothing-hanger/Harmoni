@@ -17,7 +17,6 @@ function maniaChartDifficultyCalculator:calculateDifficulty(chart)
 
     if not chunks then GlobalNotificationsHandler:addNotification("Diff calc failed! (case 1)" .. chart.meta.title .. " - " ..chart.meta.difficultyName, "error")return "fuck" end
     local chunkDifficultyScores = {}
-    print(chart.meta.title)
     for i, Chunk in ipairs(chunks) do
       -- print(i, Chunk, #Chunk, Chunk[1].startTime)
 
@@ -38,7 +37,6 @@ function maniaChartDifficultyCalculator:calculateDifficulty(chart)
 
     -- do the thingy :3
     difficulty = averageChunkDifficulty*difficultyMarkiplier 
-    print("Final Difficulty:", difficulty)
     return difficulty
 end
 

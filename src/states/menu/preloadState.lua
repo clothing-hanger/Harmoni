@@ -79,21 +79,14 @@ function preloadState:doDifficultyShit()
             goto continue
         end
 
-        for i = 1,#diffList do
-          --  print(diffList[i])
-        end
-
         -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
         for i = 1,#diffList do
             if not love.filesystem.exists(musicPath .. song .. diffList[i] .. ".difficulty.lua", "file") then
                 -- we need to parse this chart and gets its difficulty rating
                 local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i])
-                print(musicPath .. song .."/" .. diffList[i])
                 
-                print("HIIII",chart.meta.difficulty)
                 if chart.meta.difficulty then
                     love.filesystem.createDirectory(musicPath .. song)
-                    -- print(musicPath .. song)
                     local luaString = "return " .. chart.meta.difficulty
                     love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty.lua", luaString)
                 end

@@ -97,7 +97,6 @@ function ChartParse.harmc(harmc)
 
         ::continue::
     end
-    print("hi")
     if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end
 
     return chart
