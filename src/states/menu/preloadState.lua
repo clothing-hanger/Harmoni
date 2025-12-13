@@ -5,12 +5,14 @@ local progress = 0
 local step = -10
 local totalSteps = 12
 local installing = false
+local songDifficultiesDone = false
 
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
     self.debug = false
     self.skipSafetyTimer = true
+    self.songList = SongListManager.getSongList(musicPath)
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)
     States.menu.titleScreen.setUpThoseWavesThatIHate(self, 4)
@@ -29,12 +31,17 @@ function preloadState:update(dt)
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
 
+    if CLibs:isInstallationDone() then -- now we do the difficulty shit
+        self:doDifficultyShit()
+    end
+
+
     t = t + dt
         if step < 0 then
         if not installing then
             installing = true
             step = step + 1
-        elseif installing and CLibs:isInstallationDone() then
+        elseif installing and CLibs:isInstallationDone() and songDifficultiesDone then
             step = step + 1
             CLibs:after()
             Timer.after(self.skipSafetyTimer and 1 or 5, function()
@@ -52,6 +59,50 @@ function preloadState:update(dt)
            -- local targetProgress = math.abs(step / totalSteps)       -- i am literally fucking guessing
 
         --    progress = progress + (targetProgress - math.abs(progress)) * math.min(dt * 10, 1)
+
+end
+
+function preloadState:doDifficultyShit()
+
+    for i, song in ipairs(self.songList) do
+        if not song then
+            table.remove(self.songList, i)
+            goto continue
+        end
+        local diffList = SongListManager.getDifficultyList(musicPath .. song)
+        if not diffList[1] then
+            table.remove(self.songList, i)
+            goto continue
+        end
+        if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
+            table.remove(self.songList, i)
+            goto continue
+        end
+
+        for i = 1,#diffList do
+          --  print(diffList[i])
+        end
+
+        -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
+        for i = 1,#diffList do
+            if not love.filesystem.exists(musicPath .. song .. diffList[i] .. ".difficulty.lua", "file") then
+                -- we need to parse this chart and gets its difficulty rating
+                local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i])
+                print(musicPath .. song .."/" .. diffList[i])
+                
+                print("HIIII",chart.meta.difficulty)
+                if chart.meta.difficulty then
+                    love.filesystem.createDirectory(musicPath .. song)
+                    -- print(musicPath .. song)
+                    local luaString = "return " .. chart.meta.difficulty
+                    love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty.lua", luaString)
+                end
+            end
+        end
+        ::continue::
+    end
+
+    songDifficultiesDone = true
 
 end
 

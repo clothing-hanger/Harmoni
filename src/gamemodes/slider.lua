@@ -3,6 +3,8 @@ local videoFade = 0
 local played = false
 
 function slider:new(chart, parent, fullChart)
+        error("dont play this fucking mode")
+
     videoFade = 0
     played = false
     self.parent = parent
@@ -139,7 +141,6 @@ function slider:update(dt)
         thething = false
         self:endSong()
     end
-    error("dont play this fucking mode")
 end
 
 function slider:endSong()

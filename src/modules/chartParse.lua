@@ -17,7 +17,6 @@ function ChartParse.harmc(harmc)
     chart.meta = { -- safety first!! :3c
         gameMode = "mania"
     }
-    --chart.meta.gameMode = "mania"
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then
@@ -94,8 +93,12 @@ function ChartParse.harmc(harmc)
                 
         end
 
+
+
         ::continue::
     end
+    print("hi")
+    if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end
 
     return chart
 end
@@ -132,14 +135,6 @@ function ChartParse.harmcMeta(harmc)
             ::continue::
         end
     end
-
-   --if chart then chart["meta"].difficultyRating = maniaChartDifficultyCalculator:calculateDifficulty(chart) or 0 else chart["meta"].difficultyRating = 0 end
-
-    -- why did i think this could work when chart here doesnt have any notes 
-    -- we need a better way of doing this,, the notes being calculated every time is slow but we need to find the chart's difficulty too
-    -- and storing the difficutly in some cached data is bad because we dont want people editing that 
-    -- gugglliooo help :((
-    -- just hash the modified at time or smth - guglio
 
     return chart  -- will return the chart if everything goes well, or will return false if, uhh, everything does not go well
 end
