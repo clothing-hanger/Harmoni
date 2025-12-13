@@ -14,8 +14,8 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
     self.logoH = logoH
     time = 2
     uhmmode, uhmchart = mode, chart
-    fullchart = ChartParse.harmc(chart) -- yep we are just gonna parse the whole chart here lol,, why not
-    printToConsole(image)               -- This is actually a good way to do it im ngl you thought good
+    fullchart = ChartParse.harmc(chart, "get") -- yep we are just gonna parse the whole chart here lol,, why not
+                                            -- This is actually a good way to do it im ngl you thought good
     timebar = {0}
     background = sharedBackground(image)
     background.dimness = backgroundDim
@@ -28,14 +28,19 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, time)
     self.quickSettings = quickSettings(baseScreenRatio.x-500,0,10000,baseScreenRatio.y, baseScreenRatio.x-1000)
     self.quickSettings.baseX = self.quickSettings.x
+    local modList = ""
+    for i, Modifier in pairs(self.mods) do
+        if Modifier then modList = modList.. i  .. "," end
+    end
+    if modList == "" then modList = "None" end
     songInfo = {
         songName = fullchart.meta.title or "Unknown",
         diffName = fullchart.meta.difficultyName or "Unknown",
         mode = fullchart.meta.gameMode or "Unknown",
         artist = fullchart.meta.artist or "Unknown",
         charter = fullchart.meta.creator or "Unknown",
-        mods = "the game doesnt even have mods..",
-        notes = "if its not obvious enough, this is a placeholder",
+        mods = modList,
+        notes = "",
     }
 end
 

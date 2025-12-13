@@ -45,9 +45,11 @@ function buttonSlideOut:new(x, y, width, height, text, func, cornerRadius, color
 end
 
 function buttonSlideOut:update(dt)
+    local mx,my = cursor:getPosition()
     if self.slideWidth < self.slideInitialWidth then self.slideWidth = self.slideInitialWidth end
 
-    self.hovered = mouseOver(self)
+    --self.hovered = mouseOver(self)
+    self.hovered = mx>=self.x and mx<=self.x+self.slideWidth and my>= self.y and my<= self.y+self.height 
 
     self.colorIconOffsetTarget = self.hovered and 0 or 0.65
     self.colorIconOffset = self.colorIconOffset + (self.colorIconOffsetTarget - self.colorIconOffset) * 10 * dt

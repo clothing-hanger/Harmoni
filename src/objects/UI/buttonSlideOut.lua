@@ -188,7 +188,9 @@ function buttonSlideOut:draw()
     }
 
     love.graphics.setColor(textColor)
-    love.graphics.setFont(SkinHandler:getFont("Menu", 50))
+    love.graphics.
+    
+    nt(SkinHandler:getFont("Menu", 50))
 
     local textX = self.x + self.slideInitialWidth * 2
     local textY = self.y + self.height / 2 - love.graphics.getFont():getHeight() / 2
