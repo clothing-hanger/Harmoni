@@ -7,6 +7,8 @@ local totalSteps = 12
 local installing = false
 local songDifficultiesDone = false
 
+difficultyCalculatorVersionNumber = 1
+
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
     self.wavesY = 0
@@ -82,14 +84,18 @@ function preloadState:doDifficultyShit()
 
         -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
         for i = 1,#diffList do
-            if not love.filesystem.getInfo(musicPath .. song .. diffList[i] .. ".difficulty.lua", "file") then
+            if not love.filesystem.getInfo(musicPath .. song .."/".. diffList[i] .. ".difficulty", "file") then
                 -- we need to parse this chart and gets its difficulty rating
-                local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i])
+                local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i], "generate")
                 
                 if chart.meta.difficulty then
                     love.filesystem.createDirectory(musicPath .. song)
-                    local luaString = "return " .. chart.meta.difficulty
-                    love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty.lua", luaString)
+                    local luaString = chart.meta.difficulty .. ":" .. difficultyCalculatorVersionNumber
+
+                    local ok = love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty", luaString)
+                    if ok then GlobalNotificationsHandler:addNotification("Difficulty Rating File created for " ..song .." " .. diffList[i], "info")
+                    else GlobalNotificationsHandler:addNotification("Failed to create diff file for " ..song " " .. diffList[i], "error")
+                    end
                 end
             end
         end
@@ -97,7 +103,6 @@ function preloadState:doDifficultyShit()
     end
 
     songDifficultiesDone = true
-
 end
 
 function preloadState:draw()
@@ -133,7 +138,7 @@ function preloadState:draw()
     lastX, lastY = nil, nil
     
     for i = 0, segments * progress do
-        local x = barX + (i/segments)*barW         --                             commented out in case it was the line actually crashing (it wasnt)
+        local x = barX + (i/segments)*barW
         local y = barY + math.sin((i/segments)*math.pi*15 + t*speed) * amp
 
         points[#points+1] = lastX or x

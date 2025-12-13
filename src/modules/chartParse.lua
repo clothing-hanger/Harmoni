@@ -11,7 +11,7 @@ end
 ---@param harmc string the path to the .HARMC file to parse
 ---@return table|boolean harmc returns a table with the chart data, or false if there was an error
 --- ChartParse.harmc Parses .HARMC files
-function ChartParse.harmc(harmc)
+function ChartParse.harmc(harmc,calculateDifficulty)
     local chart = {}
     chart.scrollSpeedFactors = {} -- to be safe :3c
     chart.meta = { -- safety first!! :3c
@@ -97,7 +97,11 @@ function ChartParse.harmc(harmc)
 
         ::continue::
     end
-    if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end
+    if calculateDifficulty == "generate" then 
+        if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end 
+    elseif calculateDifficulty == "get" then
+        print("Hello!", harmc..".difficulty")
+    end
 
     return chart
 end
