@@ -31,9 +31,6 @@ function preloadState:update(dt)
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
 
-    if CLibs:isInstallationDone() then -- now we do the difficulty shit
-        self:doDifficultyShit()
-    end
 
 
     t = t + dt
@@ -41,10 +38,12 @@ function preloadState:update(dt)
         if not installing then
             installing = true
             step = step + 1
-        elseif installing and CLibs:isInstallationDone() and songDifficultiesDone then
+        elseif installing and CLibs:isInstallationDone() then
             step = step + 1
             CLibs:after()
             Timer.after(self.skipSafetyTimer and 1 or 5, function()
+                self:doDifficultyShit()
+                Timer.after(0.1, function()  
                 States.menu.titleScreen.bubbles = self.bubbles
                 States.menu.titleScreen.wavesY = self.wavesY
                 States.menu.titleScreen.squiglyLines = self.squiglyLines
@@ -52,6 +51,8 @@ function preloadState:update(dt)
                 States.menu.titleScreen.images = self.images
                 State.switch(States.menu.splash)
                 if AMERICA then PATRIOTIC:play() end
+                end)
+        
             end)
         end
  
@@ -81,7 +82,7 @@ function preloadState:doDifficultyShit()
 
         -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
         for i = 1,#diffList do
-            if not love.filesystem.exists(musicPath .. song .. diffList[i] .. ".difficulty.lua", "file") then
+            if not love.filesystem.getInfo(musicPath .. song .. diffList[i] .. ".difficulty.lua", "file") then
                 -- we need to parse this chart and gets its difficulty rating
                 local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i])
                 

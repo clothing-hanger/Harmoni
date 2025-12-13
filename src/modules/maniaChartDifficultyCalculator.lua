@@ -7,7 +7,7 @@ local difficultyMarkiplier = 15 -- we multiply the difficulty by this to make it
 
 
 function maniaChartDifficultyCalculator:calculateDifficulty(chart)
-    if not chart then GlobalNotificationsHandler:addNotification("fuck you asshole", "error"); return end
+    if not chart then GlobalNotificationsHandler:addNotification("fuck you asshole", "error"); return "fuck" end
     local difficulty
     --we need to break the song into 5 second chunks
     --we do that by doing something idfk what tho 
