@@ -245,7 +245,7 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
     transparency = 0.1
     local colors = SkinHandler:getRandomColors()
 
-    local allArrows = chance(0.001)
+    local allArrows = love.math.random(1,1000) == 1 -- had to chance this cuz i used my own chance function comletely incorrectly by accident
 
     for i = 1,numberOfBubbles do 
         ::start::
