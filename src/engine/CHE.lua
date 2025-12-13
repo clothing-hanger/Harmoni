@@ -96,7 +96,7 @@ function CHE:init()
         [7] = { "lane17K", "lane27K", "lane37K", "lane47K", "lane57K", "lane67K", "lane77K" }
     }
 
-    SkinHandler:loadSkin("AMERICA")
+    SkinHandler:loadSkin("Default Arrow Batched")
     local id = 1
     if NOTIFICATIONS then
         NOTIFICATIONS.setAppID("com.ch.harmoni")
