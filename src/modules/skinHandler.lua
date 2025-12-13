@@ -182,7 +182,7 @@ function SkinHandler:getFont(font,size)
                 return love.graphics.newFont(size)
             end
             fontR = love.graphics.newFont(self.__path..self.__data.Skin.Fonts[font],size)
-            self.loadedFonts[font] = {}
+            self.loadedFonts[font] = self.loadedFonts[font] or {}
             self.loadedFonts[font][size] = fontR
         else   -- it must already have been made, we will just use that then
             fontR = self.loadedFonts[font][size]
