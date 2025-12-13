@@ -406,7 +406,7 @@ function titleScreen:draw()
             love.graphics.draw(self.noteImage,Bubble.x,Bubble.y, math.rad(Bubble.rotation), 1+Bubble.squishX, 1+Bubble.squishY, self.noteImage:getWidth()/2, self.noteImage:getHeight()/2)
         end
     end
-    --love.graphics.print("harmoni lol")
+    love.graphics.print("harmoni lol")
 
     love.graphics.setColor(1,1,1,0.1)
     love.graphics.push()
