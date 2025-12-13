@@ -245,6 +245,8 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
     transparency = 0.1
     local colors = SkinHandler:getRandomColors()
 
+    local allArrows = chance(0.001)
+
     for i = 1,numberOfBubbles do 
         ::start::
         local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
@@ -261,6 +263,8 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         if chance(10) then
             Bubble.isNote = true   -- we do it like this instead of setting the type to note so we can have squisher notes (these are super rare so thats cool)
         end
+
+        if allArrows then Bubble.isNote = true end
     end
 
 end
