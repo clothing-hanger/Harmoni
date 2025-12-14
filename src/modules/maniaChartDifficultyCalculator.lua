@@ -37,7 +37,7 @@ function maniaChartDifficultyCalculator:calculateDifficulty(chart)
 
     -- do the thingy :3
     difficulty = averageChunkDifficulty*difficultyMarkiplier 
-    return difficulty
+    return  math.floor(difficulty * 100 + 0.5) / 100
 end
 
 function maniaChartDifficultyCalculator:breakChartIntoChunks(chart)

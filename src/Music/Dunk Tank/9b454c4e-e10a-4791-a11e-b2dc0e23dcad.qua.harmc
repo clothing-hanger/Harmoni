@@ -12,7 +12,8 @@ difficultyName:Sopping Wet
 initialSV:1
 creator:KingKid64
 audioFile:audio.mp3
-backgroundFile:bg.jpg
+backgroundFile:image.png
+backgroundVideo:video.mp4
 
 [warnings]
 content:unfinishedSong

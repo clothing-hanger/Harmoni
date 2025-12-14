@@ -15,7 +15,7 @@ local menuSongButton = Class:extend("menuSongButton")
 --- @param path string
 --- @param cornerRadius number
 --- @param color table <number, number, number>
-function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings, songPreviewTime, audioFile)
+function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings, songPreviewTime, audioFile, difficulty)
     self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
     self.width = width or 10
@@ -29,6 +29,10 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     self.audioFile = audioFile -- how was this not already here????????
     print(self.songPreviewTime)
+
+    self.difficulty = difficulty
+
+    print("HIIHIHISDHISHDSDHSHISH",difficulty)
 
     self.onlySkeleton = false -- why did i even add this we wont use it
 
@@ -63,13 +67,12 @@ end
 
 function menuSongButton:onClick()
     if self.isDifficultyButton then
-        return {loadSong = true, mode = self.mode, path = self.path, warnings = self.warnings}
+        return {loadSong = true, mode = self.mode, path = self.path, warnings = self.warnings}    -- why do we even have this and returnInfo honestly..  (not changing it now  though)
     else
         return {loadSong = false, mode = self.mode, path = self.path, color = self.color}
     end
     local time = 0.4   
     self.sizeXOffset,self.sizeYOffset = -30,-30
-    print("HIHIHHI")
     self.sizeTween = Timer.tween(time*3, self, {sizeXOffset = 0, sizeYOffset = 0}, "out-elastic")
 end
 
@@ -87,6 +90,7 @@ function menuSongButton:returnInfo()
         warnings = self.warnings,
         songPreviewTime = self.songPreviewTime,
         audioFile = self.audioFile,  -- why the FUCK was this not already here??? its a fucking SONG BUTTON, of course it needs to have the fucking audio file name in it
+        difficulty = self.difficulty
     }
 end
 
@@ -154,7 +158,11 @@ function menuSongButton:draw()
     love.graphics.print(self.name, self.x + 3, self.y + 3)
 
     love.graphics.setFont(self.fontSmall)
-    love.graphics.print(string.format("By: %s  Charted by: %s  BPM: %s", self.artist, self.charter, self.bpm), self.x + 3, self.y + self.height / 2)
+    if self.isDifficultyButton then
+        love.graphics.print(string.format("Difficulty: %s  Charted by: %s", self.difficulty, self.charter), self.x + 3, self.y + self.height / 2)
+    else
+        love.graphics.print(string.format("By: %s  BPM: %s", self.artist, self.bpm), self.x + 3, self.y + self.height / 2)
+    end
 
     if self.isDifficultyButton then
         love.graphics.setColor(textColor)

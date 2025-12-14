@@ -109,7 +109,7 @@ end
 ---@param harmc string the path to the .HARMC file to parse
 ---@return table|boolean harmc returns a table with the meta data, or false if there was an error
 --- Like ChartParse.harmc, but stops when it escapes the meta section
-function ChartParse.harmcMeta(harmc)
+function ChartParse.harmcMeta(harmc,calculateDifficulty)
     print("harmc",harmc)
     local chart = {}
     local section = "meta"  -- we only want the meta section, so we set it to meta
@@ -136,6 +136,28 @@ function ChartParse.harmcMeta(harmc)
             table.insert(chart[section], {warning = warning, type = type})
            -- chart[section] = warning  -- we actually do add this one as a section since we dont wanna just put these in the same table as the meta data
             ::continue::
+        end
+    end
+
+    if calculateDifficulty == "generate" then 
+        GlobalNotificationsHandler:addNotification("cannot calculate difficulty from harmcMeta!", "error") -- this is only here in case i become stupid or something idk
+    elseif calculateDifficulty == "get" then
+        local harmc = harmc
+        print("are you even running this")
+        print(harmc)
+        if harmc:sub(-1) == "/" then -- we gotta remove this obviously
+            harmc = harmc:sub(1,-2)   -- is this a good way of doing this?
+        end
+        print(harmc)
+        local file = harmc..".difficulty"
+        print(file)
+        if love.filesystem.getInfo(file, "file") then
+            local filecontents = love.filesystem.read(file)
+            print("filecontents",filecontents)
+            if not filecontents then GlobalNotificationsHandler:addNotification("couldn't get difficulty file for " .. file, "error") end
+            local diff,version = filecontents:match("(%d+%.?%d*)%s*:%s*(%d+)") -- still magic to me,, WHAT does this mean???
+            print("diff,version", diff, version)
+            chart.difficulty = diff
         end
     end
 

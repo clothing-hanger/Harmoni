@@ -316,7 +316,8 @@ function songSelect:setupDifficultyList(path,color)
 
     for i = 1, #difficultyList do
         local songInfo = nil
-        songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/")
+        songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/", "get")
+        print("DIFFICULTY",songInfo.difficulty)
         print("hello!! i am the fucking thing that creates difficulty buttons")
             print(songInfo.warnings)
             print(songInfo.warnings and #songInfo.warnings)
@@ -324,7 +325,7 @@ function songSelect:setupDifficultyList(path,color)
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
             local x = difficultyButtonX + baseX + slope * (y - baseY)
-
+            print("WHY",songInfo.difficulty)
             table.insert(difficultyButtons,
                 menuSongButton(
                     self,
@@ -342,7 +343,10 @@ function songSelect:setupDifficultyList(path,color)
                     path .. "/" .. difficultyList[i],
                     7,
                     color,
-                    songInfo.warnings  -- this is just hacked in,,,, its so bad   there was absolutely NO planning for this when the song button object was made
+                    songInfo.warnings,  -- this is just hacked in,,,, its so bad   there was absolutely NO planning for this when the song button object was made
+                    nil,
+                    nil,
+                    songInfo.difficulty
                 )
             )
         end

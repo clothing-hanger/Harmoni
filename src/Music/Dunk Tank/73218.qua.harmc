@@ -2,26 +2,24 @@
 creator:none lol
 backgroundFile:image.png
 backgroundVideo:video.mp4
-bpm:155
+bpm:180
 laneCount:4
 audioFile:audio.mp3
 chartOrigin:Quaver
 initialSV:1
-
-
-
 artist:4-MP
 gameMode:mania
 source:s
-songPreviewTime:5845
+songPreviewTime:144290
 tags:uhh
-title:Slapstick
+title:Dunk Tank
 difficultyName:funny lol
 
 [warnings]
 content:unfinishedSong
 health:flashing
-
+content:suicide
+content:language
 
 
 [bpm]
