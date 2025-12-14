@@ -132,6 +132,10 @@ function mania:setUpChart(chartpath, chart)
 
     maniaChart.scrollSpeedFactors = parsed.scrollSpeedFactors or {}
 
+    if self.mods["NVB"] then
+        self.videoBackground = nil
+    end
+
     return maniaChart
 end
 

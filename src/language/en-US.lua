@@ -56,7 +56,7 @@ Language = {
         ["BPH"] = "It's fun to just watch sometimes",
 
         ["NVBL"] = "No Video Background",
-        ["NVBS"] = "NVG",
+        ["NVBS"] = "NVB",
         ["NVBD"] = "Disables video backgrounds in songs that have one",
         ["NVBH"] = "They are pretty distracing sometimes"
     },
