@@ -575,6 +575,7 @@ function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid
     self.currentAudioVolume = 1
     self.previousAudioVolume = 1   
     self.currentPlayingSong = selectedSong
+    local audio
     
 
     -- first we clone the current song, with its time and everything
@@ -585,9 +586,12 @@ function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid
 
     self.currentAudio = nil
     if not path then GlobalNotificationsHandler("no path passed into loadAudio!", "error") end
-    if not love.filesystem.getInfo(path, "file") then GlobalNotificationsHandler(self.currentSongInfo.name .. " audio file not found!", "error") end
-    local audio = love.audio.newSource(path, "stream")
+    if not love.filesystem.getInfo(path, "file") then GlobalNotificationsHandler:addNotification(self.currentSongInfo.name .. " audio file not found!", "error");  love.audio.stop(); goto skipNewAudio end
+     audio = love.audio.newSource(path, "stream")
+    ::skipNewAudio::
+
     self.currentAudio = audio
+
     --self.currentAudio:setVolume(0)
     if self.previousSong then self.previousSong:setVolume(1) end
     if self.currentAudio then self.currentAudio:play() else GlobalNotificationsHandler:addNotification("something broke,, idk what", "error"); return end

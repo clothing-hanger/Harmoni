@@ -7,7 +7,7 @@ local totalSteps = 12
 local installing = false
 local songDifficultiesDone = false
 
-difficultyCalculatorVersionNumber = 1
+difficultyCalculatorVersionNumber = 3
 
 function preloadState:enter()
     self.BG = SkinHandler:getImage("Menu", "Background")
@@ -84,6 +84,17 @@ function preloadState:doDifficultyShit()
 
         -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
         for i = 1,#diffList do
+            -- first we check for the version number
+            if love.filesystem.getInfo(musicPath .. song .."/".. diffList[i] .. ".difficulty", "file") then
+                local file = musicPath .. song .."/".. diffList[i] .. ".difficulty"
+                local filecontents = love.filesystem.read(file)
+                if not filecontents then GlobalNotificationsHandler:addNotification("couldn't get difficulty file for " .. file, "error") end
+                local diff,version = filecontents:match("(%d+%.?%d*)%s*:%s*(%d+)") -- still magic to me,, WHAT does this mean???
+                if tonumber(version) < difficultyCalculatorVersionNumber then
+                    love.filesystem.remove(file)
+                    GlobalNotificationsHandler:addNotification(song .. diffList[i] .." Difficulty file was outdated and has been removed.", "info")
+                end
+            end
             if not love.filesystem.getInfo(musicPath .. song .."/".. diffList[i] .. ".difficulty", "file") then
                 -- we need to parse this chart and gets its difficulty rating
                 local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i], "generate")
@@ -93,9 +104,8 @@ function preloadState:doDifficultyShit()
                     local luaString = chart.meta.difficulty .. ":" .. difficultyCalculatorVersionNumber
 
                     local ok = love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty", luaString)
-                    if ok then GlobalNotificationsHandler:addNotification("Difficulty Rating File created for " ..song .." " .. diffList[i], "info")
-                    else GlobalNotificationsHandler:addNotification("Failed to create diff file for " ..song " " .. diffList[i], "error")
-                    end
+                    if not ok then GlobalNotificationsHandler:addNotification("Failed to create diff file for " ..song " " .. diffList[i], "error") end
+                    
                 end
             end
         end

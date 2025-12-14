@@ -41,4 +41,11 @@ return {
         hover = LocaleHandler:getText("Modifiers", "BPH"),
         default = false
     },
+        {
+        name = LocaleHandler:getText("Modifiers", "NVBL"),
+        short = LocaleHandler:getText("Modifiers", "NVBS"),
+        description = LocaleHandler:getText("Modifiers", "NVBD"),
+        hover = LocaleHandler:getText("Modifiers", "NVBH"),
+        default = false
+    },
 }

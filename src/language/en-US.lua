@@ -54,6 +54,11 @@ Language = {
         ["BPS"] = "BP",
         ["BPD"] = "Watch a perfect playthrough of the song",
         ["BPH"] = "It's fun to just watch sometimes",
+
+        ["NVBL"] = "No Video Background",
+        ["NVBS"] = "NVG",
+        ["NVBD"] = "Disables video backgrounds in songs that have one",
+        ["NVBH"] = "They are pretty distracing sometimes"
     },
     Results = {
         ["Accuracy"] = "Accuracy",
