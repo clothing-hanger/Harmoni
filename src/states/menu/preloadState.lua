@@ -14,25 +14,30 @@ function preloadState:enter()
     self.wavesY = 0
     self.debug = false
     self.skipSafetyTimer = true
-    self.songList = SongListManager.getSongList(musicPath)
 
     States.menu.titleScreen.setUpThoseLinesThatIHate(self, 10)
     States.menu.titleScreen.setUpThoseWavesThatIHate(self, 4)
     States.menu.titleScreen.setUpThoseBubblesThatIHate(self, 20)
-
+              
     self.images = {
         ["H"] = {image = SkinHandler:getImage("Menu", "H"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
         ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
     }
 
     self.throbbert = throbbert({{1,1,1,1}, {1,1,1,1}, {1,1,1,1}})
-    if not self.debug then CLibs:setupIfNeeded() end
+    if not self.debug then  end
+    love.timer.sleep(0.1)
 end
 
 function preloadState:update(dt)
+    self.frame = self.frame and self.frame + 1 or 0
+    if self.frame>10 and not self.fuck then
+        self.fuck = true
+        CLibs:setupIfNeeded()
+        love.timer.sleep(1) 
+    end
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
-
 
 
     t = t + dt
@@ -41,17 +46,16 @@ function preloadState:update(dt)
             installing = true
             step = step + 1
         elseif installing and CLibs:isInstallationDone() then
-            step = step + 1
             CLibs:after()
-            Timer.after(self.skipSafetyTimer and 1 or 5, function()
-                self:doDifficultyShit()
+            Timer.after(self.skipSafetyTimer and 0 or 5, function()
+                step = step + 1
                 Timer.after(0.1, function()  
                 States.menu.titleScreen.bubbles = self.bubbles
                 States.menu.titleScreen.wavesY = self.wavesY
                 States.menu.titleScreen.squiglyLines = self.squiglyLines
                 States.menu.titleScreen.layerWaves = self.layerWaves
                 States.menu.titleScreen.images = self.images
-                State.switch(States.menu.splash)
+                State.switch(States.menu.songPreloader)
                 if AMERICA then PATRIOTIC:play() end
                 end)
         
@@ -64,57 +68,6 @@ function preloadState:update(dt)
         --    progress = progress + (targetProgress - math.abs(progress)) * math.min(dt * 10, 1)
 
 end
-
-function preloadState:doDifficultyShit()
-
-    for i, song in ipairs(self.songList) do
-        if not song then
-            table.remove(self.songList, i)
-            goto continue
-        end
-        local diffList = SongListManager.getDifficultyList(musicPath .. song)
-        if not diffList[1] then
-            table.remove(self.songList, i)
-            goto continue
-        end
-        if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
-            table.remove(self.songList, i)
-            goto continue
-        end
-
-        -- we check for a difficuly file, if there is one, then we dont do anything, if there isnt, we create it
-        for i = 1,#diffList do
-            -- first we check for the version number
-            if love.filesystem.getInfo(musicPath .. song .."/".. diffList[i] .. ".difficulty", "file") then
-                local file = musicPath .. song .."/".. diffList[i] .. ".difficulty"
-                local filecontents = love.filesystem.read(file)
-                if not filecontents then GlobalNotificationsHandler:addNotification("couldn't get difficulty file for " .. file, "error") end
-                local diff,version = filecontents:match("(%d+%.?%d*)%s*:%s*(%d+)") -- still magic to me,, WHAT does this mean???
-                if tonumber(version) < difficultyCalculatorVersionNumber then
-                    love.filesystem.remove(file)
-                    GlobalNotificationsHandler:addNotification(song .. diffList[i] .." Difficulty file was outdated and has been removed.", "info")
-                end
-            end
-            if not love.filesystem.getInfo(musicPath .. song .."/".. diffList[i] .. ".difficulty", "file") then
-                -- we need to parse this chart and gets its difficulty rating
-                local chart = ChartParse.harmc(musicPath .. song .."/" .. diffList[i], "generate")
-                
-                if chart.meta.difficulty then
-                    love.filesystem.createDirectory(musicPath .. song)
-                    local luaString = chart.meta.difficulty .. ":" .. difficultyCalculatorVersionNumber
-
-                    local ok = love.filesystem.write(musicPath .. song .."/".. diffList[i] .. ".difficulty", luaString)
-                    if not ok then GlobalNotificationsHandler:addNotification("Failed to create diff file for " ..song " " .. diffList[i], "error") end
-                    
-                end
-            end
-        end
-        ::continue::
-    end
-
-    songDifficultiesDone = true
-end
-
 function preloadState:draw()
     
     local w, h = baseScreenRatio.x, baseScreenRatio.y
@@ -122,7 +75,7 @@ function preloadState:draw()
         
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
-    local msg = "loading :3"
+    local msg = "Loading...\n:3"
 
     love.graphics.printf(msg, 0, h*0.5, w, "center")
 

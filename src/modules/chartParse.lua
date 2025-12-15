@@ -100,7 +100,7 @@ function ChartParse.harmc(harmc,calculateDifficulty)
     if calculateDifficulty == "generate" then 
         if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end 
     elseif calculateDifficulty == "get" then
-        print("Hello!", harmc..".difficulty")
+        print("Hello!", harmc..".harmd")
     end
 
     return chart
@@ -149,7 +149,7 @@ function ChartParse.harmcMeta(harmc,calculateDifficulty)
             harmc = harmc:sub(1,-2)   -- is this a good way of doing this?
         end
         print(harmc)
-        local file = harmc..".difficulty"
+        local file = harmc..".harmd"
         print(file)
         if love.filesystem.getInfo(file, "file") then
             local filecontents = love.filesystem.read(file)

@@ -6,6 +6,7 @@ return {
         jukebox = require("states.menu.Jukebox"),
         settingsMenu = require("states.menu.settingsMenu"),
         preloadState = require("states.menu.preloadState"),
+        songPreloader = require("states.menu.songPreloader"),
         splash = require("states.menu.splash")
     },
     game = {
