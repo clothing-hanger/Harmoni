@@ -34,7 +34,10 @@ function preloadState:update(dt)
     if self.frame>10 and not self.fuck then
         self.fuck = true
         CLibs:setupIfNeeded()
-        --love.timer.sleep(1) 
+        --love.timer.sleep(1)   --i ran a test here
+                                -- 50 launches with the sleep(1) enabled, and 50 launches with the sleep(1) commented out
+                                -- i got 4 crashes with it enabled, but when its commented out, i got 1 crash. so we leave it commented out.
+                                -- i really expected the sleep here to lower the chances of the crash, but no, it made the chances higher
     end
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
