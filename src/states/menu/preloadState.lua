@@ -26,7 +26,7 @@ function preloadState:enter()
 
     self.throbbert = throbbert({{1,1,1,1}, {1,1,1,1}, {1,1,1,1}})
     if not self.debug then  end
-    love.timer.sleep(0.1)
+    love.timer.sleep(0.5)
 end
 
 function preloadState:update(dt)
@@ -34,7 +34,7 @@ function preloadState:update(dt)
     if self.frame>10 and not self.fuck then
         self.fuck = true
         CLibs:setupIfNeeded()
-        love.timer.sleep(1) 
+        --love.timer.sleep(1) 
     end
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
