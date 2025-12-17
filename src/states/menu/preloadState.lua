@@ -31,7 +31,7 @@ end
 
 function preloadState:update(dt)
     self.frame = self.frame and self.frame + 1 or 0
-    if self.frame>10 and not self.fuck then
+    if self.frame>10 and not self.fuck and not self.debug then
         self.fuck = true
         CLibs:setupIfNeeded()
         --love.timer.sleep(1)   --i ran a test here

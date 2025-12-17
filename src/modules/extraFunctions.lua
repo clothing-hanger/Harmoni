@@ -215,3 +215,16 @@ end
 function chance(chance)
     return love.math.random(1, 100) <= chance
 end
+
+function getFolderLocation(pathToFile)
+    return pathToFile:match("^(.*)/[^/]*$")  -- this returns the path a file is in,, idk how often this will be used but i have a need for it right now 
+end
+
+function saveTableToFile(table, path)
+    local string = "return {\n"
+    for i,v in pairs(table) do
+        string = string .. tostring(i) .. " = " .. tostring(v) .. ",\n"
+    end
+    string = string .. "}"
+    local ok = love.filesystem.write(path, string)
+end

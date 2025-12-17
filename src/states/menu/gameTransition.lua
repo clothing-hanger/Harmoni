@@ -14,7 +14,7 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
     self.logoH = logoH
     time = 2
     uhmmode, uhmchart = mode, chart
-    fullchart = ChartParse.harmc(chart, "get") -- yep we are just gonna parse the whole chart here lol,, why not
+    fullchart = ChartParse.harmc(chart, "get", true) -- yep we are just gonna parse the whole chart here lol,, why not
                                             -- This is actually a good way to do it im ngl you thought good
     timebar = {0}
     background = sharedBackground(image)

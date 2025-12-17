@@ -11,7 +11,10 @@ end
 ---@param harmc string the path to the .HARMC file to parse
 ---@return table|boolean harmc returns a table with the chart data, or false if there was an error
 --- ChartParse.harmc Parses .HARMC files
-function ChartParse.harmc(harmc,calculateDifficulty)
+function ChartParse.harmc(harmc,calculateDifficulty,playing)
+
+    local playing = playing or false -- im fucking crying
+
     local chart = {}
     chart.scrollSpeedFactors = {} -- to be safe :3c
     chart.meta = { -- safety first!! :3c
@@ -102,6 +105,25 @@ function ChartParse.harmc(harmc,calculateDifficulty)
     elseif calculateDifficulty == "get" then
         print("Hello!", harmc..".harmd")
     end
+
+    -- check for song settings file 
+    --will be used for 2 things: 
+    --checking if the song has been played before (for the newAlert) 
+    --and seeing if the user has clicked dont show again on warnings for this song (which isnt implemented yet))
+
+        if not love.filesystem.getInfo(getFolderLocation(harmc) .. "/settings.lua", "file") then
+            local settings = {playedBefore = false, skipWarnings = false}   -- we seriously still dont have anything to write tables to a file
+            saveTableToFile(settings, getFolderLocation(harmc) .. "/settings.lua")
+        end
+
+
+        if playing then
+            if love.filesystem.getInfo(getFolderLocation(harmc) .. "/settings.lua", "file") then
+                local settings = love.filesystem.load(getFolderLocation(harmc) .. "/settings.lua")()
+                settings.playedBefore = true
+                saveTableToFile(settings, getFolderLocation(harmc) .. "/settings.lua")
+            end
+        end
 
     return chart
 end

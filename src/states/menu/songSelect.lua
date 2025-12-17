@@ -22,7 +22,6 @@ local difficultyButtonX = songButtonX
 local switchingState
 
 function songSelect:resetBpmShit(newBpm)
-    print("songSelect:resetBpmShit", newBpm)
     self.bpmHandler:init()
     self.bpmHandler:setBpm(newBpm)
 end
@@ -163,16 +162,11 @@ end
 ]]
 
 
-   -- local sampleWindowMsg = LocaleHandler:getText("Warnings", "Trigger warnings") .."\n\n".. LocaleHandler:getText("TriggerWarnings", "placeholder")
-   -- self.window = window(LocaleHandler:getText("Warnings", "Hold Up"), sampleWindowMsg, 1000,600,{{text = "Play", func = function() print("yay!!") end}, {text = "Go back!", func = function() print("awhhhh :(") end}})
 
     local popupbuttons = {}
     for i = 1, 7 do
         table.insert(popupbuttons, {text = tostring(i)})
     end
-   -- self.window = window("i am a window title i guess", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", 
-  --  1000,600,popupbuttons)
-
 
     self.bannerInputChannel = self.bannerInputChannel or love.thread.getChannel("thread.bannerLoader")
     self.bannerChannel = self.bannerChannel or love.thread.getChannel("thread.bannerLoader.out")
@@ -317,16 +311,9 @@ function songSelect:setupDifficultyList(path,color)
     for i = 1, #difficultyList do
         local songInfo = nil
         songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/", "get")
-        print("DIFFICULTY",songInfo.difficulty)
-        print("hello!! i am the fucking thing that creates difficulty buttons")
-            print(songInfo.warnings)
-            print(songInfo.warnings and #songInfo.warnings)
-
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
-            local x = difficultyButtonX + baseX + slope * (y - baseY)
-            print("WHY",songInfo.difficulty)
-            table.insert(difficultyButtons,
+            local x = difficultyButtonX + baseX + slope * (y - baseY)            table.insert(difficultyButtons,
                 menuSongButton(
                     self,
                     songButtonWidth,
@@ -366,6 +353,12 @@ function songSelect:loadSongs()
             -- add to songButtons
             local songInfo = data.songInfo
             if songInfo then
+                local isNew = true
+                local settingsData
+                if love.filesystem.getInfo(musicPath .. data.folderPath .. "/settings.lua") then    -- this will work because if the file is missing, then the song def hasnt been played, and itll be created when starting the song for the first time (it shouldnt be possible for the file to be missing anyway tho)
+                    settingsData = love.filesystem.load(musicPath .. data.folderPath .. "/settings.lua")()
+                    if settingsData.playedBefore then isNew = false end
+                end
                 table.insert(songButtons, menuSongButton(
                     self,
                     songButtonWidth,songButtonHeight,songButtonX,(#songButtons+1)*(songButtonHeight+songButtonSpacing),
@@ -381,7 +374,9 @@ function songSelect:loadSongs()
                     nil,
                     nil,
                     songInfo.songPreviewTime,
-                    songInfo.audioFile
+                    songInfo.audioFile,
+                    nil,
+                    isNew
                 ))
             end
             if not self.currentAudio and #songButtons == 1 then    -- this whole thing is so hacky but it works
@@ -509,7 +504,6 @@ function songSelect:checkForSongLoop()
 
 
     if self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint) then -- we need to seek to the loop point 
-        print("Loop to " .. self.currentLoopPoint/1000 .. " seconds")
         self:resetBpmShit(self.currentSongInfo.bpm)
         self.currentAudio:seek(self.currentLoopPoint/1000)
         MusicTime = self.currentAudio:tell()
@@ -608,7 +602,6 @@ function songSelect:loadAudio(path)  -- this needs to be threaded but im stupid
     -- this is sorta hacky, but itll work 
     -- we set the song to loop, and just check if its before the preview time, if it does, we seek to the preview time, itll play till the end, loop, then seek again
     self.currentAudio:setLooping(true)
-    if self.previousSong and self.previousSong:isPlaying() then print(self.previousSong:getVolume()) end
 end
 
 
@@ -629,19 +622,14 @@ function songSelect:checkForSongButtonClicks(requireClick)
     for i, SongButton in ipairs(songButtons) do
         local thething = function()
                 self.currentSongInfo = SongButton:returnInfo()
-                print("checkForSongButtonClicks",self.currentSongInfo.bpm)
                 self:resetBpmShit(self.currentSongInfo.bpm)
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()
-                print(self.currentPlayingSong)
                 if self.currentPlayingSong ~= i then self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile) end
-                print("HIIIIIII")
                 self.currentPlayingSong = i
 
-                print("loop point ", self.currentLoopPoint)
                 self.currentLoopPoint = uhhhOtherStuffIdk.songPreviewTime
                 if selectedSong ~= i then selectedSong = i return end
-                printToConsole("Setting up difficulty list: ", buttonInfo.mode, buttonInfo.path)
                 self.menuState = "difficulty"
                 self.uglyDiffButtonIssueFix = true    -- this is gross
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)
@@ -668,7 +656,7 @@ function songSelect:checkForDifficultyButtonClicks()
                 --selectedSong = i
                 buttonInfo = SongButton:onClick()
                     local switchStateFunc = function()
-
+                        if songButtons[selectedSong].isNew then songButtons[selectedSong].isNew = false end
                         self:switchToPlaystate(buttonInfo)
                     end
 

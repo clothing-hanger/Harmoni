@@ -15,13 +15,18 @@ local menuSongButton = Class:extend("menuSongButton")
 --- @param path string
 --- @param cornerRadius number
 --- @param color table <number, number, number>
-function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings, songPreviewTime, audioFile, difficulty)
+function menuSongButton:new(instance, width, height, x, y, name, artist, charter, bpm, image, isDifficultyButton, gameMode, path, cornerRadius, color, warnings, songPreviewTime, audioFile, difficulty, isNew)
     self.isDifficultyButton = isDifficultyButton or false
     self.instance = instance
     self.width = width or 10
     self.height = height or 10
     self.x = x or 10
     self.y = y or 10
+
+    self.isNew = isNew 
+
+
+    if self.isNew then self.newAlert = newAlert(self.x, self.y) end
 
     print("HIHIHIHIIIIIIIIIIIIIIIIIII")
     self.warnings = warnings
@@ -34,7 +39,7 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     print("HIIHIHISDHISHDSDHSHISH",difficulty)
 
-    self.onlySkeleton = false -- why did i even add this we wont use it
+    self.onlySkeleton = false -- why did i even add this we wont use it       -- this describes like half the code in this fucking game now
 
     self.mode = gameMode or "???"
 
@@ -69,8 +74,10 @@ function menuSongButton:onClick()
     if self.isDifficultyButton then
         return {loadSong = true, mode = self.mode, path = self.path, warnings = self.warnings}    -- why do we even have this and returnInfo honestly..  (not changing it now  though)
     else
+
         return {loadSong = false, mode = self.mode, path = self.path, color = self.color}
     end
+
     local time = 0.4   
     self.sizeXOffset,self.sizeYOffset = -30,-30
     self.sizeTween = Timer.tween(time*3, self, {sizeXOffset = 0, sizeYOffset = 0}, "out-elastic")
@@ -96,6 +103,7 @@ end
 
 function menuSongButton:update(dt)
     self.hovered = mouseOver(self)
+    if self.newAlert then self.newAlert.x, self.newAlert.y = self.x, self.y end
 end
 
 local function remap(value, oldMin, oldMax, newMin, newMax)
@@ -178,6 +186,9 @@ function menuSongButton:draw()
     end
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setStencilTest()
+
+
+    if self.newAlert and self.isNew then self.newAlert:draw() end 
 end
 
 return menuSongButton

@@ -6,13 +6,16 @@ self.currentIndex = 1
         for i, song in ipairs(self.songList) do
             if not song then
                 table.remove(self.songList, i)
+                break
             end
             local diffList = SongListManager.getDifficultyList(musicPath .. song)
             if not diffList[1] then
                 table.remove(self.songList, i)
+                break
             end
             if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
                 table.remove(self.songList, i)
+                break
             end
         end
 
@@ -67,7 +70,7 @@ function songPreloader:update(dt)
     if self.currentIndex > #self.songList then
         self.songDifficultiesDone = true
     end
-    love.timer.sleep(0.03)
+    --love.timer.sleep(0.03)
     if self.songDifficultiesDone then
         self:done()
     end

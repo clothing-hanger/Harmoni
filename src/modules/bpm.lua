@@ -8,7 +8,7 @@ function bpmHandler:init()
 end
 
 function bpmHandler:setBpm(bpm)
-    self.bpm = bpm or 0
+    self.bpm = tonumber(bpm) or 0
     if self.bpm == 0 then GlobalNotificationsHandler:addNotification("current BPM is 0? thats not right", "error") end
 end
 

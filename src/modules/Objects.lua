@@ -43,3 +43,4 @@
     UIlogoH = require("objects.UI.logoH")
     window = require("objects.UI.window")
     coolFuckingRectangle = require("objects.UI.coolFuckingRectangle")
+    newAlert = require("objects.UI.newAlert")
