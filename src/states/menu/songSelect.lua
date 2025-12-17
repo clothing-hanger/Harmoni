@@ -407,6 +407,7 @@ function songSelect:loadSongButtonImages()
 end
 
 function songSelect:update(dt)
+    if menuSongButton.alertInstance then menuSongButton.alertInstance:update(dt) end
     self.bpmHandler:update(dt)
     if self.currentAudio and self.currentAudio:isPlaying() then MusicTime = MusicTimeManager.updateMusicTime(MusicTime,dt) end
     local mx,my = cursor:getPosition()

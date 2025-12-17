@@ -21,7 +21,9 @@ end
 function newAlert:update(dt)
 end
 
-function newAlert:draw()
+function newAlert:draw(x, y)
+    self.x = x or self.x
+    self.y = y or self.y
     love.graphics.setColor(self.color)
     love.graphics.circle("fill", self.x, self.y, self.radius)
     love.graphics.setColor(self.color[1],self.color[2],self.color[3],self.pulseAlpha)

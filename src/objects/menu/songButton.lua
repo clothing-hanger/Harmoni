@@ -1,5 +1,7 @@
 local menuSongButton = Class:extend("menuSongButton")
 
+menuSongButton.alertInstance = nil
+
 --- @param instance table -- The instance of the menu   -- what does this mean 
 --- @param width number
 --- @param height number
@@ -26,7 +28,10 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.isNew = isNew 
 
 
-    if self.isNew then self.newAlert = newAlert(self.x, self.y) end
+    if not menuSongButton.alertInstance then
+        menuSongButton.alertInstance = newAlert(0, 0)
+    end
+    if self.isNew then self.newAlert = menuSongButton.alertInstance end
 
     print("HIHIHIHIIIIIIIIIIIIIIIIIII")
     self.warnings = warnings
@@ -103,7 +108,6 @@ end
 
 function menuSongButton:update(dt)
     self.hovered = mouseOver(self)
-    if self.newAlert then self.newAlert.x, self.newAlert.y = self.x, self.y end
 end
 
 local function remap(value, oldMin, oldMax, newMin, newMax)
@@ -188,7 +192,7 @@ function menuSongButton:draw()
     love.graphics.setStencilTest()
 
 
-    if self.newAlert and self.isNew then self.newAlert:draw() end 
+    if self.newAlert and self.isNew then self.newAlert:draw(self.x, self.y) end
 end
 
 return menuSongButton
