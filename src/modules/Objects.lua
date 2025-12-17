@@ -43,4 +43,4 @@
     UIlogoH = require("objects.UI.logoH")
     window = require("objects.UI.window")
     coolFuckingRectangle = require("objects.UI.coolFuckingRectangle")
-    newAlert = require("objects.UI.newAlert")
+    newAlert = require("objects.UI.newAlert")    --this one is actually UIslop   (i call everything that i add to just make the UIs look more "full" UIslop, but the other ones are good additions at least, this one is just bad, so its especially UIslop)
