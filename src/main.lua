@@ -43,7 +43,8 @@ function love.load(args)
     LocaleHandler = require("modules.localeHandler")
     local preferredLocales
     if SDL2 then
-        preferredLocales = SDL2.getPreferredLocales()
+        --preferredLocales = SDL2.getPreferredLocales()
+        preferredLocales = { { language = "en", country = "US" } }
     else
         preferredLocales = { { language = "en", country = "US" } }
     end

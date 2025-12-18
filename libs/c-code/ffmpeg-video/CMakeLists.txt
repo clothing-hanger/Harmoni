@@ -2,47 +2,42 @@ cmake_minimum_required(VERSION 3.10)
 project(video_module LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/LuaJIT/src
-)
-
-link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/LuaJIT/src
-)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(video SHARED
     src/video.cpp
     src/lua_video.cpp
 )
 
-if(MSVC)
+if (MSVC)
     target_compile_options(video PRIVATE
         $<$<CONFIG:Release>:/O2 /Oi /Gy /DNDEBUG /Ob2>
         $<$<CONFIG:RelWithDebInfo>:/O2 /Zi /DNDEBUG /Ob2>
     )
 
-    set_target_properties(video PROPERTIES
-        LINK_FLAGS_RELEASE "/LTCG /OPT:REF /OPT:ICF"
-        LINK_FLAGS_RELWITHDEBINFO "/LTCG /OPT:REF /OPT:ICF"
+    target_link_options(video PRIVATE
+        $<$<CONFIG:Release>:/LTCG /OPT:REF /OPT:ICF>
+        $<$<CONFIG:RelWithDebInfo>:/LTCG /OPT:REF /OPT:ICF>
     )
-
 else()
     target_compile_options(video PRIVATE
-        $<$<CONFIG:Release>:-O3 -march=native -flto -DNDEBUG>
-        $<$<CONFIG:RelWithDebInfo>:-O2 -g -march=native -flto>
+        $<$<CONFIG:Release>:-O3 -DNDEBUG>
+        $<$<CONFIG:RelWithDebInfo>:-O2 -g>
     )
+
     target_link_options(video PRIVATE
-        $<$<CONFIG:Release>:-flto -s>
-        $<$<CONFIG:RelWithDebInfo>:-flto>
+        $<$<CONFIG:Release>:-s>
     )
 endif()
 
-if (WIN32)
-    target_link_libraries(video
+if (MSVC)
+    target_include_directories(video PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/LuaJIT/src
+    )
+
+    target_link_libraries(video PRIVATE
         lua51.lib
         avformat.lib
         avcodec.lib
@@ -50,14 +45,33 @@ if (WIN32)
         swscale.lib
         avutil.lib
     )
+
 else()
-    target_link_libraries(video
-        lua51
-        avformat
-        avcodec
-        swresample
-        swscale
-        avutil
+    find_package(PkgConfig REQUIRED)
+
+    pkg_check_modules(FFMPEG REQUIRED
+        libavformat
+        libavcodec
+        libswscale
+        libswresample
+        libavutil
+    )
+
+    pkg_check_modules(LUAJIT REQUIRED luajit)
+
+    target_include_directories(video PRIVATE
+        ${FFMPEG_INCLUDE_DIRS}
+        ${LUAJIT_INCLUDE_DIRS}
+    )
+
+    target_link_libraries(video PRIVATE
+        ${FFMPEG_LIBRARIES}
+        ${LUAJIT_LIBRARIES}
+    )
+
+    target_compile_options(video PRIVATE
+        ${FFMPEG_CFLAGS_OTHER}
+        ${LUAJIT_CFLAGS_OTHER}
     )
 endif()
 
