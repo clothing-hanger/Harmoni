@@ -15,8 +15,12 @@ function maniaHUD:update(dt)
 end
 
 function maniaHUD:sendValues(score,accuracy)  -- will be called every frame (obviously) to pass shit to the hud 
-    self.score = (score)
-    self.accuracy = accuracy
+   -- self.score = (score)
+   -- self.accuracy = accuracy
+end
+
+function maniaHUD:sendScoreHandlerScores(scoreHandlerScores)
+    self.scores = scoreHandlerScores
 end
 
 function maniaHUD:draw()
@@ -29,8 +33,10 @@ end
 
 function maniaHUD:debugDraw()
     love.graphics.print("DEBUG SHIT" .. "\n"
-                    .. "SCORE: " .. self.score .. "\n"
-                    .. "ACCURACY: " .. self.accuracy,
+                    .. "SCORE: " .. self.scores.trueScore .. "\n"
+                    .. "ACCURACY: " .. self.scores.trueAccuracy .. "\n"
+                    .. "PERFORMANCE RATING: " .. self.scores.truePerformanceRating .. "\n"
+                    .. "DIFFICULTY RATING: " .. self.scores.difficultyRating,
                     100,100
     )
 end

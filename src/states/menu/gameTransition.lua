@@ -16,6 +16,9 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
     uhmmode, uhmchart = mode, chart
     fullchart = ChartParse.harmc(chart, "get", true) -- yep we are just gonna parse the whole chart here lol,, why not
                                             -- This is actually a good way to do it im ngl you thought good
+                                                       --it was to prevent any weirdly long frame while gamemodemanager or mania parses the chart. all modes use harmc files so they can all be parsed here
+
+    print("dIFIFJHF", fullchart.meta.difficulty)
     timebar = {0}
     background = sharedBackground(image)
     background.dimness = backgroundDim

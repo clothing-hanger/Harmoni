@@ -7,6 +7,8 @@ function mania:new(chart, parent, fullChart, mods)
     played = false
     self.mods = mods
 
+
+    print(fullChart.meta.difficulty)
     self.parent = parent
     self.videoBackground = nil
     self.chartPath = getDirectory(chart)
@@ -18,9 +20,10 @@ function mania:new(chart, parent, fullChart, mods)
     self.scoreHandler = ScoreHandler
 
     --score shit 
-    ScoreHandler:resetScore()
+    self.scoreHandler:resetScore({difficulty = (fullChart.meta.difficulty) or 0})
+    --ScoreHandler:setupPerformanceRating()
 
-    self.scoresPerJudgements = ScoreHandler:getScorePerJudgment(self.totalNotes)
+    self.scoresPerJudgements = self.scoreHandler:getScorePerJudgment(self.totalNotes)
 
     printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
     printToConsole(self.chart)
@@ -50,6 +53,7 @@ function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     self.HUD = maniaHUD()
+    self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
 
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
 
@@ -187,9 +191,10 @@ function mania:updateObjects(dt)
     if self.song then self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration()) end
     self.comboCount:update(dt)
     self.healthBar:update(dt)
+    self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
 
     self.HUD:update(dt) -- we also gotta send values to the hud
-    self.HUD:sendValues(ScoreHandler:getScore("printable"), ScoreHandler:getAccuracy("printable"))
+    self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
     if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:endSong()
