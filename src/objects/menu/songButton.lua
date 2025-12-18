@@ -183,7 +183,7 @@ function menuSongButton:draw()
         love.graphics.setLineWidth(1)
     end
 
-    if not self.imageLoaded then
+    if not self.imageLoaded and not self.isDifficultyButton then
         local throbbertRadius = 30
 
         throbbert:draw(self.x + self.width - (throbbertRadius*2), self.y+self.height/2, throbbertRadius, 15)

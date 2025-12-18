@@ -103,7 +103,22 @@ function ChartParse.harmc(harmc,calculateDifficulty,playing)
     if calculateDifficulty == "generate" then 
         if chart.meta.gameMode == "mania" then if type(maniaChartDifficultyCalculator:calculateDifficulty(chart)) == "number" then chart.meta.difficulty = maniaChartDifficultyCalculator:calculateDifficulty(chart) end end 
     elseif calculateDifficulty == "get" then
-        print("Hello!", harmc..".harmd")
+        local harmc = harmc
+        print(harmc)
+        if harmc:sub(-1) == "/" then -- we gotta remove this obviously
+            harmc = harmc:sub(1,-2)   -- is this a good way of doing this?
+        end
+        print(harmc)
+        local file = harmc..".harmd"
+        print(file)
+        if love.filesystem.getInfo(file, "file") then
+            local filecontents = love.filesystem.read(file)
+            print("filecontents",filecontents)
+            if not filecontents then GlobalNotificationsHandler:addNotification("couldn't get difficulty file for " .. file, "error") end
+            local diff,version = filecontents:match("(%d+%.?%d*)%s*:%s*(%d+)") -- still magic to me,, WHAT does this mean???
+            print("diff,version", diff, version)
+            chart.meta.difficulty = diff
+        end
     end
 
     -- check for song settings file 
