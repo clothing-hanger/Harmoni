@@ -1,6 +1,12 @@
 ---@type table
 local video = Class:extend("video")
 
+local function fileExists(path)
+    local f = io.open(path, "rb")
+    if f then f:close() end
+    return f ~= nil
+end
+
 function video:new(video,x,y,scaleX,scaleY,dimness)
     self.path = video
     self.visible = true
@@ -15,10 +21,28 @@ function video:new(video,x,y,scaleX,scaleY,dimness)
 
     if not video then return self, error("Video path not provided") end -- temp
     printToConsole("Loading video: " .. tostring(video))
-    video = love.filesystem.newFileData(video)
-    if not video then return self, error("Video file not found") end -- again, temp
-    local vid = DLL_Video.open(video:getPointer(), video:getSize())
-    if not vid then return self, error("Video not loaded") end -- yet again
+
+    local fullPath = love.filesystem.getSource() .. "/" .. video
+    if not fileExists(fullPath) then
+        print("Video (" .. fullPath .. ") not found in source directory, checking save directory...")
+        fullPath = love.filesystem.getSaveDirectory() .. "/" .. video
+    end
+
+    fullPath = fullPath:gsub("//", "/")
+
+    if not fileExists(fullPath) then
+        error("Video file not found: " .. fullPath)
+    end
+
+    local vid, err
+    if DLL_Video.openFile then
+        vid, err = DLL_Video.openFile(fullPath)
+    end
+    if not vid then
+        local video = love.filesystem.newFileData(fullPath)
+        vid, err = DLL_Video.open(video:getPointer(), video:getSize())
+    end
+    if not vid then return self, error("Video not loaded\n" .. err .. "\n" .. fullPath) end -- yet again
 
     self.video = vid
     self.filedata = video

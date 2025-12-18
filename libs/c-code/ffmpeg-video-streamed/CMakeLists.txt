@@ -47,6 +47,8 @@ if (MSVC)
         ${CMAKE_CURRENT_SOURCE_DIR}/LuaJIT/src
     )
 
+    message(STATUS "Linking FFmpeg and LuaJIT from local directories")
+
     target_link_libraries(video PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/LuaJIT/src/lua51.lib
         ${CMAKE_CURRENT_SOURCE_DIR}/ffmpeg/lib/avformat.lib
