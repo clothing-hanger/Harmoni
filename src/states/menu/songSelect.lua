@@ -758,6 +758,7 @@ function songSelect:draw(dt)
     self:drawSongInfo(20,20,15)
 
     self:drawCircleWithContents()
+    self.modifiersMenu:draw()
 
     -- this is a sorta ugly hack but it works 
     if switchingState then
@@ -769,8 +770,7 @@ function songSelect:draw(dt)
     end
     self.logoH:draw()
 
-self.modifiersMenu:draw()
-        if self.window then self.window:draw() end
+    if self.window then self.window:draw() end
 
 end
 

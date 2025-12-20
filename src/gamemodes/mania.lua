@@ -174,10 +174,8 @@ function mania:update(dt)
 
     
     -- ending the song (FINALLY)
+    
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
-
-    print(self.endSongTimer)
-
     if self.endSongTimer>=1000 then self:endSong() end
 end
 

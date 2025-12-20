@@ -35,7 +35,7 @@ function cursor:new()
     self.mouseDownX, self.mouseDownY = nil, nil
     self.rotating = false
 
-    self.angle = 0
+    self.angle = 0-- 99999999999999999999999999999999999999991
     self.targetAngle = 0
     self.angularVelocity = 0
     self.angularAcceleration = 0
@@ -65,6 +65,12 @@ function cursor:new()
 end
 
 function cursor:update(dt)
+
+    --if self.angle > 99999999999999999999999999999999999999990 then self.angle = 0 end 
+    -- fix for cursor breaking if its wound up for 45.6 sextillion times longer than the age of the universe (634.7 nonillion years)
+    --  (assuming its wound continuously at 5 rotations per second)
+
+
     self.x, self.y = getMousePos()
     if self.x ~= self.prevX or self.y ~= self.prevY then
         self.didMove = true

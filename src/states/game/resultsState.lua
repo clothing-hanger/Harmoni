@@ -116,32 +116,34 @@ function resultsState:drawSmallRectangles()
 
     local smallRectHeights = 130
     local smallRectSpacing = 20
-
-    local cornerRadius = 70
+   
+    local cornerRadius = 70                -- WHY DID I NOT USE A TABLE FOR THIS WHAT WAS I DOING 😭😭😭
 
     -- this is the worst code in the entire game. but it works. and i am scared to touch it 
     -- score rectangle
-    love.graphics.setColor(234/255,234/255,234/255,0.5)
-    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
+
+    love.graphics.setColor(1,1,1,1)
+  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
+  --  love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
     love.graphics.setFont(SkinHandler:getFont("Menu", 50))
-    love.graphics.setColor(0,0,0,1)
+   -- love.graphics.setColor(0,0,0,1)
     love.graphics.printf(LocaleHandler:getText("Results", "Score") .. ": " .. self.score,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing)+love.graphics.getFont():getHeight()/2,self.width-20,"center")
 
 
     love.graphics.setColor(1,1,1)
 
     -- accuracy rectangle 
-    love.graphics.setColor(234/255,234/255,234/255,0.5)
-    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
-    love.graphics.setColor(0,0,0,1)
+  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
+   -- love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
+  --  love.graphics.setColor(0,0,0,1)
     love.graphics.printf(LocaleHandler:getText("Results", "Accuracy") .. ": " .. self.accuracy .. "%",self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2)+(smallRectHeights+love.graphics.getFont():getHeight()/2),self.width-20,"center")
     love.graphics.setColor(1,1,1)
 
 
     -- highest combo rectangle
-    love.graphics.setColor(234/255,234/255,234/255,0.5)
-    love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
-    love.graphics.setColor(0,0,0,1)
+  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
+ --   love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
+  --  love.graphics.setColor(0,0,0,1)
     love.graphics.printf(LocaleHandler:getText("Results", "Highest Combo") .. ": " .. self.heighestCombo,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
     love.graphics.setColor(1,1,1)
     love.graphics.setStencilTest()

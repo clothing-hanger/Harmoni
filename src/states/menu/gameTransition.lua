@@ -31,6 +31,7 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, time)
     self.quickSettings = quickSettings(baseScreenRatio.x-500,0,10000,baseScreenRatio.y, baseScreenRatio.x-1000)
     self.quickSettings.baseX = self.quickSettings.x
+    self.quickSettings.x = self.quickSettings.baseX+self.quickSettings.width
     local modList = ""
     for i, Modifier in pairs(self.mods) do
         if Modifier then modList = modList.. i  .. "," end
