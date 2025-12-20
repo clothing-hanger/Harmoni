@@ -3,7 +3,7 @@ local window = Class:extend()
 -- i have hardcoded this in a way that you cannot call the window in any state anything other than "window" and there can only be one of them.
 --i suck ass at coding
 
-function window:new(parent,title,msg,buttons)
+function window:new(parent,title,msg,buttons,checkbox,checkBoxDefault,checkBoxText)
     print("WINDOW")
     -- these will be centered to their center (am i wording that right?) cuz it just seems like it should be idfk
     -- buttons should be a table,, i think ,,, idk im just making it up as i go
@@ -11,8 +11,18 @@ function window:new(parent,title,msg,buttons)
     if type(parent) ~= "table" then GlobalNotificationsHandler:addNotification("window created with no parent!", "error") return end
     self.parent = parent
 
+
+
     self.title, self.msg = title, msg
     self.x, self.y = baseScreenRatio.x/2, baseScreenRatio.y/2 -- might make this able to change later,, idk 
+
+    self.hasCheckbox = checkbox
+    if self.hasCheckbox then
+        self.checkBoxDefault = checkBoxDefault or false
+        self.checkBoxText = checkBoxText or "you forgot to type this dumbass :3"
+
+        self.msg = self.msg .. "\n\n"..self.checkBoxText
+    end
 
     self.bodyText = love.graphics.newText(SkinHandler:getFont("Menu", 50), self.msg)    -- we dont even end up drawing this lol, we just use it for its size (i was too lazy to redo the draw func)
     self.width, self.height = self.bodyText:getDimensions()
@@ -188,6 +198,11 @@ function window:draw()
     love.graphics.setColor(r,g,b,self.alpha)
     love.graphics.printf(self.msg, self.rectX, self.rectY + self.titleBarHeight+self.coolFuckingRectangle.padding, self.width, "center")
 
+            -- draw the checkbox if we have one
+        if self.hasCheckbox then
+            love.graphics.rectangle("line", self.x-469, self.y+264, 40, 40, 10, 10)
+        end
+
     -- now we draw the buttons
     love.graphics.setFont(self.buttonFont)
     for i, Button in ipairs(self.buttons) do
@@ -198,6 +213,9 @@ function window:draw()
         love.graphics.setColor(1,1,1,self.alpha)
         love.graphics.printf(Button.text,Button.x,Button.y+(Button.height/2)-love.graphics.getFont():getHeight()/2,Button.btnWidthWithPadding,"center")
     end
+
+
+
 
     love.graphics.setStencilTest()
 
