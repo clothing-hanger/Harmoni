@@ -19,6 +19,8 @@ function mania:new(chart, parent, fullChart, mods)
     self.chart = self:setUpChart(chart, fullChart)
     self.scoreHandler = ScoreHandler
 
+    self.endSongTimer = 0
+
     --score shit 
     self.scoreHandler:resetScore({difficulty = (fullChart.meta.difficulty) or 0})
     --ScoreHandler:setupPerformanceRating()
@@ -169,6 +171,14 @@ function mania:update(dt)
         thething = false
         self:endSong()
     end
+
+    
+    -- ending the song (FINALLY)
+    self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
+
+    print(self.endSongTimer)
+
+    if self.endSongTimer>=1000 then self:endSong() end
 end
 
 function mania:endSong()
@@ -199,6 +209,7 @@ function mania:updateObjects(dt)
     if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:endSong()
     end
+
 end
 
 function mania:draw()
@@ -236,6 +247,14 @@ function mania:draw()
     self.healthBar:draw()
 
     self.countdownBar:draw()
+
+
+
+    -- draw the pause fade over everything else
+    love.graphics.setColor(0,0,0,(self.endSongTimer/1000)*0.8)
+    love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+
+    love.graphics.setColor(1,1,1,1)
 
     if self.debug then 
         love.graphics.print(MusicTime, 250, 400)
