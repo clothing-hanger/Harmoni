@@ -15,7 +15,7 @@ function maniaHUD:update(dt)
 end
 
 function maniaHUD:sendValues(score,accuracy)  -- will be called every frame (obviously) to pass shit to the hud 
-   -- self.score = (score)
+   -- self.score = (score)                               -- why did i ever do it this way? that was dumb lol
    -- self.accuracy = accuracy
 end
 

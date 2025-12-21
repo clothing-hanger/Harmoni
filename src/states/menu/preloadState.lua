@@ -1,5 +1,8 @@
 local preloadState = State("preloadState")
-
+                                             --i hate the preload crash.
+                                            --I am gonna buy a revolver with 1 bullet
+                                            --keep the gun loaded on my desk, and everytime preloader crashes, im gonna spin the chamber and then shoot myself 
+                                            -- after just a few preloader crashes, it wont be my problem anymore!!! 
 local t = 0
 local progress = 0
 local step = -10

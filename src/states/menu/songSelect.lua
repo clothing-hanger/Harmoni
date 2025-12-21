@@ -698,11 +698,13 @@ function songSelect:checkForDifficultyButtonClicks()
                     end
                     -- now we make the window
                     self.window = window(self,LocaleHandler:getText("Warnings","Hold Up"), 
-                    finalString,  
-                    {
-                        {text = LocaleHandler:getText("UI", "Yes"), func = function () switchStateFunc(); self.window:killYourself() end},
-                        {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
-                    })
+                        finalString,  
+                        {
+                            {text = LocaleHandler:getText("UI", "Yes"), func = function () switchStateFunc(); self.window:killYourself() end},
+                            {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
+                        },
+                        true,false,"Don't Show Again"
+                    )
                 else -- no warnings so just play the song
                     switchStateFunc()
                 end
@@ -764,6 +766,7 @@ function songSelect:draw(dt)
     self:drawSongInfo(20,20,15)
 
     self:drawCircleWithContents()
+    self.modifiersMenu:draw()
 
     -- this is a sorta ugly hack but it works 
     if switchingState then
@@ -775,8 +778,7 @@ function songSelect:draw(dt)
     end
     self.logoH:draw()
 
-self.modifiersMenu:draw()
-        if self.window then self.window:draw() end
+    if self.window then self.window:draw() end
 
 end
 

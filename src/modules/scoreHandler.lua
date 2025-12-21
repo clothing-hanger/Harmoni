@@ -87,7 +87,7 @@ function scoreHandler:addScore(score)
     self.scoreTween = Timer.tween(0.8, self.Scores, {printableScore = self.Scores.trueScore, printableAccuracy = self.Scores.trueAccuracy}, "out-quad")
 
     -- performance rating garbage 
-    self.Scores.truePerformanceRating = self.Scores.difficultyRating*math.pow(self.Scores.trueAccuracy/(95/100),4.75) -- i do not know what this equation does.
+    self.Scores.truePerformanceRating = math.max(self.Scores.difficultyRating*math.pow(self.Scores.trueAccuracy/95,4.75),0) -- i do not know what this equation does.
 end
 
 function scoreHandler:setupPerformanceRating(dr)  -- literally just to add the song's diff into the values table
