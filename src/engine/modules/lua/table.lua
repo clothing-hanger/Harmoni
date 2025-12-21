@@ -31,3 +31,23 @@ function table.nkeys(t)
     end
     return count
 end
+
+function table.print(t, indent)
+    indent = indent or 0
+    local prefix = string.rep("  ", indent)
+    if type(t) ~= "table" then
+        print(prefix .. tostring(t))
+        return
+    end
+    print(prefix .. "{")
+    for k, v in pairs(t) do
+        local keyStr = tostring(k)
+        if type(v) == "table" then
+            print(prefix .. "  " .. keyStr .. " = ")
+            table.print(v, indent + 2)
+        else
+            print(prefix .. "  " .. keyStr .. " = " .. tostring(v))
+        end
+    end
+    print(prefix .. "}")
+end

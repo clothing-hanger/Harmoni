@@ -8,6 +8,8 @@ ASyncInput.thread = love.thread.newThread([[
 local ffi = require("ffi")
 local bit = require("bit")
 require("love.timer")
+require("love.window")
+AMERICA = ...
 
 ffi.cdef("int16_t GetAsyncKeyState(int32_t vKey);")
 
@@ -29,7 +31,7 @@ while true do
     for vKey, keyName in pairs(keymap) do
         local state = bit.band(ffi.C.GetAsyncKeyState(vKey), 0x8000) ~= 0
 
-        if keys[vKey] ~= state then
+        if keys[vKey] ~= state and (love.window.hasFocus() or AMERICA) then
             e.key = keyName
             e.state = state
             e.time = time

@@ -181,6 +181,8 @@ end
         self:setupSongList()
     else
         self:loadBanners()
+        self.currentSongInfo = songButtons[selectedSong]:returnInfo()
+        self:resetBpmShit(self.currentSongInfo.bpm)
     end
     self:setUpThoseBubblesThatIHate(10)
     self:setUpThoseLinesThatIHate(11)
@@ -623,6 +625,10 @@ function songSelect:checkForSongButtonClicks(requireClick)
     for i, SongButton in ipairs(songButtons) do
         local thething = function()
                 self.currentSongInfo = SongButton:returnInfo()
+                if not self.currentSongInfo.bpm then 
+                    selectedSong = i
+                    self.currentSongInfo = SongButton:returnInfo()
+                end
                 self:resetBpmShit(self.currentSongInfo.bpm)
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()

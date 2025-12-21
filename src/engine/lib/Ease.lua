@@ -1,3 +1,4 @@
+-- This is a modified version of the ease library containing micro optimizations
 -- https://github.com/poke1024/ease/blob/master/ease.lua
 
 -- ease - a modified remix of flux and bezier-easing.
@@ -6,178 +7,155 @@
 -- the following code is adapted from flux, Copyright (c) 2016 rxi,
 -- https://github.com/rxi/flux/.
 
-local ease = { linear = function(p) return p end }
+local ease = {}
 
-local penner = {
-	quad    = "p * p",
-	cubic   = "p ^ 3",
-	quart   = "p ^ 4",
-	quint   = "p ^ 5",
-	expo    = "2 ^ (10 * (p - 1))",
-	sine    = "-cos(p * (pi * .5)) + 1",
-	circ    = "-(sqrt(1 - (p * p)) - 1)",
-	back    = "p * p * (2.7 * p - 1.7)",
-	elastic = "-(2^(10 * (p - 1)) * sin((p - 1.075) * (pi * 2) / .3))",
-	bounce  = "bounce(p)"
-}
+local sin, cos, sqrt, pi = math.sin, math.cos, math.sqrt, math.pi
+local abs = math.abs
 
-local bounce = function(t)
-	t = 1 - t
-	if t < (1 / 2.75) then
-  		return 1 - 7.5625 * t * t
-	elseif t < (2 / 2.75) then
-		t = t - 1.5 / 2.75
-		return 1 - (7.5625 * t * t + .75)
-	elseif t < (2.5 / 2.75) then
-		t = t - 2.25 / 2.75
-		return 1 - (7.5625 * t * t + .9375)
+local base = {}
+
+base.linear = function(p) return p end
+base.quad   = function(p) return p * p end
+base.cubic  = function(p) return p * p * p end
+base.quart  = function(p) return p * p * p * p end
+base.quint  = function(p) return p * p * p * p * p end
+base.expo   = function(p) return 2^(10 * (p - 1)) end
+base.sine   = function(p) return 1 - cos(p * pi * 0.5) end
+base.circ   = function(p) return 1 - sqrt(1 - p * p) end
+base.back   = function(p) return p * p * (2.7 * p - 1.7) end
+
+local function bounce(p)
+	p = 1 - p
+	if p < 1 / 2.75 then
+		return 1 - 7.5625 * p * p
+	elseif p < 2 / 2.75 then
+		p = p - 1.5 / 2.75
+		return 1 - (7.5625 * p * p + 0.75)
+	elseif p < 2.5 / 2.75 then
+		p = p - 2.25 / 2.75
+		return 1 - (7.5625 * p * p + 0.9375)
 	else
-		t = t - 2.625 / 2.75
-		return 1 - (7.5625 * t * t + .984375)
+		p = p - 2.625 / 2.75
+		return 1 - (7.5625 * p * p + 0.984375)
+	end
+end
+base.bounce = bounce
+
+base.elastic = function(p)
+	return -(2^(10 * (p - 1)) * sin((p - 1.075) * (pi * 2) / 0.3))
+end
+
+local function makeOut(f) -- i would love to do this with super creek 🤤🤤
+	return function(p)
+		return 1 - f(1 - p)
 	end
 end
 
-local load = loadstring or load
-
-local symbols = {
-	math = math,
-	bounce = bounce
-}
-
-local compile = function(name, str, expr)
-  ease[name] = load([[
-    local sin = math.sin; local cos = math.cos; local pi = math.pi; local sqrt = math.sqrt;
-    local bounce = ...
-    return function(p) ]] .. str:gsub("%$e", expr) .. " end", name)(bounce)
-end
-
-for k, v in pairs(penner) do
-	compile("in-" .. k, "return $e", v)
-	compile("out-" .. k, [[
-		p = 1 - p
-		return 1 - ($e)
-	]], v)
-	compile("inout-" .. k, [[
-		p = p * 2
-		if p < 1 then
-		  return .5 * ($e)
-		else
-		  p = 2 - p
-		  return .5 * (1 - ($e)) + .5
+local function makeInOut(f)
+	return function(p)
+		if p < 0.5 then
+			return 0.5 * f(p * 2)
 		end
-	]], v)
+		return 0.5 * (1 - f(2 - p * 2)) + 0.5
+	end
 end
 
--- the following code is a lua port of Gaëtan Renaudeau's JavaScript library bezier-easing,
--- https://github.com/gre/bezier-easing (ported from v2.0.3, e0036aa16e36d3647413013fa774d3df37f348f1).
+for name, fn in pairs(base) do
+	ease["in-" .. name] = fn
+	ease["out-" .. name] = makeOut(fn)
+	ease["inout-" .. name] = makeInOut(fn)
+end
 
--- These values are established by empiricism with tests (tradeoff: performance VS precision)
+ease.linear = base.linear
+
 local NEWTON_ITERATIONS = 4
 local NEWTON_MIN_SLOPE = 0.001
-local SUBDIVISION_PRECISION = 0.0000001
+local SUBDIVISION_PRECISION = 1e-7
 local SUBDIVISION_MAX_ITERATIONS = 10
 
 local kSplineTableSize = 11
-local kSampleStepSize = 1.0 / (kSplineTableSize - 1.0)
+local kSampleStepSize = 1 / (kSplineTableSize - 1)
 
-local function A (aA1, aA2) return 1.0 - 3.0 * aA2 + 3.0 * aA1 end
-local function B (aA1, aA2) return 3.0 * aA2 - 6.0 * aA1 end
-local function C (aA1)      return 3.0 * aA1 end
+local function A(a1, a2) return 1 - 3*a2 + 3*a1 end
+local function B(a1, a2) return 3*a2 - 6*a1 end
+local function C(a1)     return 3*a1 end
 
--- Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-local function calcBezier (aT, aA1, aA2) return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT end
-
--- Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-local function getSlope (aT, aA1, aA2) return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1) end
-
-local abs = math.abs
-
-local function binarySubdivide (aX, aA, aB, mX1, mX2)
-	local currentX, currentT
-	for i = 1, SUBDIVISION_MAX_ITERATIONS do
-		currentT = aA + (aB - aA) / 2.0
-		currentX = calcBezier(currentT, mX1, mX2) - aX
-		if currentX > 0.0 then
-			aB = currentT
-		else
-			aA = currentT
-		end
-		if abs(currentX) <= SUBDIVISION_PRECISION then
-			break
-		end
-	end
-	return currentT
+local function calcBezier(t, a1, a2)
+	return ((A(a1,a2)*t + B(a1,a2))*t + C(a1))*t
 end
 
-local function newtonRaphsonIterate (aX, aGuessT, mX1, mX2)
-	for i = 1, NEWTON_ITERATIONS do
-		local currentSlope = getSlope(aGuessT, mX1, mX2)
-		if currentSlope == 0.0 then
-			return aGuessT
-		end
-		local currentX = calcBezier(aGuessT, mX1, mX2) - aX
-		aGuessT = aGuessT - currentX / currentSlope
-	end
-	return aGuessT
+local function getSlope(t, a1, a2)
+	return 3*A(a1,a2)*t*t + 2*B(a1,a2)*t + C(a1)
 end
 
-local newSampleValues
-if type(jit) == "table" then -- running under LuaJIT?
+local function binarySubdivide(x, a, b, x1, x2)
+	local t, cur
+	for _ = 1, SUBDIVISION_MAX_ITERATIONS do
+		t = (a + b) * 0.5
+		cur = calcBezier(t, x1, x2) - x
+		if abs(cur) <= SUBDIVISION_PRECISION then break end
+		if cur > 0 then b = t else a = t end
+	end
+	return t
+end
+
+local function newtonRaphson(x, t, x1, x2)
+	for _ = 1, NEWTON_ITERATIONS do
+		local slope = getSlope(t, x1, x2)
+		if slope == 0 then return t end
+		t = t - (calcBezier(t, x1, x2) - x) / slope
+	end
+	return t
+end
+
+local newSamples
+if type(jit) == "table" then
 	local ffi = require("ffi")
-	local spec = "float[" .. tostring(kSplineTableSize + 1) .. "]"
-	newSampleValues = function() return ffi.new(spec) end
+	local spec = "float[" .. (kSplineTableSize + 1) .. "]"
+	newSamples = function() return ffi.new(spec) end
 else
-	newSampleValues = function() return {} end
+	newSamples = function() return {} end
 end
 
-ease.cubicbezier = function (mX1, mY1, mX2, mY2)
-	if not (0 <= mX1 and mX1 <= 1 and 0 <= mX2 and mX2 <= 1) then
-		error('bezier x values must be in [0, 1] range')
+function ease.cubicbezier(x1, y1, x2, y2)
+	assert(x1 >= 0 and x1 <= 1 and x2 >= 0 and x2 <= 1,
+		"bezier x values must be in [0,1]")
+
+	if x1 == y1 and x2 == y2 then
+		return base.linear
 	end
 
-	if mX1 == mY1 and mX2 == mY2 then
-		return ease.linear
-	end
-
-	local sampleValues = newSampleValues()
+	local samples = newSamples()
 	for i = 0, kSplineTableSize - 1 do
-		sampleValues[i + 1] = calcBezier(i * kSampleStepSize, mX1, mX2)
+		samples[i+1] = calcBezier(i * kSampleStepSize, x1, x2)
 	end
-	local lastSample = kSplineTableSize - 1
 
-	local function getTForX (aX)
-		local intervalStart = 0.0
-		local currentSample = 1
-
-		while currentSample ~= lastSample and sampleValues[currentSample + 1] <= aX do
-			currentSample = currentSample + 1
-			intervalStart = intervalStart + kSampleStepSize
+	local function getT(x)
+		local idx = 1
+		local start = 0
+		while idx < kSplineTableSize and samples[idx+1] <= x do
+			start = start + kSampleStepSize
+			idx = idx + 1
 		end
-		currentSample = currentSample - 1
+		idx = idx - 1
 
-		-- Interpolate to provide an initial guess for t
-		local dist = (aX - sampleValues[currentSample + 1]) / (sampleValues[currentSample + 2] - sampleValues[currentSample + 1])
-		local guessForT = intervalStart + dist * kSampleStepSize
+		local dist = (x - samples[idx+1]) / (samples[idx+2] - samples[idx+1])
+		local t = start + dist * kSampleStepSize
 
-		local initialSlope = getSlope(guessForT, mX1, mX2)
-		if initialSlope >= NEWTON_MIN_SLOPE then
-			return newtonRaphsonIterate(aX, guessForT, mX1, mX2)
-		elseif initialSlope == 0.0 then
-			return guessForT
+		local slope = getSlope(t, x1, x2)
+		if slope >= NEWTON_MIN_SLOPE then
+			return newtonRaphson(x, t, x1, x2)
+		elseif slope == 0 then
+			return t
 		else
-			return binarySubdivide(aX, intervalStart, intervalStart + kSampleStepSize, mX1, mX2)
+			return binarySubdivide(x, start, start + kSampleStepSize, x1, x2)
 		end
 	end
 
-	return function (x)
-		-- Because Lua numbers are imprecise, we should guarantee the extremes are right.
-		if x == 0 then
-			return 0
-		elseif x == 1 then
-			return 1
-		else
-			return calcBezier(getTForX(x), mY1, mY2)
-		end
+	return function(x)
+		if x == 0 then return 0 end
+		if x == 1 then return 1 end
+		return calcBezier(getT(x), y1, y2)
 	end
 end
 
