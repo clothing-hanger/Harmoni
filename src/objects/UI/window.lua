@@ -20,8 +20,6 @@ function window:new(parent,title,msg,buttons,checkbox,checkBoxDefault,checkBoxTe
     if self.hasCheckbox then
         self.checkBoxDefault = checkBoxDefault or false
         self.checkBoxText = checkBoxText or "you forgot to type this dumbass :3"
-
-        self.msg = self.msg .. "\n\n"..self.checkBoxText
     end
 
     self.bodyText = love.graphics.newText(SkinHandler:getFont("Menu", 50), self.msg)    -- we dont even end up drawing this lol, we just use it for its size (i was too lazy to redo the draw func)

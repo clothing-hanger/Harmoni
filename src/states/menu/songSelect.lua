@@ -697,7 +697,7 @@ function songSelect:checkForDifficultyButtonClicks()
                             {text = LocaleHandler:getText("UI", "Yes"), func = function () switchStateFunc(); self.window:killYourself() end},
                             {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
                         },
-                        true,false,"Don't show again                              ‎ "
+                        true,false,"Don't Show Again"
                     )
                 else -- no warnings so just play the song
                     switchStateFunc()
