@@ -102,11 +102,15 @@ function CLibs:after()
     love.filesystem.setCRequirePath(newPaths)
 
     package.cpath = package.cpath
-        .. ";" .. save .. sep .. "clibs" .. sep .. "?.dll"
-        .. ";" .. save .. sep .. "clibs" .. sep .. "loadall.dll"
+        .. ";" .. save .. sep .. "clibs" .. sep .. "?" .. ext
+        .. ";" .. save .. sep .. "clibs" .. sep .. "loadall" .. ext
 
     tryExcept(function()
-        DLL_Video = require("video")
+        local libname = "video"
+        if os == "Linux" then
+            libname = "libvideo"
+        end
+        DLL_Video = require(libname)
     end, function(err)
         print("Warning: Could not load video DLL. Video playback will be disabled.")
         print("Error message: " .. err)

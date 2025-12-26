@@ -23,9 +23,10 @@ local baton = {
 	]]
 }
 -- Patched by Guglio for ASyncInput support on Windows
+-- TODO: Rewrite this + Merge ASyncInput
 
 local ASyncInput = require("engine.lib.ASyncInput.ASyncInput")
-if ASyncInput then ASyncInput.thread:start() end
+if ASyncInput and type(ASyncInput) == "table" then ASyncInput.thread:start(AMERICA) end
 local asyncKeys = {}
 
 local function warn(msg, args)

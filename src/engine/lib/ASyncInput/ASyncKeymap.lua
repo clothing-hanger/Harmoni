@@ -8,15 +8,15 @@ keymap[0x28] = "down"
 
 keymap[0x0D] = "return"
 
-for i = 0x41, 0x5A do
+for i = 0x41, 0x5A do -- a-z
     keymap[i] = string.char(i + 32)
 end
 
-for i = 0x30, 0x39 do
+for i = 0x30, 0x39 do -- 0-9
     keymap[i] = string.char(i)
 end
 
-for i = 0x60, 0x69 do
+for i = 0x60, 0x69 do -- numpad 0-9
     keymap[i] = "kp" .. (i - 0x60)
 end
 

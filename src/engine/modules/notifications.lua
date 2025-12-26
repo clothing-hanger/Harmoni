@@ -1,4 +1,9 @@
 local ffi = require("ffi")
+
+if love.system.getOS() ~= "Windows" then
+    return false
+end
+
 local user32 = ffi.load("user32")
 local shell32 = ffi.load("shell32")
 

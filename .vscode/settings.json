@@ -4,11 +4,13 @@
         "deprecated",
         "param-type-mismatch",
         "lowercase-global",
-        "redundant-parameter"
+        "redundant-parameter",
+        "undefined-global"
     ],
     "pixelbyte.love2d.srcDir": "./src/",
     "Lua.diagnostics.globals": [
-        "jit"
+        "jit",
+        "bit"
     ],
     "files.associations": {
         "xstring": "cpp",
