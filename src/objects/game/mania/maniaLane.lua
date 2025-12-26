@@ -103,6 +103,8 @@ function maniaLane:handleInput()
         end
 
         state.judgementObject:judge(bestJudgement.name)
+        if bestJudgement.name == "Miss" then self.parent.parent.comboCount:breakCombo() end -- pretty self explanitory, huh?
+
         state.scoreHandler:addScore(bestJudgement.score)
         local healthChange
 

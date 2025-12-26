@@ -505,9 +505,14 @@ function songSelect:checkForSongLoop()
 
 
     if self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint) then -- we need to seek to the loop point 
-        self:resetBpmShit(self.currentSongInfo.bpm)
         self.currentAudio:seek(self.currentLoopPoint/1000)
         MusicTime = self.currentAudio:tell()
+        -- this is where that one bug happens,,, idk what to try to fix this really..
+        if not (self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint)) then-- we just check the same conditions again and if it still is true we dont set the bpm
+            self:resetBpmShit(self.currentSongInfo.bpm)
+        else
+         --   self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)       -- oh my god my fucking ears do NOT uncomment this line 😭😭😭
+        end
     end
 end
 
@@ -623,6 +628,7 @@ function songSelect:checkForSongButtonClicks(requireClick)
     for i, SongButton in ipairs(songButtons) do
         local thething = function()
                 self.currentSongInfo = SongButton:returnInfo()
+                GlobalNotificationsHandler:addNotification("(2) IM A DEBUG THINGY!! IGNORE ME!")
                 self:resetBpmShit(self.currentSongInfo.bpm)
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()

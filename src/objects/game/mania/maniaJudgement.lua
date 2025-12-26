@@ -81,7 +81,7 @@ function maniaJudgement:update(dt)
     for i = #self.judgements, 1, -1 do
         local j = self.judgements[i]
         j.timer = j.timer - dt * 1000
-        if j.timer <= 0 then
+        if j.timer <= 0 and not (i == #self.judgements) then
             table.remove(self.judgements, i)
         end
     end
@@ -97,6 +97,7 @@ function maniaJudgement:draw()
         local x, y, size = j.x, j.y, self.size
         local alpha = j.timer / 500
         local isTop = (i == #self.judgements)
+        if isTop then alpha = 1 end
         local color = isTop and {1, 1, 1, alpha} or {0.5, 0.5, 0.5, alpha}
 
         local ox, oy

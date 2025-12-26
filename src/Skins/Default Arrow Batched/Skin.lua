@@ -7,13 +7,13 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HoldEnd Size"] = 125,
         ["Receptor Size"] = 125,
 
-        ["Judgement Size"] = 1.5,
+        ["Judgement Size"] = 1.25,
         ["Judgement Y Offset"] = getScreenCenter().y,
-        ["Judgement X Offset"] = getScreenCenter().x-500,
+        ["Judgement X Offset"] = getScreenCenter().x,
 
-        ["Combo Y Offset"] = getScreenCenter().y,
-        ["Combo X Offset"] = getScreenCenter().x+500,
-        ["Combo Format"] = "Full",
+        ["Combo Y Offset"] = getScreenCenter().y+130,
+        ["Combo X Offset"] = getScreenCenter().x,
+        ["Combo Format"] = "Short",
         ["Remove Combo Stack"] = true,
 
         ["Hit Error Meter Y"] = 0,
