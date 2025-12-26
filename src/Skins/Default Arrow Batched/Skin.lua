@@ -61,8 +61,8 @@ Skin = {   -- i need to remove lots of these tbh..
     },
 
     Fonts = {
-        ["HUD"] = "FONTS/Novamono-njdg.ttf",
-        ["Combo"] = "FONTS/SourceCodePro-Medium.ttf",
+        ["HUD"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",
+        ["Combo"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",
         ["Menu"] = "FONTS/neweresterfont.ttf",
         ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
     },
