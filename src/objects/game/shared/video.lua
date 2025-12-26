@@ -14,7 +14,7 @@ function video:new(video,x,y,scaleX,scaleY,dimness)
     self.scaleX, self.scaleY = scaleX or 1,scaleY or 1
     self.checkTimer = 0
     if not DLL_Video then
-        error("Video not supported on this platform") --temp until logging is added
+        --error("Video not supported on this platform") --temp until logging is added
 
         return self
     end

@@ -110,8 +110,12 @@ function mania:setUpChart(chartpath, chart)
             nil,
             gameplayBackgroundDim
         )
-        self.videoBackground.scaleX = baseScreenRatio.x / self.videoBackground.image:getWidth()
-        self.videoBackground.scaleY = baseScreenRatio.y / self.videoBackground.image:getHeight()
+        if not self.videoBackground.image then
+            self.videoBackground = nil
+        else
+            self.videoBackground.scaleX = baseScreenRatio.x / self.videoBackground.image:getWidth()
+            self.videoBackground.scaleY = baseScreenRatio.y / self.videoBackground.image:getHeight()
+        end
     end
 
     for _, BpmChange in ipairs(parsed.bpm) do

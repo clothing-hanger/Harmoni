@@ -75,7 +75,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
     end
 
    -- module.showNotification(title, text, timeout_ms, opts)
-    NOTIFICATIONS.showNotification("HI", "HELLO", 1000)
+    if NOTIFICATIONS then NOTIFICATIONS.showNotification("HI", "HELLO", 1000) end
 
 
     self.socialsX = baseScreenRatio.x - (5*120)

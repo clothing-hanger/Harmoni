@@ -36,6 +36,7 @@ function CHE:init()
     Timer = require("engine.lib.Timer")
     Ease = require("engine.lib.Ease")
     WINDOW = require("engine.modules.window")
+    if type(WINDOW) ~= "table" then WINDOW = nil end
     if WINDOW then
         local ok = WINDOW.setDarkMode(WINDOW.isDarkMode())
         if not ok then
@@ -43,6 +44,7 @@ function CHE:init()
         end
     end
     NOTIFICATIONS = require("engine.modules.notifications")
+    if type(NOTIFICATIONS) ~= "table" then NOTIFICATIONS = nil end
     require("modules.Objects")
 
     cursor = cursor()
@@ -120,7 +122,7 @@ function CHE:update(dt)
     CHETime.real, CHETime.session = self:updateTime()
 
     love.mouse.setVisible(false)
-    NOTIFICATIONS.update()
+    if NOTIFICATIONS then NOTIFICATIONS.update() end
 end
 
 function CHE:updateTime()

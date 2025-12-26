@@ -26,7 +26,7 @@ local baton = {
 -- TODO: Rewrite this + Merge ASyncInput
 
 local ASyncInput = require("engine.lib.ASyncInput.ASyncInput")
-if ASyncInput then ASyncInput.thread:start(AMERICA) end
+if ASyncInput and type(ASyncInput) == "table" then ASyncInput.thread:start(AMERICA) end
 local asyncKeys = {}
 
 local function warn(msg, args)

@@ -4,6 +4,10 @@ local user32, advapi32
 local module = {}
 local okay = true
 
+if love.system.getOS() ~= "Windows" then
+    return false
+end
+
 local success, err = pcall(function()
     user32 = ffi.load("user32.dll")
 end)
