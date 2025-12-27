@@ -188,8 +188,6 @@ function mania:update(dt)
         self.notesPerSecond[i] = self.notesPerSecond[i]-1000*dt
         if self.notesPerSecond[i] <= 0 then table.remove(self.notesPerSecond, i) break end
     end    
-
-    print(#self.inputsPerSecond, #self.notesPerSecond)
     
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
     if self.endSongTimer>=1000 then self:endSong() end
@@ -202,7 +200,7 @@ function mania:endSong()
     self.song = nil
     self.chart = nil
     self.playField = {}
-    State.switch(States.game.resultsState, self)
+    State.switch(States.extra.markus)
 end
 
 
@@ -221,10 +219,22 @@ function mania:updateObjects(dt)
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
     if self.healthBar.health <= 0 and not self.mods["NF"] then
-        self:endSong()
+        self:gameOver()
     end
 
 end
+
+function mania:gameOver()
+    self:endSong()  -- remove this to see the gameover, but youll be softlocked
+
+    if self.parent.gameOver then return end
+    self.parent.gameOver = true
+    for _, playField in ipairs(self.playField) do
+        playField:gameOver()
+    end
+
+end
+
 
 function mania:draw()
     self.background:draw()

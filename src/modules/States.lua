@@ -15,6 +15,7 @@ return {
         sand = require("states.game.sand")
     },
     extra = {
-        america = require("states.extra.america")
+        america = require("states.extra.america"),
+        markus = require("states.extra.markus")
     }
 }

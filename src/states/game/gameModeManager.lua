@@ -14,6 +14,7 @@ function gameModeManager:enter(s,mode,chart,fullchart,mods)
     elseif mode == "slider" then
         self.gameMode = {slider(chart, self, fullchart)}
     end
+    self.gameOver = false
 
     cursor.fadeOutWhenIdle = true    -- why dont we just add a check to the cursor to see if we are in gamemodemanager
                                      -- because its not like the cursor will only ever fade out in gamemodemanager
@@ -31,10 +32,13 @@ function gameModeManager:startSong(countdown)
 end
 
 function gameModeManager:update(dt)
-    MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
-    if MusicTimeManager.needsResync(self.gameMode[1].song) then
-        MusicTime = MusicTimeManager.resyncMusicTime(self.gameMode[1].song)
+    if not self.gameOver then
+        MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
+        if MusicTimeManager.needsResync(self.gameMode[1].song) then
+            MusicTime = MusicTimeManager.resyncMusicTime(self.gameMode[1].song)
+        end
     end
+
     for i, gameMode in ipairs(self.gameMode) do
         gameMode:update(dt)
     end

@@ -58,6 +58,12 @@ function maniaLane:update(dt)
     self.empty = (#self.notes == 0 and #self.drawableNotes == 0)
 end
 
+function maniaLane:gameOver()
+    for _, note in ipairs(self.drawableNotes) do
+        note:gameOver()
+    end
+end
+
 function maniaLane:isOnScreen(note)
     return note.startTime - MusicTime <= 10000
 end

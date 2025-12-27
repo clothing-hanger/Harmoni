@@ -65,6 +65,12 @@ function maniaPlayField:new(chart, parent)
     end
 end
 
+function maniaPlayField:gameOver()
+    for _, lane in ipairs(self.lanes) do
+        lane:gameOver()
+    end
+end
+
 function maniaPlayField:getPositionFromTime(time, index)
     local svs = self.chart.scrollVelocities
     local initialSV = self.chart.meta.initialSV or 1

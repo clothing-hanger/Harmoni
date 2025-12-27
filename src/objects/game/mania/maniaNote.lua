@@ -39,6 +39,10 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVE
         self.endY = self.startTime + self.holdLength + (MusicTime or 0)
     end
 
+
+    self.gameOverX, self.gameOverY = 0,0
+    self.rotation = 0
+    self.gameOverBool = false
     self.held = false
     self.released = false
 
@@ -60,7 +64,7 @@ function maniaNote:update(dt)
 end
 
 function maniaNote:updatePosition()
-    self.y = self:getNotePosition(self.initialSVTime, not self.held)
+    self.y = self:getNotePosition(self.initialSVTime, not self.held) + self.gameOverY
     if self.holdLength then
         self.endY = self:getNotePosition(self.initialSVEndTime, true)
     end
@@ -79,7 +83,7 @@ function maniaNote:getNotePosition(time, moveWithScroll)
     local currentTime = self.parent.parent.currentTime
 
     if moveWithScroll then
-        local offset = (time - currentTime) * multiplier * sfMult
+        local offset = (time - currentTime) * multiplier * sfMult + self.gameOverY
         if scrollDir == "Up" then
             return self.parent.y + offset
         else
@@ -88,6 +92,20 @@ function maniaNote:getNotePosition(time, moveWithScroll)
     else
         return self.parent.y
     end
+end
+
+function maniaNote:gameOver()
+    self.gameOverBool = true
+
+    local shit = 100
+
+
+    Timer.tween(
+        love.math.random(0.4,0.6),
+        self,
+        {x = self.x+love.math.random(-shit,shit), gameOverY = love.math.random(-shit,shit)},
+        "out-quad"
+    )
 end
 
 function maniaNote:hit()
@@ -104,6 +122,7 @@ function maniaNote:draw()
 
     local curBatch = arrowBatch or noteBatch
 
+    --
     if curBatch then
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
@@ -162,7 +181,8 @@ function maniaNote:draw()
                 self.y = self.y - 70
             end
         end
-        love.graphics.draw(self.image, self.x, self.y, 0, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2)
+        love.graphics.draw(self.image, self.x+self.gameOverX, self.y+self.gameOverX, self.rotation, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2)
+
     end
 
     if self.debug then
