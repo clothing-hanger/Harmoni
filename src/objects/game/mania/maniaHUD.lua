@@ -1,24 +1,22 @@
 local maniaHUD = Class:extend("maniaHUD")
 
-function maniaHUD:new()
-    self.score = 0
-    self.accuracy = 0
-
-    self.debug = true
+function maniaHUD:new(parent)
+    self.parent = parent
+    self.debug = false
     self.fontLarge = SkinHandler:getFontLegacy("HUD Large")
     self.fontSmall = SkinHandler:getFontLegacy("HUD Small")
     self.fontExtraSmall = SkinHandler:getFontLegacy("HUD Extra Small")
 
-    self.font = SkinHandler:getFont("HUD", 40)
+    self.font = SkinHandler:getFont("HUD", 160)
+    self.grade = "N/A"
 end
 
 function maniaHUD:update(dt)
-
+    self.grade = maniaGrades.getGrade(self.scores.trueAccuracy)
 end
 
-function maniaHUD:sendValues(score,accuracy)  -- will be called every frame (obviously) to pass shit to the hud 
-   -- self.score = (score)                               -- why did i ever do it this way? that was dumb lol
-   -- self.accuracy = accuracy
+function maniaHUD:sendValues()  -- will be called every frame (obviously) to pass shit to the hud 
+
 end
 
 function maniaHUD:sendScoreHandlerScores(scoreHandlerScores)
@@ -30,7 +28,17 @@ function maniaHUD:draw()
 
     if self.debug then self:debugDraw() end
 
-    love.graphics.printf(self.score, 10, 10, baseScreenRatio.x, "left")
+    local score = string.format("%.0f", self.scores.printableScore)
+    local accuracy = string.format("%.0f", self.scores.printableAccuracy) .. "%"
+    local grade = self.grade 
+
+    local IPSoverNPS = string.format("%02d",#self.parent.inputsPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond)
+
+    love.graphics.printf(score .. "\n" .. IPSoverNPS, 10, 10, baseScreenRatio.x, "left")
+
+    love.graphics.printf(accuracy .. "\n" .. grade, baseScreenRatio.x-1000, 10, 990, "right")
+
+
    -- love.graphics.printf
 end
 

@@ -65,11 +65,13 @@ end
 function maniaLane:handleInput()
     if not Input then return end -- why would input be nil???????????
 
+
     
     if not self.parent.parent.mods["BP"] then
         if not Input:pressed(self.inputBind) then return end
     end
-    
+    table.insert(self.parent.parent.inputsPerSecond, 1000)
+
 
     local bestJudgement = nil
     local bestTimeDiff = math.huge
@@ -97,6 +99,7 @@ function maniaLane:handleInput()
         local state = self.parent.parent
         if not note.holdLength then
             table.remove(self.drawableNotes, 1)
+            table.insert(self.parent.parent.notesPerSecond, 1000)
         else
             note.held = true
             note.holdStartTime = MusicTime
@@ -114,10 +117,10 @@ function maniaLane:handleInput()
             healthChange = bestJudgement.health
         end
 
-      --  print(self, self.parent, self.parent.parent, self.parent.parent.mods, self.parent.parent.mods["SD"])
-        if self.parent.parent.mods["SD"] then healthChange = -99999 end   -- i dont understand why the print above seems fine but this doesnt work..
+        --if self.parent.parent.mods["SD"] and bestJudgement.name == "Miss" then state.healthBar:justFuckingDie() end
 
         state.healthBar:changeHealth(healthChange)
+
         state.comboCount:incrementCombo()
     end
 end

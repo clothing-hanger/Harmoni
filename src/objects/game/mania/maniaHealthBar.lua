@@ -29,6 +29,9 @@ function maniaHealthBar:changeHealth(amount)
     if self.health > 1 then self.health = 1 elseif self.health < 0 then self.health = 0 end
 end
 
+function maniaHealthBar:justFuckingDie()
+    self.health = 0
+end
 
 function maniaHealthBar:draw()
     love.graphics.setColor(1,1,1,0.45)

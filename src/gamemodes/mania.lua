@@ -37,6 +37,9 @@ function mania:new(chart, parent, fullChart, mods)
 
     mania.judgements = require("modules.maniaJudgements")
 
+    self.inputsPerSecond = {}
+    self.notesPerSecond = {}
+
     self:setUpObjects()
 end
 
@@ -54,7 +57,7 @@ end
 function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
-    self.HUD = maniaHUD()
+    self.HUD = maniaHUD(self)
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
 
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
@@ -176,8 +179,17 @@ function mania:update(dt)
         self:endSong()
     end
 
-    
-    -- ending the song (FINALLY)
+    for i = 1,#self.inputsPerSecond do
+        self.inputsPerSecond[i] = self.inputsPerSecond[i]-1000*dt
+        if self.inputsPerSecond[i] <= 0 then table.remove(self.inputsPerSecond, i) break end
+    end
+
+    for i = 1,#self.notesPerSecond do
+        self.notesPerSecond[i] = self.notesPerSecond[i]-1000*dt
+        if self.notesPerSecond[i] <= 0 then table.remove(self.notesPerSecond, i) break end
+    end    
+
+    print(#self.inputsPerSecond, #self.notesPerSecond)
     
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
     if self.endSongTimer>=1000 then self:endSong() end
