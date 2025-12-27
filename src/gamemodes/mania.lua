@@ -200,7 +200,7 @@ function mania:endSong()
     self.song = nil
     self.chart = nil
     self.playField = {}
-    State.switch(States.extra.markus)
+    State.switch(States.game.resultsState)
 end
 
 
