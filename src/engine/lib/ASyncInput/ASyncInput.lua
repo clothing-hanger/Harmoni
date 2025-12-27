@@ -9,7 +9,7 @@ local ffi = require("ffi")
 local bit = require("bit")
 require("love.timer")
 require("love.window")
-AMERICA = ...
+AMERICA = ... -- Because we believe in freedom of your input
 
 ffi.cdef("int16_t GetAsyncKeyState(int32_t vKey);")
 
