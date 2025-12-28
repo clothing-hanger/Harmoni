@@ -21,7 +21,7 @@ local captionParser = {}
 --- TIMESTAMP CONVERSIONS
 
 ---@param timestamp string The timestamp in SRT format (e.g., "00:01:23,456" for HH:MM:SS,mmm)
----@return number The timestamp in seconds
+--@return number The timestamp in seconds
 local function srtTimeToSeconds(timestamp)
     local hours, minutes, seconds = timestamp:match("(%d+):(%d+):(%d+),(%d+)")
     if not hours or not minutes or not seconds then

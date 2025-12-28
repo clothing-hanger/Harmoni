@@ -8,7 +8,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.bubbleClickedCount = 0
     self.coverAlpha = (fadeIn and 1) or 0
     if resetItems == nil then resetItems = true end
-    self.BG = SkinHandler:getImage("Menu", "Background")
+    self.BG = SkinHandler:getRandomBG()
     if resetItems then self.wavesY = 0 end
     if not self.wavesY then
         self.wavesY = 0
@@ -58,7 +58,18 @@ function titleScreen:enter(from, resetItems, fadeIn)
         {
             label = LocaleHandler:getText("Menu", "Exit"), 
             func = function() 
-                love.event.quit()
+                self.window = window(self, LocaleHandler:getText("UI", "Exit Title"), LocaleHandler:getText("UI", "Exit Confirm"),
+                    {
+                        {
+                            text = LocaleHandler:getText("UI", "Exit"),
+                            func = function() self.window.msg = LocaleHandler:getText("UI", "Exited"); love.quit() end  -- changing the window text like that is such a hack but it works lol
+                        },
+                        {
+                            text = LocaleHandler:getText("UI", "Cancel"),
+                            func = function() self.window:killYourself() end
+                        }
+                    }
+                )
             end, 
             color1 = {1,1,1,1}, 
             color2 = {1,1,1,1},
@@ -386,7 +397,7 @@ function titleScreen:updateBubbles(dt)
 
                     if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
                         self.shownOsuWindow = true
-                        self.window = window(self,"This isn't osu!", "Stop clicking circles!!", {{text = "sorry...", func = function() self.window:killYourself() end}})
+                        self.window = window(self,LocaleHandler:getText("easterEggs","Isn't osu"), LocaleHandler:getText("easterEggs","Stop Clicking Circles"), {{text = LocaleHandler:getText("easterEggs","Sorry"), func = function() self.window:killYourself() end}})
                     end
 
                 -- save original alpha 

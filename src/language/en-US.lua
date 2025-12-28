@@ -69,13 +69,16 @@ Language = {
         ["Combo"] = "Combo",  -- idk ,, theres prob more we need but i cant think rn
     },
     UI = {
-        ["Ok"] = "Ok",
+        ["Ok"] = "Ok",  -- Ok
         ["Yes"] = "Yeah!",
         ["No"] = "Nah...",
         ["Cancel"] = "Cancel",
         ["Back"] = "Back",     -- not sure if all of these will be used but im adding them in case
-        ["Confirm"] = "Confirm",                                                                                -- please push git
+        ["Confirm"] = "Confirm",
         ["Exit"] = "Exit" ,
+        ["Exited"] = "See ya!", -- no way osu reference!!!!1!!
+        ["Exit Confirm"] = "You really wanna close the game?",
+        ["Exit Title"] = "Heading out already?",
         ["Leaving Harmoni"] = "You're leaving Harmoni.",
         ["Take To X"] = "This will open Harmoni's X page in your default browser.",  -- can elon hurry up and fucking die?
         ["Take To Bluesky"] = "This will open Harmoni's Bluesky page in your default browser.",
@@ -87,6 +90,11 @@ Language = {
         ["Click Unfullscreen"] = "Fullscreened. Click the video or press F to unfullscreen.",
         ["Headphones Recommended"] = "Headphones Recommended!",
         ["Headphones Better"] = "The composers worked hard on these songs,\nand they sound better with headphones.\n\nSo use them."
+    },
+    easterEggs = {
+        ["Stop Clicking Circles"] = "Stop clicking circles!!",
+        ["Isn't osu"] = "This isnt osu!",
+        ["Sorry"] = "sorry..."
     },
     Warnings = {
         ["Hold Up"] = "Hold up!",

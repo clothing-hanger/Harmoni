@@ -3,8 +3,8 @@ local songList = {}
 local difficultyList = {} -- hate having to have 2 but its better this way
 local songButtons = {}
 local difficultyButtons = {}
-local songButtonWidth = 600 * 1.3    -- why???? why would we do this??
-local songButtonHeight = 75 * 1.3    -- because its fucking FUNNY
+local songButtonWidth = 780
+local songButtonHeight = 97.5
 local songButtonSpacing = 15
 local selectedSong = 1
 local hoveredSong = 0
@@ -315,7 +315,8 @@ function songSelect:setupDifficultyList(path,color)
         songInfo = ChartParse.harmcMeta(path .. "/" .. difficultyList[i] .. "/", "get")
         if songInfo then
             local y = i * (songButtonHeight + songButtonSpacing)
-            local x = difficultyButtonX + baseX + slope * (y - baseY)            table.insert(difficultyButtons,
+            local x = difficultyButtonX + baseX + slope * (y - baseY) 
+            table.insert(difficultyButtons,
                 menuSongButton(
                     self,
                     songButtonWidth,
@@ -483,8 +484,8 @@ function songSelect:update(dt)
         end
         Bubble.y = Bubble.y + math.cos(love.timer.getTime() * 0.5 + i) * 30 * dt
         if Bubble.x > baseScreenRatio.x + Bubble.radius+10 then Bubble.x = -Bubble.radius+10
-        elseif Bubble.x < -Bubble.radius+10 then Bubble.x = baseScreenRatio.x + Bubble.radius+10
-        end
+        elseif Bubble.x < -Bubble.radius+10 then Bubble.x = baseScreenRatio.x + Bubble.radius+10 end
+        
         if Bubble.y < -Bubble.radius+10 then Bubble.y = baseScreenRatio.y + Bubble.radius+10 end
     end
 
@@ -513,7 +514,7 @@ function songSelect:checkForSongLoop()
         if not (self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint)) then-- we just check the same conditions again and if it still is true we dont set the bpm
             self:resetBpmShit(self.currentSongInfo.bpm)
         else
-         --   self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)       -- oh my god my fucking ears do NOT uncomment this line 😭😭😭
+           -- self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)       -- oh my god my fucking ears do NOT uncomment this line 😭😭😭
         end
     end
 end
@@ -708,7 +709,7 @@ function songSelect:checkForDifficultyButtonClicks()
                             {text = LocaleHandler:getText("UI", "Yes"), func = function () switchStateFunc(); self.window:killYourself() end},
                             {text = LocaleHandler:getText("UI", "No"), func = function() self.window:killYourself() end}
                         },
-                        true,false,"Don't Show Again"
+                        false,false,"Don't Show Again"
                     )
                 else -- no warnings so just play the song
                     switchStateFunc()

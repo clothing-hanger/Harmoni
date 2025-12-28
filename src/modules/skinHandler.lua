@@ -174,6 +174,13 @@ function SkinHandler:getFontLegacy(param)
     end
 end
 
+
+function SkinHandler:getRandomBG()
+    if self.__data.Skin.RandomBackgrounds then
+        return self.__data.Skin.RandomBackgrounds[love.math.random(1,#self.__data.Skin.RandomBackgrounds)]
+    end
+end
+
 function SkinHandler:getFont(font,size)
     local fontR
     if self.__data.Skin.Fonts then

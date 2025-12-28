@@ -181,6 +181,13 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Background"] = newImage("MENU/TITLEBG/1.png")
     },
 
+    
+    RandomBackgrounds = {
+        newImage("MENU/backgrounds/1.png"),
+        newImage("MENU/backgrounds/8.png"),
+        newImage("MENU/backgrounds/9.png"),
+    },
+
     Sounds = {
         ["First Miss"] = nil,  -- some day
         ["Miss"] = nil,

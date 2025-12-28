@@ -2,10 +2,10 @@
 
 Skin = {   -- i need to remove lots of these tbh..
     Params = {
-        ["Note Size"] = 125,
-        ["Hold Size"] = 125,
-        ["HoldEnd Size"] = 125,
-        ["Receptor Size"] = 125,
+        ["Note Size"] = 100,
+        ["Hold Size"] = 100,
+        ["HoldEnd Size"] = 100,
+        ["Receptor Size"] = 100,
 
         ["Judgement Size"] = 1.5,
         ["Judgement Y Offset"] = getScreenCenter().y,
@@ -62,7 +62,7 @@ Skin = {   -- i need to remove lots of these tbh..
 
     Fonts = {
         ["HUD"] = "FONTS/Novamono-njdg.ttf",
-        ["Combo"] = "FONTS/SourceCodePro-Medium.ttf",
+        ["Combo"] = "FONTS/Novamono-njdg.ttf",
         ["Menu"] = "FONTS/neweresterfont.ttf",
         ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
     },
@@ -179,6 +179,11 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Icon Logo"] = newImage("MENU/logoH.png"),
         ["Loading Spinner"] = newImage("MENU/logoH.png"),
         ["Background"] = newImage("MENU/TITLEBG/1.png")
+    },
+
+    RandomBackgrounds = {
+        newImage("MENU/backgrounds/1.png"),
+        newImage("MENU/backgrounds/2.png")
     },
 
     Sounds = {

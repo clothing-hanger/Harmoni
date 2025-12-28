@@ -33,6 +33,7 @@ end
 
 function UISquigleCircle:draw()
     love.graphics.push()
+    --love.graphics.setBlendMode("multiply","premultiplied")
     love.graphics.setColor(self.color)
     love.graphics.translate(self.x, self.y)
     love.graphics.rotate(math.rad(self.rotation))
@@ -41,6 +42,7 @@ function UISquigleCircle:draw()
     love.graphics.setLineWidth(self.lineThickness)
     love.graphics.polygon(self.mode, self.points)
 
+    --love.graphics.setBlendMode("alpha")
     love.graphics.pop()
     love.graphics.setColor(1, 1, 1, 1)
 end

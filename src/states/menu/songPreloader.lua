@@ -111,7 +111,6 @@ function songPreloader:draw()
     love.graphics.setColor(0,0,0,self.alpha)
     love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)
-    --self.throbbert:draw()
     
 end
 

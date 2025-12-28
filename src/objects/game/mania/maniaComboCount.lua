@@ -9,6 +9,7 @@ function maniaComboCount:new(x, y)
     self.removeComboStack = SkinHandler:getParam("Remove Combo Stack") or false
     self.activeTweens = {}
     self.debug = false
+    self.font = SkinHandler:getFont("Combo", 100)
 end
 
 function maniaComboCount:update(dt)
@@ -36,6 +37,7 @@ end
 
 function maniaComboCount:breakCombo()
     self.combo = 0
+    self:addDrawableCombo()
 end
 
 function maniaComboCount:addDrawableCombo()
@@ -80,7 +82,7 @@ function maniaComboCount:startTween(combo)
 end
 
 function maniaComboCount:draw()
-    love.graphics.setFont(SkinHandler:getFontLegacy("Combo"))
+    love.graphics.setFont(self.font)
     for i, Combo in ipairs(self.drawnCombos) do
         local alpha = self.removeComboStack and 1 or (Combo.time / self.fullTimeLimit)
         alpha = math.min(math.max(alpha, 0), 1)
