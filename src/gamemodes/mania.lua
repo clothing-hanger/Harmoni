@@ -253,10 +253,16 @@ function mania:updateObjects(dt)
 end
 
 function mania:onBeat()
+    if self.beatFuckThingyIdk == nil then self.beatFuckThingyIdk = false end
+            self.beatFuckThingyIdk = not self.beatFuckThingyIdk
+    print(self.beatFuckThingyIdk)
     if self.timeBarBeatTween then Timer.cancel(self.timeBarBeatTween) end
-    self.timeRemaingBar.squiglyLine.amplitude = 10
-    self.timeBarBeatTween = Timer.tween(0.5, self.timeRemaingBar.squiglyLine, {time = self.timeRemaingBar.squiglyLine.time-1, amplitude = 3}, "out-quad")
-
+    local timeBarTime = 1
+    local timeBarAmplitude = 5
+    if self.beatFuckThingyIdk then 
+        self.timeRemaingBar.squiglyLine.amplitude = timeBarAmplitude
+        self.timeBarBeatTween = Timer.tween(0.5, self.timeRemaingBar.squiglyLine, {time = self.timeRemaingBar.squiglyLine.time-1, amplitude = 0}, "out-quad")
+    end
     if self.healthBarBeatTween then Timer.cancel(self.healthBarBeatTween) end
     self.healthBar.line.amplitude = 5
     self.healthBarBeatTween = Timer.tween(0.5, self.healthBar.line, {time = self.healthBar.line.time-5, amplitude = 0}, "out-quad")    -- FAKE liquid ass!!

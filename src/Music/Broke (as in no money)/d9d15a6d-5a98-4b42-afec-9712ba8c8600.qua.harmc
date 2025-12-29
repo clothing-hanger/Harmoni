@@ -13,6 +13,8 @@ initialSV:1
 creator:Harmoni
 songPreviewTime:68172
 backgroundFile:image.png
+[warnings]
+content:unfinishedSong
 [bpm]
 bpm:12:250
 [sliderVelocities]
