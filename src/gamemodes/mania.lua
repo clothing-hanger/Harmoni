@@ -254,7 +254,8 @@ end
 
 function mania:onBeat()
     if self.timeBarBeatTween then Timer.cancel(self.timeBarBeatTween) end
-    self.timeBarBeatTween = Timer.tween(0.5, self.timeRemaingBar.squiglyLine, {time = self.timeRemaingBar.squiglyLine.time-1}, "out-quad")
+    self.timeRemaingBar.squiglyLine.amplitude = 10
+    self.timeBarBeatTween = Timer.tween(0.5, self.timeRemaingBar.squiglyLine, {time = self.timeRemaingBar.squiglyLine.time-1, amplitude = 3}, "out-quad")
 
     if self.healthBarBeatTween then Timer.cancel(self.healthBarBeatTween) end
     self.healthBar.line.amplitude = 5
