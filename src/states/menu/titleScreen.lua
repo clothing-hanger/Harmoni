@@ -274,7 +274,6 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         if chance(10) then
             Bubble.isNote = true   -- we do it like this instead of setting the type to note so we can have squisher notes (these are super rare so thats cool)
         end
-
         if allArrows then Bubble.isNote = true end
     end
 
@@ -418,7 +417,7 @@ function titleScreen:draw()
             Bubble:draw()
         else
             love.graphics.setColor(Bubble.color)
-            love.graphics.draw(self.noteImage,Bubble.x,Bubble.y, math.rad(Bubble.rotation), 1+Bubble.squishX, 1+Bubble.squishY, self.noteImage:getWidth()/2, self.noteImage:getHeight()/2)
+            love.graphics.draw(self.noteImage,Bubble.x,Bubble.y, math.rad(Bubble.rotation), 1+Bubble.squishX*(Bubble.radius/130), 1+Bubble.squishY*(Bubble.radius/130), self.noteImage:getWidth()/2, self.noteImage:getHeight()/2)
         end
     end
     love.graphics.print("harmoni lol")

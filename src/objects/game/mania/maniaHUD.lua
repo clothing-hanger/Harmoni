@@ -34,6 +34,8 @@ function maniaHUD:draw()
 
     local IPSoverNPS = string.format("%02d",#self.parent.inputsPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond)
 
+    if self.parent.mods["BP"] then IPSoverNPS = string.format("%02d",#self.parent.notesPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond) end -- shitty hack but i dont care lol!
+
     love.graphics.printf(score .. "\n" .. IPSoverNPS, 10, 10, baseScreenRatio.x, "left")
 
     love.graphics.printf(accuracy .. "\n" .. grade, baseScreenRatio.x-1000, 10, 990, "right")

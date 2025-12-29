@@ -27,6 +27,7 @@ function mania:new(chart, parent, fullChart, mods)
 
     self.scoresPerJudgements = self.scoreHandler:getScorePerJudgment(self.totalNotes)
 
+    self.HUDBeatSize = 1
     printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
     printToConsole(self.chart)
     self.laneSpacing = 30
@@ -54,12 +55,22 @@ function mania:startSong(countdown)
     self.parent:startSong(countdown)
 end
 
+function mania:resetBpmShit(newBpm)
+    self.bpmHandler:init()
+    self.bpmHandler:setBpm(newBpm)
+    GlobalNotificationsHandler:addNotification("New BPM: " .. newBpm)
+end
+
 function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     self.HUD = maniaHUD(self)
+    self.bpmHandler = require("modules.bpm")
+    self:resetBpmShit(0)
+
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
 
+  --  self.judgementCount = maniaJudgmentCount()
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
 
     local songLength = self.song and self.song:getDuration("seconds") or 0
@@ -99,6 +110,7 @@ function mania:setUpChart(chartpath, chart)
 
     local maniaChart = {
         meta = parsed.meta,
+        bpm = {},
         hitObjects = {},
         scrollVelocities = {}
     }
@@ -122,11 +134,10 @@ function mania:setUpChart(chartpath, chart)
     end
 
     for _, BpmChange in ipairs(parsed.bpm) do
-
+        table.insert(maniaChart.bpm, {startTime = BpmChange.startTime, bpm = BpmChange.bpm})
     end
 
     for _, SliderVelocity in ipairs(parsed.sliderVelocities) do
-       -- if not modifiersTable.
         table.insert(maniaChart.scrollVelocities, {
             startTime = SliderVelocity.startTime,
             multiplier = SliderVelocity.multiplier
@@ -155,6 +166,7 @@ end
 function mania:update(dt)
     self:updateObjects(dt)
 
+  --  self.judgementCount:sendJudgements(self.judgements)
     for _, playField in ipairs(self.playField) do
         playField:update(dt)
     end
@@ -166,6 +178,8 @@ function mania:update(dt)
 
     if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
         self.song:play()
+        self:resetBpmShit(self.chart.meta.bpm)
+
         if self.videoBackground then self.videoBackground:play() end
         played = true
     else
@@ -191,6 +205,16 @@ function mania:update(dt)
     
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
     if self.endSongTimer>=1000 then self:endSong() end
+
+
+    if self.chart and self.chart.bpm then
+        for i, BpmChange in ipairs(self.chart.bpm) do
+            if MusicTime >= BpmChange.startTime and not BpmChange.wasHit then
+                self:resetBpmShit(BpmChange.bpm)
+                BpmChange.wasHit = true
+            end
+        end
+    end
 end
 
 function mania:endSong()
@@ -214,6 +238,7 @@ function mania:updateObjects(dt)
     self.comboCount:update(dt)
     self.healthBar:update(dt)
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
+    self.bpmHandler:update(dt)
 
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
@@ -221,6 +246,23 @@ function mania:updateObjects(dt)
     if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:gameOver()
     end
+
+    if self.bpmHandler:wasBeatHit() then
+        self:onBeat()
+    end
+end
+
+function mania:onBeat()
+    if self.timeBarBeatTween then Timer.cancel(self.timeBarBeatTween) end
+    self.timeBarBeatTween = Timer.tween(0.5, self.timeRemaingBar.squiglyLine, {time = self.timeRemaingBar.squiglyLine.time-1}, "out-quad")
+
+    if self.healthBarBeatTween then Timer.cancel(self.healthBarBeatTween) end
+    self.healthBar.line.amplitude = 5
+    self.healthBarBeatTween = Timer.tween(0.5, self.healthBar.line, {time = self.healthBar.line.time-5, amplitude = 0}, "out-quad")    -- FAKE liquid ass!!
+
+    self.HUDBeatSize = 1.01
+    if self.HUDSizeTween then Timer.cancel(self.HUDSizeTween) end   -- OOH EMM GEE ITS EFF ENN EFF !!!!!
+    self.HUDSizeTween = Timer.tween(0.5, self, {HUDBeatSize = 1}, "out-quad")
 
 end
 
@@ -266,13 +308,19 @@ function mania:draw()
     if judgementBatch then love.graphics.draw(judgementBatch) end
 
     self.comboCount:draw()
-    self.HUD:draw()
     self.timeRemaingBar:draw()
     self.healthBar:draw()
 
     self.countdownBar:draw()
+    love.graphics.translate(baseScreenRatio.x/2, baseScreenRatio.y/2)
+    love.graphics.scale(self.HUDBeatSize)
+    love.graphics.translate(-baseScreenRatio.x/2, -baseScreenRatio.y/2)
+
+    self.HUD:draw()
+    --love.graphics.scale(-self.HUDBeatSize)
 
 
+  --  self.judgementCount:draw()
 
     -- draw the pause fade over everything else
     love.graphics.setColor(0,0,0,(self.endSongTimer/1000)*0.8)

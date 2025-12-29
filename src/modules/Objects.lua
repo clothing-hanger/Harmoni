@@ -4,10 +4,11 @@
     maniaNote = require("objects.game.mania.maniaNote")
     maniaPlayField = require("objects.game.mania.maniaPlayField")
     maniaReceptor = require("objects.game.mania.maniaReceptor")
-    maniaJudgement = require("objects.game.mania.maniaJudgement")
     maniaComboCount = require("objects.game.mania.maniaComboCount")
     maniaHealthBar = require("objects.game.mania.maniaHealthBar")
     maniaHUD = require("objects.game.mania.maniaHUD")
+    maniaJudgement = require("objects.game.mania.maniaJudgement")
+    maniaJudgmentCount = require("objects.game.mania.maniaJudgmentCount")
 
     --slider
     sliderField = require("objects.game.slider.sliderField")
@@ -19,9 +20,9 @@
     --menu
     menuSongButton = require("objects.menu.songButton")
     modifiersMenu = require("objects.menu.modifiersMenu")
-        notificationsHandler = require("objects.menu.notificationsHandler")
-        quickSettings = require("objects.menu.quickSettings")
-        countdownBar = require("objects.menu.countdownBar")
+    notificationsHandler = require("objects.menu.notificationsHandler")
+    quickSettings = require("objects.menu.quickSettings")
+    countdownBar = require("objects.menu.countdownBar")
     lyricsDisplay = require("objects.menu.lyricsDisplay")
     lyricsRenderer = require("objects.menu.lyricsRenderer") -- haha it says ass
     jukeboxSongButton = require("objects.menu.jukeboxSongButton")
@@ -29,7 +30,7 @@
     --UI
     UIsquiglyLine = require("objects.UI.UIsquiglyLine")  -- UIslop
     cursor = require("objects.UI.cursor")
-    SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")
+    SMWCloudThingyAnimation = require("objects.UI.notGivingAwayWhatThisIs")  -- this would also be UIslop if it wasnt unused (it was fully planned to be used tho.. i just have no idea where this would fit (it also is broken as hell))
     UITimeRemaing = require("objects.UI.UITimeRemaining")
     button = require("objects.UI.button")
     socialButton = require("objects.UI.socialButton")

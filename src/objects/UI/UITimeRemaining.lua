@@ -7,7 +7,7 @@ function UITimeRemaining:new(startTime, endTime, x,y,widht,parent,lineWidth,spee
     self.x, self.y = x or 0, y or 0
     self.width = widht or 50
     self.lineWidth = lineWidth or 1
-    self.speed = speed or 5
+    self.speed = 5
     self.amplitude = amplitude or 10
     self.frequency = frequency or 10
 
