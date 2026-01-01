@@ -9,6 +9,7 @@
     maniaHUD = require("objects.game.mania.maniaHUD")
     maniaJudgement = require("objects.game.mania.maniaJudgement")
     maniaJudgmentCount = require("objects.game.mania.maniaJudgmentCount")
+    maniaComboAlert = require("objects.game.mania.maniaComboAlert")
 
     --slider
     sliderField = require("objects.game.slider.sliderField")

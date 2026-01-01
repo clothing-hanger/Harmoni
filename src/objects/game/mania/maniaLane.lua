@@ -112,6 +112,7 @@ function maniaLane:handleInput()
         end
 
         state.judgementObject:judge(bestJudgement.name)
+        state.judgementCount:incrementJudgement(bestJudgement.name)
         if bestJudgement.name == "Miss" then self.parent.parent.comboCount:breakCombo() end -- pretty self explanitory, huh?
 
         state.scoreHandler:addScore(bestJudgement.score)
@@ -128,6 +129,7 @@ function maniaLane:handleInput()
         state.healthBar:changeHealth(healthChange)
 
         state.comboCount:incrementCombo()
+        if state.comboCount:getCombo()%100 == 0 then state.comboAlert:doComboAlert(state.comboCount:getCombo()) end
     end
 end
 
@@ -176,6 +178,7 @@ function maniaLane:checkHoldReleases()
                 local parentParent = self.parent.parent
                 parentParent.comboCount:incrementCombo()
                 parentParent.judgementObject:judge(bestJudgement.name)
+                state.judgementCount:incrementJudgement(bestJudgement.name)
                 parentParent.healthBar:changeHealth(bestJudgement.health)
                 --]]
                 
@@ -206,6 +209,8 @@ function maniaLane:checkForMisses()
             local parentParent = self.parent.parent
             parentParent.comboCount:breakCombo()
             parentParent.judgementObject:judge("Miss")
+            parentParent.judgementCount:incrementJudgement("Miss")
+
             parentParent.scoreHandler:addScore(missJudgement.score)
             parentParent.healthBar:changeHealth(missJudgement.health)
         end
@@ -219,6 +224,7 @@ function maniaLane:checkForMisses()
                 local parentParent = self.parent.parent
                 parentParent.comboCount:breakCombo()
                 parentParent.judgementObject:judge("Miss")
+                parentParent.judgementCount:incrementJudgement("Miss")
                 parentParent.scoreHandler:addScore(missJudgement.score)
                 parentParent.healthBar:changeHealth(missJudgement.health)
             end

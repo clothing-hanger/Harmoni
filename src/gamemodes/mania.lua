@@ -68,9 +68,14 @@ function mania:setUpObjects()
     self.bpmHandler = require("modules.bpm")
     self:resetBpmShit(0)
 
-    self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
+    self.comboAlert = maniaComboAlert()
 
-  --  self.judgementCount = maniaJudgmentCount()
+    self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
+    
+
+    self.judgementCount = maniaJudgmentCount()
+    self.judgementCount:sendJudgements(self.judgements)
+
     self.countdownBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)
 
     local songLength = self.song and self.song:getDuration("seconds") or 0
@@ -166,7 +171,6 @@ end
 function mania:update(dt)
     self:updateObjects(dt)
 
-  --  self.judgementCount:sendJudgements(self.judgements)
     for _, playField in ipairs(self.playField) do
         playField:update(dt)
     end
@@ -240,6 +244,7 @@ function mania:updateObjects(dt)
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
     self.bpmHandler:update(dt)
 
+
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
@@ -255,7 +260,6 @@ end
 function mania:onBeat()
     if self.beatFuckThingyIdk == nil then self.beatFuckThingyIdk = false end
             self.beatFuckThingyIdk = not self.beatFuckThingyIdk
-    print(self.beatFuckThingyIdk)
     if self.timeBarBeatTween then Timer.cancel(self.timeBarBeatTween) end
     local timeBarTime = 1
     local timeBarAmplitude = 5
@@ -324,10 +328,12 @@ function mania:draw()
     love.graphics.translate(-baseScreenRatio.x/2, -baseScreenRatio.y/2)
 
     self.HUD:draw()
+
+    self.comboAlert:draw()
     --love.graphics.scale(-self.HUDBeatSize)
 
 
-  --  self.judgementCount:draw()
+    self.judgementCount:draw()
 
     -- draw the pause fade over everything else
     love.graphics.setColor(0,0,0,(self.endSongTimer/1000)*0.8)

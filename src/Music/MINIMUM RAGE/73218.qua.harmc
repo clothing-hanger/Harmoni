@@ -1,0 +1,23 @@
+[meta]
+creator:none lol
+backgroundFile:image.png
+bpm:91
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:MonochromeMenace
+gameMode:mania
+source:s
+songPreviewTime:105500
+tags:uhh
+title:MINIMUM RAGE
+difficultyName:funny lol
+
+[warnings]
+content:unfinishedSong
+content:nochart
+
+[bpm]
+[sliderVelocities]
+[hitObjects]

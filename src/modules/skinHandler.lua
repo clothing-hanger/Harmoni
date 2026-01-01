@@ -181,6 +181,12 @@ function SkinHandler:getRandomBG()
     end
 end
 
+function SkinHandler:getComboAlerts()
+    if self.__data.Skin.ComboAlerts then
+        return self.__data.Skin.ComboAlerts
+    else return false end
+end
+
 function SkinHandler:getFont(font,size)
     local fontR
     if self.__data.Skin.Fonts then

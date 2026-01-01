@@ -39,12 +39,25 @@ Skin = {   -- i need to remove lots of these tbh..
         ["Health Bar Width"] = 40,
         ["Health Bar Direction"] = "vertical",
 
-        ["Marvelous Color"] = rgb {0, 213, 255},
-        ["Perfect Color"] = rgb {0, 0, 225},
-        ["Great Color"] = rgb {0, 255, 81},
-        ["Good Color"] = rgb {0, 153, 81},
-        ["Okay Color"] = rgb {210, 13, 81},
-        ["Miss Color"] = rgb {209, 0, 0},
+        ["Combo Alert Start X"] = getScreenDimensions().width + 200,  -- this should always be off screen unless youre fucking weird
+        ["Combo Alert Start Y"] = getScreenDimensions().height/2,
+        ["Combo Alert Target X"] = getScreenDimensions().width - 300,
+        ["Combo Alert Target Y"] = getScreenDimensions().height/2,
+        ["Combo Alert Font Size"] = 75,
+
+        ["Judgement Count Height"] = 750,
+        ["Judgement Count X"] = 20,
+        ["Judgement Count Y"] = getScreenDimensions().height/2-375,
+        ["Judgement Count Square Width"] = 240,
+        ["Judgement Count Square Height"] = 90,
+
+        
+        ["Perfect Color"] = rgb {191, 254, 255},
+        ["Great Color"] = rgb {0, 118, 255},
+        ["Good Color"] = rgb {111, 255, 158},
+        ["Alright Color"] = rgb {112, 40, 78},
+        ["Awful Color"] = rgb {115, 6, 6},
+        ["Miss Color"] = rgb {67, 31, 31},
     },
 
     FontsLegacy = {
@@ -64,7 +77,9 @@ Skin = {   -- i need to remove lots of these tbh..
         ["HUD"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",
         ["Combo"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",
         ["Menu"] = "FONTS/neweresterfont.ttf",
-        ["Judgement Counter"] = "FONTS/Novamono-njdg.ttf",
+        ["Judgement Counter"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",  -- we really using the same font for fucking everyuthing
+        ["Combo Alert"] = "FONTS/Courier Prime Sans/Courier Prime Sans Bold.ttf",
+
     },
 
     Notes = {

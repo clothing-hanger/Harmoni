@@ -40,6 +40,10 @@ function maniaComboCount:breakCombo()
     self:addDrawableCombo()
 end
 
+function maniaComboCount:getCombo()
+    return self.combo
+end
+
 function maniaComboCount:addDrawableCombo()
     if self.removeComboStack then
         self.drawnCombos = {}
