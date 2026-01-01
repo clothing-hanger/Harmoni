@@ -17,6 +17,7 @@ function jukebox:enter(parent)
     self.songButtons = {}
     self.scrubber = nil
     self.frametimer = 0
+    self.currentBGPos = { x = 0, y = 0 }
 
     self.songBGX = 520
     self.songBGY = 30
@@ -76,6 +77,11 @@ function jukebox:switchSong(songInfo)
         self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
         self.songBG.x = self.songBGX + (targetSizeX / 2)
         self.songBG.y = self.songBGY + (targetSizeY / 2)
+
+        self.currentBGPos.x = self.songBG.x
+        self.currentBGPos.y = self.songBG.y
+        self.currentBGPos.scaleX = self.songBG.scaleX
+        self.currentBGPos.scaleY = self.songBG.scaleY
     end
 
     local type = ""
@@ -113,35 +119,40 @@ function jukebox:switchSong(songInfo)
     )
 end
 
-function jukebox:fullscreenVideo()
-    if not self.video then return end -- i hate myself so much why the fuck did i make it work this way 
+function jukebox:toggleFullscreen()
+    --[[ if not self.video then return end ]] -- i hate myself so much why the fuck did i make it work this way 
                                         -- looking at this by itself you would think this just checks that the video object self.video exists,, nope. self.video is a FUCKING BOOLEAN 
-        self.videoHudAlpha = 1
-        Timer.after(3, function() 
-            Timer.tween(1, self, {videoHudAlpha = 0})
-        end)
+    self.videoHudAlpha = 1
+    Timer.after(3, function() 
+        Timer.tween(1, self, {videoHudAlpha = 0})
+    end)
     --save the original video size shit first
     if self.fullscreened then  -- unfullscren
-    self.fullscreened = false
-        self.songBG.x, self.songBG.y, self.songBG.scaleX, self.songBG.scaleY = self.originalvideoX, self.originalvideoY, self.originalvideoScaleX, self.originalvideoScaleY
+        self.fullscreened = false
+        self.currentBGPos.x, self.currentBGPos.y, self.currentBGPos.scaleX, self.currentBGPos.scaleY = self.originalvideoX, self.originalvideoY, self.originalvideoScaleX, self.originalvideoScaleY
     else                        -- fullscreen
-        self.originalvideoScaleX = self.songBG.scaleX
-        self.originalvideoScaleY = self.songBG.scaleY
-        self.originalvideoX = self.songBG.x
-        self.originalvideoY = self.songBG.y
+        self.originalvideoScaleX = self.currentBGPos.scaleX
+        self.originalvideoScaleY = self.currentBGPos.scaleY
+        self.originalvideoX = self.currentBGPos.x
+        self.originalvideoY = self.currentBGPos.y
 
         self.fullscreened = true
 
         -- now we just change the video's size and position to be fullscreened 
         -- it draws from center, so we set it to the center of the screen
-        self.songBG.x, self.songBG.y = baseScreenRatio.x/2, baseScreenRatio.y/2
+        self.currentBGPos.x, self.currentBGPos.y = baseScreenRatio.x/2, baseScreenRatio.y/2
 
         -- and finally, we just make it fullscreen 
         local targetSizeX = baseScreenRatio.x
         local targetSizeY = baseScreenRatio.y
 
-        self.songBG.scaleX = targetSizeX / self.songBG.image:getWidth()
-        self.songBG.scaleY = targetSizeY / self.songBG.image:getHeight()
+        if self.songBG.image then
+            self.currentBGPos.scaleX = targetSizeX / self.songBG.image:getWidth()
+            self.currentBGPos.scaleY = targetSizeY / self.songBG.image:getHeight()
+        else
+            self.currentBGPos.scaleX = targetSizeX / self.songBG:getWidth()
+            self.currentBGPos.scaleY = targetSizeY / self.songBG:getHeight()
+        end
     end
 end
 
@@ -238,9 +249,13 @@ function jukebox:update(dt)
     end
 
     if self.video and not self.scrubberHeld then
+        self.songBG.x = self.currentBGPos.x
+        self.songBG.y = self.currentBGPos.y
+        self.songBG.scaleX = self.currentBGPos.scaleX
+        self.songBG.scaleY = self.currentBGPos.scaleY
         self.songBG:update(dt)
-        self:checkForFullscreenInput()
     end
+    self:checkForFullscreenInput()
     if self.audio and self.scrubber then
         self.scrubBack:update(dt)
         self.scrubber:update(dt, self.audio:tell()/self.audio:getDuration())
@@ -267,7 +282,7 @@ function jukebox:checkForFullscreenInput()
     local x,y,width,height = self.songBGX,self.songBGY,self.songBGWidth,self.songBGHeight
     if mx >= x and mx <= x+width and my >= y and my <= y+height then -- cursor is over the video
         local funct = function() 
-            self:fullscreenVideo()
+            self:toggleFullscreen()
             self:fade("in")
         end
         if Input:pressed("menuClickLeft") then self:fade("out",funct) end
@@ -279,16 +294,16 @@ function jukebox:checkForFullscreenInput()
         end
     else
         if self.fullscreened then -- we need to fade the cursor and also let the user unfullscreen when they click anywhere
-        cursor.fadeOutWhenIdle = true
-        local funct = function() 
-            self:fullscreenVideo()
-            self:fade("in")
-        end
-        if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
+            cursor.fadeOutWhenIdle = true
+            local funct = function() 
+                self:toggleFullscreen()
+                self:fade("in")
+            end
+            if Input:pressed("menuClickLeft") and not (mouseOver(self.scrubBack)) then self:fade("out", funct) end
 
-        else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
-            cursor.fadeOutWhenIdle = false
-        end
+            else -- video must not be fullscreen, so we dont fade the cursor out and we obviously dont let the user unfullscreen
+                cursor.fadeOutWhenIdle = false
+            end
         end
 end
 
@@ -499,10 +514,11 @@ function jukebox:drawBG()
     love.graphics.setColor(1,1,1)
 
     -- here we draw the video outside of the stencil if its fullscreened
-    if self.fullscreened then 
-        
+    if self.fullscreened then
         if self.video then
             self.songBG:draw()
+        else
+            love.graphics.draw(self.songBG,0, 0,nil,self.currentBGPos.scaleX,self.currentBGPos.scaleY)
         end
 
         if self.lyricsRenderer then
@@ -510,9 +526,11 @@ function jukebox:drawBG()
         end
     end
 
-    love.graphics.setColor(1,1,1,self.videoHudAlpha)
-    local text = (not self.fullscreened and LocaleHandler:getText("UI", "Click Fullscreen")) or LocaleHandler:getText("UI", "Click Unfullscreen")
-    love.graphics.printf(text, x, y, width, "center")
+    if self.video then
+        love.graphics.setColor(1,1,1,self.videoHudAlpha)
+        local text = (not self.fullscreened and LocaleHandler:getText("UI", "Click Fullscreen")) or LocaleHandler:getText("UI", "Click Unfullscreen")
+        love.graphics.printf(text, x, y, width, "center")
+    end
 
     love.graphics.setColor(1,1,1,1)
 end
