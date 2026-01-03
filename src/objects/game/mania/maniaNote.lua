@@ -119,11 +119,13 @@ end
 function maniaNote:draw()
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
+    local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
 
     local curBatch = arrowBatch or noteBatch
 
     --
     if curBatch then
+        -- dont render hold if passed the receptor
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
@@ -136,15 +138,21 @@ function maniaNote:draw()
             local bodyHeight = math.abs(self.endY - self.y)
             bodyHeight = bodyHeight - tailH/2
 
-            curBatch:add(self.holdAsset, self.x, midY, 0,
-                self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+            local passed = (
+                scrollDir == "Down" and midY > self.parent.y
+                or scrollDir == "Up" and midY < self.parent.y
+            )
 
-            local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+            if not passed then
+                curBatch:add(self.holdAsset, self.x, midY, 0,
+                    self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
 
+                local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
 
-            curBatch:add(self.holdEndAsset, self.x, self.endY, 0,
-                self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
-                nil)
+                curBatch:add(self.holdEndAsset, self.x, self.endY, 0,
+                    self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
+                    nil)
+            end
 
             if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
                 self.y = self.y + 70
@@ -168,13 +176,20 @@ function maniaNote:draw()
             local bodyHeight = math.abs(self.endY - self.y)
             bodyHeight = bodyHeight - tailH/2
 
-            love.graphics.draw(self.holdAsset, self.x, midY, 0,
-                self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+            local passed = (
+                scrollDir == "Down" and midY > self.parent.y
+                or scrollDir == "Up" and midY < self.parent.y
+            )
 
-            local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
-            love.graphics.draw(self.holdEndAsset, self.x, self.endY, 0,
-                self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
-                nil)
+            if not passed then
+                love.graphics.draw(self.holdAsset, self.x, midY, 0,
+                    self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+
+                local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+                love.graphics.draw(self.holdEndAsset, self.x, self.endY, 0,
+                    self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
+                    nil)
+            end
             if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
                 self.y = self.y + 70
             else
