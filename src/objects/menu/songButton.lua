@@ -25,15 +25,13 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.x = x or 10
     self.y = y or 10
 
-    self.isNew = isNew 
-
+    self.isNew = isNew
 
     if not menuSongButton.alertInstance then
         menuSongButton.alertInstance = newAlert(0, 0)
     end
     if self.isNew then self.newAlert = menuSongButton.alertInstance end
 
-    print("HIHIHIHIIIIIIIIIIIIIIIIIII")
     self.warnings = warnings
     self.songPreviewTime = songPreviewTime or 0
 
@@ -41,8 +39,6 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     print(self.songPreviewTime)
 
     self.difficulty = difficulty
-
-    print("HIIHIHISDHISHDSDHSHISH",difficulty)
 
     self.onlySkeleton = false -- why did i even add this we wont use it       -- this describes like half the code in this fucking game now
 

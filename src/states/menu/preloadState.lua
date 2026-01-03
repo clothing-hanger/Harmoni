@@ -45,28 +45,27 @@ function preloadState:update(dt)
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
 
-
     t = t + dt
-        if step < 0 then
-        if not installing then
-            installing = true
+    if step < 0 then
+    if not installing then
+        installing = true
+        step = step + 1
+    elseif installing and CLibs:isInstallationDone() then
+        CLibs:after()
+        Timer.after(self.skipSafetyTimer and 0 or 5, function()
             step = step + 1
-        elseif installing and CLibs:isInstallationDone() then
-            CLibs:after()
-            Timer.after(self.skipSafetyTimer and 0 or 5, function()
-                step = step + 1
-                Timer.after(0.1, function()  
-                States.menu.titleScreen.bubbles = self.bubbles
-                States.menu.titleScreen.wavesY = self.wavesY
-                States.menu.titleScreen.squiglyLines = self.squiglyLines
-                States.menu.titleScreen.layerWaves = self.layerWaves
-                States.menu.titleScreen.images = self.images
-                State.switch(States.menu.songPreloader)
-                if AMERICA then PATRIOTIC:play() end
-                end)
-        
+            Timer.after(0.1, function()  
+            States.menu.titleScreen.bubbles = self.bubbles
+            States.menu.titleScreen.wavesY = self.wavesY
+            States.menu.titleScreen.squiglyLines = self.squiglyLines
+            States.menu.titleScreen.layerWaves = self.layerWaves
+            States.menu.titleScreen.images = self.images
+            State.switch(States.menu.songPreloader)
+            if AMERICA then PATRIOTIC:play() end
             end)
-        end
+    
+        end)
+    end
  
     else step = step + 1 end 
            -- local targetProgress = math.abs(step / totalSteps)       -- i am literally fucking guessing
