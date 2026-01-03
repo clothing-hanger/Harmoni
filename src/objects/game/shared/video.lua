@@ -39,7 +39,7 @@ function video:new(video,x,y,scaleX,scaleY,dimness)
         vid, err = DLL_Video.openFile(fullPath)
     end
     if not vid then
-        local video = love.filesystem.newFileData(fullPath)
+        local video = love.filesystem.newFileData(video)
         vid, err = DLL_Video.open(video:getPointer(), video:getSize())
     end
     if not vid then return self, error("Video not loaded\n" .. err .. "\n" .. fullPath) end -- yet again
