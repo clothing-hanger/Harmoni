@@ -91,7 +91,7 @@ local t = 0
 function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
-    _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL   i assume this is over dt,, i ALWAYS type dt in updates its a FUCKING HABIT!!
+    _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL   i assume this is over dt,, i ALWAYS type dt in updates its a FUCKING HABIT!!     oh its the _G.,,,, i dont remember why i added it, and im not removing it now
     t = t + dt
     if murica then
         murica:send("time", t)

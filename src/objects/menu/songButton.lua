@@ -63,8 +63,8 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
     self.color = color or {1, 1, 1}
     self.cornerRadius = cornerRadius or 7
 
-    self.fontLarge = songButtonFontLarge
-    self.fontSmall = songButtonFontSmall
+    self.fontLarge = SkinHandler:getFont("Menu",40)
+    self.fontSmall = SkinHandler:getFont("Menu",30)
     self.sizeXOffset,self.sizeYOffset = 0,0
 
     self.borderHoverAlpha = 0

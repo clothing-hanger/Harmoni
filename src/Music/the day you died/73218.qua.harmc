@@ -1,0 +1,24 @@
+[meta]
+creator:none lol
+backgroundFile:image.png
+backgroundVideo:video.mp4
+bpm:138
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:Kuru
+gameMode:mania
+source:s
+songPreviewTime:105500
+tags:uhh
+title:君が死んだ日、世界は立ち止まって悲しむことはなかった　/　Feat. 初音ミク
+difficultyName:funny lol
+
+[warnings]
+content:unfinishedSong
+content:nochart
+
+[bpm]
+[sliderVelocities]
+[hitObjects]
