@@ -49,7 +49,9 @@ function jukebox:switchSong(songInfo)
     self.audio = love.audio.newSource(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audio, "stream")
     self.audio:play()
 
-    if getFileExtension(self.currentSongInfo.bg) ~= "mp4" then
+    if getFileExtension(self.currentSongInfo.bg) == "png" or
+         getFileExtension(self.currentSongInfo.bg) == "jpg" or
+            getFileExtension(self.currentSongInfo.bg) == "jpeg" then
         self.video = false
         if love.filesystem.getInfo(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg, "file") then
             self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
