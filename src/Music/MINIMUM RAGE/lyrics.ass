@@ -13,7 +13,7 @@ Style: Default,Arial,48,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:01.38,0:00:03.58,Default,,0,0,0,,"Hi! How can I help you?"
+Dialogue: 0,0:00:01.38,0:00:03.58,Default,,0,0,0,,\N"Hi! How can I help you?"
 Dialogue: 0,0:00:03.58,0:00:14.10,Default,,0,0,0,,🎶
 Dialogue: 0,0:00:14.10,0:00:15.14,Default,,0,0,0,,Thanks for checking in
 Dialogue: 0,0:00:15.14,0:00:16.28,Default,,0,0,0,,I'm not doing well
@@ -31,7 +31,7 @@ Dialogue: 0,0:00:35.22,0:00:37.32,Default,,0,0,0,,Please step back
 Dialogue: 0,0:00:37.32,0:00:40.50,Default,,0,0,0,,If you keep yelling, I am gonna have a panic attack!
 Dialogue: 0,0:00:40.50,0:00:42.66,Default,,0,0,0,,Please understand
 Dialogue: 0,0:00:42.66,0:00:46.02,Default,,0,0,0,,Given the circumstances, I'm doing the very best I can!
-Dialogue: 0,0:00:46.02,0:00:46.94,Default,,0,0,0,,mario kart ahh sound effect 🥀🙏 
+Dialogue: 0,0:00:46.02,0:00:46.94,Default,,0,0,0,,🎶 
 Dialogue: 0,0:00:46.94,0:00:49.68,Default,,0,0,0,,Smile, baby smile for the corporation!
 Dialogue: 0,0:00:49.68,0:00:52.38,Default,,0,0,0,,Vital, baby vital to the operation!
 Dialogue: 0,0:00:52.38,0:00:54.86,Default,,0,0,0,,Working for an hour costs as much as a sandwich
@@ -63,7 +63,7 @@ Dialogue: 0,0:01:42.44,0:01:44.64,Default,,0,0,0,,Please look away!
 Dialogue: 0,0:01:44.64,0:01:47.64,Default,,0,0,0,,I need a second to reset, today I don't get a break
 Dialogue: 0,0:01:47.64,0:01:49.90,Default,,0,0,0,,Please, let me go!
 Dialogue: 0,0:01:49.90,0:01:53.04,Default,,0,0,0,,I'm out of sick days so I can't afford to break another bone! 
-Dialogue: 0,0:01:53.04,0:01:54.18,Default,,0,0,0,,marko kart
+Dialogue: 0,0:01:53.04,0:01:54.18,Default,,0,0,0,,🎶
 Dialogue: 0,0:01:54.18,0:01:56.98,Default,,0,0,0,,Smile, baby smile for the corporation!
 Dialogue: 0,0:01:56.98,0:01:59.64,Default,,0,0,0,,Vital, baby vital to the operation!
 Dialogue: 0,0:01:59.64,0:02:02.04,Default,,0,0,0,,Working for an hour costs as much as a sandwich

@@ -13,7 +13,7 @@ Style: Default,Arial,48,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:01.42,0:00:17.60,Default,,0,0,0,,🎶
+Dialogue: 0,0:00:01.42,0:00:17.60,Default,,0,0,0,,\N🎶
 Dialogue: 0,0:00:17.60,0:00:19.38,Default,,0,0,0,,"What's your name?"
 Dialogue: 0,0:00:19.38,0:00:23.24,Default,,0,0,0,,A simple question but my answer’s really never the same
 Dialogue: 0,0:00:23.24,0:00:25.06,Default,,0,0,0,,"What's your name?"
