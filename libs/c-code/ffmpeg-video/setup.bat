@@ -1,0 +1,1 @@
+cmake -G "Visual Studio 18 2026" -B build -A x64 .

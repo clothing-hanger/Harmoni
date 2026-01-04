@@ -8,7 +8,7 @@
 #define FILE_BUFFER_SIZE 1048576
 
 Video::Video(uint8_t* content, int64_t size)
-    : fileContent(content), fileSize(size), fileOffset(0) {}
+    : ownedData(content, content + size), fileContent(ownedData.data()), fileSize(size), fileOffset(0) {}
 
 int Video::fileRead(void* ptr, uint8_t* buf, int len) {
     auto* video = reinterpret_cast<Video*>(ptr);
@@ -66,6 +66,8 @@ bool Video::open(std::string& error) { // straight up rubbin' my belly
 
     rawCtx->pb = ioContext.get();
     rawCtx->flags |= AVFMT_FLAG_CUSTOM_IO;
+    rawCtx->probesize = FILE_BUFFER_SIZE;
+    rawCtx->max_analyze_duration = AV_TIME_BASE;
 
     if (avformat_open_input(&rawCtx, nullptr, nullptr, nullptr) != 0) {
         error = "Can't open input";

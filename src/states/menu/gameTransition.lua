@@ -18,7 +18,7 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
                                             -- This is actually a good way to do it im ngl you thought good
                                                        --it was to prevent any weirdly long frame while gamemodemanager or mania parses the chart. all modes use harmc files so they can all be parsed here
 
-    print("dIFIFJHF", fullchart.meta.difficulty)
+    print("DIFFICULTY:", fullchart.meta.difficulty)
     timebar = {0}
     background = sharedBackground(image)
     background.dimness = backgroundDim

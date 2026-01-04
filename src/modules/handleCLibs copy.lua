@@ -10,31 +10,16 @@ local ext = ({
 local outchannel = love.thread.getChannel("clib_install_done")
 local ffi = require("ffi")
 
-local WIN_LOAD_LIBRARY_SEARCH_DEFAULT_DIRS = 0x00001000
-local WIN_LOAD_LIBRARY_SEARCH_USER_DIRS = 0x00000400
-
 if os == "Windows" then
     ffi.cdef[[
         int _putenv(const char *envstring);
         const char *getenv(const char *name);
-        int SetDllDirectoryW(const wchar_t *lpPathName);
-        void* AddDllDirectory(const wchar_t* NewDirectory);
-        int SetDefaultDllDirectories(unsigned long DirectoryFlags);
     ]]
 else
     ffi.cdef[[
         int setenv(const char *name, const char *value, int overwrite);
         const char *getenv(const char *name);
     ]]
-end
-
-local function toWide(str)
-    local w = ffi.new("wchar_t[?]", #str + 1)
-    for i = 1, #str do
-        w[i - 1] = str:byte(i)
-    end
-    w[#str] = 0
-    return w
 end
 
 local function setenv(name, value)
@@ -46,21 +31,10 @@ local function setenv(name, value)
 end
 
 local function getenv(name)
-    -- windows can return null pointers, so we need to handle that
-    -- (like what the fuck windows)
-    local res = ffi.C.getenv(name)
-    if res == nil then
-        return nil
-    else
-        return ffi.string(res)
-    end
+    return ffi.string(ffi.C.getenv(name))
 end
 
-local save = love.filesystem.getSaveDirectory()
-local clibs = save .. sep .. "clibs"
---[[ ffi.C.SetDllDirectoryW(toWide(clibs)) ]]
-
-local CURRENT_VIDEO_VERSION = "2.1"
+local CURRENT_VIDEO_VERSION = "2.0"
 
 local installThread
 local installThreadCode = [[
@@ -116,44 +90,33 @@ end
 function CLibs:after()
     print("Finalizing C Libraries setup...")
     outchannel:pop()
+    local save = love.filesystem.getSaveDirectory()
+    local sep = package.config:sub(1,1)
+    local clibs = save .. sep .. "clibs"
 
-    if not package.cpath:find(clibs, 1, true) then
-        package.cpath = package.cpath .. ";" .. clibs .. sep .. "?.dll"
-    end
-
-    local path = getenv("PATH")
-    if not path then path = "" end
-    ffi.C.SetDefaultDllDirectories(
-        WIN_LOAD_LIBRARY_SEARCH_DEFAULT_DIRS + WIN_LOAD_LIBRARY_SEARCH_USER_DIRS
-    )
-
-    local cookie = ffi.C.AddDllDirectory(toWide(clibs))
-    assert(cookie ~= nil, "AddDllDirectory failed")
-    print("Updated PATH environment variable.")
+    local path = getenv("PATH") or ""
+    setenv("PATH", path .. ";" .. clibs)
 
     local base = love.filesystem.getCRequirePath()
     local newPaths = base .. ";clibs/??" .. ";" .. save .. "/clibs/??"
     love.filesystem.setCRequirePath(newPaths)
-    print("Updated love.filesystem C require path.")
+
+    package.cpath = package.cpath
+        .. ";" .. save .. sep .. "clibs" .. sep .. "?" .. ext
+        .. ";" .. save .. sep .. "clibs" .. sep .. "loadall" .. ext
 
     tryExcept(function()
         local libname = "video"
         if os == "Linux" then
             libname = "libvideo"
         end
-        print("Loading video DLL: " .. libname .. ext)
-        love.timer.sleep(0.1)
         DLL_Video = require(libname)
-        print("Successfully loaded video DLL.")
     end, function(err)
         print("Warning: Could not load video DLL. Video playback will be disabled.")
         print("Error message: " .. err)
     end)
 
-    print("Requiring video module...")
     video = require("objects.game.shared.video")
-
-    print("C Libraries setup complete.")
 end
 
 return CLibs

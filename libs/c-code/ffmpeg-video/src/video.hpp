@@ -13,6 +13,7 @@ extern "C" {
 #include <cstdint>
 #include <string>
 #include <memory>
+#include <vector>
 
 struct AVDeleter {
     void operator()(AVFormatContext* ctx) const {
@@ -67,6 +68,7 @@ private:
     uint8_t* image = nullptr;
     int imageSize = 0;
 
+    std::vector<uint8_t> ownedData;
     uint8_t* fileBuffer = nullptr;
     uint8_t* fileContent = nullptr;
     int64_t fileSize = 0;

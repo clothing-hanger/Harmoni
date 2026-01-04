@@ -168,7 +168,7 @@ function maniaLane:checkHoldReleases()
                 end
 
             end
-            if bestJudgement then
+            --if bestJudgement then
                 note.held = false
                 note.released = true
                 table.remove(self.drawableNotes, i)
@@ -182,7 +182,7 @@ function maniaLane:checkHoldReleases()
                 parentParent.healthBar:changeHealth(bestJudgement.health)
                 --]]
                 
-            end
+            --end
         end
     end
 end
@@ -215,7 +215,7 @@ function maniaLane:checkForMisses()
             parentParent.healthBar:changeHealth(missJudgement.health)
         end
 
-        if note.holdLength and not note.released then
+        if note.holdLength and not note.released and not note.held then
             if currentTime > note.endTime + 100 then
                 table.remove(self.drawableNotes, i)
                 note.held = false
