@@ -60,7 +60,7 @@ local save = love.filesystem.getSaveDirectory()
 local clibs = save .. sep .. "clibs"
 --[[ ffi.C.SetDllDirectoryW(toWide(clibs)) ]]
 
-local CURRENT_VIDEO_VERSION = "2.1"
+local CURRENT_VIDEO_VERSION = "2.2"
 
 local installThread
 local installThreadCode = [[
