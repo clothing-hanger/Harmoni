@@ -35,15 +35,13 @@ function CHE:init()
     States = require("modules.States")
     Timer = require("engine.lib.Timer")
     Ease = require("engine.lib.Ease")
+    GIF = require("engine.lib.GIF")
+    GIF.pushLove()
+    GIF.enableDrawUpdates()
     WINDOW = require("engine.modules.window")
-
-
-
 
     -- game stufffff :3
     maniaGrades = require("modules.maniaGrades") -- this is here but judgments isnt because this one isnt just a table like judgements is
-
-
 
     if type(WINDOW) ~= "table" then WINDOW = nil end
     if WINDOW then
