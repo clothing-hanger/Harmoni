@@ -8,6 +8,7 @@ function maniaHUD:new(parent)
     self.fontExtraSmall = SkinHandler:getFontLegacy("HUD Extra Small")
 
     self.font = SkinHandler:getFont("HUD", 160)
+    self.debugFont = SkinHandler:getFont("HUD", 70)
     self.grade = "N/A"
 end
 
@@ -24,13 +25,15 @@ function maniaHUD:sendScoreHandlerScores(scoreHandlerScores)
 end
 
 function maniaHUD:draw()
-        love.graphics.setFont(self.font)
 
     if self.debug then self:debugDraw() end
+        love.graphics.setFont(self.font)
 
     local score = string.format("%.0f", self.scores.printableScore)
-    local accuracy = string.format("%.0f", self.scores.printableAccuracy) .. "%"
+    local accuracy = string.format("%.2f", self.scores.printableAccuracy) .. "%"
     local grade = self.grade 
+    local prOverDr = string.format("%.2f", self.scores.printablePerformanceRating) .. "/" .. string.format("%.2f", self.scores.difficultyRating)   -- this was a bad idea what was i thinking
+    local pr = string.format("%.2f", self.scores.truePerformanceRating)  -- use true for now because printable isnt implemented yet and i am very tired and lazy right now
 
     local IPSoverNPS = string.format("%02d",#self.parent.inputsPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond)
 
@@ -38,13 +41,15 @@ function maniaHUD:draw()
 
     love.graphics.printf(score .. "\n" .. IPSoverNPS, 10, 10, baseScreenRatio.x, "left")
 
-    love.graphics.printf(accuracy .. "\n" .. grade, baseScreenRatio.x-1000, 10, 990, "right")
+    love.graphics.printf(pr .. "\n" .. accuracy .. "\n" .. grade, baseScreenRatio.x-1000, 10, 990, "right")
 
 
    -- love.graphics.printf
 end
 
 function maniaHUD:debugDraw()
+    love.graphics.setFont(self.debugFont)
+    love.graphics.setColor(1,1,0)
     love.graphics.print("DEBUG SHIT" .. "\n"
                     .. "SCORE: " .. self.scores.trueScore .. "\n"
                     .. "ACCURACY: " .. self.scores.trueAccuracy .. "\n"
@@ -52,6 +57,8 @@ function maniaHUD:debugDraw()
                     .. "DIFFICULTY RATING: " .. self.scores.difficultyRating,
                     100,100
     )
+        love.graphics.setColor(1,1,1)
+
 end
 
 return maniaHUD
