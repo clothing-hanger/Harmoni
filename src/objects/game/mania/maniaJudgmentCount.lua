@@ -39,7 +39,6 @@ function maniaJudgementCount:incrementJudgement(judgement)
     for i, Judgement in ipairs(self.judgements) do
         if Judgement.name == judgement then
             Judgement.count = Judgement.count+1
-            print(Judgement.name)
             self:liquidAss(Judgement)
             break
         end

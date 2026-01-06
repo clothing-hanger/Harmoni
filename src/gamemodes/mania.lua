@@ -58,7 +58,6 @@ end
 function mania:resetBpmShit(newBpm)
     self.bpmHandler:init()
     self.bpmHandler:setBpm(newBpm)
-    GlobalNotificationsHandler:addNotification("New BPM: " .. newBpm)
 end
 
 function mania:setUpObjects()
@@ -71,6 +70,8 @@ function mania:setUpObjects()
     self.comboAlert = maniaComboAlert()
 
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
+
+    
     
 
     self.judgementCount = maniaJudgmentCount()
@@ -165,6 +166,37 @@ function mania:setUpChart(chartpath, chart)
         self.videoBackground = nil
     end
 
+
+        -- look for the lyrics file
+
+    local validTypes = {
+        "srt",
+        "vtt",
+        "sbv",
+        "stl",
+        "ass",
+        "lua"
+    }
+
+    local type = ""
+    local path = songPath .. "/lyrics."
+    for _, t in ipairs(validTypes) do
+        if love.filesystem.getInfo(path .. t, "file") then
+            type = t
+            break
+        end
+    end
+
+    local lyrics
+    if type ~= "lua" and type ~= "" then
+        lyrics = CaptionParser.parse(love.filesystem.read(path .. type), type)
+    elseif type == "lua" then
+        lyrics = CaptionParser.parse(path .. type, type)
+    end
+    self.lyricsRenderer = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200, lyrics)
+
+    print(type)
+
     return maniaChart
 end
 
@@ -228,7 +260,7 @@ function mania:endSong()
     self.song = nil
     self.chart = nil
     self.playField = {}
-    State.switch(States.game.resultsState, self)
+    State.switch(States.menu.songSelect, self)  -- fuck that unfinished ass results screen, we will just skip it for now
 end
 
 
@@ -244,6 +276,9 @@ function mania:updateObjects(dt)
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
     self.bpmHandler:update(dt)
 
+    if self.lyricsRenderer then
+        self.lyricsRenderer:update(dt, MusicTime/1000)
+    end
 
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
@@ -334,6 +369,10 @@ function mania:draw()
 
 
     self.judgementCount:draw()
+
+    if self.lyricsRenderer then
+        self.lyricsRenderer:draw(self.song:tell())
+    end
 
     -- draw the pause fade over everything else
     love.graphics.setColor(0,0,0,(self.endSongTimer/1000)*0.8)

@@ -212,6 +212,14 @@ function isEven(number)    -- borrring
     return number % 2 == 0
 end
 
+function REALisEven(number)
+    local even = false
+    for i = 0,math.abs(number) do
+        even = not even
+    end
+    return even
+end
+
 function chance(chance)
     return love.math.random(1, 100) <= chance
 end
