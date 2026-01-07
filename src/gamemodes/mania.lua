@@ -201,6 +201,7 @@ function mania:setUpChart(chartpath, chart)
 end
 
 function mania:update(dt)
+    Profiler:start("GAMEMODE:UPDATE")
     self:updateObjects(dt)
 
     for _, playField in ipairs(self.playField) do
@@ -251,6 +252,10 @@ function mania:update(dt)
             end
         end
     end
+    Profiler:stop("GAMEMODE:UPDATE")
+
+    --local avg, last = Profiler:getAverage("GAMEMODE:UPDATE"), Profiler:getLastTime("GAMEMODE:UPDATE")
+    --print("Time to update MANIA GAMEMODE: ", last, "\nAverage: ", avg)
 end
 
 function mania:endSong()
@@ -325,6 +330,7 @@ end
 
 
 function mania:draw()
+    Profiler:start("GAMEMODE:DRAW")
     self.background:draw()
     if self.videoBackground then
         self.videoBackground.alpha = videoFade
@@ -383,6 +389,10 @@ function mania:draw()
     if self.debug then 
         love.graphics.print(MusicTime, 250, 400)
     end
+
+    Profiler:stop("GAMEMODE:DRAW")
+    --[[ local avg, last = Profiler:getAverage("GAMEMODE:DRAW"), Profiler:getLastTime("GAMEMODE:DRAW")
+    print("Time to draw MANIA GAMEMODE: ", last, "\nAverage: ", avg) ]]
 end
 
 return mania
