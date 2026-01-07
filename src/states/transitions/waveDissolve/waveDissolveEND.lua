@@ -12,7 +12,7 @@ function t:enter(from, to, ...)
         vec4 effect(vec4 color, Image tex, vec2 uv, vec2 px) {
             float wave = sin(uv.y * frequency + progress * 10.0) * amplitude;
             if (uv.x > progress + wave) {
-                return vec4(0.0, 0.0, 0.0, 1.0);
+                discard;
             } else {
                 return Texel(tex, uv);
             }

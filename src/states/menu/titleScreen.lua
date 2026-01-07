@@ -33,7 +33,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
             func = function() 
                 self:raiseWaves()
                 State.transition("waveDissolve", States.menu.songSelect) 
-            end, 
+            end,
             color1 = {94/255,252/255,141/255,1},
             color2 = {44/255,251/255,106/255,0},
             icon = self.icons["play"],
