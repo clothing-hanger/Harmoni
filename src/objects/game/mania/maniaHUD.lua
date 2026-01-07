@@ -30,7 +30,7 @@ function maniaHUD:draw()
         love.graphics.setFont(self.font)
 
     local score = string.format("%.0f", self.scores.printableScore)
-    local accuracy = string.format("%.2f", self.scores.printableAccuracy) .. "%"
+    local accuracy = self.scores.trueAccuracy == 100 and "100%" or self.scores.trueAccuracy == 0 and "0%" or string.format("%.2f", self.scores.printableAccuracy) .. "%"
     local grade = self.grade 
     local prOverDr = string.format("%.2f", self.scores.printablePerformanceRating) .. "/" .. string.format("%.2f", self.scores.difficultyRating)   -- this was a bad idea what was i thinking
     local pr = string.format("%.2f", self.scores.truePerformanceRating)  -- use true for now because printable isnt implemented yet and i am very tired and lazy right now
