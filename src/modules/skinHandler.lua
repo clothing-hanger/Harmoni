@@ -59,7 +59,7 @@ local restricted = {
     end,
     dofile = function(filePath)
        printToConsole("Restricted dofile: " .. filePath)
-    end,
+    end
 }
 
 local skinEnv = {
@@ -78,7 +78,30 @@ local skinEnv = {
     end,
     getScreenDimensions = function()
         return { width = baseScreenRatio.x, height = baseScreenRatio.y }
-    end
+    end,
+
+    HEX = function(hexval)
+        if type(hexval) == "string" then
+            hexval = hexval:gsub("#","")
+            if string.len(hexval) == 6 then
+                hexval = hexval .. "FF"
+            end
+            if string.len(hexval) ~= 8 then
+                error("Invalid HEX color: " .. tostring(hexval))
+            end
+            local r = tonumber("0x"..hexval:sub(1,2)) / 255
+            local g = tonumber("0x"..hexval:sub(3,4)) / 255
+            local b = tonumber("0x"..hexval:sub(5,6)) / 255
+            local a = tonumber("0x"..hexval:sub(7,8)) / 255
+            return {r, g, b, a}
+        elseif type(hexval) == "number" then
+            local r = ((bit32.rshift(hexval, 24)) % 256) / 255
+            local g = ((bit32.rshift(hexval, 16)) % 256) / 255
+            local b = ((bit32.rshift(hexval, 8)) % 256) / 255
+            local a = (hexval % 256) / 255
+            return {r, g, b, a}
+        end
+    end,
 }
 
 local chunk
