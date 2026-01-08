@@ -29,7 +29,6 @@ static VideoWrapper* checkWrapper(lua_State* L, int idx, int mustBeOpen) {
 }
 
 static int lua_Video_open(lua_State *L) {
-    Video *v;
     uint8_t *data;
     int64_t size;
     char error[256];
@@ -38,22 +37,26 @@ static int lua_Video_open(lua_State *L) {
     data = (uint8_t *)lua_touserdata(L, 1);
     size = (int64_t)luaL_checkinteger(L, 2);
 
-    v = video_create(data, size);
-    if (!v) {
+    VideoWrapper* w = (VideoWrapper*)lua_newuserdata(L, sizeof(VideoWrapper));
+    memset(w, 0, sizeof(VideoWrapper));
+
+    w->video = video_create(data, size);
+    if (!w->video) {
+        lua_pop(L, 1);
         lua_pushnil(L);
         lua_pushstring(L, "Failed to create video");
         return 2;
     }
 
-    if (!video_open(v, error, sizeof(error))) {
-        video_destroy(v);
+    if (!video_open(w->video, error, sizeof(error))) {
+        video_destroy(w->video);
+        lua_pop(L, 1);
         lua_pushnil(L);
         lua_pushstring(L, error);
         return 2;
     }
 
-    Video **ud = (Video **)lua_newuserdata(L, sizeof(Video *));
-    *ud = v;
+    w->isOpen = 1;
 
     luaL_getmetatable(L, MT_NAME);
     lua_setmetatable(L, -2);
