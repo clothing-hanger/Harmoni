@@ -50,16 +50,24 @@ static int fileRead(void* ptr, uint8_t* buf, int len) {
 }
 
 static int64_t fileSeek(void* ptr, int64_t pos, int whence) {
-    Video* v = (Video*)ptr;
+    Video* v = ptr;
 
     if (whence == AVSEEK_SIZE)
         return v->fileSize;
 
-    if (pos < 0 || pos > v->fileSize)
+    int64_t newPos;
+    switch (whence) {
+        case SEEK_SET: newPos = pos; break;
+        case SEEK_CUR: newPos = v->fileOffset + pos; break;
+        case SEEK_END: newPos = v->fileSize + pos; break;
+        default: return -1;
+    }
+
+    if (newPos < 0 || newPos > v->fileSize)
         return -1;
 
-    v->fileOffset = pos;
-    return pos;
+    v->fileOffset = newPos;
+    return newPos;
 }
 
 Video* video_create(uint8_t* data, int64_t size) {
@@ -202,15 +210,27 @@ int video_read_frame(Video* v, void* dst, double* timestamp) {
         av_packet_unref(&v->packet);
 
         if (avcodec_receive_frame(v->codecContext, v->frame) == 0) {
-            sws_scale(
-                v->swsContext,
-                (const uint8_t* const*)v->frame->data,
-                v->frame->linesize,
-                0,
-                v->codecContext->height,
-                v->frameRGB->data,
-                v->frameRGB->linesize
-            );
+            if (v->swsContext) {
+                sws_scale(
+                    v->swsContext,
+                    (const uint8_t* const*)v->frame->data,
+                    v->frame->linesize,
+                    0,
+                    v->codecContext->height,
+                    v->frameRGB->data,
+                    v->frameRGB->linesize
+                );
+            } else {
+                av_image_copy(
+                    v->frameRGB->data,
+                    v->frameRGB->linesize,
+                    (const uint8_t* const*)v->frame->data,
+                    v->frame->linesize,
+                    AV_PIX_FMT_RGBA,
+                    v->codecContext->width,
+                    v->codecContext->height
+                );
+            }
 
             if (dst)
                 memcpy(dst, v->image, v->imageSize);

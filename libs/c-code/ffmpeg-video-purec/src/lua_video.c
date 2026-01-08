@@ -28,35 +28,36 @@ static VideoWrapper* checkWrapper(lua_State* L, int idx, int mustBeOpen) {
     return w;
 }
 
-static int lua_Video_open(lua_State* L) {
-    size_t size = 0;
-    const uint8_t* data = (const uint8_t*)luaL_checklstring(L, 1, &size);
-
-    VideoWrapper* w = (VideoWrapper*)lua_newuserdata(L, sizeof(VideoWrapper));
-    memset(w, 0, sizeof(VideoWrapper));
-
-    luaL_getmetatable(L, MT_NAME);
-    lua_setmetatable(L, -2);
-
+static int lua_Video_open(lua_State *L) {
+    Video *v;
+    uint8_t *data;
+    int64_t size;
     char error[256];
-    w->video = video_create((uint8_t*)data, (int64_t)size);
-    if (!w->video) {
-        lua_pop(L, 1);
+
+    luaL_checktype(L, 1, LUA_TLIGHTUSERDATA);
+    data = (uint8_t *)lua_touserdata(L, 1);
+    size = (int64_t)luaL_checkinteger(L, 2);
+
+    v = video_create(data, size);
+    if (!v) {
         lua_pushnil(L);
-        lua_pushstring(L, "failed to allocate video");
+        lua_pushstring(L, "Failed to create video");
         return 2;
     }
 
-    if (!video_open(w->video, error, sizeof(error))) {
-        video_destroy(w->video);
-        w->video = NULL;
-        lua_pop(L, 1);
+    if (!video_open(v, error, sizeof(error))) {
+        video_destroy(v);
         lua_pushnil(L);
         lua_pushstring(L, error);
         return 2;
     }
 
-    w->isOpen = 1;
+    Video **ud = (Video **)lua_newuserdata(L, sizeof(Video *));
+    *ud = v;
+
+    luaL_getmetatable(L, MT_NAME);
+    lua_setmetatable(L, -2);
+
     return 1;
 }
 

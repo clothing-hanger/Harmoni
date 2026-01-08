@@ -43,7 +43,7 @@ end
 local save = love.filesystem.getSaveDirectory()
 local clibs = save .. sep .. "clibs"
 
-local CURRENT_DLL_LAYOUT_VERSION = "1.2"
+local CURRENT_DLL_LAYOUT_VERSION = "1.3"
 
 local function copyToSave(src, dst)
     local data, err = love.filesystem.read("data", src)
