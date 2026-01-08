@@ -4,6 +4,7 @@ build/
 
 libs/**/*.a
 libs/**/*.dll
+libs/**/*.o
 
 libs/**/ffmpeg/
 libs/**/luajit
