@@ -66,4 +66,5 @@
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.ignoreCMakeListsMissing": true,
+    "Lua.runtime.version": "LuaJIT",
 }

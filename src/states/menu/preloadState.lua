@@ -41,6 +41,29 @@ function preloadState:update(dt)
                                 -- 50 launches with the sleep(1) enabled, and 50 launches with the sleep(1) commented out
                                 -- i got 4 crashes with it enabled, but when its commented out, i got 1 crash. so we leave it commented out.
                                 -- i really expected the sleep here to lower the chances of the crash, but no, it made the chances higher
+
+        love.audio.newAdvancedSource = require("engine.lib.asl.asl")
+        tryExcept(function()
+            if love.system.getOS() ~= "Windows" then
+                return
+            end
+            print("Loading Steam...")
+            Steam = require("engine.lib.sworks.main")
+            print("Steam loaded!")
+        end, function(err)
+            print("Warning: Could not load Steamworks. Steam features will be disabled.")
+            print("Error message: " .. err)
+        end)
+
+        if Steam then
+            if not Steam.init() or not Steam.isRunning() then
+                Steam = nil
+                print("Steam failed to initialize!")
+            else
+                Steam.USER = Steam.getUser()
+                Steam.USERNAME = Steam.USER:getName()
+            end
+        end
     end
 
     if self.debug then if Input:pressed("menuConfirm") then CLibs:setupIfNeeded() end end
@@ -50,8 +73,7 @@ function preloadState:update(dt)
     if not installing then
         installing = true
         step = step + 1
-    elseif installing and CLibs:isInstallationDone() then
-        CLibs:after()
+    elseif installing then
         Timer.after(self.skipSafetyTimer and 0 or 5, function()
             step = step + 1
             Timer.after(0.1, function()  
