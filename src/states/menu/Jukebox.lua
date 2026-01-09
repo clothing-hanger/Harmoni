@@ -41,6 +41,29 @@ local validTypes = {
     "lua"
 }
 
+-- https://love2d.org/wiki/Image_Formats
+-- Plus some specially programmed ones
+local validImages = {
+    "png",
+    "jpg", "jpeg",
+    "bmp",
+    "tga",
+    "hdr", "pic",
+    "exr",
+
+    -- Custom formats support
+    "gif",
+}
+
+local function findValidImageExtension(filename)
+    for _, ext in ipairs(validImages) do
+        if filename:sub(-#ext):lower() == ext then
+            return ext
+        end
+    end
+    return nil
+end
+
 function jukebox:switchSong(songInfo)
     if self.audio and self.audio:isPlaying() then self.audio:stop() end
     self.audio = nil
@@ -49,12 +72,14 @@ function jukebox:switchSong(songInfo)
     self.audio = love.audio.newSource(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audio, "stream")
     self.audio:play()
 
-    if getFileExtension(self.currentSongInfo.bg) == "png" or
-         getFileExtension(self.currentSongInfo.bg) == "jpg" or
-            getFileExtension(self.currentSongInfo.bg) == "jpeg" then
+    if findValidImageExtension(self.currentSongInfo.bg) then
         self.video = false
         if love.filesystem.getInfo(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg, "file") then
             self.songBG = love.graphics.newImage(self.currentSongInfo.path .. "/" ..self.currentSongInfo.bg)
+            if self.songBG:typeOf("GIF") then
+                self.songBG:setLooping(true)
+            end
+            print(self.songBG:type())
         else
             self.songBG = nil
         end

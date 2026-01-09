@@ -1,26 +1,26 @@
 local songPreloader = State("songPreloader") -- idk i just felt like spliting it into its own file was better 
 local msg
 function songPreloader:enter()
-        self.songList = SongListManager.getSongList(musicPath)
-self.currentIndex = 1
-        for i, song in ipairs(self.songList) do
-            if not song then
-                table.remove(self.songList, i)
-                break
-            end
-            local diffList = SongListManager.getDifficultyList(musicPath .. song)
-            if not diffList[1] then
-                table.remove(self.songList, i)
-                break
-            end
-            if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
-                table.remove(self.songList, i)
-                break
-            end
+    self.songList = SongListManager.getSongList(musicPath)
+    self.currentIndex = 1
+    for i, song in ipairs(self.songList) do
+        if not song then
+            table.remove(self.songList, i)
+            break
         end
+        local diffList = SongListManager.getDifficultyList(musicPath .. song)
+        if not diffList[1] then
+            table.remove(self.songList, i)
+            break
+        end
+        if not love.filesystem.getInfo(musicPath .. song .. "/" .. diffList[1], "file") then
+            table.remove(self.songList, i)
+            break
+        end
+    end
 
 
-            self.images = {
+    self.images = {
         ["H"] = {image = SkinHandler:getImage("Menu", "H"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
         ["logo"] = {image = SkinHandler:getImage("Menu", "Main Logo"), sizeX  = 1, sizeY = 1, x = 0, y = 0},
     }

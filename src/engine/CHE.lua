@@ -15,7 +15,6 @@ function mouseOver(object)
            my >= object.y and my <= object.y + object.height
 end
 
-
 function CHE:init()
 
     Fullscreen = false

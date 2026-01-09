@@ -129,6 +129,8 @@ local function getAverageColor(imageData)
     return {r, g, b}
 end
 
+local avg = {0, 0, 0}
+
 local path, image
 local loaded = false
 while true do
@@ -143,13 +145,21 @@ while true do
     if not love.filesystem.getInfo(path, "file") then 
         goto continue 
     else 
-        image = love.image.newImageData(path) 
+        if path:sub(-4):lower() ~= ".gif" then
+            image = love.image.newImageData(path)
+        else
+            image = path
+        end
+    end
+
+    if type(image) ~= "string" then
+        avg = getAverageColor(image)
     end
 
     outChannel:push({
         path = path,
         image = image,
-        averageColor = getAverageColor(image)
+        averageColor = avg
     })
     
     loaded = true
@@ -160,8 +170,6 @@ while true do
     end
 end
 ]]
-
-
 
     local popupbuttons = {}
     for i = 1, 7 do
@@ -392,6 +400,27 @@ function songSelect:loadSongs()
     end
 end
 
+local function getAverageColor(imageData)
+    local r, g, b = 0, 0, 0
+    local width, height = imageData:getDimensions()
+    local totalPixels = width * height
+
+    for y = 0, height - 1 do
+        for x = 0, width - 1 do
+            local pr, pg, pb = imageData:getPixel(x, y)
+            r = r + pr
+            g = g + pg
+            b = b + pb
+        end
+    end
+
+    r = r / totalPixels
+    g = g / totalPixels
+    b = b / totalPixels
+
+    return {r, g, b}
+end
+
 function songSelect:loadSongButtonImages()
     if self.bannerChannel:peek() then
         local data = self.bannerChannel:pop()
@@ -399,9 +428,15 @@ function songSelect:loadSongButtonImages()
             for i, SongButton in ipairs(songButtons) do
                 if SongButton.imagePath == data.path and love.filesystem.getInfo(data.path, "file") then
                     SongButton.imageData = data.image
-                    SongButton.image = love.graphics.newImage(data.image)
+                    if type(data.image) ~= "string" then
+                        SongButton.image = love.graphics.newImage(data.image)
+                        SongButton.color = data.averageColor
+                    else
+                        SongButton.image = GIF.new(data.image)
+                        SongButton:update(0)
+                        SongButton.color = getAverageColor(SongButton.image.imageData)
+                    end
                     SongButton.imageLoaded = true
-                    SongButton.color = data.averageColor
                     break
                 end
             end

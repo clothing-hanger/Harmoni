@@ -10,10 +10,10 @@ function setupControls()
 
             menuClickLeft = {"mouse:1"},
 
-            lane14K = {"key:d"},
-            lane24K = {"key:f"},
-            lane34K = {"key:j"},
-            lane44K = {"key:k"},
+            lane14K = {"key:d", "axis:triggerleft+"},
+            lane24K = {"key:f", "button:leftshoulder"},
+            lane34K = {"key:j", "button:rightshoulder"},
+            lane44K = {"key:k", "axis:triggerright+"},
 
             lane17K = {"key:s"},
             lane27K = {"key:d"},
