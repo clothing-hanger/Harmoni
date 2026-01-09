@@ -30,9 +30,9 @@ function video:new(video,x,y,scaleX,scaleY,dimness)
 
     fullPath = fullPath:gsub("//", "/")
 
-    if not fileExists(fullPath) then
+    --[[ if not fileExists(fullPath) then
         error("Video file not found: " .. fullPath)
-    end
+    end ]]
 
     local vid, err
     if DLL_Video.openFile then
