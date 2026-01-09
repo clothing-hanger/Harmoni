@@ -18,6 +18,8 @@ end
 
 function CHE:init()
 
+    Fullscreen = false
+    CHE:fullscreen()
     Console = require("engine.modules.console")
 
     baseScreenRatio = { x = 2560, y = 1440 }
@@ -131,6 +133,8 @@ function CHE:update(dt)
 
     love.mouse.setVisible(false)
     if NOTIFICATIONS then NOTIFICATIONS.update() end
+
+
 end
 
 function CHE:updateTime()
@@ -144,8 +148,14 @@ function CHE:updateTime()
 end
 
 function CHE:keypressed(k, sc, isrepeat)
-    if k == "q" then CHE:flashbang() end
     Console.keypressed(k)
+
+    if k == "f11" then CHE:fullscreen() end
+end
+
+function CHE:fullscreen()
+    Fullscreen = not Fullscreen
+    love.window.setFullscreen(Fullscreen, "exclusive")
 end
 
 function CHE:textinput(t)
