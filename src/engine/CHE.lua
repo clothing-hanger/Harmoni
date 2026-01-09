@@ -131,7 +131,8 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
     if NOTIFICATIONS then NOTIFICATIONS.update() end
 
-
+    --spookyGlitchShader:send("time", love.timer.getTime())
+    --spookyGlitchShader:send("prob", 0.1)
 end
 
 function CHE:updateTime()
