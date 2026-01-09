@@ -1,0 +1,13 @@
+[package]
+name = "Harmoni"
+description = "arow game"
+author = "Harmoni Team"
+icon = "src/images/icon.png"
+version = "1.0"
+
+[build]
+default = ["love", "win64", "linux"]
+
+[directories]
+source = "src"
+build = "build"

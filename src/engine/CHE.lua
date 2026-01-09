@@ -16,9 +16,7 @@ function mouseOver(object)
 end
 
 function CHE:init()
-
     Fullscreen = false
-    CHE:fullscreen()
     Console = require("engine.modules.console")
 
     baseScreenRatio = { x = 2560, y = 1440 }
