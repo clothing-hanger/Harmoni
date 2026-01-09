@@ -20,7 +20,7 @@ function video:new(video,x,y,scaleX,scaleY,dimness)
     end
 
     if not video then return self, error("Video path not provided") end -- temp
-    printToConsole("Loading video: " .. tostring(video))
+    print("Loading video: " .. tostring(video))
 
     local fullPath = love.filesystem.getSource() .. "/" .. video
     if not fileExists(fullPath) then

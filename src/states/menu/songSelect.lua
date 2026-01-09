@@ -41,6 +41,15 @@ function songSelect:enter()
     }
 
     self.songThread = self.songThread or love.thread.newThread [[
+local oprint = print
+function print(...)
+    local args = {...}
+    for i = 1, #args do
+        args[i] = tostring(args[i])
+    end
+    oprint("[SongLoader Thread] " .. table.concat(args, "\t"))
+end
+
 require("love.timer")
 require("love.filesystem")
 
@@ -72,7 +81,7 @@ while true do
         --songInfo = loadSongMetadata(path) 
         ok, err = pcall(function() songInfo = loadSongMetadata(path) end)
         if not ok then
-           print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
+            print("ERROR: Failed to load song metadata from " .. path .. ": " .. err)
             goto continue
         end
     end

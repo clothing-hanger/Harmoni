@@ -125,8 +125,8 @@ function slider:update(dt)
     end
 
     if self.song and self.playField[1].finished then
-        printToConsole("SONG END 1")
-        if not self.song:isPlaying() then printToConsole("SONG END 2"); self:endSong() end
+        print("SONG END 1")
+        if not self.song:isPlaying() then print("SONG END 2"); self:endSong() end
     end
 
     if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
@@ -144,7 +144,7 @@ function slider:update(dt)
 end
 
 function slider:endSong()
-    if self.song then self.song:stop();printToConsole("SONG END 3") end
+    if self.song then self.song:stop();print("SONG END 3") end
     self.song = nil
     self.chart = nil
     self.playField = {}

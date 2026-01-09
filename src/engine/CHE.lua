@@ -144,11 +144,11 @@ end
 
 function CHE:keypressed(k, sc, isrepeat)
     if k == "q" then CHE:flashbang() end
-    Console.keypressed(k)
+    Console:keypressed(k)
 end
 
 function CHE:textinput(t)
-    Console.textinput(t)
+    Console:textinput(t)
 end
 
 local function updateMouse(mx, my)
@@ -238,10 +238,8 @@ function CHE:draw(dt)
         love.graphics.setShader()
     end
 
-    if Console.isVisible then
-        love.graphics.setColor(0, 0, 0, 0.5)
-        love.graphics.rectangle("fill", 0, 0, Console.width, Console.height)
-        Console.draw()
+    if Console.visible then
+        Console:draw()
     end
 
     cursor:draw()

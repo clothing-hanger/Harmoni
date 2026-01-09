@@ -23,7 +23,7 @@ function ChartParse.harmc(harmc,calculateDifficulty,playing)
     local section
 
     if not love.filesystem.getInfo(harmc, "file") then
-        printToConsole("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file " .. harmc)
+        print("ERROR: ChartParse.harmc(): oopsies :3,,,, harmc was either not found or not a file " .. harmc)
         return false
     end
 
@@ -152,7 +152,7 @@ function ChartParse.harmcMeta(harmc,calculateDifficulty)
     local section = "meta"  -- we only want the meta section, so we set it to meta
 
     if not love.filesystem.getInfo(harmc, "file") then   -- obviously if the file is either not real or not a file, thats a bad error lmfao, so dont try to parse it
-       printToConsole("ERROR: ChartParse.harmcMeta(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
+        print("ERROR: ChartParse.harmcMeta(): oopsies :3,,,, harmc was either not found or not a file" .. harmc)
         return false
     end
 

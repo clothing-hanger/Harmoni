@@ -193,6 +193,14 @@ function jukebox:setupSongList()
     self.songDoneChannel:clear()
 
     self.songThread = love.thread.newThread([[
+local oprint = print
+function print(...)
+    local args = {...}
+    for i = 1, #args do
+        args[i] = tostring(args[i])
+    end
+    oprint("[Jukebox Thread] " .. table.concat(args, "\t"))
+end
 local ChartParse = require("modules.chartParse")
 local musicPath = ...
 

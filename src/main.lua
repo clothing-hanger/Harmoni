@@ -82,7 +82,7 @@ function love.load(args)
     State.switch(States.menu.preloadState)
 
     -- load objects
-    printToConsole(SkinHandler:getRandomColors())
+    print(SkinHandler:getRandomColors())
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
 

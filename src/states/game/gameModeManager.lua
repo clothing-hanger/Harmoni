@@ -8,7 +8,7 @@ function gameModeManager:enter(s,mode,chart,fullchart,mods)
                        -- no lol     -ch
                        -- kladsjhdsajklcxzkljmn
                        -- ok       -ch
-    printToConsole("Game Mode Manager Entered with mode: " .. mode)
+    print("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
         self.gameMode = {mania(chart, self, fullchart, mods)}
     elseif mode == "slider" then

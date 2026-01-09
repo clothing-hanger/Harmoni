@@ -29,7 +29,7 @@ function maniaReceptor:getLaneString()
     if laneList then
         return laneList[self.lane]
     else
-       printToConsole("wtf")
+        print("wtf")
         return "wtf"  --wtf
     end
 end

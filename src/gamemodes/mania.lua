@@ -28,8 +28,8 @@ function mania:new(chart, parent, fullChart, mods)
     self.scoresPerJudgements = self.scoreHandler:getScorePerJudgment(self.totalNotes)
 
     self.HUDBeatSize = 1
-    printToConsole("FJIDFJOFI",self.scoresPerJudgements.perfect)
-    printToConsole(self.chart)
+    print("FJIDFJOFI",self.scoresPerJudgements.perfect)
+    print(self.chart)
     self.laneSpacing = 30
     self.laneYOffset = 30
     self.song = love.audio.newSource(self.chartPath .. "/" .. self.chart.meta.audioFile, "static")
@@ -209,8 +209,8 @@ function mania:update(dt)
     end
 
     if self.song and self.playField[1].finished then
-        printToConsole("SONG END 1")
-        if not self.song:isPlaying() then printToConsole("SONG END 2"); self:endSong() end
+        print("SONG END 1")
+        if not self.song:isPlaying() then print("SONG END 2"); self:endSong() end
     end
 
     if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
@@ -260,7 +260,7 @@ end
 
 function mania:endSong()
     print("mania:endSong()")
-    if self.song then self.song:stop();printToConsole("SONG END 3") end
+    if self.song then self.song:stop();print("SONG END 3") end
   --  love.audio.stop()
     self.song = nil
     self.chart = nil
