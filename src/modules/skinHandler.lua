@@ -11,17 +11,17 @@ local mt = {}
 local restricted = {
     States = setmetatable({}, {
         __index = function(_, key)
-           printToConsole("Access to States is restricted: " .. key)
+            print("Access to States is restricted: " .. key)
         end,
         __newindex = function(_, key, value)
-           printToConsole("Modification of States is restricted: " .. key .. " = " .. tostring(value))
+            print("Modification of States is restricted: " .. key .. " = " .. tostring(value))
         end
     }),
     os = {
         time = os.time,
         date = os.date,
         execute = function()
-           printToConsole("os.execute is restricted")
+            print("os.execute is restricted")
         end,
     },
     love = {
@@ -55,10 +55,10 @@ local restricted = {
     },
     Skin = {},
     require = function(moduleName)
-       printToConsole("Restricted require: " .. moduleName)
+        print("Restricted require: " .. moduleName)
     end,
     dofile = function(filePath)
-       printToConsole("Restricted dofile: " .. filePath)
+        print("Restricted dofile: " .. filePath)
     end
 }
 

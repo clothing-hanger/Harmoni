@@ -5,7 +5,7 @@ local cols, rows = 8, 8
 local cellW, cellH
 
 function t:enter(from, to, ...)
-    printToConsole("Entering checkerboardFade transition from " .. tostring(from) .. " to " .. tostring(to))
+    print("Entering checkerboardFade transition from " .. tostring(from) .. " to " .. tostring(to))
     cellW = baseScreenRatio.x / cols
     cellH = baseScreenRatio.y / rows
     blocks = {}

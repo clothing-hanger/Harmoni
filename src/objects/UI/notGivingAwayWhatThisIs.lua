@@ -30,7 +30,7 @@ function SMWCloudThingyAnimation:new(rows, width, height, x, y, rowMinWidth, row
             center = center,
             width = rowWidth
         })
-       printToConsole(filled)
+       print(filled)
         if not filled then
             previousNonFilledCenter = center
         end
@@ -41,19 +41,19 @@ function SMWCloudThingyAnimation:new(rows, width, height, x, y, rowMinWidth, row
             filledCenter = math.max(self.x + width / 10, math.min(filledCenter, self.x + width - width / 10))
             self.rows[i].center = filledCenter
         end
-       printToConsole(filled)
+       print(filled)
     end
 
     -- now we do the connecting rows :(
 
     for i = 1,#self.rows do
         if not self.rows[i].filled then -- we need to find halfway between the previous and the next rows centers
-            printToConsole(self.rows[i].filled)
+            print(self.rows[i].filled)
             local previousCenter = self.rows[i-1].center
             local nextCenter = self.rows[i+1] and self.rows[i+1].center or 1
-            printToConsole(previousCenter, nextCenter)
+            print(previousCenter, nextCenter)
             local halfwayCenter = (previousCenter + nextCenter) / 2
-            printToConsole(i)
+            print(i)
             self.rows[i].center = halfwayCenter
             self.rows[i].width = 10
         end

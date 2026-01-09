@@ -109,11 +109,11 @@ function maniaNote:gameOver()
 end
 
 function maniaNote:hit()
-   printToConsole("Note hit at time: ", self.startTime)
+    print("Note hit at time: ", self.startTime)
 end
 
 function maniaNote:release()
-   printToConsole("Note released at time: ", self.startTime)
+    print("Note released at time: ", self.startTime)
 end
 
 function maniaNote:draw()

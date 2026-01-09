@@ -79,10 +79,12 @@ function love.load(args)
     -- seems to be the best place to load these so,,, we load modifiers in main lol 
     modifiersTable = require("modules.modifiers")
 
+    spookyGlitchShader = love.graphics.newShader("shaders/spookyglitch.glsl")
+
     State.switch(States.menu.preloadState)
 
     -- load objects
-    printToConsole(SkinHandler:getRandomColors())
+    print(SkinHandler:getRandomColors())
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
 

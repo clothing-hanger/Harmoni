@@ -67,7 +67,7 @@ end
 
 
 function bob:idleFunc()
-   printToConsole("i feel fine")
+    print("i feel fine")
 end
 
 function bob:spookedFunc()
