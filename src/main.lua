@@ -89,6 +89,7 @@ end
 if AMERICA then murica = love.graphics.newShader("shaders/murica.glsl") end
 local t = 0
 function love.update(dt)
+    GIF:resetGifs()
     CHE:update(dt)
     throbbert:update(dt)
     _G.GlobalNotificationsHandler:update(dt) -- you laugh you go to HELL   i assume this is over dt,, i ALWAYS type dt in updates its a FUCKING HABIT!!     oh its the _G.,,,, i dont remember why i added it, and im not removing it now

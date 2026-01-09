@@ -122,7 +122,7 @@ function mania:setUpChart(chartpath, chart)
     }
 
     -- Setup video background if valid
-    if parsed.meta.backgroundVideo and getFileExtension(parsed.meta.backgroundVideo) == "mp4" then
+    if parsed.meta.backgroundVideo then
         self.videoBackground = video(
             songPath .. "/" .. parsed.meta.backgroundVideo,
             baseScreenRatio.x / 2,

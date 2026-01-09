@@ -7,6 +7,7 @@ local bit = require("bit")
 
 local Gif = {}
 Gif.__index = Gif
+Gif.__storage = {}
 
 ffi.cdef[[
 typedef struct {
@@ -217,7 +218,8 @@ local function readSubBlocks(data, pos)
 end
 
 Gif.IS_GIF = true
-function Gif.new(path)
+function Gif.new(path, createImageDatas)
+    if createImageDatas == nil then createImageDatas = true end
     local self = setmetatable({}, Gif)
 
     local data = love.filesystem.read(path)
@@ -415,16 +417,22 @@ function Gif.new(path)
     end
 
     self.imageData = love.image.newImageData(self.width, self.height, "rgba8")
-    self.image = love.graphics.newImage(self.imageData)
+    if createImageDatas then
+        self.image = love.graphics.newImage(self.imageData)
+    end
 
     ffi.copy(
         self.imageData:getFFIPointer(),
         self.canvas,
         self.width * self.height * 4
     )
-    self.image:replacePixels(self.imageData)
+    if createImageDatas then
+        self.image:replacePixels(self.imageData)
+    end
 
     self.lastFrame = nil
+
+    table.insert(Gif.__storage, self)
 
     return self
 end
@@ -434,6 +442,7 @@ Gif.__allowUpdateInDraw = false
 function Gif.pushLove()
     local ogdraw = love.graphics.draw
     local ognewImage = love.graphics.newImage
+    local ogupdate = love.update
 
     ---@diagnostic disable-next-line: duplicate-set-field
     function love.graphics.draw(...)
@@ -445,8 +454,10 @@ function Gif.pushLove()
         end
     end
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     function love.graphics.newImage(img)
         if type(img) == "string" and img:sub(-4):lower() == ".gif" then
+            print("Loading GIF:", img)
             return Gif.new(img)
         else
             return ognewImage(img)
@@ -456,6 +467,12 @@ end
 
 function Gif.enableDrawUpdates()
     Gif.__allowUpdateInDraw = true
+end
+
+function Gif:resetGifs()
+    for _, gif in ipairs(Gif.__storage) do
+        gif.updatedThisFrame = false
+    end
 end
 
 function Gif:applyDisposal(frame)
@@ -523,6 +540,8 @@ function Gif:update(dt)
         )
     end
 
+    if not self.image then self.image = love.graphics.newImage(self.imageData) end
+
     self.lastFrame = frame
     self.frameIndex = self.frameIndex + 1
 
@@ -531,7 +550,8 @@ function Gif:update(dt)
         self.frameIndex = 1
         self.currentLoop = self.currentLoop + 1
 
-        if self.loopCount ~= 0 and self.currentLoop >= self.loopCount then
+        if self.loopCount ~= 0 and self.currentLoop >= self.loopCount and not self.loopOverride then
+            print(self.loopCount ~= 0, self.currentLoop >= self.loopCount, not self.loopOverride)
             self.finished = true
             return
         end
@@ -579,7 +599,9 @@ function Gif:update(dt)
             self.canvas,
             self.width * self.height * 4
         )
-        self.image:replacePixels(self.imageData)
+        if self.image then
+            self.image:replacePixels(self.imageData)
+        end
 
         return
     end
@@ -589,7 +611,9 @@ function Gif:update(dt)
         self.canvas,
         self.width * self.height * 4
     )
-    self.image:replacePixels(self.imageData)
+    if self.image then
+        self.image:replacePixels(self.imageData)
+    end
 end
 
 function Gif:setLooping(enabled)
@@ -649,7 +673,9 @@ function Gif:reset()
         self.width * self.height * 4
     )
 
-    self.image:replacePixels(self.imageData)
+    if self.image then
+        self.image:replacePixels(self.imageData)
+    end
     self.lastFrame = first
 end
 
@@ -727,14 +753,17 @@ function Gif:draw(...)
     local oy = quickNumberAssert(select(7, ...) or 0, 7)
     local kx = quickNumberAssert(select(8, ...) or 0, 8)
     local ky = quickNumberAssert(select(9, ...) or 0, 9)
-    if Gif.__allowUpdateInDraw then
+    if Gif.__allowUpdateInDraw and not self.updatedThisFrame then
         self:update(love.timer.getDelta())
+        self.updatedThisFrame = true
     end
     love.graphics.draw(self.image, x, y, r, sx, sy, ox, oy, kx, ky)
 end
 
 function Gif:release()
-    self.image:release()
+    if self.image then
+        self.image:release()
+    end
     self.imageData:release()
 
     self.image = nil
@@ -742,6 +771,8 @@ function Gif:release()
     self.frames = nil
     self.canvas = nil
     self.prevCanvas = nil
+
+    self = nil
 
     collectgarbage("collect")
     collectgarbage("collect")
