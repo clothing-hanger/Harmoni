@@ -41,6 +41,8 @@ function mania:new(chart, parent, fullChart, mods)
     self.inputsPerSecond = {}
     self.notesPerSecond = {}
 
+    self.ableToModscript = false
+
     self:setUpObjects()
 end
 
@@ -70,9 +72,6 @@ function mania:setUpObjects()
     self.comboAlert = maniaComboAlert()
 
     self.HUD:sendScoreHandlerScores(self.scoreHandler.Scores)
-
-    
-    
 
     self.judgementCount = maniaJudgmentCount()
     self.judgementCount:sendJudgements(self.judgements)
@@ -242,7 +241,7 @@ function mania:update(dt)
     
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
     if self.endSongTimer>=1000 then self:endSong() end
-
+    -- counts the current beat based off of music time and bpm changes
 
     if self.chart and self.chart.bpm then
         for i, BpmChange in ipairs(self.chart.bpm) do
@@ -288,9 +287,9 @@ function mania:updateObjects(dt)
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
-    if self.healthBar.health <= 0 and not self.mods["NF"] then
+    --[[ if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:gameOver()
-    end
+    end ]]
 
     if self.bpmHandler:wasBeatHit() then
         self:onBeat()

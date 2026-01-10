@@ -76,7 +76,10 @@ local function msToMulti(speed)
 end
 
 function maniaNote:getNotePosition(time, moveWithScroll)
+    self.moveWithScroll = moveWithScroll
     local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
+    if States.game.gameModeManager.gameMode.ableToModscript then scrollDir = "Up" end
+    print(scrollDir, States.game.gameModeManager.gameMode.ableToModscript)
     local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
     local multiplier = msToMulti(scrollSpeed)
     local sfMult = self.parent.parent:getScrollSpeedFactorFromTime(self.parent.parent.currentTime)
@@ -120,6 +123,7 @@ function maniaNote:draw()
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
     local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
+    if States.game.gameModeManager.gameMode.ableToModscript then scrollDir = "Up" end
 
     local curBatch = arrowBatch or noteBatch
 
@@ -129,7 +133,7 @@ function maniaNote:draw()
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
-            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+            if scrollDir then
                 self.y = self.y - 70
             else
                 self.y = self.y + 70
@@ -147,14 +151,14 @@ function maniaNote:draw()
                 curBatch:add(self.holdAsset, self.x, midY, 0,
                     self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
 
-                local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+                local flipsY = scrollDir == "Down"
 
                 curBatch:add(self.holdEndAsset, self.x, self.endY, 0,
                     self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
                     nil)
             end
 
-            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+            if scrollDir == "Up" then
                 self.y = self.y + 70
             else
                 self.y = self.y - 70
@@ -167,7 +171,7 @@ function maniaNote:draw()
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
-            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+            if scrollDir == "Up" then
                 self.y = self.y - 70
             else
                 self.y = self.y + 70
@@ -185,12 +189,12 @@ function maniaNote:draw()
                 love.graphics.draw(self.holdAsset, self.x, midY, 0,
                     self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
 
-                local flipsY = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+                local flipsY = scrollDir == "Down"
                 love.graphics.draw(self.holdEndAsset, self.x, self.endY, 0,
                     self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
                     nil)
             end
-            if Settings:getValue("Game", "Mania", "Scroll Direction") == "Up" then
+            if scrollDir == "Up" then
                 self.y = self.y + 70
             else
                 self.y = self.y - 70
