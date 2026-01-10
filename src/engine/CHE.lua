@@ -1,4 +1,7 @@
 local CHE = {}
+
+
+local CHEShader
 Mouse = {}
 
 local sessionBegin
@@ -192,6 +195,14 @@ function CHE:flashbangTrigger()
     end)
 end
 
+function CHE:setShader(shader)
+    if type(shader) == "userdata" and shader:typeOf("shader") then
+        CHEShader = shader
+    else
+        return false,"invalid shader"
+    end
+end
+
 function CHE:flashbang()
     self.doingflashbang = true
     Timer.after(0.1, function() end)
@@ -235,7 +246,11 @@ function CHE:draw(dt)
     if murica then
         love.graphics.setShader(murica)
     end
-     --   love.graphics.setShader(spookyGlitchShader)
+
+
+    if CHEShader and not murica then
+        love.graphics.setShader(CHEShader)
+    end
 
     love.graphics.draw(
         CHECanvas,
@@ -243,6 +258,8 @@ function CHE:draw(dt)
         0, ratio, ratio,
         baseScreenRatio.x / 2, baseScreenRatio.y / 2
     )
+
+ --   if Gamestate then 			Gamestate.draw() end
 
     if murica then
         love.graphics.setShader()

@@ -79,7 +79,6 @@ function maniaNote:getNotePosition(time, moveWithScroll)
     self.moveWithScroll = moveWithScroll
     local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
     if States.game.gameModeManager.gameMode.ableToModscript then scrollDir = "Up" end
-    print(scrollDir, States.game.gameModeManager.gameMode.ableToModscript)
     local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
     local multiplier = msToMulti(scrollSpeed)
     local sfMult = self.parent.parent:getScrollSpeedFactorFromTime(self.parent.parent.currentTime)

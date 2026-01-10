@@ -1,17 +1,13 @@
 local gameModeManager = State()
 
 function gameModeManager:enter(s,mode,chart,fullchart,mods)
-    self.gameMode = nil -- i hate that this has to be a table 😭😭      -ch
-                       -- Literally why does it have to be a table?
-                       -- because its FUNNY guglio,,,,, but you would never understand   -ch
-                       -- stfu
-                       -- no lol     -ch
-                       -- kladsjhdsajklcxzkljmn
-                       -- ok       -ch
-                       -- now its no longer a table -guglio
+    self.gameMode = nil
+
+    self.s,self.mode,self.chart,self.fullchart,self.mods = s,mode,chart,fullchart,mods
+
     print("Game Mode Manager Entered with mode: " .. mode)
     if mode == "mania" then
-        self.gameMode = mania(chart, self, fullchart, mods)
+        self.gameMode = mania(self.chart, self, self.fullchart, self.mods)
     elseif mode == "slider" then
         self.gameMode = slider(chart, self, fullchart)
     end
@@ -24,6 +20,11 @@ function gameModeManager:enter(s,mode,chart,fullchart,mods)
     SongScript:load(self.gameMode.chartPath .. "mod/script.lua")
 end
 
+
+function gameModeManager:restart()
+    self:enter(self.s,self.mode,self.chart,self.fullchart,self.mods)
+end
+
 function gameModeManager:initializeSong()
     MusicTime = -100000 -- we set this to something wild just so that it wont somehow reach 0 before we want
 end
@@ -33,7 +34,7 @@ function gameModeManager:startSong(countdown)
 end
 
 function gameModeManager:update(dt)
-    if not self.gameOver then
+    if not self.gameOver and not self.gameMode.paused then
         MusicTime = MusicTimeManager.updateMusicTime(MusicTime, dt)
         if MusicTimeManager.needsResync(self.gameMode.song) then
             MusicTime = MusicTimeManager.resyncMusicTime(self.gameMode.song)

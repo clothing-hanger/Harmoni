@@ -21,6 +21,7 @@ function mania:new(chart, parent, fullChart, mods)
 
     self.endSongTimer = 0
 
+    self.paused = false
     --score shit 
     self.scoreHandler:resetScore({difficulty = (fullChart.meta.difficulty) or 0})
     --ScoreHandler:setupPerformanceRating()
@@ -44,6 +45,14 @@ function mania:new(chart, parent, fullChart, mods)
     self.ableToModscript = false
 
     self:setUpObjects()
+    self.pauseButtonWidth = 800
+    self.pauseButtonHeight = 200
+
+    self.pauseButtons = {
+        {text = "Resume", subtext = "Don't quit!", func = function() self:unpause() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2-300, color = rgb({79,240,141})},   -- old harmoni ahh code 🥀
+        {text = "Restart", subtext = "Try again?", func = function() self:restart() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2, color = rgb({240,219,91})},
+        {text = "Quit", subtext = "Giving up?", func = function()  self:endSong() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2,y = baseScreenRatio.y/2+300, color = rgb({237,102,92})},
+    }
 end
 
 
@@ -51,6 +60,32 @@ function mania:countdownhandler()
 
 end
 
+
+function mania:pause()  -- i wanna implement pausing into gamemodemanager instead,,,, but im lazy and this seems easier lol
+    self.song:pause()
+
+    self.unpausing = false -- i hate this whole game genuienly and shit like this pisses me off more than it should
+
+    self.paused = true  -- dont toggle since this only pauses, it will never be called to unpause
+    if self.videoBackground then self.videoBackground:pause() end
+end
+
+function mania:restart()
+    self.parent:restart()
+end
+
+function mania:unpause()
+
+    self.unpausing = true --kill myself 
+
+    self.unpauseBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)  -- we dont call this self.timeBar since we arent going to use the timebar.complete thingy, because im a lazy piece of shit and wanna do it incorrectly instead
+    Timer.after(1.5, function()
+        self.song:play()
+        self.paused = false
+        if self.videoBackground then self.videoBackground:play() end
+        MusicTime = MusicTimeManager.resyncMusicTime(self.song)
+    end)
+end
 
 function mania:startSong(countdown)
     self.songStarted = true
@@ -239,10 +274,26 @@ function mania:update(dt)
         if self.notesPerSecond[i] <= 0 then table.remove(self.notesPerSecond, i) break end
     end    
     
-    self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and 1200 or -3000) * dt,0)
-    if self.endSongTimer>=1000 then self:endSong() end
-    -- counts the current beat based off of music time and bpm changes
+    self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and not self.paused and 1200 or -3000) * dt,0)
+    if self.endSongTimer>=230 then self.endSongTimer =0 self:pause() end
 
+
+
+    if self.paused then
+        local mx,my = cursor:getPosition()
+        for i, Button in ipairs(self.pauseButtons) do
+            local bx,by = Button.x-Button.width/2, Button.y-Button.height/2
+            local bw, bh = bx+Button.width, by+Button.height
+            if mx >= bx and mx <= bw and my >= by and my <= bh then
+                if Input:pressed("menuClickLeft") then
+                    Button.func()
+                end
+            end
+        end
+    end
+
+
+    -- counts the current beat based off of music time and bpm changes
     if self.chart and self.chart.bpm then
         for i, BpmChange in ipairs(self.chart.bpm) do
             if MusicTime >= BpmChange.startTime and not BpmChange.wasHit then
@@ -272,6 +323,7 @@ function mania:updateObjects(dt)
     if self.videoBackground then self.videoBackground:update(dt) end
     self.background:update(dt)
     self.countdownBar:update(dt)
+    if self.unpauseBar then self.unpauseBar:update(dt) end
     if self.countdownBar.complete and not self.songStarted then self:startSong(1) end
     self.judgementObject:update(dt)
     if self.song then self.timeRemaingBar:update(dt, self.song:tell()/self.song:getDuration()) end
@@ -363,6 +415,7 @@ function mania:draw()
     self.healthBar:draw()
 
     self.countdownBar:draw()
+    if self.unpauseBar then self.unpauseBar:draw() end
     love.graphics.translate(baseScreenRatio.x/2, baseScreenRatio.y/2)
     love.graphics.scale(self.HUDBeatSize)
     love.graphics.translate(-baseScreenRatio.x/2, -baseScreenRatio.y/2)
@@ -377,6 +430,28 @@ function mania:draw()
 
     if self.lyricsRenderer then
         self.lyricsRenderer:draw(self.song:tell())
+    end
+
+    local target = (self.paused and not self.unpausing) and 0.8 or 0
+            if not self.pauseAlpha then self.pauseAlpha = 0 end
+        self.pauseAlpha = lerp(self.pauseAlpha, target, 0.5)
+        love.graphics.setColor(0,0,0,self.pauseAlpha)
+
+        love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+        love.graphics.setColor(1,1,1)
+    if self.paused and not self.unpausing then
+
+        for i,Button in ipairs(self.pauseButtons) do -- this shit look like old harmoni 
+            love.graphics.setColor(Button.color)
+            love.graphics.rectangle("fill", Button.x-Button.width/2, Button.y-Button.height/2, Button.width, Button.height, 10, 10)
+            love.graphics.setFont(SkinHandler:getFont("Menu", 80))
+            love.graphics.setColor(0,0,0)
+            love.graphics.printf(Button.text, Button.x-Button.width/2, Button.y-love.graphics.getFont():getHeight()/2-25, Button.width, "center")
+            love.graphics.setFont(SkinHandler:getFont("Menu", 30))
+            love.graphics.setColor(0,0,0)
+            love.graphics.printf(Button.subtext, Button.x-Button.width/2, Button.y-love.graphics.getFont():getHeight()/2+30, Button.width, "center")
+            love.graphics.setColor(1,1,1)
+        end
     end
 
     -- draw the pause fade over everything else
