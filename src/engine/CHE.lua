@@ -131,8 +131,8 @@ function CHE:update(dt)
     love.mouse.setVisible(false)
     if NOTIFICATIONS then NOTIFICATIONS.update() end
 
-    --spookyGlitchShader:send("time", love.timer.getTime())
-    --spookyGlitchShader:send("prob", 0.1)
+   -- spookyGlitchShader:send("time", love.timer.getTime()*5)
+  --  spookyGlitchShader:send("prob",0.01)
 end
 
 function CHE:updateTime()
@@ -235,6 +235,7 @@ function CHE:draw(dt)
     if murica then
         love.graphics.setShader(murica)
     end
+     --   love.graphics.setShader(spookyGlitchShader)
 
     love.graphics.draw(
         CHECanvas,
