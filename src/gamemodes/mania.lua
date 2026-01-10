@@ -49,15 +49,32 @@ function mania:new(chart, parent, fullChart, mods)
     self.pauseButtonHeight = 200
 
     self.pauseButtons = {
-        {text = "Resume", subtext = "Don't quit!", func = function() self:unpause() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2-300, color = rgb({79,240,141})},   -- old harmoni ahh code 🥀
-        {text = "Restart", subtext = "Try again?", func = function() self:restart() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2, color = rgb({240,219,91})},
-        {text = "Quit", subtext = "Giving up?", func = function()  self:endSong() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2,y = baseScreenRatio.y/2+300, color = rgb({237,102,92})},
+        {text = "Resume", subtext = "Don't quit!", func = function() self:unpause() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2-300, color = rgb({79,240,141}), liquidAssX = 0, liquidAssY = 0},   -- old harmoni ahh code 🥀
+        {text = "Restart", subtext = "Try again?", func = function() self:restart() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2, color = rgb({240,219,91}), liquidAssX = 0, liquidAssY = 0},
+        {text = "Quit", subtext = "Giving up?", func = function()  self:endSong() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2,y = baseScreenRatio.y/2+300, color = rgb({237,102,92}), liquidAssX = 0, liquidAssY = 0},
     }
 end
 
 
 function mania:countdownhandler()
 
+end
+
+function mania:liquidAssPauseButtons(button,what,liquidAssTime)
+    if what == "clicked" then
+        self.dontAllowPauseClicks = true
+        button.clicked = true
+        button.liquidAssX = 100
+        button.liquidAssY = -20
+        Timer.tween(liquidAssTime, button, {liquidAssX = 10, liquidAssY = 10}, "out-elastic", function() self.dontAllowPauseClicks = false end)
+    elseif what == "mouseover" then
+        button.isMousingOver = true
+        Timer.tween(liquidAssTime, button, {liquidAssX = 110}, "out-elastic")
+    else
+        button.isMousingOver = false
+        Timer.tween(liquidAssTime, button, {liquidAssX = 0}, "out-elastic")
+    end
+    button.clicked = false
 end
 
 
@@ -280,16 +297,25 @@ function mania:update(dt)
 
 
     if self.paused then
+        local liquidAssTime = 0.5
         local mx,my = cursor:getPosition()
+        if self.dontAllowPauseClicks then goto continue end
         for i, Button in ipairs(self.pauseButtons) do
             local bx,by = Button.x-Button.width/2, Button.y-Button.height/2
             local bw, bh = bx+Button.width, by+Button.height
             if mx >= bx and mx <= bw and my >= by and my <= bh then
-                if Input:pressed("menuClickLeft") then
-                    Button.func()
+
+                if not Button.isMousingOver and not Button.clicked then self:liquidAssPauseButtons(Button, "mouseover", liquidAssTime) end
+                if Button.isMousingOver and not Button.clicked and Input:pressed("menuClickLeft") then 
+                    self:liquidAssPauseButtons(Button, "clicked", liquidAssTime) 
+                Timer.after(liquidAssTime, function() Button.func() end) 
+               -- Button.func()
                 end
+            else
+                if Button.isMousingOver and not Button.clicked then self:liquidAssPauseButtons(Button, nil, liquidAssTime) end
             end
         end
+        ::continue::
     end
 
 
@@ -443,7 +469,7 @@ function mania:draw()
 
         for i,Button in ipairs(self.pauseButtons) do -- this shit look like old harmoni 
             love.graphics.setColor(Button.color)
-            love.graphics.rectangle("fill", Button.x-Button.width/2, Button.y-Button.height/2, Button.width, Button.height, 10, 10)
+            love.graphics.rectangle("fill", Button.x-Button.width/2-Button.liquidAssX/2, Button.y-Button.height/2-Button.liquidAssY/2, Button.width+Button.liquidAssX, Button.height+Button.liquidAssY, 10, 10)
             love.graphics.setFont(SkinHandler:getFont("Menu", 80))
             love.graphics.setColor(0,0,0)
             love.graphics.printf(Button.text, Button.x-Button.width/2, Button.y-love.graphics.getFont():getHeight()/2-25, Button.width, "center")
