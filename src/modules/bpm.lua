@@ -4,6 +4,7 @@ function bpmHandler:init()
     self.lastBeatTime = 0
     self.currentMusicTime = 0
     self.nextBeatTime = 0
+    self.fullBeatTime = 0
     self.beatHitOnFrame = false
 end
 
@@ -25,7 +26,8 @@ function bpmHandler:update(dt)
     if not self.bpm then return end
     self.beatInterval = self:getBpmInterval()
     self.currentMusicTime = (MusicTime or 0)/1000
-    self.currentBeatTime = math.floor(self.currentMusicTime / self.beatInterval) 
+    self.currentBeatTime = math.floor(self.currentMusicTime / self.beatInterval)
+    self.fullBeatTime = self.currentMusicTime / self.beatInterval
     self.beatHitOnFrame = false
     if self.currentBeatTime > (self.lastBeatTime or -1) then
         self.lastBeatTime = self.currentBeatTime

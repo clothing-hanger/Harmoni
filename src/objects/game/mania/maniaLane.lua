@@ -56,6 +56,8 @@ function maniaLane:update(dt)
     self:checkForMisses()
 
     self.empty = (#self.notes == 0 and #self.drawableNotes == 0)
+
+    self.receptor.y = self.y
 end
 
 function maniaLane:gameOver()
@@ -232,10 +234,39 @@ function maniaLane:checkForMisses()
     end
 end
 
+local function msToMulti(speed)
+    return baseScreenRatio.y / speed
+end
 
 function maniaLane:draw()
+    if States.game.gameModeManager.gameMode.ableToModscript then
+        local pos = SongScript:getPos(0, 0, 0, States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime, self.maniaLane, self.parent.id)
+        SongScript:updateObject(States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime, self.receptor, pos, self.parent.id)
+        self.receptor.x, self.receptor.y = pos.x, pos.y
+        self.receptor.z = pos.z * 200
+    end
     self.receptor:draw()
+    local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
+    local multiplier = msToMulti(scrollSpeed)
     for _, note in ipairs(self.drawableNotes) do
+        if States.game.gameModeManager.gameMode.ableToModscript then
+            local vis = -((MusicTime - note.startTime) * multiplier)
+            if not note.moveWithScroll then
+                vis = 0
+            end
+            local pos = SongScript:getPos(note.startTime, vis, note.startTime - MusicTime, 
+                States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime, note.lane, self.parent.id, note, {}, Point()
+            )
+            SongScript:updateObject(States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime, note, pos, self.parent.id)
+            note.x, note.y = pos.x, pos.y
+            note.z = pos.z * 200
+            --[[ if note.holdLength then
+                local vis = -((MusicTime - note.endTime) *multiplier)
+                local pos2 = SongScript:getPos(note.startTime, vis, note.endTime - MusicTime, 
+                    States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime, note.data, self.id, note.children[1], {}
+                )
+            end ]]
+        end
         note:draw()
     end
 end

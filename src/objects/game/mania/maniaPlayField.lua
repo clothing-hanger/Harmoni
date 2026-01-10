@@ -14,6 +14,8 @@ function maniaPlayField:new(chart, parent)
     self.endNoteTime = 0
     self.totalNotes = 0
     self.laneSpacing = 0
+    self.offset = { x = 0, y = 0 }
+    self.id = 1
 
     if #self.chart.scrollVelocities > 0 then
         local svs = self.chart.scrollVelocities
@@ -152,9 +154,12 @@ function maniaPlayField:update(dt)
 end
 
 function maniaPlayField:draw()
+    love.graphics.push()
+    love.graphics.translate(self.offset.x, self.offset.y)
     for _, lane in ipairs(self.lanes) do
         lane:draw()
     end
+    love.graphics.pop()
 end
 
 return maniaPlayField

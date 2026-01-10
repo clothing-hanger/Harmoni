@@ -56,6 +56,8 @@ function love.load(args)
     CLibs = require("modules.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
+    --SongScript = require("scripting.songScript")
+
     if AMERICA then LocaleHandler:loadLocale("AMERICAN!!!.lua") end
 
     if AMERICA then PATRIOTIC = love.audio.newSource("Skins/AMERICA/stars and stripes forever.mp3", "stream"); PATRIOTIC:setLooping(true) end
@@ -75,11 +77,13 @@ function love.load(args)
     ScoreHandler = require("modules.scoreHandler")
     SongListManager = require("modules.songListManager")
     CaptionParser = require("modules.captionParser")
-
+    Point = require("modules.Point")
     -- seems to be the best place to load these so,,, we load modifiers in main lol 
     modifiersTable = require("modules.modifiers")
 
     spookyGlitchShader = love.graphics.newShader("shaders/spookyglitch.glsl")
+
+    SongScript = require("modules.Modscript.ModscriptManager")
 
     State.switch(States.menu.preloadState)
 
