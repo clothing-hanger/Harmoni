@@ -1,0 +1,25 @@
+[meta]
+creator:none lol
+backgroundFile:image.png
+backgroundVideo:video.mp4
+bpm:156
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:Kuru
+gameMode:mania
+source:s
+songPreviewTime:105500
+tags:uhh
+title:忘れないで　/　Feat. My Idiot Bug
+difficultyName:funny lol
+
+[warnings]
+content:unfinishedSong
+content:nochart
+content:mildgore
+
+[bpm]
+[sliderVelocities]
+[hitObjects]

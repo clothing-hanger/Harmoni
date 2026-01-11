@@ -92,7 +92,7 @@ Language = {
         ["Headphones Better"] = "The composers worked hard on these songs,\nand they sound better with headphones.\n\nSo use them."
     },
     easterEggs = {
-        ["Stop Clicking Circles"] = "Stop clicking circles!!",
+        ["Stop Clicking Circles"] =  "Stop clicking circles!!",
         ["Isn't osu"] = "This isnt osu!",
         ["Sorry"] = "sorry..."
     },
@@ -112,6 +112,7 @@ Language = {
         ["Warning suicide"] = "References to Suicide or Self Harm",
         ["Warning sexual"] = "Sexually Explicit Language or Images",              -- i HIGHLY doubt we will need these but im just adding all the major ones i can think of
         ["Warning gore"] = "References or Depictions of Blood or Gore",            -- the game would be crazy if we ended up using these all tho lmfao 
+        ["Warning mildgore"] = "Mild References or Depictions of Blood",      
         ["Warning violent"] = "References of Violence",
         ["Warning loud"] = "Loud or Sudden Sounds",
         ["Warning drugs"] = "References to Drug Use",
