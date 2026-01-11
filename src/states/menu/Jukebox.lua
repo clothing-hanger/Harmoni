@@ -543,6 +543,7 @@ function jukebox:drawBG()
     if self.video then
         self.songBG:draw()
     elseif self.songBG then
+        
         love.graphics.draw(self.songBG,x, y,nil,width / self.songBG:getWidth(),height / self.songBG:getHeight())
     end
     love.graphics.setStencilTest()

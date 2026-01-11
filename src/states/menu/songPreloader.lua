@@ -28,6 +28,7 @@ function songPreloader:enter()
     self.alpha = 0 
     self.squiglyLine = UIsquiglyLine(0,100,baseScreenRatio.x,100,4,5,50,1,self.width)
     self.throbbert = throbbert({{1,1,1,1}, {1,1,1,1}, {1,1,1,1}})
+    
 end
 
 function songPreloader:update(dt)

@@ -18,6 +18,7 @@ function gameModeManager:enter(s,mode,chart,fullchart,mods)
 
     gameModeManager:initializeSong()
     SongScript:load(self.gameMode.chartPath .. "mod/script.lua")
+    
 end
 
 

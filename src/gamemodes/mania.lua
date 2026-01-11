@@ -53,6 +53,7 @@ function mania:new(chart, parent, fullChart, mods)
         {text = "Restart", subtext = "Try again?", func = function() self:restart() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2, color = rgb({240,219,91}), liquidAssX = 0, liquidAssY = 0},
         {text = "Quit", subtext = "Giving up?", func = function()  self:endSong() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2,y = baseScreenRatio.y/2+300, color = rgb({237,102,92}), liquidAssX = 0, liquidAssY = 0},
     }
+    
 end
 
 
