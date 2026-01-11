@@ -27,7 +27,7 @@ Dialogue: 0,0:00:33.18,0:00:34.90,Default,,0,0,0,,Tell me things I shouldn't kno
 Dialogue: 0,0:00:34.90,0:00:36.24,Default,,0,0,0,,(know, know, know, know, know)
 Dialogue: 0,0:00:36.24,0:00:37.52,Default,,0,0,0,,Strike me where I stand
 Dialogue: 0,0:00:37.70,0:00:39.40,Default,,0,0,0,,I'll even open the window!
-Dialogue: 0,0:00:39.40,0:00:40.50,Default,,0,0,0,,(window, window, windo-)
+Dialogue: 0,0:00:39.40,0:00:40.50,Default,,0,0,0,,(window, window)
 Dialogue: 0,0:00:40.50,0:00:41.52,Default,,0,0,0,,Cuz I'm over it!
 Dialogue: 0,0:00:41.80,0:00:42.80,Default,,0,0,0,,I'm over it all!
 Dialogue: 0,0:00:42.80,0:00:45.10,Default,,0,0,0,,I'm underwhelmed by the start of the fall
@@ -47,7 +47,7 @@ Dialogue: 0,0:01:04.04,0:01:05.92,Default,,0,0,0,,With each tap of the glass
 Dialogue: 0,0:01:05.92,0:01:08.20,Default,,0,0,0,,feel it crack, I feel it crack!
 Dialogue: 0,0:01:08.58,0:01:10.58,Default,,0,0,0,,Drag me down with the rats!
 Dialogue: 0,0:01:10.92,0:01:13.00,Default,,0,0,0,,and don't dig up the scraps!
-Dialogue: 0,0:01:13.20,0:01:15.24,Default,,0,0,0,,I'll cover up my tracks
+Dialogue: 0,0:01:13.20,0:01:15.24,Default,,0,0,0,,I'll cover up my tracks 
 Dialogue: 0,0:01:15.24,0:01:16.06,Default,,0,0,0,,Won't look back!
 Dialogue: 0,0:01:16.06,0:01:17.48,Default,,0,0,0,,I won't look back!
 Dialogue: 0,0:01:17.48,0:01:33.38,Default,,0,0,0,,🎶
@@ -95,9 +95,7 @@ Dialogue: 0,0:02:35.12,0:02:36.08,Default,,0,0,0,,Stop telling me lies!
 Dialogue: 0,0:02:36.08,0:02:36.88,Default,,0,0,0,,I've made up my mind!
 Dialogue: 0,0:02:36.88,0:02:37.82,Default,,0,0,0,,I've made up my mind!
 Dialogue: 0,0:02:37.82,0:02:38.64,Default,,0,0,0,,I've made up my mind!
-Dialogue: 0,0:02:38.64,0:02:38.94,Default,,0,0,0,,LEAVE
-Dialogue: 0,0:02:38.94,0:02:39.22,Default,,0,0,0,,ME
-Dialogue: 0,0:02:39.22,0:02:40.06,Default,,0,0,0,,BEHIND!
+Dialogue: 0,0:02:38.64,0:02:40.06,Default,,0,0,0,,Leave me behind!
 Dialogue: 0,0:02:40.06,0:02:42.38,Default,,0,0,0,,Take me out with the trash!
 Dialogue: 0,0:02:42.38,0:02:44.62,Default,,0,0,0,,and don't dig up the past!
 Dialogue: 0,0:02:44.62,0:02:46.64,Default,,0,0,0,,With each tap of the glass

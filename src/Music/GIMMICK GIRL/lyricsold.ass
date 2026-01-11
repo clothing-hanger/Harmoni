@@ -13,7 +13,7 @@ Style: Default,Arial,48,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.00,0:00:17.30,Default,,0,0,0,, \N🎶
+Dialogue: 0,0:00:00.00,0:00:17.30,Default,,0,0,0,,\N🎶
 Dialogue: 0,0:00:17.30,0:00:19.10,Default,,0,0,0,,I'm pushing daisies, daisies
 Dialogue: 0,0:00:19.10,0:00:21.26,Default,,0,0,0,,(daisies, daisies, daisies, daisies)
 Dialogue: 0,0:00:21.26,0:00:23.04,Default,,0,0,0,,But you don't need to save me
@@ -22,21 +22,13 @@ Dialogue: 0,0:00:24.30,0:00:26.28,Default,,0,0,0,,I'm made of everything
 Dialogue: 0,0:00:26.28,0:00:28.32,Default,,0,0,0,,and also nothing at all
 Dialogue: 0,0:00:28.32,0:00:30.30,Default,,0,0,0,,Life is a scary thing
 Dialogue: 0,0:00:30.30,0:00:32.28,Default,,0,0,0,,But I'll never get the call
-Dialogue: 0,0:00:32.28,0:00:34.08,Default,,0,0,0,,I'm just a mimic
+Dialogue: 0,0:00:32.28,0:00:34.08,Default,,0,0,0,,I'm just a mimic 
 Dialogue: 0,0:00:34.08,0:00:36.00,Default,,0,0,0,,🎶
 Dialogue: 0,0:00:36.00,0:00:38.16,Default,,0,0,0,,You treat my existence
 Dialogue: 0,0:00:38.54,0:00:39.00,Default,,0,0,0,,like a
 Dialogue: 0,0:00:39.00,0:00:39.50,Default,,0,0,0,,gimmick
 Dialogue: 0,0:00:39.50,0:00:40.02,Default,,0,0,0,,gimmick
-Dialogue: 0,0:00:40.02,0:00:41.02,Default,,0,0,0,,gimmick
-Dialogue: 0,0:00:41.02,0:00:41.30,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:41.30,0:00:41.54,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:41.54,0:00:41.80,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:41.80,0:00:42.00,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:42.00,0:00:42.22,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:42.22,0:00:42.46,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:42.46,0:00:42.70,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:00:42.70,0:00:43.08,Default,,0,0,0,,FAKE!
+Dialogue: 0,0:00:40.02,0:00:43.08,Default,,0,0,0,,gimmick (-ick, -ick, -ick, -ick, -ick, -ick, -ick, -ick)
 Dialogue: 0,0:00:43.08,0:00:44.02,Default,,0,0,0,,🎶
 Dialogue: 0,0:00:44.02,0:00:45.46,Default,,0,0,0,,Hey! Did you know?
 Dialogue: 0,0:00:45.46,0:00:46.48,Default,,0,0,0,,I can sing!
@@ -59,21 +51,14 @@ Dialogue: 0,0:01:16.30,0:01:18.10,Default,,0,0,0,,It's almost like I'm famous
 Dialogue: 0,0:01:18.10,0:01:20.10,Default,,0,0,0,,(famous, famous, famous, famous)
 Dialogue: 0,0:01:20.28,0:01:22.08,Default,,0,0,0,,Designed for entertainment
 Dialogue: 0,0:01:22.08,0:01:23.30,Default,,0,0,0,,🎶
-Dialogue: 0,0:01:23.30,0:01:25.28,Default,,0,0,0,,I'm made of everything
+Dialogue: 0,0:01:23.30,0:01:25.28,Default,,0,0,0,,I'm made of everything 
 Dialogue: 0,0:01:25.28,0:01:27.32,Default,,0,0,0,,and also nothing at all
 Dialogue: 0,0:01:27.32,0:01:29.26,Default,,0,0,0,,I would do anything
 Dialogue: 0,0:01:29.26,0:01:31.16,Default,,0,0,0,,for a real heart to install
 Dialogue: 0,0:01:31.16,0:01:33.08,Default,,0,0,0,,but I'm a cynic
 Dialogue: 0,0:01:33.08,0:01:35.00,Default,,0,0,0,,🎶
 Dialogue: 0,0:01:35.00,0:01:37.56,Default,,0,0,0,,I know my own limits
-Dialogue: 0,0:01:37.56,0:01:40.02,Default,,0,0,0,,Bound by digits, digits, digits
-Dialogue: 0,0:01:40.02,0:01:40.26,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:40.26,0:01:40.54,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:40.54,0:01:40.80,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:40.80,0:01:41.06,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:41.06,0:01:41.30,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:41.30,0:01:41.54,Default,,0,0,0,,FAKE!
-Dialogue: 0,0:01:41.54,0:01:41.92,Default,,0,0,0,,FAKE!
+Dialogue: 0,0:01:37.56,0:01:41.92,Default,,0,0,0,,Bound by digits, digits, digits
 Dialogue: 0,0:01:41.92,0:01:43.00,Default,,0,0,0,,🎶
 Dialogue: 0,0:01:43.00,0:01:44.54,Default,,0,0,0,,Hey! Did you know?
 Dialogue: 0,0:01:44.54,0:01:45.48,Default,,0,0,0,,I can sing!
@@ -87,7 +72,7 @@ Dialogue: 0,0:01:51.04,0:01:52.50,Default,,0,0,0,,I'm made of waves
 Dialogue: 0,0:01:52.50,0:01:53.48,Default,,0,0,0,,Imitate
 Dialogue: 0,0:01:53.48,0:01:55.52,Default,,0,0,0,,what's supposed to be a brain
 Dialogue: 0,0:01:55.52,0:01:56.54,Default,,0,0,0,,Not a fake
-Dialogue: 0,0:01:56.54,0:01:57.02,Default,,0,0,0,,or a
+Dialogue: 0,0:01:56.54,0:01:57.02,Default,,0,0,0,,or a 
 Dialogue: 0,0:01:57.02,0:01:57.50,Default,,0,0,0,,gimmick
 Dialogue: 0,0:01:57.50,0:01:58.04,Default,,0,0,0,,gimmick
 Dialogue: 0,0:01:58.04,0:01:59.14,Default,,0,0,0,,gimmick
@@ -115,5 +100,5 @@ Dialogue: 0,0:02:28.56,0:02:29.06,Default,,0,0,0,,or a
 Dialogue: 0,0:02:29.06,0:02:29.54,Default,,0,0,0,,gimmick
 Dialogue: 0,0:02:29.54,0:02:30.00,Default,,0,0,0,,gimmick
 Dialogue: 0,0:02:30.00,0:02:31.08,Default,,0,0,0,,(-is monotonous)
-Dialogue: 0,0:02:31.08,0:02:34.08,Default,,0,0,0,,🎶
+Dialogue: 0,0:02:31.08,0:02:34.08,Default,,0,0,0,,🎶 
 Dialogue: 0,0:02:34.08,0:02:37.08,Default,,0,0,0,,
