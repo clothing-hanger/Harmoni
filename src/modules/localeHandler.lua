@@ -70,6 +70,7 @@ function LocaleHandler:loadLocale(file)
     if not love.filesystem.getInfo(filepath) then
         filepath = "language/en-US.lua"
     end
+    local localeName = file:gsub("%.lua$", "")
 
     local chunk = love.filesystem.load(filepath)
 
@@ -81,7 +82,8 @@ function LocaleHandler:loadLocale(file)
     chunk()
     
     self.__data = {
-        Locale = mt.Language
+        Locale = mt.Language,
+        LocaleName = localeName
     }
 end
 
@@ -105,9 +107,9 @@ function LocaleHandler:getText(category, text)
         if self.__data.Locale[category][text] then
             return self.__data.Locale[category][text]
         else
-            return "???"
+            return self.__data.LocaleName .. "|" .. category .. "|" .. text
         end
-    else return "???" end
+    else return self.__data.LocaleName .. "|" .. category .. "|" .. text end
 end
 
 return LocaleHandler

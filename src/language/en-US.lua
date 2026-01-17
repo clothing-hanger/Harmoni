@@ -13,7 +13,7 @@ Language = {
         ["Exit"] = "Exit",
         ["Now Playing"] = "Now Playing",
         ["Song"] = "Song",
-        ["Song By"] = "Song by: ",
+        ["Song By"] = "Produced by: ",
         ["Charted By"] = "Charted by: ",
         ["Length"] = "Length: ",
         ["Artist"] = "Artist",
@@ -23,6 +23,14 @@ Language = {
         ["Click Search"] = "Click here to search.",
         ["BPM"] = "BPM: ",
         ["LN%"] = "LN%: "
+    },
+    Transition = {
+        ["Song"] = "Song: ",
+        ["Difficulty"] = "Difficulty: ",
+        ["Mode"] = "Mode: ",
+        ["Produced"] = "Produced by: ",
+        ["Charted"] = "Charted by: ",
+        ["Mods"] = "Active Modifiers: ",
     },
     Modifiers = {
         ["NSVL"] = "No Scroll Velocities",
@@ -58,7 +66,7 @@ Language = {
         ["NVBL"] = "No Video Background",
         ["NVBS"] = "NVB",
         ["NVBD"] = "Disables video backgrounds in songs that have one",
-        ["NVBH"] = "They are pretty distracing sometimes"
+        ["NVBH"] = "They are pretty distracting sometimes"
     },
     Results = {
         ["Accuracy"] = "Accuracy",
