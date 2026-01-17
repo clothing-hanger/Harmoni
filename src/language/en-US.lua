@@ -139,10 +139,10 @@ Language = {
         ["Copy Error"] = "Press CTRL+C to copy this error."
     },
     GeneralErrors = {
-        ["No Song Name"] = "Error! No current song name!",
-        ["No Difficulty Name"] = "Error! No current Difficulty name!",
-        ["Audio Not Found"] = "Error! Audio file not found!",
-        ["Chart Not Found"] = "Error! Chart file not found!",
+        ["No Song Name"] = "No current song name!",
+        ["No Difficulty Name"] = "No current Difficulty name!",
+        ["Audio Not Found"] = "Audio file not found!",
+        ["Chart Not Found"] = "Chart file not found!",
         ["Error"] = "Error!",
         ["Unknown"] = "???"
     },
