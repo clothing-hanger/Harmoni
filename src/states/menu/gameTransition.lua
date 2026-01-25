@@ -46,6 +46,10 @@ function transition:enter(parent,mode,chart,image,logoH, backgroundDim, audio, m
         mods = modList,
         notes = "",
     }
+
+    self.font = SkinHandler:getFont("Menu", 35)
+
+    
 end
 
 function transition:raiseH()
@@ -113,16 +117,17 @@ function transition:draw()
     love.graphics.push()
         love.graphics.translate(offsetX, self.logoH.y - 500)
 
-        love.graphics.setFont(songButtonFontLarge)
+        love.graphics.setFont(self.font)
+
+        local song,difficulty,mode,produced,charted,mods = LocaleHandler:getText("Transition", "Song"), LocaleHandler:getText("Transition", "Difficulty"), LocaleHandler:getText("Transition", "Mode"), LocaleHandler:getText("Transition", "Produced"), LocaleHandler:getText("Transition", "Charted"), LocaleHandler:getText("Transition", "Mods")
         local infoText = string.format(
-            "Song: %s\nDifficulty: %s\nMode: %s\nProduced by: %s\nCharted by: %s\nActive Modifiers: %s\n%s",
+            song .. "%s\n" ..difficulty .. "%s\n" .. mode .. "%s\n" .. produced .. "%s\n" .. charted .. "%s\n" .. mods .. "%s",
             songInfo.songName,
             songInfo.diffName,
             songInfo.mode,
             songInfo.artist,
             songInfo.charter,
-            songInfo.mods,
-            songInfo.notes or "No notes available"
+            songInfo.mods
         )
         love.graphics.setColor(1,1,1,self.textAlpha)
         love.graphics.printf(infoText, 0, baseScreenRatio.y / 2 , baseScreenRatio.x, "center")

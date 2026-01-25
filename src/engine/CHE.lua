@@ -80,10 +80,7 @@ function CHE:init()
 
     local loadFont = love.graphics.newFont
 
-    songButtonFontLarge = loadFont("fonts/astonpoliz.regular.ttf", 35)
-    songButtonFontSmall = loadFont("fonts/astonpoliz.regular.ttf", 25)
-    songSelectSongInfoFontLarge = loadFont("fonts/astonpoliz.regular.ttf", 35)
-    songSelectSongInfoFontSmall = loadFont("fonts/astonpoliz.regular.ttf", 25)
+
 
     maniaLanePositions = {
         ["4K"] = {
@@ -156,7 +153,7 @@ end
 
 function CHE:fullscreen()
     Fullscreen = not Fullscreen
-    love.window.setFullscreen(Fullscreen, "exclusive")
+    love.window.setFullscreen(Fullscreen, "desktop")
 end
 
 function CHE:textinput(t)
@@ -231,6 +228,8 @@ function CHE:draw(dt)
             local r, g, b, a = love.graphics.getColor()
 
             State.draw(dt)
+            VolumeControl:draw()
+
 
             love.graphics.setFont(startFont)
             love.graphics.setLineWidth(lastLineWidth)

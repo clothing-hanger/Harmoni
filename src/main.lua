@@ -54,6 +54,7 @@ function love.load(args)
     LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
     if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
     CLibs = require("modules.handleCLibs")
+
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     --SongScript = require("scripting.songScript")
@@ -65,6 +66,8 @@ function love.load(args)
     CHE = require("engine.CHE")
     CHE:init()
     _G.GlobalNotificationsHandler = notificationsHandler()
+
+    VolumeControl = volumeControl()
 
     require("modules.gamemodes")
 
@@ -99,6 +102,7 @@ function love.update(dt)
     CHE:update(dt)
     throbbert:update(dt)
     _G.GlobalNotificationsHandler:update(dt)
+    VolumeControl:update(dt)
     t = t + dt
     if murica then
         murica:send("time", t)
@@ -128,6 +132,7 @@ end
 
 function love.wheelmoved(x,y)
     State.scroll(y)
+    VolumeControl:wheelmoved(y)
 end
 
 function love.resize(w, h) end
