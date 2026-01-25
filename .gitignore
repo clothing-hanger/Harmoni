@@ -10,3 +10,6 @@ libs/**/ffmpeg/
 libs/**/luajit
 
 src/Music/testlmao/*
+
+formatsource.py
+ss.toml

@@ -214,7 +214,8 @@ end
 
 function REALisEven(number)
     local even = false
-    for i = 0,math.abs(number) do
+    local step = number >= 0 and 1 or -1
+    for i = 0, number, step do
         even = not even
     end
     return even
