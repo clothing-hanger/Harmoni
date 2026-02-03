@@ -54,7 +54,6 @@ function love.load(args)
     LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
     if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
     CLibs = require("modules.handleCLibs")
-
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     --SongScript = require("scripting.songScript")

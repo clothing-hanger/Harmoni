@@ -31,7 +31,7 @@ Language = {
         ["NSVH"] = "i can watch them arrows but i cant hit them when they do all that",
 
         ["NLNL"] = "short arrows",
-        ["NLNS"] = "SA",
+        ["NLNS"] = "SA",  -- maybe we shouldnt abbriviate this one like this
         ["NLND"] = "gets all them long notes into NOT WOKE short ones",
         ["NLNH"] = "#own the libs",
 

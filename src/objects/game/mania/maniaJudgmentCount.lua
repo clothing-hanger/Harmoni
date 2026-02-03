@@ -1,7 +1,7 @@
 local maniaJudgementCount = Class:extend("maniaJudgementCount")
 local args
 function maniaJudgementCount:new(args) -- i like table arguments so much more why didnt i do shit this way sooner
-    if not args then args = {}; GlobalNotificationsHandler:addNotification("you forgot something lmao", "error") end
+    if not args then args = {};--[[ GlobalNotificationsHandler:addNotification("you forgot something lmao", "error")--]] end
     self.x = args.x or 0
     self.y = args.y or 0 
     self.jiggle = args.jiggle or 10
