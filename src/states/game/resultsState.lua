@@ -1,9 +1,6 @@
 local resultsState = State("resultsState")
 
-function resultsState:enter(s, parent, accuracy, image)
-
-    --if smth doesnt change soon im gonna stop existing
-    --but this is pretty cool i got the results state "working" (the one im literally gonna be deleting soon anyway)
+function resultsState:enter(s, parent)
 
     self.score = parent.scoreHandler.Scores.trueScore
     self.heighestCombo = 459
