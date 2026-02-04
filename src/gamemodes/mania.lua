@@ -342,7 +342,7 @@ function mania:endSong()
     self.song = nil
     self.chart = nil
     self.playField = {}
-    State.switch(States.menu.songSelect, self)  -- fuck that unfinished ass results screen, we will just skip it for now
+    State.switch(States.game.resultsState, self)
 end
 
 
@@ -366,9 +366,9 @@ function mania:updateObjects(dt)
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
-    --[[ if self.healthBar.health <= 0 and not self.mods["NF"] then
+    if self.healthBar.health <= 0 and not self.mods["NF"] then
         self:gameOver()
-    end ]]
+    end
 
     if self.bpmHandler:wasBeatHit() then
         self:onBeat()

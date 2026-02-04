@@ -2,12 +2,16 @@ local resultsState = State("resultsState")
 
 function resultsState:enter(s, parent, accuracy, image)
 
-    self.score = 1000000
+    --if smth doesnt change soon im gonna stop existing
+    --but this is pretty cool i got the results state "working" (the one im literally gonna be deleting soon anyway)
+
+    self.score = parent.scoreHandler.Scores.trueScore
     self.heighestCombo = 459
+    self.performanceRating = parent.scoreHandler.Scores.truePerformanceRating
     
     self.parent = parent
     self.grades = require("modules.maniaGrades")
-    self.accuracy = accuracy or 100
+    self.accuracy = parent.scoreHandler.Scores.trueAccuracy
     self.x, self.y = baseScreenRatio.x / 2, baseScreenRatio.y / 2
     self.width, self.height = 700, 700
     self.rectX, self.rectY = self.x - (self.width / 2), self.y - (self.height / 2)
@@ -117,34 +121,23 @@ function resultsState:drawSmallRectangles()
     local smallRectHeights = 130
     local smallRectSpacing = 20
    
-    local cornerRadius = 70                -- WHY DID I NOT USE A TABLE FOR THIS WHAT WAS I DOING 😭😭😭
+    local cornerRadius = 70 
 
-    -- this is the worst code in the entire game. but it works. and i am scared to touch it 
-    -- score rectangle
 
     love.graphics.setColor(1,1,1,1)
-  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
-  --  love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing, self.width-20, 130, cornerRadius)
     love.graphics.setFont(SkinHandler:getFont("Menu", 50))
-   -- love.graphics.setColor(0,0,0,1)
     love.graphics.printf(LocaleHandler:getText("Results", "Score") .. ": " .. self.score,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing)+love.graphics.getFont():getHeight()/2,self.width-20,"center")
 
 
     love.graphics.setColor(1,1,1)
 
-    -- accuracy rectangle 
-  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
-   -- love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2+(smallRectHeights), self.width-20, 130, cornerRadius)
-  --  love.graphics.setColor(0,0,0,1)
+    -- accuracy 
     love.graphics.printf(LocaleHandler:getText("Results", "Accuracy") .. ": " .. self.accuracy .. "%",self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*2)+(smallRectHeights+love.graphics.getFont():getHeight()/2),self.width-20,"center")
     love.graphics.setColor(1,1,1)
 
 
-    -- highest combo rectangle
-  --  love.graphics.setColor(234/255,234/255,234/255,0.5)
- --   love.graphics.rectangle("fill", self.rectX+10, self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3+(smallRectHeights*2), self.width-20, 130, cornerRadius)
-  --  love.graphics.setColor(0,0,0,1)
-    love.graphics.printf(LocaleHandler:getText("Results", "Highest Combo") .. ": " .. self.heighestCombo,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
+    -- pr 
+    love.graphics.printf(LocaleHandler:getText("Results", "Performance Rating") .. ": " .. self.performanceRating,self.rectX+10,(self.arcY+self.arcR+(self.arcLineWidth/2)+smallRectSpacing*3)+(smallRectHeights*2+love.graphics.getFont():getHeight()/2),self.width-20,"center")
     love.graphics.setColor(1,1,1)
     love.graphics.setStencilTest()
 end
