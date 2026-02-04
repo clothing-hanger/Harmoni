@@ -71,7 +71,8 @@ Language = {
     Results = {
         ["Accuracy"] = "Accuracy",
         ["Score"] = "Score",
-        ["Highest Combo"] = "Highest Combo"
+        ["Highest Combo"] = "Highest Combo",
+        ["Performance Rating"] = "Performance Rating"
     },
     Mania = {
         ["Combo"] = "Combo",  -- idk ,, theres prob more we need but i cant think rn
