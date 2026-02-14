@@ -439,9 +439,11 @@ function songSelect:loadSongButtonImages()
                     SongButton.imageData = data.image
                     if type(data.image) ~= "string" then
                         SongButton.image = love.graphics.newImage(data.image)
+                        SongButton.cacheDirty = true
                         SongButton.color = data.averageColor
                     else
                         SongButton.image = GIF.new(data.image)
+                        SongButton.cacheDirty = true
                         SongButton:update(0)
                         SongButton.color = getAverageColor(SongButton.image.imageData)
                     end
@@ -579,6 +581,9 @@ function songSelect:updateSongButtons(dt)
     local speed = 10
 
     for i, SongButton in ipairs(songButtons) do
+        if SongButton.image and SongButton.typeOf and SongButton:typeOf("GIF") then
+            SongButton.cacheDirty = true
+        end
         local targetY = (i * (songButtonHeight + songButtonSpacing)) + hoveredSong
         local targetX = (self.menuState == "song" and songButtonX) or baseScreenRatio.x + songButtonSpacing
         if i == selectedSong and self.menuState ~= "difficulty" then targetX = targetX - 50 end
@@ -659,7 +664,6 @@ end
 
 
 
-
 function songSelect:updateDifficultyButtons(dt)
     local speed = 10
     for _, DifficultyButton in ipairs(difficultyButtons) do
@@ -667,7 +671,6 @@ function songSelect:updateDifficultyButtons(dt)
         DifficultyButton.x = DifficultyButton.x + (targetX - DifficultyButton.x) * speed * dt
     end
 end
-
 
 function songSelect:checkForSongButtonClicks(requireClick)
     local buttonInfo = false
@@ -830,6 +833,7 @@ function songSelect:draw(dt)
 
     if self.window then self.window:draw() end
 
+    menuSongButton:resetCounts()
 end
 
 function songSelect:drawSongInfo(x, y, spacing)

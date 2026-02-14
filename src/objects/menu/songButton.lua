@@ -1,6 +1,7 @@
 local menuSongButton = Class:extend("menuSongButton")
 
 menuSongButton.alertInstance = nil
+menuSongButton.total = { updating = 0, drawing = 0 }
 
 --- @param instance table -- The instance of the menu   -- what does this mean 
 --- @param width number
@@ -69,6 +70,9 @@ function menuSongButton:new(instance, width, height, x, y, name, artist, charter
 
     self.borderHoverAlpha = 0
     self.hovered = false
+
+    self.canvas = nil
+    self.cacheDirty = true
 end
 
 function menuSongButton:onClick()
@@ -102,8 +106,80 @@ function menuSongButton:returnInfo()
     }
 end
 
+function menuSongButton:rebuildCache(newCanvas)
+    if not self.width or not self.height then return end
+    if not self.canvas then newCanvas = true end
+
+    if newCanvas then
+        self.canvas = love.graphics.newCanvas(self.width, self.height)
+    end
+
+    local lastCanvas = love.graphics.getCanvas()
+    love.graphics.setCanvas({self.canvas, stencil=true})
+        love.graphics.clear(0,0,0,0)
+
+        local x, y = 0, 0
+
+        local function stencilShape()
+            love.graphics.rectangle("fill", x, y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+        end
+
+        love.graphics.stencil(stencilShape, "replace", 1)
+        love.graphics.setStencilTest("greater", 0)
+
+        if self.imageLoaded and self.image and not dontShowBG then
+            local imageScale = self.width / self.image:getWidth()
+            local imageDrawY = y - (self.image:getHeight() * imageScale) / 2
+
+            love.graphics.setColor(1,1,1)
+            love.graphics.draw(self.image, x, imageDrawY, 0, imageScale, imageScale)
+        end
+
+        love.graphics.setColor(self.color)
+        love.graphics.rectangle("fill", x, y, self.width / 7, self.height)
+
+        drawGradientRect(
+            x + self.width / 7, y,
+            self.width, self.height,
+            {self.color[1], self.color[2], self.color[3], 1},
+            {self.color[1], self.color[2], self.color[3], 0},
+            false
+        )
+
+        love.graphics.setStencilTest()
+
+        local textColor = getTextColor(self.color[1], self.color[2], self.color[3])
+
+        love.graphics.setFont(self.fontLarge)
+        love.graphics.setColor(textColor)
+        love.graphics.print(self.name, x + 3, y + 3)
+
+        love.graphics.setFont(self.fontSmall)
+
+        if self.isDifficultyButton then
+            love.graphics.print(
+                string.format("Difficulty: %s  Charted by: %s", self.difficulty, self.charter),
+                x + 3, y + self.height / 2
+            )
+
+            love.graphics.setLineWidth(5)
+            love.graphics.rectangle("line", x, y, self.width, self.height, self.cornerRadius, self.cornerRadius)
+            love.graphics.setLineWidth(1)
+        else
+            love.graphics.print(
+                string.format("By: %s  BPM: %s", self.artist, self.bpm),
+                x + 3, y + self.height / 2
+            )
+        end
+    love.graphics.setCanvas({ lastCanvas, stencil=true })
+
+    self.cacheDirty = false
+end
+
+
 function menuSongButton:update(dt)
     self.hovered = mouseOver(self)
+    menuSongButton.total.updating = menuSongButton.total.updating + 1
 end
 
 local function remap(value, oldMin, oldMax, newMin, newMax)
@@ -116,79 +192,67 @@ function menuSongButton:draw()
         return
     end
 
+    menuSongButton.total.drawing = menuSongButton.total.drawing + 1
+
+    if self.cacheDirty or not self.canvas then
+        self:rebuildCache()
+    end
+
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(self.canvas, self.x, self.y)
+
+    local x, y = 0, 0
+
     local function stencilShape()
         love.graphics.rectangle("fill", self.x, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset, self.cornerRadius, self.cornerRadius)
     end
+    
     love.graphics.stencil(stencilShape, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
 
-    if self.imageLoaded and not dontShowBG then
-        local imageScale = self.width / self.image:getWidth()
-        local imageDrawY = self.y - (self.image:getHeight() * imageScale) / 2
-        if not self.skeleton and not self.onlySkeleton then love.graphics.draw(self.image, self.x, imageDrawY, 0, imageScale, imageScale) else love.graphics.setColor(0.5,0.5,0.5);love.graphics.rectangle("fill",self.x, imageDrawY,1000,1000) end
-    end
-
-    love.graphics.setColor(self.color)
-    love.graphics.rectangle("fill", self.x, self.y, self.width / 7, self.height)
-
-    drawGradientRect(
-        self.x + self.width / 7, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset,
-        {self.color[1], self.color[2], self.color[3], 1},
-        {self.color[1], self.color[2], self.color[3], 0},
-        false
-    )
-
     if self.hovered then
         local mouseX = toCanvasCoords(love.mouse.getPosition())
-        local remappedX = remap(mouseX, self.x, self.x + self.width, 0, 1)
+        local remappedX = (mouseX - self.x) / self.width
 
         local gradientWidth = self.width
         local gradientX = self.x + (remappedX * self.width) - (gradientWidth / 2)
+
         drawMultiGradientRect(
-            gradientX, self.y, gradientWidth, self.height,
+            gradientX, self.y,
+            gradientWidth, self.height,
             {
-                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0},
-                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 1},
-                {self.color[1] * 0.75, self.color[2] * 0.75, self.color[3] * 0.75, 0}
+                {self.color[1]*0.75, self.color[2]*0.75, self.color[3]*0.75, 0},
+                {self.color[1]*0.75, self.color[2]*0.75, self.color[3]*0.75, 1},
+                {self.color[1]*0.75, self.color[2]*0.75, self.color[3]*0.75, 0}
             }
         )
+
         self.borderHoverAlpha = math.min(self.borderHoverAlpha + 10 * love.timer.getDelta(), 1)
     else
         self.borderHoverAlpha = math.max(self.borderHoverAlpha - 10 * love.timer.getDelta(), 0)
     end
 
-    love.graphics.setColor(1, 1, 1, self.borderHoverAlpha)
-    love.graphics.rectangle("line", self.x, self.y, self.width - self.sizeXOffset, self.height-self.sizeYOffset, self.cornerRadius, self.cornerRadius)
+    love.graphics.setStencilTest()
 
-    love.graphics.setFont(self.fontLarge)
-    local textColor = getTextColor(self.color[1], self.color[2], self.color[3])
-    love.graphics.setColor(textColor)
-    love.graphics.print(self.name, self.x + 3, self.y + 3)
-
-    love.graphics.setFont(self.fontSmall)
-    if self.isDifficultyButton then
-        love.graphics.print(string.format("Difficulty: %s  Charted by: %s", self.difficulty, self.charter), self.x + 3, self.y + self.height / 2)
-    else
-        love.graphics.print(string.format("By: %s  BPM: %s", self.artist, self.bpm), self.x + 3, self.y + self.height / 2)
-    end
-
-    if self.isDifficultyButton then
-        love.graphics.setColor(textColor)
-        love.graphics.setLineWidth(5)
-        love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
-        love.graphics.setLineWidth(1)
-    end
+    love.graphics.setColor(1,1,1,self.borderHoverAlpha)
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height, self.cornerRadius, self.cornerRadius)
 
     if not self.imageLoaded and not self.isDifficultyButton then
         local throbbertRadius = 30
-
         throbbert:draw(self.x + self.width - (throbbertRadius*2), self.y+self.height/2, throbbertRadius, 15)
     end
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setStencilTest()
+
+    if self.newAlert and self.isNew then
+        self.newAlert:draw(self.x, self.y)
+    end
+
+    love.graphics.setColor(1,1,1,1)
+end
 
 
-    if self.newAlert and self.isNew then self.newAlert:draw(self.x, self.y) end
+function menuSongButton:resetCounts()
+    menuSongButton.total.updating = 0
+    menuSongButton.total.drawing = 0
 end
 
 return menuSongButton
