@@ -132,7 +132,7 @@ function maniaNote:draw()
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
-            if scrollDir then
+            if scrollDir == "Up" then
                 self.y = self.y - 70
             else
                 self.y = self.y + 70
