@@ -23,7 +23,7 @@ local switchingState
 
 function songSelect:resetBpmShit(newBpm)
     self.bpmHandler:init()
-    self.bpmHandler:setBpm(newBpm)
+    self.bpmHandler:setBpm(newBpm or 100)
 end
 
 function songSelect:enter()
@@ -199,7 +199,7 @@ end
     else
         self:loadBanners()
         self.currentSongInfo = songButtons[selectedSong]:returnInfo()
-        self:resetBpmShit(self.currentSongInfo.bpm)
+        self:resetBpmShit(self.currentSongInfo.bpm or 100)
     end
     self:setUpThoseBubblesThatIHate(10)
     self:setUpThoseLinesThatIHate(11)
@@ -558,7 +558,7 @@ function songSelect:checkForSongLoop()
         MusicTime = self.currentAudio:tell()
         -- this is where that one bug happens,,, idk what to try to fix this really..
         if not (self.currentAudio:tell("seconds")*1000 < tonumber(self.currentLoopPoint)) then-- we just check the same conditions again and if it still is true we dont set the bpm
-            self:resetBpmShit(self.currentSongInfo.bpm)
+            self:resetBpmShit(self.currentSongInfo.bpm or 100)
         else
            -- self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile)       -- oh my god my fucking ears do NOT uncomment this line 😭😭😭
         end
@@ -682,7 +682,7 @@ function songSelect:checkForSongButtonClicks(requireClick)
                     selectedSong = i
                     self.currentSongInfo = SongButton:returnInfo()
                 end
-                self:resetBpmShit(self.currentSongInfo.bpm)
+                self:resetBpmShit(self.currentSongInfo.bpm or 100)
                 buttonInfo = SongButton:onClick()
                 local uhhhOtherStuffIdk = SongButton:returnInfo()
                 if self.currentPlayingSong ~= i then self:loadAudio(self.currentSongInfo.path .. "/" .. self.currentSongInfo.audioFile) end

@@ -112,7 +112,7 @@ end
 
 function mania:resetBpmShit(newBpm)
     self.bpmHandler:init()
-    self.bpmHandler:setBpm(newBpm)
+    self.bpmHandler:setBpm(newBpm or 100)
 end
 
 function mania:setUpObjects()
@@ -267,7 +267,7 @@ function mania:update(dt)
 
     if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
         self.song:play()
-        self:resetBpmShit(self.chart.meta.bpm)
+        self:resetBpmShit(self.chart.meta.bpm or 100)
 
         if self.videoBackground then self.videoBackground:play() end
         played = true
@@ -324,7 +324,7 @@ function mania:update(dt)
     if self.chart and self.chart.bpm then
         for i, BpmChange in ipairs(self.chart.bpm) do
             if MusicTime >= BpmChange.startTime and not BpmChange.wasHit then
-                self:resetBpmShit(BpmChange.bpm)
+                self:resetBpmShit(BpmChange.bpm or 100)
                 BpmChange.wasHit = true
             end
         end
