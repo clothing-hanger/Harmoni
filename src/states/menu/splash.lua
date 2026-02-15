@@ -1,5 +1,7 @@
 local splash = State("splash")
 
+local funct
+
 function splash:enter()
     self.splashNumber = 1
     self.alpha = 0

@@ -98,6 +98,7 @@ function window:killYourself()
     self:animation("close", function() self.parent.window = nil end)
 end
 
+local funct
 function window:animation(type,func)
     local funct
 
