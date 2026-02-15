@@ -221,7 +221,7 @@ function songSelect:setUpThoseLinesThatIHate(numberOfLines)
     for i = 1,numberOfLines do
         local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
         local x1,x2 = -50, baseScreenRatio.x+50
-        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
+        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
     end
 end
 
@@ -256,7 +256,7 @@ function songSelect:setUpThoseWavesThatIHate(numberOfWaves)
         {1,0,1,0.5},
         {0,0,1,0.5}
     }
-    self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,300, 30, 50, colors)
+    self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,200, 30, 50, colors)
 end
 
 function songSelect:setupSongList()

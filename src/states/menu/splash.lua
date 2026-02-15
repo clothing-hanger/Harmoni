@@ -24,7 +24,7 @@ function splash:setupShit()
         self.currentMessage = self.splashScreens[self.splashNumber].msg
         if self.splashScreens[self.splashNumber].img then self.currentImage = self.splashScreens[self.splashNumber].img end
     else -- no more splashes, go to the title screen
-    State.switch(States.menu.titleScreen, false, true) 
+        State.switch(States.menu.titleScreen, false, true) 
     end
 end
 
@@ -34,6 +34,7 @@ function splash:fade(dir, func)
     local value = (dir == "in" and 1) or 0
     self.timerTween = Timer.tween(0.25, self, {alpha = value}, "linear", function() funct() end)
 end
+
 function splash:update()
     if Input:pressed("menuConfirm") then
         if self.timerAfter then Timer.cancel(self.timerAfter) end

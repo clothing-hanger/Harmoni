@@ -295,7 +295,7 @@ function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
     for _ = 1,numberOfWaves do
         table.insert(colorsREAL, colors[love.math.random(1,#colors)])
     end
-    self.layerWaves = UILayerWave(0,baseScreenRatio.y+50,baseScreenRatio.x,500,#colorsREAL,300, 30, 50, colorsREAL)
+    self.layerWaves = UILayerWave(0,baseScreenRatio.y+50,baseScreenRatio.x,250,#colorsREAL,300, 30, 50, colorsREAL)
 end
 
 
@@ -304,7 +304,7 @@ function titleScreen:setUpThoseLinesThatIHate(numberOfLines)
     for i = 1,numberOfLines do
         local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
         local x1,x2 = -50, baseScreenRatio.x+50
-        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,1000,1,70,{1,1,1,0.15}))
+        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
     end
 end
 

@@ -135,7 +135,7 @@ function jukebox:switchSong(songInfo)
     self.scrubBack = UIsquiglyLine(
         0, baseScreenRatio.y - 50,
         baseScreenRatio.x, baseScreenRatio.y - 50,
-        30, 5, 1000, -5, 5
+        30, 5, 200, -5, 5
     )
     self.scrubber = UITimeRemaing(
         0, self.audio:getDuration(),

@@ -112,7 +112,7 @@ function preloadState:draw()
     local barW = w * 0.5
     local barX = w/2 - barW/2
     local barY = h*0.6
-    local segments = 300
+    local segments = 200
     local amp = 15
     local speed = 5
     local points = {}

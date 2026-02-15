@@ -17,7 +17,7 @@ function UITimeRemaining:new(startTime, endTime, x,y,widht,parent,lineWidth,spee
 
     self.timer = 0
 
-    self.squiglyLine = UIsquiglyLine(self.x, self.y, self.width+self.x, self.y, self.frequency, self.amplitude, 1000, self.speed, self.lineWidth)
+    self.squiglyLine = UIsquiglyLine(self.x, self.y, self.width+self.x, self.y, self.frequency, self.amplitude, 200, self.speed, self.lineWidth)
 
     self.gradient = createMultiGradientRectMesh(self.x,self.y-200, self.width, 300, {{1,1,1}, {61/255,0,100/255}})
 end
