@@ -15,7 +15,7 @@ function MusicTimeManager.needsResync(song)
 end
 
 function MusicTimeManager.resyncMusicTime(song)
-    if song and song:isPlaying() then
+    if song then
         local audioTime = song:tell() * 1000
         MusicTime = audioTime
     end

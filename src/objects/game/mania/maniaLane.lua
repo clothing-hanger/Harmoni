@@ -72,8 +72,7 @@ end
 
 function maniaLane:handleInput()
     if not Input then return end -- why would input be nil???????????
-
-
+    if self.parent.parent.paused then return end
     
     if not self.parent.parent.mods["BP"] then
         if not Input:pressed(self.inputBind) then return end

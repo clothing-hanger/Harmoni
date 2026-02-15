@@ -99,6 +99,7 @@ end
 
 if AMERICA then murica = love.graphics.newShader("shaders/murica.glsl") end
 local t = 0
+
 function love.update(dt)
     GIF:resetGifs()
     CHE:update(dt)
