@@ -130,6 +130,7 @@ function maniaLane:handleInput()
 
         state.healthBar:changeHealth(healthChange)
 
+        if AchievementGranter then AchievementGranter:noteHit() end
         state.comboCount:incrementCombo()
         if state.comboCount:getCombo()%100 == 0 then state.comboAlert:doComboAlert(state.comboCount:getCombo()) end
     end

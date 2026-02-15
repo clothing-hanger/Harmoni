@@ -262,7 +262,11 @@ function mania:update(dt)
 
     if self.song and self.playField[1].finished then
         print("SONG END 1")
-        if not self.song:isPlaying() then print("SONG END 2"); self:endSong() end
+        if not self.song:isPlaying() then
+            print("SONG END 2")
+            if AchievementHandler then AchievementHandler:unlock("finished song") end
+            self:endSong()
+        end
     end
 
     if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
@@ -367,6 +371,7 @@ function mania:updateObjects(dt)
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
     if self.healthBar.health <= 0 and not self.mods["NF"] then
+        if AchievementHandler then AchievementHandler:unlock("failed song") end
         self:gameOver()
     end
 

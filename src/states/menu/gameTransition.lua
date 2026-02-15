@@ -92,6 +92,7 @@ function transition:switchToGame(mode,chart)
     Timer.tween(time, self, {textAlpha = 0})
         Timer.tween(time, self.quickSettings, {x = baseScreenRatio.x}, "linear",
         function()
+            if AchievementHandler then AchievementHandler:unlock("started song") end
             State.switch(States.game.gameModeManager, uhmmode, uhmchart, fullchart, self.mods)
         end
     )

@@ -212,7 +212,11 @@ function titleScreen:enter(from, resetItems, fadeIn)
 
     self.coolrect = coolFuckingRectangle(200,200,800,300,40,90,{181/255, 235/255, 174/255}, {72/255, 181/255, 63/255})
 
-    if self.coverAlpha > 0 then self:fadeIn() end
+    if self.coverAlpha > 0 then
+        self:fadeIn(function()
+            if AchievementHandler then AchievementHandler:unlock("title screen") end
+        end)
+    end
 end
 
 function titleScreen:setupSocialButtons()
@@ -246,8 +250,8 @@ function titleScreen:fuckElon()   -- the fuckElon function can stay just because
     self.socialButtons[4].x = self.socialButtons[4].x+20
 end
 
-function titleScreen:fadeIn()
-    Timer.tween(0.25, self, {coverAlpha = 0})
+function titleScreen:fadeIn(callback)
+    Timer.tween(0.25, self, {coverAlpha = 0}, "linear", callback)
 end
 
 function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
@@ -276,6 +280,14 @@ function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
         end
         if allArrows then Bubble.isNote = true end
     end
+
+    table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {squishX = 0.5}))
+    table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {rotation = 0}))
+
+    self.bubbles[#self.bubbles].type = "Squisher"
+    self.bubbles[#self.bubbles-1].type = "Spinner"
+
+    self.bubbles[#self.bubbles].isNote = true
 
 end
 
@@ -379,6 +391,13 @@ function titleScreen:updateBubbles(dt)
                 local unsquish
 
                 local squish = function()
+                    if AchievementHandler then
+                        if Bubble.isNote then
+                            AchievementHandler:unlock("touched a squishy arrow")
+                        else
+                            AchievementHandler:unlock("touched a squishy circle")
+                        end
+                    end
                     unsquish = function(l)
                         if self.unsquishTimer then Timer.cancel(self.unsquishTimer) end
                         self.unsquishTimer = Timer.tween(1, Bubble, {squishX = 0,squishY = 0, }, "out-elastic", function() unsquish() end)
@@ -387,6 +406,13 @@ function titleScreen:updateBubbles(dt)
                 end
 
                 local spin = function()
+                    if AchievementHandler then
+                        if Bubble.isNote then
+                            AchievementHandler:unlock("touched a spinning arrow")
+                        else
+                            AchievementHandler:unlock("touched a spinning circle")
+                        end
+                    end
                     Bubble.shit = Timer.tween(2, Bubble, {rotation = Bubble.rotation + 360}, "out-quad")
                 end
 
@@ -394,10 +420,10 @@ function titleScreen:updateBubbles(dt)
                 if Bubble.type == "Squisher" then squish() end
                 self.bubbleClickedCount = (self.bubbleClickedCount or 0) + 1
 
-                    if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
-                        self.shownOsuWindow = true
-                        self.window = window(self,LocaleHandler:getText("easterEggs","Isn't osu"), LocaleHandler:getText("easterEggs","Stop Clicking Circles"), {{text = LocaleHandler:getText("easterEggs","Sorry"), func = function() self.window:killYourself() end}})
-                    end
+                if self.bubbleClickedCount > 10 and not self.shownOsuWindow then
+                    self.shownOsuWindow = true
+                    self.window = window(self,LocaleHandler:getText("easterEggs","Isn't osu"), LocaleHandler:getText("easterEggs","Stop Clicking Circles"), {{text = LocaleHandler:getText("easterEggs","Sorry"), func = function() self.window:killYourself() end}})
+                end
 
                 -- save original alpha 
                 if not Bubble.originalAlpha then Bubble.originalAlpha = Bubble.color[4] end

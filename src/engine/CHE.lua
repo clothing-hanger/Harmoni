@@ -80,8 +80,6 @@ function CHE:init()
 
     local loadFont = love.graphics.newFont
 
-
-
     maniaLanePositions = {
         ["4K"] = {
             screenMiddle - (1.5 * maniaNoteSize + 1.5 * maninaLaneGap),
@@ -115,6 +113,16 @@ function CHE:init()
     self.flashbangimage = nil
     self.flashbangalphas = {rect = 0, img = 0}
    -- CHE:flashbangTrigger()
+
+    self.shakeTime = 0
+    self.shakeDuration = 0
+    self.shakeMagnitude = 0
+end
+
+function CHE:shake(duration, magnitude)
+    self.shakeDuration = duration
+    self.shakeTime = duration
+    self.shakeMagnitude = magnitude
 end
 
 function CHE:update(dt)
@@ -130,6 +138,8 @@ function CHE:update(dt)
 
     love.mouse.setVisible(false)
     if NOTIFICATIONS then NOTIFICATIONS.update() end
+
+    if AchievementHandler then AchievementHandler:update(dt) end
 
    -- spookyGlitchShader:send("time", love.timer.getTime()*5)
   --  spookyGlitchShader:send("prob",0.01)
@@ -227,9 +237,26 @@ function CHE:draw(dt)
             local lastLineWidth = love.graphics.getLineWidth()
             local r, g, b, a = love.graphics.getColor()
 
+            local shakeX, shakeY = 0, 0
+
+            if self.shakeTime and self.shakeTime > 0 then
+                self.shakeTime = self.shakeTime - dt
+
+                local strength = self.shakeMagnitude * (self.shakeTime / self.shakeDuration)
+
+                shakeX = love.math.random(-strength, strength)
+                shakeY = love.math.random(-strength, strength)
+            end
+
+            love.graphics.push()
+            love.graphics.translate(shakeX, shakeY)
+
             State.draw(dt)
             VolumeControl:draw()
 
+            if AchievementHandler then AchievementHandler:draw() end
+
+            love.graphics.pop()
 
             love.graphics.setFont(startFont)
             love.graphics.setLineWidth(lastLineWidth)

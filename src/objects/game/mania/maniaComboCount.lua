@@ -37,6 +37,7 @@ end
 
 function maniaComboCount:breakCombo()
     self.combo = 0
+    if AchievementGranter then AchievementGranter:miss() end
     self:addDrawableCombo()
 end
 

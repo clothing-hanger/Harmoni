@@ -690,6 +690,7 @@ function songSelect:checkForSongButtonClicks(requireClick)
 
                 self.currentLoopPoint = uhhhOtherStuffIdk.songPreviewTime
                 if selectedSong ~= i then selectedSong = i return end
+                if AchievementHandler then AchievementHandler:unlock("select song") end
                 self.menuState = "difficulty"
                 self.uglyDiffButtonIssueFix = true    -- this is gross
                 self:setupDifficultyList(buttonInfo.path,buttonInfo.color)

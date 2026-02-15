@@ -30,6 +30,8 @@ function jukebox:enter(parent)
     self.faded = false
 
     self.videoHudAlpha = 0
+
+    if AchievementHandler then AchievementHandler:unlock("jukebox mode") end
 end
 
 local validTypes = {
@@ -109,6 +111,8 @@ function jukebox:switchSong(songInfo)
         self.currentBGPos.y = self.songBG.y
         self.currentBGPos.scaleX = self.songBG.scaleX
         self.currentBGPos.scaleY = self.songBG.scaleY
+
+        if AchievementHandler then AchievementHandler:unlock("jukebox video") end
     end
 
     local type = ""
@@ -180,6 +184,8 @@ function jukebox:toggleFullscreen()
             self.currentBGPos.scaleX = targetSizeX / self.songBG:getWidth()
             self.currentBGPos.scaleY = targetSizeY / self.songBG:getHeight()
         end
+
+        if AchievementHandler and self.video then AchievementHandler:unlock("jukebox fullscreen video") end
     end
 end
 
@@ -350,6 +356,7 @@ function jukebox:checkForSongButtonClicks()
         if Input:pressed("menuClickLeft") then
             if MX >= Button.x and MX <= Button.x+Button.width then
                 if MY >= Button.y and MY <= Button.y+Button.height then
+                    if AchievementHandler then AchievementHandler:unlock("jukebox song") end
                     self:switchSong(Button:onClick())
                     ok = true
                 end

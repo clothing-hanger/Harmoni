@@ -241,8 +241,6 @@ function cursor:draw()
         love.graphics.print(string.format("Scale: %.2f", self.scale), self.x + 10, self.y + 10)
         love.graphics.print(string.format("X: %.2f, Y: %.2f", self.x, self.y), self.x + 10, self.y + 40)
 
-
-
         if self.mouseDownX then
             love.graphics.print(string.format("Mouse Down: (%.2f, %.2f)", self.mouseDownX, self.mouseDownY), self.x + 10, self.y + 30)
             love.graphics.setColor(0, 1, 0, 1)
@@ -256,6 +254,7 @@ end
 
 function cursor:mousepressed(x, y, button)
     if button == 1 then
+        if AchievementHandler then AchievementHandler:unlock("left click") end
         self.mouseDownX, self.mouseDownY = x, y
 
         self:scaleDown()

@@ -21,6 +21,22 @@ function maniaJudgement:judge(judgement)
     end
     if not image then return end
 
+    if AchievementHandler then
+        if judgement == "Perfect" then
+            AchievementHandler:unlock("first perfect judge")
+        elseif judgement == "Great" then
+            AchievementHandler:unlock("first great judge")
+        elseif judgement == "Good" then
+            AchievementHandler:unlock("first good judge")
+        elseif judgement == "Alright" then
+            AchievementHandler:unlock("first alright judge")
+        elseif judgement == "Awful" then
+            AchievementHandler:unlock("first awful judge")
+        elseif judgement == "Miss" then
+            AchievementHandler:unlock("first miss judge")
+        end
+    end
+
     local w, h
     if image.getViewport then
         _, _, w, h = image:getViewport()

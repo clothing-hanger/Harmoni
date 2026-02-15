@@ -87,6 +87,8 @@ function love.load(args)
 
     SongScript = require("modules.Modscript.ModscriptManager")
 
+    --require("aprilfools") -- uncomment for fucking awesome
+
     State.switch(States.menu.preloadState)
 
     -- load objects
