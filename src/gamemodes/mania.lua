@@ -53,7 +53,6 @@ function mania:new(chart, parent, fullChart, mods)
         {text = "Restart", subtext = "Try again?", func = function() self:restart() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2, y = baseScreenRatio.y/2, color = rgb({240,219,91}), liquidAssX = 0, liquidAssY = 0},
         {text = "Quit", subtext = "Giving up?", func = function()  self:endSong() end, width = self.pauseButtonWidth, height = self.pauseButtonHeight, x = baseScreenRatio.x/2,y = baseScreenRatio.y/2+300, color = rgb({237,102,92}), liquidAssX = 0, liquidAssY = 0},
     }
-    
 end
 
 
@@ -78,13 +77,14 @@ function mania:liquidAssPauseButtons(button,what,liquidAssTime)
     button.clicked = false
 end
 
-
-function mania:pause()  -- i wanna implement pausing into gamemodemanager instead,,,, but im lazy and this seems easier lol
+function mania:pause(showMenu)  -- i wanna implement pausing into gamemodemanager instead,,,, but im lazy and this seems easier lol
+    showMenu = (showMenu == nil) and true or false
     self.song:pause()
 
     self.unpausing = false -- i hate this whole game genuienly and shit like this pisses me off more than it should
 
     self.paused = true  -- dont toggle since this only pauses, it will never be called to unpause
+    self.showMenu = showMenu
     if self.videoBackground then self.videoBackground:pause() end
 end
 
@@ -93,7 +93,6 @@ function mania:restart()
 end
 
 function mania:unpause()
-
     self.unpausing = true --kill myself 
 
     self.unpauseBar = countdownBar(baseScreenRatio.x/2, baseScreenRatio.y/2-50, 500, 20, 1.5)  -- we dont call this self.timeBar since we arent going to use the timebar.complete thingy, because im a lazy piece of shit and wanna do it incorrectly instead
@@ -269,13 +268,13 @@ function mania:update(dt)
         end
     end
 
-    if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played then
+    if self.song and MusicTime >= 0 and not self.song:isPlaying() and not played and not self.paused then
         self.song:play()
         self:resetBpmShit(self.chart.meta.bpm or 100)
 
         if self.videoBackground then self.videoBackground:play() end
         played = true
-    else
+    elseif not self.paused then
         if self.videoBackground and played then
             videoFade = math.min(videoFade + dt*5, 1)
         end
@@ -464,15 +463,15 @@ function mania:draw()
         self.lyricsRenderer:draw(self.song:tell())
     end
 
-    local target = (self.paused and not self.unpausing) and 0.8 or 0
-            if not self.pauseAlpha then self.pauseAlpha = 0 end
-        self.pauseAlpha = lerp(self.pauseAlpha, target, 0.5)
-        love.graphics.setColor(0,0,0,self.pauseAlpha)
+    local target = (self.paused and not self.unpausing and self.showMenu) and 0.8 or 0
+    if not self.pauseAlpha then self.pauseAlpha = 0 end
+    self.pauseAlpha = lerp(self.pauseAlpha, target, 0.5)
+    love.graphics.setColor(0,0,0,self.pauseAlpha)
 
-        love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
-        love.graphics.setColor(1,1,1)
-    if self.paused and not self.unpausing then
+    love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+    love.graphics.setColor(1,1,1)
 
+    if self.paused and not self.unpausing and self.showMenu then
         for i,Button in ipairs(self.pauseButtons) do -- this shit look like old harmoni 
             love.graphics.setColor(Button.color)
             love.graphics.rectangle("fill", Button.x-Button.width/2-Button.liquidAssX/2, Button.y-Button.height/2-Button.liquidAssY/2, Button.width+Button.liquidAssX, Button.height+Button.liquidAssY, 10, 10)

@@ -18,7 +18,7 @@ function gameModeManager:enter(s,mode,chart,fullchart,mods)
 
     gameModeManager:initializeSong()
     SongScript:load(self.gameMode.chartPath .. "mod/script.lua")
-    
+    self.inSong = true  
 end
 
 
@@ -55,6 +55,7 @@ end
 function gameModeManager:exit()
     cursor.fadeOutWhenIdle = false
     cursor.fadeOutAlpha = 1
+    self.inSong = false
 end
 
 return gameModeManager

@@ -33,4 +33,4 @@ function love.conf(t)
 
 
     t.window.icon = "images/icon.png"
-end 
+end

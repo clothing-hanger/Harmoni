@@ -87,7 +87,7 @@ function love.load(args)
 
     SongScript = require("modules.Modscript.ModscriptManager")
 
-    --require("aprilfools") -- uncomment for fucking awesome
+    require("aprilfools") -- uncomment for fucking awesome
 
     State.switch(States.menu.preloadState)
 
@@ -98,6 +98,7 @@ end
 
 if AMERICA then murica = love.graphics.newShader("shaders/murica.glsl") end
 local t = 0
+
 function love.update(dt)
     GIF:resetGifs()
     CHE:update(dt)

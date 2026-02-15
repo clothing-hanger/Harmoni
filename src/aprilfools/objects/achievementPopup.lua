@@ -255,6 +255,10 @@ function AchievementPopup:new(text, rarity)
             commonSound:clone():play()
         end
     end
+
+    if States.game.gameModeManager.inSong then
+        States.game.gameModeManager.gameMode:pause(false)
+    end
 end
 
 function AchievementPopup:update(dt)
@@ -263,6 +267,9 @@ function AchievementPopup:update(dt)
 
     if t >= self.duration then
         self.dead = true
+        if States.game.gameModeManager.inSong and #AchievementHandler.popupQueue < 1 then
+            States.game.gameModeManager.gameMode:unpause(false)
+        end
     end
 
     if t < 0.6 then
@@ -352,6 +359,7 @@ function AchievementPopup:draw()
 
             love.graphics.setColor(1, 1, 1, self.alpha)
             love.graphics.setShader()
+            love.graphics.setFont(SkinHandler:getFont("Menu", 50))
             love.graphics.printf(
                 "ACHIEVEMENT UNLOCKED\n" .. self.text,
                 0,
