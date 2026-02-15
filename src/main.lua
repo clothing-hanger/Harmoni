@@ -5,6 +5,7 @@ require("love.init")
 -- ass backgrounds FUCK YOU QUAVER AND OSU MAPPERS WHAT IS WRONG WITH YOU FUCKING PEOPLE
 dontShowBG = false
 
+aprilFools = true
 AMERICA =  false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
@@ -87,7 +88,7 @@ function love.load(args)
 
     SongScript = require("modules.Modscript.ModscriptManager")
 
-    --require("aprilfools") -- uncomment for fucking awesome
+    if aprilFools then require("aprilfools") end -- fucking awesome
 
     State.switch(States.menu.preloadState)
 
