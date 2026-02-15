@@ -60,7 +60,13 @@ function ChartParse.harmc(harmc,calculateDifficulty,playing)
             if key == "bpm" and startTime and bpm then
                 table.insert(chart[section], {startTime = tonumber(startTime), bpm = tonumber(bpm)})
             end
-
+        elseif section == "event" then
+            local type, time, args = parts[1], parts[2], parts[3]
+            if type and time then
+                local argsTable = split(args or "", ",")
+                argsTable = argsTable or {}
+                table.insert(chart[section], {type = type, time = tonumber(time), args = argsTable})
+            end
         elseif section == "sliderVelocities" then
             local _, startTime, multiplier = parts[1], parts[2], parts[3]
             if startTime and multiplier then
@@ -93,10 +99,7 @@ function ChartParse.harmc(harmc,calculateDifficulty,playing)
                     })
                 end
             end
-                
         end
-
-
 
         ::continue::
     end

@@ -25,24 +25,37 @@ function maniaHUD:sendScoreHandlerScores(scoreHandlerScores)
 end
 
 function maniaHUD:draw()
-
     if self.debug then self:debugDraw() end
-        love.graphics.setFont(self.font)
 
-    local score = string.format("%.0f", self.scores.printableScore)
-    local accuracy = self.scores.trueAccuracy == 100 and "100%" or self.scores.trueAccuracy == 0 and "0%" or string.format("%.2f", self.scores.printableAccuracy) .. "%"
-    local grade = self.grade 
-    local prOverDr = string.format("%.2f", self.scores.printablePerformanceRating) .. "/" .. string.format("%.2f", self.scores.difficultyRating)   -- this was a bad idea what was i thinking
-    local pr = string.format("%.2f", self.scores.truePerformanceRating)  -- use true for now because printable isnt implemented yet and i am very tired and lazy right now
+    love.graphics.setFont(self.font)
 
-    local IPSoverNPS = string.format("%02d",#self.parent.inputsPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond)
+    local scores = self.scores
+    local parent = self.parent
 
-    if self.parent.mods["BP"] then IPSoverNPS = string.format("%02d",#self.parent.notesPerSecond) .. "/" .. string.format("%02d",#self.parent.notesPerSecond) end -- shitty hack but i dont care lol!
+    local scoreText = string.format("%.0f", scores.printableScore)
 
-    love.graphics.printf(score .. "\n" .. IPSoverNPS, 10, 10, baseScreenRatio.x, "left")
+    local accuracyText = "0%"
+    if scores.trueAccuracy == 100 then
+        accuracyText = "100%"
+    elseif scores.trueAccuracy == 0 then
+        accuracyText = "0%"
+    else
+        accuracyText = string.format("%.2f%%", scores.printableAccuracy)
+    end
 
-    love.graphics.printf(pr .. "\n" .. accuracy .. "\n" .. grade, baseScreenRatio.x-1000, 10, 990, "right")
+    local prText = string.format("%.2f", scores.truePerformanceRating)
+    local ips = #parent.inputsPerSecond
+    local nps = #parent.notesPerSecond
 
+    if parent.mods["BP"] then ips = nps end
+
+    local ipsOverNpsText = string.format("%02d/%02d", ips, nps)
+
+    -- lefrt
+    love.graphics.printf(scoreText .. "\n" .. ipsOverNpsText, 10, 10, baseScreenRatio.x, "left")
+
+    -- righjt
+    love.graphics.printf(prText .. "\n" .. accuracyText .. "\n" .. self.grade, baseScreenRatio.x - 1000, 10, 990, "right")
 
    -- love.graphics.printf
 end
@@ -57,8 +70,8 @@ function maniaHUD:debugDraw()
                     .. "DIFFICULTY RATING: " .. self.scores.difficultyRating,
                     100,100
     )
-        love.graphics.setColor(1,1,1)
 
+    love.graphics.setColor(1,1,1)
 end
 
 return maniaHUD

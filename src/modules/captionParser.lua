@@ -477,6 +477,7 @@ end
 --- | "srt"
 --- | "vtt"
 --- | "sbv"
+--- | "stl"
 --- | "ass"
 --- @return string The formatted caption content
 function captionParser.serialize(captions, format)
@@ -529,7 +530,18 @@ function captionParser.serialize(captions, format)
 
         return table.concat(out):gsub("\n+$", "\n")
     elseif format == "ass" then
-        table.insert(out, "[Script Info]\nScriptType: v4.00+\nCollisions: Normal\nPlayResY: 720\nPlayResX: 1280\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Default,Arial,36,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+        --table.insert(out, "[Script Info]\nScriptType: v4.00+\nCollisions: Normal\nPlayResY: 720\nPlayResX: 1280\n\n[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\nStyle: Default,Arial,36,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1\n\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+        table.insert(out, "[Script Info]\n")
+        table.insert(out, "ScriptType: v4.00+\n")
+        table.insert(out, "Collisions: Normal\n")
+        table.insert(out, "PlayResY: 720\n")
+        table.insert(out, "PlayResX: 1280\n\n")
+        table.insert(out, "[V4+ Styles]\n")
+        table.insert(out, "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n")
+        table.insert(out, "Style: Default,Arial,36,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,10,10,10,1\n\n")
+        table.insert(out, "[Events]\n")
+        table.insert(out, "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+        
         for _, cap in ipairs(captions) do
             table.insert(out, string.format("Dialogue: 0,%s,%s,Default,,0,0,0,,%s\n",
                 secondsToASSTime(cap.time),
