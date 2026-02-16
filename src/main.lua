@@ -138,7 +138,9 @@ function love.wheelmoved(x,y)
     VolumeControl:wheelmoved(y)
 end
 
-function love.resize(w, h) end
+function love.resize(w, h)
+    State.resize(w, h)
+end
 
 --if you wanna edit this, go to engine/CHE.lua and edit the CHE:draw() function to keep drawing in a letterboxed environment
 function love.draw(dt)

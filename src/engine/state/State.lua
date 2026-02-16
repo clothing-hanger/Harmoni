@@ -87,9 +87,9 @@ function state.substate(newstate, ...)
     return substate
 end
 
-function state.resize(w, h)
+--[[ function state.resize(w, h)
     canvas = love.graphics.newCanvas(w, h)
-end
+end ]]
 
 function state.killSubstate(...)
     if substate and substate.exit then substate:exit() end
@@ -166,6 +166,12 @@ function state.completeTransition()
     return nil
 end
 
+function state.killTransition()
+    activeTransition = nil
+    transitionTarget = nil
+    transitionArgs = nil
+    callback = nil
+end
 
 function state.isTransitioning()
     return activeTransition ~= nil
