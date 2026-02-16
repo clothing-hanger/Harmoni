@@ -17,5 +17,8 @@ return {
     extra = {
         america = require("states.extra.america"),
         markus = require("states.extra.markus")
+    },
+    aprilfools = {
+        tutorialState = require("aprilfools.states.tutorial")
     }
 }
