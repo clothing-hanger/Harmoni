@@ -168,6 +168,7 @@ end
 
 function CHE:textinput(t)
     Console:textinput(t)
+    State.textinput(t)
 end
 
 local function updateMouse(mx, my)
@@ -230,8 +231,10 @@ end
 function CHE:draw(dt)
     local lastFont = defaultFont
     love.graphics.push()
-        love.graphics.setCanvas({CHECanvas, stencil = true})
+        if CHECanvas then
+            love.graphics.setCanvas({CHECanvas, stencil = true})
             love.graphics.clear(0, 0, 0, 1)
+        end
 
             local startFont = love.graphics.getFont()
             local lastLineWidth = love.graphics.getLineWidth()
@@ -261,7 +264,9 @@ function CHE:draw(dt)
             love.graphics.setFont(startFont)
             love.graphics.setLineWidth(lastLineWidth)
             love.graphics.setColor(r, g, b, a)
-        love.graphics.setCanvas()
+        if CHECanvas then
+            love.graphics.setCanvas()
+        end
     love.graphics.pop()
 
     local ratio = math.min(
@@ -273,17 +278,18 @@ function CHE:draw(dt)
         love.graphics.setShader(murica)
     end
 
-
     if CHEShader and not murica then
         love.graphics.setShader(CHEShader)
     end
 
-    love.graphics.draw(
-        CHECanvas,
-        love.graphics.getWidth() / 2, love.graphics.getHeight() / 2,
-        0, ratio, ratio,
-        baseScreenRatio.x / 2, baseScreenRatio.y / 2
-    )
+    if CHECanvas then
+        love.graphics.draw(
+            CHECanvas,
+            love.graphics.getWidth() / 2, love.graphics.getHeight() / 2,
+            0, ratio, ratio,
+            baseScreenRatio.x / 2, baseScreenRatio.y / 2
+        )
+    end
 
  --   if Gamestate then 			Gamestate.draw() end
 
