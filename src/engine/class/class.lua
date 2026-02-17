@@ -1,16 +1,6 @@
 local class = {}
 class.__index = class
 
-local idChars = "0123456789abcdef"
-
-local function generateID()
-    local id = "Class: 0x"
-    for _ = 1, 4 do
-        id = id .. idChars:sub(love.math.random(1, #idChars), love.math.random(1, #idChars))
-    end
-    return id
-end
-
 --- Create a new class that extends the current one
 ---@param name string?
 ---@return table
@@ -23,7 +13,10 @@ function class:extend(name)
     end
     cls.__index = cls
     cls.super = self
-    cls.__ID = generateID()
+    --[[ cls.__ID = generateID() ]]
+    local id = tostring(cls)
+    id = id:sub(id:find(":") + 2)
+    cls.__ID = name or ("Class: " .. id)
     cls._NAME = name or "Class"
     setmetatable(cls, self)
     return cls
@@ -64,7 +57,8 @@ end
 ---@return any
 function class:__call(...)
     local inst = setmetatable({}, self)
-    inst.__ID = generateID()
+    --[[ inst.__ID = generateID() ]]
+    inst.__ID = self.__ID .. " Instance"
     if inst.new then inst:new(...) end
     return inst
 end

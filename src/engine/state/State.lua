@@ -176,14 +176,19 @@ end
 function state.isTransitioning()
     return activeTransition ~= nil
 end
-
+print(tostring({}))
 local function new(name)
-    name = name or ("State." .. string.format("%x", love.math.random(0, 0xFFFFFFFF)))
-    return setmetatable({
-        __name = name,
-        __forceCallEnter = true,
-    }, {
-        __tostring = function() return name end,
+    local stateObj = {
+        __name = "",
+        __forceCallEnter = true
+    }
+
+    local id = tostring(stateObj)
+    id = id:sub(id:find(":") + 2)
+    stateObj.__name = name or ("State: " .. id)
+
+    return setmetatable(stateObj, {
+        __tostring = function() return stateObj.__name end,
         __call = function(self, ...) return state.switch(self, ...) end
     })
 end
