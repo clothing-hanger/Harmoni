@@ -3,7 +3,10 @@ local tutorialState = State()
 function tutorialState:enter(p,tutorial)
     print(tutorial)
     self:setupTutorial(love.filesystem.load(tutorial)())
-    self:switchPage(1)
+    self.currentPage = 1
+    self:switchPage(self.currentPage)
+    self.titleFont = SkinHandler:getFont("Menu", 50)
+    self.subtextFont = SkinHandler:getFont("Menu",35)
 end
 
 function tutorialState:setupTutorial(t)
@@ -19,22 +22,31 @@ function tutorialState:setupTutorial(t)
 end
 
 function tutorialState:switchPage(page)
+    
     self.currentText = self.pages[page].text
     self.currentImage = self.pages[page].image
     self.currentTitle = self.pages[page].title
 
 end
 
+
 function tutorialState:update(dt)
+    if Input:pressed("menuConfirm") or Input:pressed("menuClickLeft") then
+        self.currentPage = self.currentPage + 1
+        self:switchPage(self.currentPage)
+    end
 end
 
 function tutorialState:draw()
+    local sx,sy = 0.7,0.7
+    love.graphics.setFont(self.subtextFont)
     if self.currentText then
-        love.graphics.printf(self.currentText,0, baseScreenRatio.y-100, baseScreenRatio.x, "center")
+        love.graphics.printf(self.currentText,0, baseScreenRatio.y-150, baseScreenRatio.x, "center")
     end
     if self.currentImage then
-        love.graphics.draw(self.image, 0, 0, sx, sy, self.image:getWidth()/2, self.image:getHeight()/2)
+        love.graphics.draw(self.currentImage, baseScreenRatio.x/2, baseScreenRatio.y/2,0, sx, sy, self.currentImage:getWidth()/2, self.currentImage:getHeight()/2)
     end
+    love.graphics.setFont(self.titleFont)
     if self.currentTitle then
         love.graphics.printf(self.currentTitle, 0, 100, baseScreenRatio.x, "center")
     end

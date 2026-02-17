@@ -42,7 +42,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
         {
             label = LocaleHandler:getText("Menu", "Jukebox"), 
            -- func = function() State.transition("waveDissolve", States.aprilfools.tutorialState, "aprilfools/tutorials/testtutorial.lua") end, 
-            func = function() State.switch(States.aprilfools.tutorialState, "aprilfools/tutorials/testtutorial.lua") end,
+            func = function() State.switch(States.aprilfools.tutorialState, "aprilfools/tutorials/fishsave.lua") end,
             color1 = {142/255,249/255,243/255,1},
             color2 = {88/255,246/255,238/255,1},
             icon = self.icons["jukebox"]
