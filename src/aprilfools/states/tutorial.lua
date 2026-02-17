@@ -7,6 +7,9 @@ function tutorialState:enter(p,tutorial)
     self:switchPage(self.currentPage)
     self.titleFont = SkinHandler:getFont("Menu", 50)
     self.subtextFont = SkinHandler:getFont("Menu",35)
+    self.imageXOffset = 0
+    self.titleYOffset = 0
+    self.subtextyOffset = 0
 end
 
 function tutorialState:setupTutorial(t)
@@ -29,11 +32,22 @@ function tutorialState:switchPage(page)
 
 end
 
+function tutorialState:slideShitAroundAndDoStuff()
+    self.slidingShitAroundAndDoingStuff = true
+    local imageXOffsetValue, titleYOffsetValue, subtextyOffsetValue = 1000, -200, 200
+    Timer.tween(0.45, self, {imageXOffset = imageXOffsetValue, titleYOffset = titleYOffsetValue, subtextyOffset = subtextyOffsetValue}, "out-quad", function()
+            self.currentPage = self.currentPage + 1
+            self:switchPage(self.currentPage)
+            self.imageXOffset, self.titleYOffset, self.subtextyOffset = -imageXOffsetValue, -titleYOffsetValue, -subtextyOffsetValue
+        Timer.tween(0.45, self, {imageXOffset = 0, titleYOffset = -0, subtextyOffset = 0}, "out-quad", function() self.slidingShitAroundAndDoingStuff = false end)
+    end)
+
+end
+
 
 function tutorialState:update(dt)
     if Input:pressed("menuConfirm") or Input:pressed("menuClickLeft") then
-        self.currentPage = self.currentPage + 1
-        self:switchPage(self.currentPage)
+        self:slideShitAroundAndDoStuff()
     end
 end
 
@@ -41,14 +55,14 @@ function tutorialState:draw()
     local sx,sy = 0.7,0.7
     love.graphics.setFont(self.subtextFont)
     if self.currentText then
-        love.graphics.printf(self.currentText,0, baseScreenRatio.y-150, baseScreenRatio.x, "center")
+        love.graphics.printf(self.currentText,0, baseScreenRatio.y-150 + (self.subtextyOffset), baseScreenRatio.x, "center")
     end
     if self.currentImage then
-        love.graphics.draw(self.currentImage, baseScreenRatio.x/2, baseScreenRatio.y/2,0, sx, sy, self.currentImage:getWidth()/2, self.currentImage:getHeight()/2)
+        love.graphics.draw(self.currentImage, baseScreenRatio.x/2 + (self.imageXOffset), baseScreenRatio.y/2,0, sx, sy, self.currentImage:getWidth()/2, self.currentImage:getHeight()/2)
     end
     love.graphics.setFont(self.titleFont)
     if self.currentTitle then
-        love.graphics.printf(self.currentTitle, 0, 100, baseScreenRatio.x, "center")
+        love.graphics.printf(self.currentTitle, 0, 100 + (self.titleYOffset), baseScreenRatio.x, "center")
     end
 end
 

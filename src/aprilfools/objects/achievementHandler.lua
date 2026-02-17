@@ -92,7 +92,7 @@ function AchievementHandler:new()
     create("first epic achievement", "Unlocked your first epic achievement!", "legendary")
     create("first legendary achievement", "Unlocked your first legendary achievement!", "mythical")
     create("first mythical achievement", "Unlocked your first mythical achievement!", "unique")
-    create("first unique achievement", "Unlocked your first unique achievement!", "common") -- common because FUCK you
+    create("first unique achievement", "Unlocked your first unique achievement!", "common") -- common because FUCK you            :(
 end
 
 function AchievementHandler:unlock(id)

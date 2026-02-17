@@ -6,7 +6,7 @@ return {
         {
             image = love.graphics.newImage("aprilfools/images/fishsave/when no fish save.png"),
             title = "You won't get far without knowing how to do the fish save.",
-            text = "The fish save is the action of using a fish to save yourself."
+            text = "The fish save is the action of using a fish to save yourself.\nShown above is what happens when you do not know how to do the fish save."
         },
         {
             image = love.graphics.newImage("aprilfools/images/fishsave/how do fish save.png"),
