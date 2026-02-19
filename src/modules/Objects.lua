@@ -47,3 +47,12 @@
     coolFuckingRectangle = require("objects.UI.coolFuckingRectangle")
     newAlert = require("objects.UI.newAlert")    --this one is actually UIslop   (i call everything that i add to just make the UIs look more "full" UIslop, but the other ones are good additions at least, this one is just bad, so its especially UIslop)
     volumeControl = require("objects.UI.volumeControl")
+
+    settingsTabButton = require("objects.settings.tabButton")
+    settingsPreview = require("objects.settings.preview")
+    settingDescription = require("objects.settings.description")
+    settingsToggle = require("objects.settings.toggle")
+    settingsSlider = require("objects.settings.slider")
+    settingsDropdown = require("objects.settings.dropdown")
+    settingsScrollbar = require("objects.settings.scrollBar")
+    settingsExitButton = require("objects.settings.exitButton")
