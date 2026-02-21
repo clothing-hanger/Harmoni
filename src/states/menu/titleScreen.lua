@@ -4,6 +4,8 @@ local screenFade = {0}
 
 local btnStrEasterEgg = "X"
 function titleScreen:enter(from, resetItems, fadeIn)
+
+    self.testcurve = growingCircleObjectThingyIdfk()
     fade = 0
     self.bubbleClickedCount = 0
     self.coverAlpha = (fadeIn and 1) or 0
@@ -345,6 +347,8 @@ end
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
 
+    self.testcurve:update(dt)
+
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
     end
@@ -472,6 +476,8 @@ function titleScreen:draw()
     love.graphics.setColor(0,0,0,self.coverAlpha + screenFade[1])
     love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)
+
+    self.testcurve:draw()
 end
 
 function titleScreen:drawLogo()

@@ -47,6 +47,7 @@
     coolFuckingRectangle = require("objects.UI.coolFuckingRectangle")
     newAlert = require("objects.UI.newAlert")    --this one is actually UIslop   (i call everything that i add to just make the UIs look more "full" UIslop, but the other ones are good additions at least, this one is just bad, so its especially UIslop)
     volumeControl = require("objects.UI.volumeControl")
+    growingCircleObjectThingyIdfk = require("objects.UI.growingCircleObjectThingyIdfk")  -- this one is the most slop of all the UIslop i swear to god, i literally am stealing this from a vocaloid music video i saw,, and its my first time using bezier curves so im prob doing everuthing wrong
 
     settingsTabButton = require("objects.settings.tabButton")
     settingsPreview = require("objects.settings.preview")
