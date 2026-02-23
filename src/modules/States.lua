@@ -19,6 +19,7 @@ return {
         markus = require("states.extra.markus")
     },
     aprilfools = {
-        tutorialState = require("aprilfools.states.tutorial")
+        tutorialState = require("aprilfools.states.tutorial"),
+        loading = require("aprilfools.states.loading")
     }
 }

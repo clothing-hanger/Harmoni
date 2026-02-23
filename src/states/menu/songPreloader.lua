@@ -79,7 +79,9 @@ end
 
 function songPreloader:done()
     msg = "Loaded! :3"
-    Timer.tween(1, self, {alpha = 1}, "linear", function() State.switch(States.menu.splash)end)
+    local stateToSwitchTo = aprilFools and States.aprilfools.loading or States.menu.splash
+    local alpha = aprilFools and 0 or 1
+    Timer.tween(1, self, {alpha = alpha}, "linear", function() State.switch(stateToSwitchTo)end)
 end
 
 function songPreloader:draw()
@@ -90,7 +92,7 @@ function songPreloader:draw()
     love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Large"))
 
     if not self.songDifficultiesDone then msg = math.ceil(self.currentIndex/#self.songList*100) .. "%" end
-
+    if  aprilFools then msg = "0%" end -- we gotta fake this number (obviously)
 
     love.graphics.printf(msg, 0, h*0.5, w, "center")
 
