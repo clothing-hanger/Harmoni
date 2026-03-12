@@ -77,8 +77,9 @@ function maniaLane:handleInput()
     if not self.parent.parent.mods["BP"] then
         if not Input:pressed(self.inputBind) then return end
     end
-    table.insert(self.parent.parent.inputsPerSecond, 1000)
-
+    if self.parent.id == 1 then
+        table.insert(self.parent.parent.inputsPerSecond, 1000)
+    end
 
     local bestJudgement = nil
     local bestTimeDiff = math.huge
@@ -112,33 +113,35 @@ function maniaLane:handleInput()
             note.holdStartTime = MusicTime
         end
 
-        state.judgementObject:judge(bestJudgement.name)
-        state.judgementCount:incrementJudgement(bestJudgement.name)
-        if bestJudgement.name == "Miss" then self.parent.parent.comboCount:breakCombo() end -- pretty self explanitory, huh?
+        if self.parent.id == 1 then
+            state.judgementObject:judge(bestJudgement.name)
+            state.judgementCount:incrementJudgement(bestJudgement.name)
+            if bestJudgement.name == "Miss" then self.parent.parent.comboCount:breakCombo() end -- pretty self explanitory, huh?
 
-        state.scoreHandler:addScore(bestJudgement.score)
-        local healthChange
+            state.scoreHandler:addScore(bestJudgement.score)
+            local healthChange
 
-        if self.parent.parent.mods["EZ"] and bestJudgement.name == "Miss" then
-            healthChange = bestJudgement.health/2   -- i have no clue if this works or not honestly
-        else
-            healthChange = bestJudgement.health
-        end
+            if self.parent.parent.mods["EZ"] and bestJudgement.name == "Miss" then
+                healthChange = bestJudgement.health/2   -- i have no clue if this works or not honestly
+            else
+                healthChange = bestJudgement.health
+            end
 
         --if self.parent.parent.mods["SD"] and bestJudgement.name == "Miss" then state.healthBar:justFuckingDie() end
 
-        state.healthBar:changeHealth(healthChange)
+            state.healthBar:changeHealth(healthChange)
 
-        if AchievementGranter then AchievementGranter:noteHit() end
-        state.comboCount:incrementCombo()
-        if state.comboCount:getCombo()%100 == 0 then state.comboAlert:doComboAlert(state.comboCount:getCombo()) end
+            if AchievementGranter then AchievementGranter:noteHit() end
+            state.comboCount:incrementCombo()
+            if state.comboCount:getCombo()%100 == 0 then state.comboAlert:doComboAlert(state.comboCount:getCombo()) end
+        end
     end
 end
 
 function maniaLane:checkHoldReleases()
     if not Input then return end
 
-    if not self.parent.parent.mods["BP"] then
+    if not self.parent.parent.mods["BP"] and self.parent.inputAllowed then
         if not Input:released(self.inputBind) then return end
     end
 
@@ -208,13 +211,15 @@ function maniaLane:checkForMisses()
 
         if not note.holdLength and currentTime - note.startTime > timingWindow then
             table.remove(self.drawableNotes, i)
-            local parentParent = self.parent.parent
-            parentParent.comboCount:breakCombo()
-            parentParent.judgementObject:judge("Miss")
-            parentParent.judgementCount:incrementJudgement("Miss")
+            if self.parent.id == 1 then
+                local parentParent = self.parent.parent
+                parentParent.comboCount:breakCombo()
+                parentParent.judgementObject:judge("Miss")
+                parentParent.judgementCount:incrementJudgement("Miss")
 
-            parentParent.scoreHandler:addScore(missJudgement.score)
-            parentParent.healthBar:changeHealth(missJudgement.health)
+                parentParent.scoreHandler:addScore(missJudgement.score)
+                parentParent.healthBar:changeHealth(missJudgement.health)
+            end
         end
 
         if note.holdLength and not note.released and not note.held then
@@ -223,12 +228,14 @@ function maniaLane:checkForMisses()
                 note.held = false
                 note.released = true
 
-                local parentParent = self.parent.parent
-                parentParent.comboCount:breakCombo()
-                parentParent.judgementObject:judge("Miss")
-                parentParent.judgementCount:incrementJudgement("Miss")
-                parentParent.scoreHandler:addScore(missJudgement.score)
-                parentParent.healthBar:changeHealth(missJudgement.health)
+                if self.parent.id == 1 then
+                    local parentParent = self.parent.parent
+                    parentParent.comboCount:breakCombo()
+                    parentParent.judgementObject:judge("Miss")
+                    parentParent.judgementCount:incrementJudgement("Miss")
+                    parentParent.scoreHandler:addScore(missJudgement.score)
+                    parentParent.healthBar:changeHealth(missJudgement.health)
+                end
             end
         end
     end

@@ -71,6 +71,10 @@ function Modscript:reset(receptors)
             end
         else
             local lmod = register[name]
+            if not lmod then
+                print("No mod named " .. name)
+                return
+            end
             local mod = lmod.parent or lmod
             local name = mod.name
 
@@ -81,7 +85,7 @@ function Modscript:reset(receptors)
             end
 
             if not table.find(activeMods[playfield], name) then
-                --[[ table.insert(activeMods[playfield], name) ]]
+                print("Activating " .. name .. " on playfield " .. playfield)
                 if lmod.name ~= name then
                     table.insert(activeMods[playfield], lmod.name)
                 end
@@ -101,8 +105,13 @@ function Modscript:reset(receptors)
     end
 
     function CreatePlayfield(...)
-        --[[ GAME.GameManager:addPlayfield(...)
-        for _, mod in ipairs(register) do
+        local gamemode = States.game.gameModeManager.gameMode
+        local first = gamemode.playField[1]
+        local new = maniaPlayField(first.chart, gamemode)
+        new.inputAllowed = false
+        new.id = #gamemode.playField + 1
+        table.insert(activeMods, {})
+        for _, mod in ipairs(modArray) do
             if mod.type == "Mod" then
                 table.insert(mod.percents, 0)
                 for _, submod in ipairs(mod.submods) do
@@ -113,7 +122,33 @@ function Modscript:reset(receptors)
                     table.insert(submod.percents, 0)
                 end
             end
-        end ]]
+        end
+
+        table.insert(gamemode.playField, new)
+    end
+
+    function RemovePlayfield(id)
+        if id < 2 then
+            print("Cannot remove main playfield")
+            return
+        end
+
+        local gamemode = States.game.gameModeManager.gameMode
+        table.remove(gamemode.playField, id)
+
+        table.remove(activeMods, id)
+        for _, mod in ipairs(modArray) do
+            if mod.type == "Mod" then
+                table.remove(mod.percents, id)
+                for _, submod in ipairs(mod.submods) do
+                    table.remove(submod.percents, id)
+                end
+            else
+                for _, submod in ipairs(mod.submods) do
+                    table.remove(submod.percents, id)
+                end
+            end
+        end
     end
 
     function GetMainPlayfieldVertSprite()
@@ -140,7 +175,8 @@ function Modscript:load(script)
         ReverseModifier,
         BeatModifier,
         TransformModifier,
-        MoveModifier
+        MoveModifier,
+        StealthModifier
     }
 
     for _, mod in ipairs(mods) do
@@ -164,7 +200,7 @@ function Modscript:load(script)
     self.chunk = chunk
 
     --QueueEase(1, 20, "Drunk", 2, "out-quad")
-    QueueSet(1, "Drunk", 1, 1)
+    --QueueSet(1, "Drunk", 1, 1)
 
     return ok
 end
@@ -179,7 +215,7 @@ function Modscript:update(dt)
             -- bleh
             table.remove(timeline, i)
         else
-            local curDecBeat = States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime
+            local curDecBeat = States.game.gameModeManager.gameMode.bpmHandler.fullBeatTime/4
             if curDecBeat >= event.startBeat then
                 event:run(curDecBeat)
             end
@@ -196,6 +232,8 @@ function Modscript:updateObject(beat, obj, pos, playfield)
 
         if obj:isInstanceOf(maniaNote) then
             mod:updateNote(beat, obj, pos, playfield)
+        elseif obj:isInstanceOf(maniaReceptor) then
+            mod:updateReceptor(beat, obj, pos, playfield)
         end
     end
 end
@@ -256,6 +294,7 @@ function Modscript:queueEase(beat, endBeat, modName, val, easeStyle, playfield, 
             run = function(self, curBeat)
                 if curBeat <= self.endBeat then
                     if not self.startVal then
+                        if not register[self.modName] then return end
                         self.startVal = register[self.modName]:getValue(self.playfield)
                     end
 

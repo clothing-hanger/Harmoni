@@ -1,7 +1,20 @@
-local maniaNote = Class:extend("maniaNote")
+local maniaNote = vertSprite:extend("maniaNote")
 
 local fourkLanes = { "Left", "Down", "Up", "Right" }
 local sevenkLanes = { "Left1", "Down", "Left2", "Center", "Right1", "Up", "Right2" }
+
+local stealthShader = love.graphics.newShader [[
+uniform Image MainTex;
+uniform float white;
+uniform float opacity;
+void effect() {
+    // this time NO xyz, its just normal 
+    vec4 col = Texel(MainTex, VaryingTexCoord.xy) * VaryingColor;
+    col.rgb = mix(col.rgb, vec3(1.0), white);
+    col.a *= opacity;
+    love_PixelColor = col;
+}
+]]
 
 function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVEndTime, parent)
     self.size = maniaNoteSize
@@ -47,6 +60,8 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVE
     self.released = false
 
     self.debug = false
+
+    vertSprite.new(self, self.x, self.y, 0)
 end
 
 function maniaNote:getLaneString()
@@ -127,7 +142,7 @@ function maniaNote:draw()
     local curBatch = arrowBatch or noteBatch
 
     --
-    if curBatch then
+    --[[ if curBatch then
         -- dont render hold if passed the receptor
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
@@ -166,14 +181,24 @@ function maniaNote:draw()
 
         local _, _, w, h = self.image:getViewport()
         curBatch:add(self.image, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
-    else
+    else ]]
+        local ogX, ogY = self.x, self.y
+        local graphic
+        if arrowBatch then
+            graphic = arrowBatch:getTexture()
+        elseif noteBatch then
+            graphic = noteBatch:getTexture()
+        else
+            graphic = self.holdAsset
+        end
+        love.graphics.setColor(1, 1, 1, self.alpha * self.stealthOpacity)
         if self.holdLength then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
             if scrollDir == "Up" then
-                self.y = self.y - 70
+                ogY = ogY - 70
             else
-                self.y = self.y + 70
+                ogY = ogY + 70
             end
             local midY = (self.y + self.endY) / 2
             local bodyHeight = math.abs(self.endY - self.y)
@@ -185,23 +210,70 @@ function maniaNote:draw()
             )
 
             if not passed then
-                love.graphics.draw(self.holdAsset, self.x, midY, 0,
+                --vertSprite.setGraphic(self, graphic)
+                local lastShader = love.graphics.getShader()
+                love.graphics.setShader(stealthShader)
+                stealthShader:send("white", self.stealthWhite)
+                love.graphics.draw(graphic, self.holdAsset, self.x, midY, 0,
                     self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+                --[[ local q
+                if self.holdAsset.getViewport then
+                    q = self.holdAsset
+                end
+                self.x = ogX
+                self.y = midY
+                self.scale.x = self.size / hw
+                self.scale.y = bodyHeight / hh
+                self.origin.x = hw / 2
+                self.origin.y = hh / 2
+                vertSprite.draw(self, q)
+                q = nil ]]
 
                 local flipsY = scrollDir == "Down"
-                love.graphics.draw(self.holdEndAsset, self.x, self.endY, 0,
+                love.graphics.draw(graphic, self.holdEndAsset, self.x, self.endY, 0,
                     self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
                     nil)
+                love.graphics.setShader(lastShader)
+                --[[ self.x = ogX
+                self.y = self.endY
+                self.scale.x = self.size / tailW
+                self.scale.y = (self.size / tailH)
+                self.flipY = flipsY
+                self.origin.x = tailW / 2
+                self.origin.y = tailH / 2
+                if self.holdEndAsset.getViewport then
+                    q = self.holdEndAsset
+                end
+                vertSprite.draw(self, q) ]]
             end
             if scrollDir == "Up" then
-                self.y = self.y + 70
+                ogY = ogY + 70
             else
-                self.y = self.y - 70
+                ogY = ogY - 70
             end
         end
-        love.graphics.draw(self.image, self.x+self.gameOverX, self.y+self.gameOverX, self.rotation, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2)
+        --[[ love.graphics.draw(self.image, self.x+self.gameOverX, self.y+self.gameOverX, self.rotation, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2) ]]
+        local _, _, w, h = self.image:getViewport()
+        --[[ self.x = self.x + self.gameOverX
+        self.y = self.y + self.gameOverY
+        self.scale.x = self.size / w ]]
+        
+        local x = ogX + self.gameOverX
+        local y = self.y + self.gameOverY
+        self.scale.x = self.size / w
+        self.scale.y = self.size / h
+        self.origin.x = w / 2
+        self.origin.y = h / 2
+        local q
+        if self.image.getViewport then
+            q = self.image
+        end
+        vertSprite.setGraphic(self, graphic)
+        vertSprite.draw(self, q)
+        self.x = ogX
+        self.y = ogY
 
-    end
+    --[[ end ]]
 
     if self.debug then
         love.graphics.setColor(1, 0, 0)

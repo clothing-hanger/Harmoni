@@ -246,8 +246,6 @@ function mania:setUpChart(chartpath, chart)
     end
     self.lyricsRenderer = lyricsRenderer(baseScreenRatio.x-570,30,540,baseScreenRatio.y-200, lyrics)
 
-    print(type)
-
     return maniaChart
 end
 
@@ -255,9 +253,12 @@ function mania:update(dt)
     Profiler:start("GAMEMODE:UPDATE")
     self:updateObjects(dt)
 
+    
     for _, playField in ipairs(self.playField) do
         playField:update(dt)
     end
+    -- should only ever update the FIRST playfield
+    --[[ self.playField[1]:update(dt) ]]
 
     if self.song and self.playField[1].finished then
         print("SONG END 1")
@@ -293,12 +294,10 @@ function mania:update(dt)
     for i = 1,#self.notesPerSecond do
         self.notesPerSecond[i] = self.notesPerSecond[i]-1000*dt
         if self.notesPerSecond[i] <= 0 then table.remove(self.notesPerSecond, i) break end
-    end    
+    end
     
     self.endSongTimer = math.max(self.endSongTimer + (Input:down("menuBack") and not self.paused and 1200 or -3000) * dt,0)
     if self.endSongTimer>=230 then self.endSongTimer =0 self:pause() end
-
-
 
     if self.paused then
         local liquidAssTime = 0.5
@@ -369,10 +368,10 @@ function mania:updateObjects(dt)
     self.HUD:update(dt) -- we also gotta send values to the hud
     self.HUD:sendValues(self.scoreHandler:getScore("printable"), self.scoreHandler:getAccuracy("printable"))
 
-    if self.healthBar.health <= 0 and not self.mods["NF"] then
+    --[[ if self.healthBar.health <= 0 and not self.mods["NF"] then
         if AchievementHandler then AchievementHandler:unlock("failed song") end
         self:gameOver()
-    end
+    end ]]
 
     if self.bpmHandler:wasBeatHit() then
         self:onBeat()

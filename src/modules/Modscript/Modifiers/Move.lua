@@ -8,9 +8,8 @@ Move.active = false
 function Move:getPos(time, visualDiff, timeDiff, beat, pos, data, playfield, obj)
     local moveXPert = self:getValue(playfield)
 
-    -- Define the boundaries
-    local leftSide = -475
-    local rightSide = 475
+    local leftSide = -850
+    local rightSide = 850
 
     local convertedPos = moveXPert * (rightSide - leftSide) / 2
 

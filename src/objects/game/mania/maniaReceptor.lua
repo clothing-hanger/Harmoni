@@ -1,5 +1,5 @@
 ---@diagnostic disable: need-check-nil
-local maniaReceptor = Class:extend("maniaReceptor")
+local maniaReceptor = vertSprite:extend("maniaReceptor")
 
 local laneStrings = {
     [4] = {"Left", "Down", "Up", "Right"},
@@ -22,6 +22,8 @@ function maniaReceptor:new(mode, lane, inputBind, x, y, parent)
 
     self.imageUp = SkinHandler:getImage("Receptors", "Up", self.laneCountString, self.laneString)
     self.imageDown = SkinHandler:getImage("Receptors", "Down", self.laneCountString, self.laneString)
+
+    vertSprite.new(self, self.x, self.y, 0)
 end
 
 function maniaReceptor:getLaneString()
@@ -50,13 +52,29 @@ function maniaReceptor:draw()
         w, h = drawnImage:getWidth(), drawnImage:getHeight()
     end
 
-    if arrowBatch then
+    --[[ if arrowBatch then
         arrowBatch:add(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
     elseif receptorBatch then
         receptorBatch:add(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
     else
         love.graphics.draw(drawnImage, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
+    end ]]
+    self.scale.x = self.size / w
+    self.scale.y = self.size / h
+    self.origin.x = w / 2
+    self.origin.y = h / 2
+    self.graphic = drawnImage
+    if receptorBatch then
+        self.graphic = receptorBatch:getTexture()
+    elseif arrowBatch then
+        self.graphic = arrowBatch:getTexture()
     end
+    vertSprite.setGraphic(self, self.graphic)
+    local q
+    if drawnImage.getViewport then
+        q = drawnImage
+    end
+    vertSprite.draw(self, q)
 
     -- draw a line at the center position
 

@@ -1,4 +1,9 @@
 --game
+
+    --shared game thingies
+    sharedBackground = require("objects.game.shared.sharedBackground")
+    vertSprite = require("objects.game.shared.vertSprite")
+
     --mania
     maniaLane = require("objects.game.mania.maniaLane")
     maniaNote = require("objects.game.mania.maniaNote")
@@ -14,9 +19,6 @@
     --slider
     sliderField = require("objects.game.slider.sliderField")
     sliderReceptor = require("objects.game.slider.sliderReceptor")
-
-    --shared game thingies
-    sharedBackground = require("objects.game.shared.sharedBackground")
 
     --menu
     menuSongButton = require("objects.menu.songButton")

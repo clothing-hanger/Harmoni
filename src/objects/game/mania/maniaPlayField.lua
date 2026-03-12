@@ -16,6 +16,7 @@ function maniaPlayField:new(chart, parent)
     self.laneSpacing = 0
     self.offset = { x = 0, y = 0 }
     self.id = 1
+    self.inputAllowed = true
 
     if #self.chart.scrollVelocities > 0 then
         local svs = self.chart.scrollVelocities
