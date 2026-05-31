@@ -107,7 +107,7 @@ function maniaNote:getNotePosition(time, moveWithScroll)
             return self.parent.y - offset
         end
     else
-        return self.parent.y
+        return self.parent.y - 35
     end
 end
 
@@ -137,143 +137,177 @@ function maniaNote:draw()
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
     local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
-    if States.game.gameModeManager.gameMode.ableToModscript then scrollDir = "Up" end
 
+    local canBatch = not States.game.gameModeManager.gameMode.ableToModscript
     local curBatch = arrowBatch or noteBatch
 
-    --
-    --[[ if curBatch then
-        -- dont render hold if passed the receptor
-        if self.holdLength then
+    if canBatch and curBatch then
+        if self.holdLength and self.holdAsset and self.holdAsset.getViewport then
             local _, _, hw, hh = self.holdAsset:getViewport()
             local _, _, tailW, tailH = self.holdEndAsset:getViewport()
+
+            local noteY = self.y
             if scrollDir == "Up" then
-                self.y = self.y - 70
+                noteY = noteY - 70
             else
-                self.y = self.y + 70
+                noteY = noteY + 70
             end
-            local midY = (self.y + self.endY) / 2
-            local bodyHeight = math.abs(self.endY - self.y)
-            bodyHeight = bodyHeight - tailH/2
+
+            local midY = (noteY + self.endY) / 2
+            local bodyHeight = math.abs(self.endY - noteY)
+            bodyHeight = bodyHeight - tailH / 2
 
             local passed = (
-                scrollDir == "Down" and midY > self.parent.y
-                or scrollDir == "Up" and midY < self.parent.y
+                (scrollDir == "Down" and midY > self.parent.y)
+                or
+                (scrollDir == "Up" and midY < self.parent.y)
             )
 
             if not passed then
-                curBatch:add(self.holdAsset, self.x, midY, 0,
-                    self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
+                curBatch:add(
+                    self.holdAsset,
+                    self.x,
+                    midY,
+                    0,
+                    self.size / hw,
+                    bodyHeight / hh,
+                    hw / 2,
+                    hh / 2
+                )
 
                 local flipsY = scrollDir == "Down"
 
-                curBatch:add(self.holdEndAsset, self.x, self.endY, 0,
-                    self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
-                    nil)
-            end
-
-            if scrollDir == "Up" then
-                self.y = self.y + 70
-            else
-                self.y = self.y - 70
+                curBatch:add(
+                    self.holdEndAsset,
+                    self.x,
+                    self.endY,
+                    0,
+                    self.size / tailW,
+                    (self.size / tailH) * (flipsY and -1 or 1),
+                    tailW / 2,
+                    tailH / 2
+                )
             end
         end
 
-        local _, _, w, h = self.image:getViewport()
-        curBatch:add(self.image, self.x, self.y, 0, self.size / w, self.size / h, w / 2, h / 2)
-    else ]]
-        local ogX, ogY = self.x, self.y
-        local graphic
-        if arrowBatch then
-            graphic = arrowBatch:getTexture()
-        elseif noteBatch then
-            graphic = noteBatch:getTexture()
+        if self.image and self.image.getViewport then
+            local _, _, w, h = self.image:getViewport()
+
+            curBatch:add(
+                self.image,
+                self.x + self.gameOverX,
+                self.y + self.gameOverY,
+                0,
+                self.size / w,
+                self.size / h,
+                w / 2,
+                h / 2
+            )
+        end
+
+        if self.debug then
+            love.graphics.setColor(1, 0, 0)
+            love.graphics.setLineWidth(2)
+            love.graphics.line(self.x - 200, self.y, self.x + 200, self.y)
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setLineWidth(1)
+        end
+
+        return
+    end
+
+    local ogX, ogY = self.x, self.y
+    local graphic
+
+    if arrowBatch then
+        graphic = arrowBatch:getTexture()
+    elseif noteBatch then
+        graphic = noteBatch:getTexture()
+    else
+        graphic = self.holdAsset
+    end
+
+    love.graphics.setColor(1, 1, 1, self.alpha * self.stealthOpacity)
+
+    if self.holdLength then
+        local _, _, hw, hh = self.holdAsset:getViewport()
+        local _, _, tailW, tailH = self.holdEndAsset:getViewport()
+
+        if scrollDir == "Up" then
+            ogY = ogY - 70
         else
-            graphic = self.holdAsset
+            ogY = ogY + 70
         end
-        love.graphics.setColor(1, 1, 1, self.alpha * self.stealthOpacity)
-        if self.holdLength then
-            local _, _, hw, hh = self.holdAsset:getViewport()
-            local _, _, tailW, tailH = self.holdEndAsset:getViewport()
-            if scrollDir == "Up" then
-                ogY = ogY - 70
-            else
-                ogY = ogY + 70
-            end
-            local midY = (self.y + self.endY) / 2
-            local bodyHeight = math.abs(self.endY - self.y)
-            bodyHeight = bodyHeight - tailH/2
 
-            local passed = (
-                scrollDir == "Down" and midY > self.parent.y
-                or scrollDir == "Up" and midY < self.parent.y
+        local midY = (self.y + self.endY) / 2
+        local bodyHeight = math.abs(self.endY - self.y)
+        bodyHeight = bodyHeight - tailH / 2
+
+        local passed = (
+            scrollDir == "Down" and midY > self.parent.y
+            or
+            scrollDir == "Up" and midY < self.parent.y
+        )
+
+        if not passed then
+            local lastShader = love.graphics.getShader()
+
+            love.graphics.setShader(stealthShader)
+            stealthShader:send("white", self.stealthWhite)
+
+            love.graphics.draw(
+                graphic,
+                self.holdAsset,
+                self.x,
+                midY,
+                0,
+                self.size / hw,
+                bodyHeight / hh,
+                hw / 2,
+                hh / 2
             )
 
-            if not passed then
-                --vertSprite.setGraphic(self, graphic)
-                local lastShader = love.graphics.getShader()
-                love.graphics.setShader(stealthShader)
-                stealthShader:send("white", self.stealthWhite)
-                love.graphics.draw(graphic, self.holdAsset, self.x, midY, 0,
-                    self.size / hw, bodyHeight / hh, hw / 2, hh / 2)
-                --[[ local q
-                if self.holdAsset.getViewport then
-                    q = self.holdAsset
-                end
-                self.x = ogX
-                self.y = midY
-                self.scale.x = self.size / hw
-                self.scale.y = bodyHeight / hh
-                self.origin.x = hw / 2
-                self.origin.y = hh / 2
-                vertSprite.draw(self, q)
-                q = nil ]]
+            local flipsY = scrollDir == "Down"
 
-                local flipsY = scrollDir == "Down"
-                love.graphics.draw(graphic, self.holdEndAsset, self.x, self.endY, 0,
-                    self.size / tailW, (self.size / tailH) * (flipsY and -1 or 1), tailW / 2, tailH / 2,
-                    nil)
-                love.graphics.setShader(lastShader)
-                --[[ self.x = ogX
-                self.y = self.endY
-                self.scale.x = self.size / tailW
-                self.scale.y = (self.size / tailH)
-                self.flipY = flipsY
-                self.origin.x = tailW / 2
-                self.origin.y = tailH / 2
-                if self.holdEndAsset.getViewport then
-                    q = self.holdEndAsset
-                end
-                vertSprite.draw(self, q) ]]
-            end
-            if scrollDir == "Up" then
-                ogY = ogY + 70
-            else
-                ogY = ogY - 70
-            end
-        end
-        --[[ love.graphics.draw(self.image, self.x+self.gameOverX, self.y+self.gameOverX, self.rotation, self.size / self.image:getWidth(), self.size / self.image:getHeight(), self.image:getWidth() / 2, self.image:getHeight() / 2) ]]
-        local _, _, w, h = self.image:getViewport()
-        --[[ self.x = self.x + self.gameOverX
-        self.y = self.y + self.gameOverY
-        self.scale.x = self.size / w ]]
-        
-        local x = ogX + self.gameOverX
-        local y = self.y + self.gameOverY
-        self.scale.x = self.size / w
-        self.scale.y = self.size / h
-        self.origin.x = w / 2
-        self.origin.y = h / 2
-        local q
-        if self.image.getViewport then
-            q = self.image
-        end
-        vertSprite.setGraphic(self, graphic)
-        vertSprite.draw(self, q)
-        self.x = ogX
-        self.y = ogY
+            love.graphics.draw(
+                graphic,
+                self.holdEndAsset,
+                self.x,
+                self.endY,
+                0,
+                self.size / tailW,
+                (self.size / tailH) * (flipsY and -1 or 1),
+                tailW / 2,
+                tailH / 2
+            )
 
-    --[[ end ]]
+            love.graphics.setShader(lastShader)
+        end
+
+        if scrollDir == "Up" then
+            ogY = ogY + 70
+        else
+            ogY = ogY - 70
+        end
+    end
+
+    local _, _, w, h = self.image:getViewport()
+
+    self.scale.x = self.size / w
+    self.scale.y = self.size / h
+    self.origin.x = w / 2
+    self.origin.y = h / 2
+
+    local q
+    if self.image.getViewport then
+        q = self.image
+    end
+
+    vertSprite.setGraphic(self, graphic)
+    vertSprite.draw(self, q)
+
+    self.x = ogX
+    self.y = ogY
 
     if self.debug then
         love.graphics.setColor(1, 0, 0)

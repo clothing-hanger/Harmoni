@@ -378,6 +378,7 @@ function mania:updateObjects(dt)
     end
 end
 
+local HUD_BEAT_SIZE_MULT = 1.0065
 function mania:onBeat()
     if self.beatFuckThingyIdk == nil then self.beatFuckThingyIdk = false end
             self.beatFuckThingyIdk = not self.beatFuckThingyIdk
@@ -392,7 +393,7 @@ function mania:onBeat()
     self.healthBar.line.amplitude = 5
     self.healthBarBeatTween = Timer.tween(0.5, self.healthBar.line, {time = self.healthBar.line.time-5, amplitude = 0}, "out-quad")    -- FAKE liquid ass!!
 
-    self.HUDBeatSize = 1.01
+    self.HUDBeatSize = 1 * HUD_BEAT_SIZE_MULT
     if self.HUDSizeTween then Timer.cancel(self.HUDSizeTween) end   -- OOH EMM GEE ITS EFF ENN EFF !!!!!
     self.HUDSizeTween = Timer.tween(0.5, self, {HUDBeatSize = 1}, "out-quad")
 

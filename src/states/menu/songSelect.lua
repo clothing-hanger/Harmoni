@@ -359,6 +359,15 @@ function songSelect:setupDifficultyList(path,color)
         end
     end
 
+    table.sort(difficultyButtons, function(a, b)
+        return tonumber(a.difficulty) < tonumber(b.difficulty)
+    end)
+
+    for i = 1, #difficultyButtons do
+        local y = i * (songButtonHeight + songButtonSpacing)
+        difficultyButtons[i].y = y
+    end
+
     function songSelect:difficultyListDraw()
         for _, DifficultyButton in ipairs(difficultyButtons) do
             DifficultyButton:draw()

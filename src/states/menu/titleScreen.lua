@@ -4,8 +4,6 @@ local screenFade = {0}
 
 local btnStrEasterEgg = "X"
 function titleScreen:enter(from, resetItems, fadeIn)
-
-    self.testcurve = growingCircleObjectThingyIdfk()
     fade = 0
     self.bubbleClickedCount = 0
     self.coverAlpha = (fadeIn and 1) or 0
@@ -91,14 +89,12 @@ function titleScreen:enter(from, resetItems, fadeIn)
    -- module.showNotification(title, text, timeout_ms, opts)
     if NOTIFICATIONS then NOTIFICATIONS.showNotification("HI", "HELLO", 1000) end
 
-
     self.socialsX = baseScreenRatio.x - (5*120)
     self.socialsY = baseScreenRatio.y - 120
 
     self.socialButtons = {}
     self.clickedXCount = 0
     self.socials = {
-
         {
             label = "YouTube",
             link = "https://www.youtube.com/@Harmoni-de7zk",
@@ -198,7 +194,6 @@ function titleScreen:enter(from, resetItems, fadeIn)
     self.buttons = {}
 
     for i = 1,#self.buttonLabels do
-
         table.insert(self.buttons,
             buttonSlideOut(self.buttonX, 770 + (i-1) * (self.buttonHeight + buttonSpacing), 
                             self.buttonWidth, self.buttonHeight, self.buttonLabels[i].label, self.buttonLabels[i].func, 7, 
@@ -212,8 +207,6 @@ function titleScreen:enter(from, resetItems, fadeIn)
         self:setUpThoseWavesThatIHate(4)
         self:setUpThoseBubblesThatIHate(20)
     end
-
-    self.coolrect = coolFuckingRectangle(200,200,800,300,40,90,{181/255, 235/255, 174/255}, {72/255, 181/255, 63/255})
 
     if self.coverAlpha > 0 then
         self:fadeIn(function()
@@ -347,8 +340,6 @@ end
 function titleScreen:update(dt)
     fade = math.min(fade + dt*5, 1)
 
-    self.testcurve:update(dt)
-
     for i, Button in ipairs(self.buttons) do
         Button:update(dt)
     end
@@ -363,13 +354,9 @@ function titleScreen:update(dt)
 
     if self.window then self.window:update(dt) end
 
-
-
-
     self.layerWaves:update(dt)
 
     self:updateBubbles(dt) 
-
 end
 
 function titleScreen:updateBubbles(dt)
@@ -379,7 +366,6 @@ function titleScreen:updateBubbles(dt)
         local sinv = math.sin(ang)
         local cosv = math.cos(ang)
         Bubble:update(dt)
-
 
         Bubble.rotation = Bubble.rotation + cosv * 30 * dt
         Bubble.x = Bubble.x + sinv * 30 * dt
@@ -476,23 +462,9 @@ function titleScreen:draw()
     love.graphics.setColor(0,0,0,self.coverAlpha + screenFade[1])
     love.graphics.rectangle("fill", 0, 0 , baseScreenRatio.x, baseScreenRatio.y)
     love.graphics.setColor(1,1,1,1)
-
-    self.testcurve:draw()
 end
 
 function titleScreen:drawLogo()
-    -- the logo drawing is complex so we move it to its own function
-    local fullLogoFinalX, fullLogoFinalY = baseScreenRatio.x/2, 300
-    local HOnlyFinalX, HOnlyFinalY = 0,0 -- ill figure it out later      -- guess this was a lie (the logo no longer works this way so.... i should just remove all this)
-    local HOnlyStartingX, HOnlyStartingY = 0,0
-
-    local HOnlyX, HOnlyY = HOnlyStartingX, HOnlyStartingY
-
-
-    -- love.graphics.draw(self.images["H"], )
-
-    -- we need to draw the full logo first 
-
     -- logo variables 
     local fullLogo = self.images["logo"].image
     local fullLogoSizeX, fullLogoSizeY, fullLogoX, fullLogoY = 0.3,0.3, baseScreenRatio.x/2, baseScreenRatio.y/2

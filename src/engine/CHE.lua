@@ -65,7 +65,7 @@ function CHE:init()
     sliderNoteSize = 180
     maninaLaneGap = 10
     maniaScrollSpeed = 2.85
-    maniaLaneYOffset = 110
+    maniaLaneYOffset = 150
 
     gameplayBackgroundDim = 0.65
 
