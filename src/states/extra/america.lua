@@ -94,9 +94,11 @@ function america:draw()
     local lastFont = love.graphics.getFont()
     love.graphics.setFont(self.font)
     love.graphics.setColor(0, 0, 0)
+    
     local textX = 0
     local textY = baseScreenRatio.y - 80
     local text = "Please rise for our national anthem"
+
     for x = -2, 2 do
         for y = -2, 2 do
             love.graphics.printf(
@@ -107,6 +109,7 @@ function america:draw()
             )
         end
     end
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
         text,

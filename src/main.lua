@@ -6,7 +6,7 @@ require("love.init")
 dontShowBG = false
 
 aprilFools = false
-AMERICA =  false
+AMERICA = true
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
