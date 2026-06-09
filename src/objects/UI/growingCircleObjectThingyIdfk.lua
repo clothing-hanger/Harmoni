@@ -8,7 +8,7 @@ function circleThing:new()
     --self:doShit(1)
     Timer.after(love.math.random(1,2), function() self:doShit(love.math.random(1,3)) end)
     self.colors = SkinHandler:getRandomColors()
-    self.debug = true
+    self.debug = false
 end
 
 function circleThing:setUpAThingy()

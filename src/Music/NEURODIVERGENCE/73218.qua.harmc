@@ -1,0 +1,23 @@
+[meta]
+creator:none lol
+backgroundFile:image.png
+bpm:86
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:ROMA
+gameMode:mania
+source:s
+songPreviewTime:109000
+tags:uhh
+title:NEURODIVERGENCE
+difficultyName:funny lol
+
+[warnings]
+content:unfinishedSong
+content:nochart
+
+[bpm]
+[sliderVelocities]
+[hitObjects]

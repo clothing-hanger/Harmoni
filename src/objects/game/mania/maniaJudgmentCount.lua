@@ -75,7 +75,7 @@ function maniaJudgementCount:draw()
         local x = Judgement.x-Judgement.liquidAssWidth/2
         local y = Judgement.y-self.font:getHeight()/2+self.squareHeight/2
         local limit = Judgement.width+Judgement.liquidAssWidth
-        love.graphics.printf(Judgement.count, x, y, Judgement.width+Judgement.liquidAssWidth, "center", nil, Judgement.liquidAssTextWidth, Judgement.liquidAssTextHeight)
+        love.graphics.printf((Judgement.count == 0 and Judgement.shortName) or Judgement.count, x, y, Judgement.width+Judgement.liquidAssWidth, "center", nil, Judgement.liquidAssTextWidth, Judgement.liquidAssTextHeight)
 
     end
         love.graphics.setColor(1,1,1,1)

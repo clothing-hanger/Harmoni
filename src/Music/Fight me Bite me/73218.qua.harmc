@@ -1,0 +1,24 @@
+[meta]
+creator:none lol
+backgroundFile:image.jpg
+bpm:114
+laneCount:4
+audioFile:audio.mp3
+chartOrigin:Quaver
+initialSV:1
+artist:GuitarHeroPianoZero
+gameMode:mania
+source:s
+songPreviewTime:145780
+tags:uhh
+title:Fight Me Bite Me
+difficultyName:funny lol
+backgroundVideo:video.mp4
+
+[warnings]
+content:unfinishedSong
+content:nochart
+
+[bpm]
+[sliderVelocities]
+[hitObjects]
