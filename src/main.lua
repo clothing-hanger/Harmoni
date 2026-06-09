@@ -73,7 +73,7 @@ function love.load(args)
     require("modules.gamemodes")
 
     require("bob")  -- bob 💖
-    -- bob WILL be added
+    -- bob will not be added
 
     maniaChartDifficultyCalculator = require("modules.maniaChartDifficultyCalculator")
     ChartParse = require("modules.chartParse")
@@ -91,7 +91,7 @@ function love.load(args)
 
     if aprilFools then require("aprilfools") end -- fucking awesome
 
-    State.switch(States.menu.settingsMenu)
+    State.switch(States.menu.preloadState)
 
     -- load objects
     print(SkinHandler:getRandomColors())

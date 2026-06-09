@@ -58,6 +58,295 @@ Settings.SettingsTable = {
     }
 }
 
+
+
+
+Settings.SettingsTable = {
+    ["Gameplay"] = {
+        meta = {index = 1},
+        description = "These settings affect how the game plays"
+        ["Mania"] = {
+            meta = {index = 1},
+            ["Scroll Direction"] = {
+                meta = { index = 1 },
+                type = "dropdown",
+                options = { "Up", "Down" },
+                value = "Up",
+                defaultValue = "Up",
+                description = "Direction the notes scroll"
+            },
+            ["Scroll Speed"] = {
+                meta = { index = 2 },
+                type = "slider",
+                min = 300,
+                max = 3000,
+                value = 480,
+                defaultValue = 480,
+                description = "How quickly the notes travel across the screen (in milliseconds)"
+            },
+            ["Enable Hitsounds"] = {
+                meta = {index = 3},
+                type = "toggle",
+                value = true,
+                defaultValue = true,
+                description = "Play a sound when a Note is hit",
+            },
+            ["Enable Keysounds"] = {
+                meta = {index = 4},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Play a sound when a keybind is pressed",
+            },
+            ["Enable Combo Break Sound"] = {
+                meta = {index = 5},
+                type = "toggle",
+                value = true,
+                defaultValue = true,
+                description = "Play a sound when a combo over 5 is broken",
+            },
+            ["Background Brightness"] = {
+                meta = {index = 6},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "How bright the background is during gameplay",
+            }
+        }
+    },
+    ["Menu"] = {
+        meta = {index = 2},
+        description = "These settings affect how menus function" -- i dont know what else to put here,this really isnt a good desc of what these do but whatever
+        ["Title Screen"] = {
+            ["Enable Bubbles"] = {
+                meta = {index = 1},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Enables the bubble decorations in the Title Screen",
+            },
+            ["Enable Squiglly Lines"] = {
+                meta = {index = 2},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Enables the squiggly line decorations in the Title Screen",
+            },
+            ["Auto Play Music"] = {
+                meta = {index = 3},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Automatically select and play full songs while idle on the Title Screen",
+            },                      
+        },
+        ["Song Select"] = {
+            ["Enable Bubbles"] = {
+                meta = {index = 1},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Enables the bubble decorations in the Song Select",
+            },
+            ["Enable Squiglly Lines"] = {
+                meta = {index = 2},
+                type = "toggle",
+                value = true,
+                defaultValue = true
+                description = "Enables the squiggly line decorations in the Song Select",
+            },   
+        },
+    },
+    ["Keybinds"] = {
+        meta = {index = 3},
+        description = "Adjust your Keybinds here",
+        ["Mania"] = {
+            meta = {index = 1},
+             -- idk what to put here
+        }
+    },
+    ["Audio"] = {
+        meta = {index = 4},
+        description = "Adjust volume levels here",
+        ["Menu"] = {
+            meta = {index = 1},
+            ["Music Volume"] = {
+                meta = {index = 1},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of music played in menus",
+            },
+            ["Effect Volume"] = {
+                meta = {index = 2},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of sound effects played in menus",
+            }                        
+        },
+        ["Game"] == {
+            meta = {index = 2},
+            ["Music Volume"] = {
+                meta = {index = 1},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of music played during gameplay",
+            },
+            ["Hitsound Volume"] = {
+                meta = {index = 2},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of hitsounds",
+            },
+            ["Keysound Volume"] = {
+                meta = {index = 3},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of keysounds",
+            },
+            ["Combo Break Volume"] = {
+                meta = {index = 4},
+                type = "slider",
+                min = 0,
+                max = 100,
+                value = 80,
+                defaultValue = 80,
+                description = "Volume of Combo Breaks",
+            }  
+
+        }
+    },
+    ["Skin"] = {
+        meta = {index = 5},
+        description = "Choose your Skin and adjust Skin related settings",
+            ["Mania"] = {
+            meta = {index = 1}
+            ["Skin"] = {
+                meta = { index = 1 },
+                type = "dropdown",
+                options = {
+                    "Default Arrow",
+                    "Default Arrow Batched",
+                },
+                value = "Default Arrow Batched",
+                defaultValue = "Default Arrow Batched",
+                description = "PLACEHOLDER!!!"
+            },
+            ["Lane Spacing"] = {
+                meta = { index = 2 },
+                type = "slider",
+                min = 10,
+                max = 130,
+                value = 35,
+                defaultValue = 35,
+                description = "The space between your note lanes"
+            },
+            ["Lane Height"] = {
+                meta = { index = 3 },
+                type = "slider",
+                min = 10,
+                max = 130,
+                value = 35,
+                defaultValue = 35,
+                description = "The space between your receptors and the edge of your screen"                
+            }
+        }
+    },
+    ["System"] = {
+        meta = {index = 6},
+        description = "Adjust system related settings", -- what a great description, holy shit im actually gonna kill myself
+        [""] = {
+            meta = {index = 1}
+            ["Framerate Limit"] = {
+                meta = {index = 1},
+                type = "dropdown",
+                options = {
+                    "VSync*2",
+                    "VSync",
+                    "Unlimited",
+                    "Custom",
+                },
+                value = "VSync*2",
+                defaultValue = "VSync*2",
+                description = "Max framerate the game will be allowed to reach (does not affect UPS)",
+            },
+            ["Lower FPS when Inactive"] = {
+                meta = {index = 2},
+                type = "toggle",
+                value = true,
+                defaultValue = true,
+                description = "Cap FPS to 10 when window is not in focus",
+            },
+            ["Enable Discord Rich Presence"] = {
+                meta = {index = 3},
+                type = "toggle",
+                value = true, 
+                defaultValue = true, 
+                description = "Enables discord activity sharing for Harmoni"
+            },
+            ["Open Save Folder"] = {
+                meta = {index = 4}, 
+                type = "button" -- this doesnt exist yet
+                func = function() print("open save folder") end,
+                description = "Opens Harmoni's save directory"
+            },
+            ["Open Logs Folder"] = {
+                meta = {index = 4}, 
+                type = "button" -- this doesnt exist yet
+                func = function() print("open log folder") end,
+                description = "Opens Harmoni's logs directory"
+            },
+            ["Generate Log"] = {
+                meta = {index = 5},
+                type = "button",
+                func = function() print(generate log) end,
+                description = "Generates a log" -- who would have guessed "generate log" generates a log
+            }
+        }
+    },
+    ["Debug"] = {
+        meta = {index = 7},
+        description = "Developer shit",
+        [""] = {
+            meta = {index = 1},
+            ["Enable Debug Overlay"] = {
+                meta = {index = 1},
+                type = "toggle",
+                value = true,
+                defaultValue = true,
+                description = "it does exactly what the fucking setting name says it does.",
+            },
+            ["crash the fucking game"] = {
+                meta = {index = 2},
+                type = "button",
+                func = function() error("forced crash") end,
+                description = "i fucking wonder what this button does",
+            },            
+        }
+    }
+}
+
+
+
+
+
+
 function Settings:defaultSettings()
     local defaults = {}
     for category, data in pairs(self.SettingsTable) do

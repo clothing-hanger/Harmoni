@@ -11,7 +11,8 @@ PlayResY: 720
 
 [Aegisub Project Garbage]
 Audio File: audio.mp3
-Active Line: 40
+Scroll Position: 99
+Active Line: 140
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
@@ -32,7 +33,7 @@ Dialogue: 0,0:00:35.66,0:00:41.38,Default,,0,0,0,,Thousand miles an hour, I come
 Dialogue: 0,0:00:41.60,0:00:43.92,Default,,0,0,0,,(fade)
 Dialogue: 0,0:00:43.92,0:00:46.66,Default,,0,0,0,,I have a stone that's crushing me on top of my chest
 Dialogue: 0,0:00:46.66,0:00:49.36,Default,,0,0,0,,I pray for peace e- every time I walk to my bed
-Dialogue: 0,0:00:49.36,0:00:52.14,Default,,0,0,0,,Oh how I wish to tell you something worth your time here with me
+Dialogue: 0,0:00:49.36,0:00:52.14,Default,,0,0,0,,Oh, how I wish to tell you something worth your time here with me
 Dialogue: 0,0:00:52.14,0:00:54.90,Default,,0,0,0,,already breaking as the person that I'm trying to be
 Dialogue: 0,0:00:54.90,0:00:57.58,Default,,0,0,0,,For every time I forced myself to push through my bounds
 Dialogue: 0,0:00:57.58,0:01:00.30,Default,,0,0,0,,I hear a cry, a child in me, that wants to be proud
@@ -55,7 +56,7 @@ Dialogue: 0,0:01:22.94,0:01:24.62,Default,,0,0,0,,I take the stress and lock it 
 Dialogue: 0,0:01:24.62,0:01:25.62,Default,,0,0,0,,Cause I deserve it!
 Dialogue: 0,0:01:25.62,0:01:27.38,Default,,0,0,0,,I took my state and kept it in me
 Dialogue: 0,0:01:27.38,0:01:30.02,Default,,0,0,0,,Cause I'm so "perfect"!!
-Dialogue: 0,0:01:30.02,0:01:39.46,Default,,0,0,0,,music
+Dialogue: 0,0:01:30.02,0:01:39.46,Default,,0,0,0,,🎶
 Dialogue: 0,0:01:39.46,0:01:39.98,Default,,0,0,0,,When I close my eyes
 Dialogue: 0,0:01:39.98,0:01:40.48,Default,,0,0,0,,When I close my eyes
 Dialogue: 0,0:01:40.48,0:01:40.96,Default,,0,0,0,,When I close my eyes
@@ -83,11 +84,80 @@ Dialogue: 0,0:01:53.72,0:01:54.23,Default,,0,0,0,,I just want a night
 Dialogue: 0,0:01:54.23,0:01:54.76,Default,,0,0,0,,I just want a night
 Dialogue: 0,0:01:54.76,0:01:55.79,Default,,0,0,0,,I just want a night to let it out
 Dialogue: 0,0:01:55.79,0:01:56.44,Default,,0,0,0,,I just wanna cry
-Dialogue: 0,0:01:56.44,0:01:56.94,Default,,0,0,0,, I just wanna cry
+Dialogue: 0,0:01:56.44,0:01:56.94,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:56.94,0:01:57.43,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:57.43,0:01:57.93,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:57.93,0:01:58.48,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:58.48,0:01:59.00,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:59.00,0:01:59.51,Default,,0,0,0,,I just wanna cry
 Dialogue: 0,0:01:59.51,0:02:00.06,Default,,0,0,0,,I just wanna cry
-Dialogue: 0,0:02:00.06,0:02:03.06,Default,,0,0,0,, 
+Dialogue: 0,0:02:00.06,0:02:01.25,Default,,0,0,0,,I just wanna cry it out in pain aloud
+Dialogue: 0,0:02:01.25,0:02:02.01,Default,,0,0,0,,When I close my eyes
+Dialogue: 0,0:02:02.01,0:02:02.58,Default,,0,0,0,,When I close my eyes
+Dialogue: 0,0:02:02.58,0:02:03.11,Default,,0,0,0,,When I close my eyes
+Dialogue: 0,0:02:03.11,0:02:04.01,Default,,0,0,0,,I can feel my heart, it's pushing now
+Dialogue: 0,0:02:04.01,0:02:04.66,Default,,0,0,0,,Pressure me all night
+Dialogue: 0,0:02:04.66,0:02:05.20,Default,,0,0,0,,Pressure me all night
+Dialogue: 0,0:02:05.20,0:02:05.70,Default,,0,0,0,,Pressure me all night
+Dialogue: 0,0:02:05.70,0:02:06.76,Default,,0,0,0,,Wonder what the fuck I'm doing now
+Dialogue: 0,0:02:06.76,0:02:07.41,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:07.41,0:02:07.94,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:07.94,0:02:08.47,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:08.47,0:02:09.00,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:09.00,0:02:09.54,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:09.54,0:02:10.09,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:10.09,0:02:10.59,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:10.59,0:02:11.05,Default,,0,0,0,,I don't wanna try
+Dialogue: 0,0:02:11.05,0:02:12.01,Default,,0,0,0,,to force myself all out
+Dialogue: 0,0:02:12.01,0:02:12.98,Default,,0,0,0,,I just want the fight
+Dialogue: 0,0:02:12.98,0:02:13.58,Default,,0,0,0,,I just want the fight
+Dialogue: 0,0:02:13.58,0:02:14.09,Default,,0,0,0,,I just want the fight
+Dialogue: 0,0:02:14.09,0:02:15.00,Default,,0,0,0,,I just want the fight to settle down
+Dialogue: 0,0:02:15.00,0:02:15.72,Default,,0,0,0,,I just want a night
+Dialogue: 0,0:02:15.72,0:02:16.33,Default,,0,0,0,,I just want a night
+Dialogue: 0,0:02:16.33,0:02:16.91,Default,,0,0,0,,I just want a night
+Dialogue: 0,0:02:16.91,0:02:17.92,Default,,0,0,0,,I just want a night to let it out
+Dialogue: 0,0:02:17.92,0:02:18.52,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:18.52,0:02:19.03,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:19.03,0:02:19.52,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:19.52,0:02:20.00,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:20.00,0:02:20.49,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:20.49,0:02:20.98,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:20.98,0:02:21.46,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:21.46,0:02:21.93,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:21.93,0:02:22.60,Default,,0,0,0,,I just wanna cry
+Dialogue: 0,0:02:22.60,0:02:25.29,Default,,0,0,0,,I have a stone that's crushing me on top of my chest
+Dialogue: 0,0:02:25.37,0:02:28.09,Default,,0,0,0,,I pray for peace e- every time I walk to my bed
+Dialogue: 0,0:02:28.09,0:02:30.89,Default,,0,0,0,,Oh, how I wish to tell you something worth your time here with me
+Dialogue: 0,0:02:30.89,0:02:33.62,Default,,0,0,0,,Already breaking as the person that I'm trying to be
+Dialogue: 0,0:02:33.62,0:02:36.30,Default,,0,0,0,,For every time I forced myself to push through my bounds
+Dialogue: 0,0:02:36.30,0:02:39.10,Default,,0,0,0,,I hear a cry, a child in me, that wants to be proud
+Dialogue: 0,0:02:39.10,0:02:41.86,Default,,0,0,0,,I said it's love until I realized it's hate in disguise
+Dialogue: 0,0:02:41.86,0:02:44.45,Default,,0,0,0,,I hate myself for times I wasn't able making it right
+Dialogue: 0,0:02:44.45,0:02:47.33,Default,,0,0,0,,I have a stone that's crushing me on top of my chest
+Dialogue: 0,0:02:47.33,0:02:49.97,Default,,0,0,0,,I pray for peace e- every time I walk to my bed
+Dialogue: 0,0:02:49.97,0:02:52.84,Default,,0,0,0,,Oh, how I wish to tell you something worth your time here with me
+Dialogue: 0,0:02:52.84,0:02:55.48,Default,,0,0,0,,Already breaking as the person that I'm trying to be
+Dialogue: 0,0:02:55.48,0:02:58.21,Default,,0,0,0,,For every time I forced myself to push through my bounds
+Dialogue: 0,0:02:58.30,0:03:01.00,Default,,0,0,0,,I hear a cry, a child in me, that wants to be proud
+Dialogue: 0,0:03:01.05,0:03:03.81,Default,,0,0,0,,I said it's love until I realized it's hate in disguise
+Dialogue: 0,0:03:03.81,0:03:06.41,Default,,0,0,0,,I hate myself for times I wasn't able making it right
+Dialogue: 0,0:03:06.41,0:03:07.26,Default,,0,0,0,,ooh
+Dialogue: 0,0:03:07.26,0:03:08.87,Default,,0,0,0,,I take the pain and lock it deeply
+Dialogue: 0,0:03:08.87,0:03:09.98,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:09.98,0:03:11.60,Default,,0,0,0,,I take my shame and lock it deeply
+Dialogue: 0,0:03:11.60,0:03:12.68,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:12.68,0:03:14.33,Default,,0,0,0,,I take the stress and lock it deeply
+Dialogue: 0,0:03:14.39,0:03:15.47,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:15.47,0:03:17.10,Default,,0,0,0,,I took my state and kept it in me
+Dialogue: 0,0:03:17.10,0:03:18.06,Default,,0,0,0,,Cause I'm so "perfect"!
+Dialogue: 0,0:03:18.06,0:03:19.88,Default,,0,0,0,,I take the pain and lock it deeply
+Dialogue: 0,0:03:19.88,0:03:20.92,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:20.92,0:03:22.57,Default,,0,0,0,,I take my shame and lock it deeply
+Dialogue: 0,0:03:22.63,0:03:23.60,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:23.60,0:03:25.34,Default,,0,0,0,,I take the stress and lock it deeply
+Dialogue: 0,0:03:25.34,0:03:26.39,Default,,0,0,0,,Cause I deserve it!
+Dialogue: 0,0:03:26.39,0:03:28.09,Default,,0,0,0,,I took my state and kept it in me
+Dialogue: 0,0:03:28.09,0:03:29.54,Default,,0,0,0,,Cause I'm so "perfect"!!
+Dialogue: 0,0:03:29.54,0:03:39.88,Default,,0,0,0,,🎶
+Dialogue: 0,0:03:39.88,0:03:42.88,Default,,0,0,0,,
