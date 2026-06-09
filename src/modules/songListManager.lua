@@ -16,6 +16,7 @@ function SongListManager.getDifficultyList(path)
             table.insert(list, item)
         end
     end
+
     return list
 end
 

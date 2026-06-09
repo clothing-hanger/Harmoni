@@ -65,7 +65,7 @@ local _, _, flags = love.window.getMode()
 -- Don't ask.
 love._framerate = flags.refreshrate
 love._framerate = love._framerate + (love._framerate % 2)
-love._framerate = math.ceil(love._framerate) * 2
+love._framerate = math.ceil(love._framerate*1.5)
 
 love._currentFPS = 0
 love._currentTPS = 0

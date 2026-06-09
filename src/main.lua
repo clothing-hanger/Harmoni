@@ -6,7 +6,7 @@ require("love.init")
 dontShowBG = false
 
 aprilFools = false
-AMERICA =  false
+AMERICA = true
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
@@ -22,10 +22,11 @@ function ithink(nums, whatDoYouThink)
     return (math.abs(count - whatDoYouThink) <3 and "yeah i think so") or "nah probably not"
 end
 
-if type(jit) ~= nil and love.system.getOS() ~= "OS X" then
-    jit.opt.start("maxtrace=8000", "maxrecord=16000")
-    jit.opt.start("minstitch=3")
-    jit.opt.start("maxmcode=40960")
+
+if love.system.getOS() == "OS X" then -- disable jit on arm osx because it performs like dookie rn
+    if jit.arch == "arm64" or jit.arch == "arm" then
+        jit.off()
+    end
 end
 
 function love.load(args)
