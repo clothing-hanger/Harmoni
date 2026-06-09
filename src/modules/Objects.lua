@@ -51,7 +51,9 @@
     volumeControl = require("objects.UI.volumeControl")
     growingCircleObjectThingyIdfk = require("objects.UI.growingCircleObjectThingyIdfk")  -- this one is the most slop of all the UIslop i swear to god, i literally am stealing this from a vocaloid music video i saw,, and its my first time using bezier curves so im prob doing everuthing wrong
 
+    settingsbaseshitthingy = require("objects.settings.settingsbaseshitthingy")
     settingsTabButton = require("objects.settings.tabButton")
+    settingsModeSeperator = require("objects.settings.modeSeperator")
     settingsPreview = require("objects.settings.preview")
     settingDescription = require("objects.settings.description")
     settingsToggle = require("objects.settings.toggle")

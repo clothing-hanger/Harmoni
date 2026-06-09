@@ -6,7 +6,7 @@ require("love.init")
 dontShowBG = false
 
 aprilFools = false
-AMERICA = true
+AMERICA = false
 
 spongebirth = love.graphics.newImage("images/spongebirth.png")
 
@@ -91,7 +91,7 @@ function love.load(args)
 
     if aprilFools then require("aprilfools") end -- fucking awesome
 
-    State.switch(States.menu.preloadState)
+    State.switch(States.menu.settingsMenu)
 
     -- load objects
     print(SkinHandler:getRandomColors())
