@@ -95,41 +95,34 @@ function video:getFPS()
     if self.video then
         return self.video:getFPS()
     end
-    
+
     return 0
 end
 
-function video:update(dt)
-    if (self.playing or self.forcedUpdate) and self.video then
-        if self.forcedUpdate then
-            tryExcept(function()
-                if not self.video:read(self.imageData:getPointer()) then
-                    self.playing = false
-                else
-                    self.image:replacePixels(self.imageData)
-                end
-            end)
-            self.previousFrameTime = love.timer.getTime()
-            self.forcedUpdate = false
-            return
-        end
-
-        self.checkTimer = self.checkTimer + dt
-        local interval = 1 / self.checkPerFrame
-        if self.checkTimer >= interval then
-            self.checkTimer = self.checkTimer - interval
-            tryExcept(function()
-                if self.time >= self.video:tell() then
-                    if not self.video:read(self.imageData:getPointer()) then
-                        self.playing = false
-                    end
-                end
-                self.image:replacePixels(self.imageData)
-            end)
-            self.previousFrameTime = love.timer.getTime()
-        end
-        self.time = self.time + dt
+function video:update(_)
+    if not (self.playing or self.forcedUpdate) or not self.video then
+        return
     end
+
+    local currentTime = love.timer.getTime()
+
+    local targetAdvance = currentTime - self.previousFrameTime
+
+    self.checkTimer = self.checkTimer + targetAdvance
+    self.previousFrameTime = currentTime
+
+    local interval = 1 / self.checkPerFrame
+
+    while self.checkTimer >= interval do
+        self.checkTimer = self.checkTimer - interval
+
+        if not self.video:read(self.imageData:getPointer()) then
+            self.playing = false
+            break
+        end
+    end
+
+    self.image:replacePixels(self.imageData)
 end
 
 function video:play()
