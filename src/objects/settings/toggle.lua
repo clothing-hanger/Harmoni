@@ -16,6 +16,9 @@ function toggle:new(name, val)
     self.font = SkinHandler:getFont("Menu", 35)
     self.font2 = SkinHandler:getFont("Menu", 28)
 
+
+    self.images = {["true"] = love.graphics.newImage("images/UI/true.png"), ["false"] = love.graphics.newImage("images/UI/false.png")}
+
     self.x = 0
     self.y = 0
 end
@@ -59,6 +62,10 @@ function toggle:draw(x, y)
     love.graphics.stencil(stencil, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
     love.graphics.print(capitalize(tostring(self.val)), x + w, y + 7)
+
+    local drawImage = self.images[tostring(self.val)]
+    local dick, balls = 200/drawImage:getWidth(), 50/drawImage:getHeight()
+    love.graphics.draw(drawImage, x + w - 5, y - 5,0, dick, balls)
     love.graphics.setStencilTest()
 
     return 100

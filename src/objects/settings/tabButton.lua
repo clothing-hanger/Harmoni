@@ -8,6 +8,9 @@ function tabButton:new(name)
     self.x = 25
     self.y = 25
 
+    self.width = 100
+    self.height = 100
+
     self.font = SkinHandler:getFont("Menu", 35)
 end
 
@@ -44,11 +47,23 @@ end
 function tabButton:draw()
     love.graphics.setFont(self.font)
     love.graphics.print(self.name, self.x, self.y)
+
+
+    -- draw the rectangly thingy!!!! :D im sohappy !!
+    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 end
 
 function tabButton:getDimensions()
     -- change this when its a normal button in the #future
-    return self.font:getWidth(self.name), self.font:getHeight()
+    return self.width, self.height --self.font:getWidth(self.name), self.font:getHeight()
+end
+
+function tabButton:getWidth()
+    return self.width 
+end
+
+function tabButton:getHeight()
+    return self.height 
 end
 
 function tabButton:drawMembers()

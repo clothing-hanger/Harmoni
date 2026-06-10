@@ -32,9 +32,9 @@ function settingsMenu:enter()
     local id = 0
     for tabName, tabTabs in sortedPairs(Settings.SettingsTable) do
         id = id + 1
-
+        local spacing = 20
         local tab = settingsTabButton(tabName)
-        tab.y = 25 + (65 * id)
+        tab.y = 25 + ((tab.height + spacing) * id)
 
         for secondaryTabName, secondaryTabs in sortedPairs(tabTabs) do
             if secondaryTabName == "meta" or secondaryTabName == "description" then

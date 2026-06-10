@@ -148,7 +148,7 @@ function love.draw(dt)
 
     CHE:draw(dt)
     love.graphics.setShader()
-    GlobalNotificationsHandler:draw()
+    if not Settings:getValue("Debug"," ", "disable notifications") then     GlobalNotificationsHandler:draw() end
 end
 
 function love.quit()

@@ -42,7 +42,7 @@ Settings.SettingsTable = {
                 type = "toggle",
                 value = true,
                 defaultValue = true,
-                description = "Play a sound when a combo over 5 is broken",
+                description = "Play a sound when a combo over 20 is broken",
             },
             ["Background Brightness"] = {
                 meta = {index = 6},
@@ -277,6 +277,13 @@ Settings.SettingsTable = {
                 func = function() error("forced crash") end,
                 description = "i fucking wonder what this button does",
             },       
+            ["disable notifications"] = {
+                meta = {index = 3},
+                type = "toggle",
+                value = false, 
+                defaultValue = false,
+                description = "disables in game notifications cuz they are fucking annoying",
+            },    
         }
     }
 }
