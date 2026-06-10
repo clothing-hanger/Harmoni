@@ -2,6 +2,7 @@ local settingsMenu = State("settingsMenu")
 
 local tabs = {}
 local currentTab = ""
+local tabReference
 
 local function sortedPairs(tbl)
     local keys = {}
@@ -27,6 +28,7 @@ local function sortedPairs(tbl)
 end
 
 function settingsMenu:enter()
+    tabs = {}
     local id = 0
     for tabName, tabTabs in sortedPairs(Settings.SettingsTable) do
         id = id + 1
@@ -43,18 +45,31 @@ function settingsMenu:enter()
 
             tab:add(sep)
 
-            for theName, bullshit in sortedPairs(secondaryTabs.settings) do
-                print(theName)
+            for theName, bullshit in sortedPairs(secondaryTabs) do
+                if theName == "meta" then goto continue end
+
                 local set
                 if bullshit.type == "slider" then
-                    set = settingsSlider(theName, bullshit.value, bullshit.min, bullshit.max)
+                    set = settingsSlider(theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.min, bullshit.max)
                 elseif bullshit.type == "dropdown" then
-                    set = settingsDropdown(theName, bullshit.value, bullshit.options)
+                    set = settingsDropdown(theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.options)
+                elseif bullshit.type == "toggle" then
+                    set = settingsToggle(theName, Settings:getValue(tabName, secondaryTabName, theName))
                 end
 
-                tab:add(set)
-            end
+                if not set then goto continue end
 
+                local built = ''
+                built = built .. tabName .. '.'
+                built = built .. secondaryTabName .. '.'
+                built = built .. theName
+
+                set.reference = built
+
+                tab:add(set)
+
+                ::continue::
+            end
 
             ::continue::
         end
@@ -64,36 +79,45 @@ function settingsMenu:enter()
 end
 
 function settingsMenu:update()
-
+    if Input:pressed("menuBack") then
+        State.transition("waveDissolve", States.menu.titleScreen, function()
+            Settings:writeSettings()
+        end)
+    end
 end
 
 function settingsMenu:mousepressed(x, y, button)
+    x, y = toCanvasCoords(x, y)
     for _, tab in ipairs(tabs) do
         local tx, ty, tw, th = tab.x, tab.y, tab:getDimensions()
 
-        if x >= tx and x <= tx+tw and y >= ty-th and y <= ty then
+        if x >= tx and x <= tx+tw and y >= ty and y <= ty+th then
             currentTab = tab.name
+            tabReference = tab
         end
+    end
 
-        for _, member in ipairs(tab.members) do
-            member:mousepressed(x, y, button)
-        end
+    if not tabReference then return end
+    for _, member in ipairs(tabReference.members) do
+        member:mousepressed(x, y, button)
     end
 end
 
 function settingsMenu:mousereleased(x, y, button)
-    for _, tab in ipairs(tabs) do
-        for _, member in ipairs(tab.members) do
-            member:mousereleased(x, y, button)
-        end
+    x, y = toCanvasCoords(x, y)
+
+    if not tabReference then return end
+    for _, member in ipairs(tabReference.members) do
+        member:mousereleased(x, y, button)
     end
 end
 
 function settingsMenu:mousemoved(x, y)
-    for _, tab in ipairs(tabs) do
-        for _, member in ipairs(tab.members) do
-            member:mousemoved(x, y)
-        end
+    x, y = toCanvasCoords(x, y)
+
+    if not tabReference then return end
+    for _, member in ipairs(tabReference.members) do
+        member:mousemoved(x, y, button)
     end
 end
 

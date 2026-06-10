@@ -8,6 +8,10 @@ local function clamp(value, min, max)
     return math.max(min, math.min(max, value))
 end
 
+local function distance(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+end
+
 function slider:new(name, val, min, max)
     self.name = name
     self.val = val
@@ -24,15 +28,26 @@ function slider:new(name, val, min, max)
 end
 
 function slider:updateValue(mouseX)
-
+    self.val = clamp(remap(mouseX, self.x, self.x+self.lineWidth, self.min, self.max), self.min, self.max)
 end
 
 function slider:mousepressed(x, y, button)
+    if button ~= 1 then return end
+
+    local circleX = remap(self.val, self.min, self.max, self.x, self.x + self.lineWidth)
+    local lineY = self.y + self.font:getHeight() + 20
+
+    if distance(x, y, circleX, lineY) <= 15 then
+        self.dragging = true
+    end
 end
 
 function slider:mousemoved(x, y)
     if self.dragging then
         self:updateValue(x)
+
+        local split = stringSplit(self.reference, ".")
+        Settings:setValue(split[1], split[2], split[3], self.val)
     end
 end
 

@@ -218,31 +218,34 @@ end
 
 function songSelect:setUpThoseLinesThatIHate(numberOfLines)
     self.squiglyLines = {}
-    for i = 1,numberOfLines do
-        local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
-        local x1,x2 = -50, baseScreenRatio.x+50
-        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
+    if Settings:getValue("Menu", "Song Select", "Enable Squiglly Lines") then
+        for i = 1,numberOfLines do
+            local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
+            local x1,x2 = -50, baseScreenRatio.x+50
+            table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
+        end
     end
 end
 
 function songSelect:setUpThoseBubblesThatIHate(numberOfBubbles)
     self.bubbles = {}
+    if Settings:getValue("Menu", "Song Select", "Enable Bubbles") then
+        transparency = 0.1
+        local colors = SkinHandler:getRandomColors()
 
-    transparency = 0.1
-    local colors = SkinHandler:getRandomColors()
+        for i = 1,numberOfBubbles do 
+            ::start::
+            local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
-    for i = 1,numberOfBubbles do 
-        ::start::
-        local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
+            local color = colors[love.math.random(1,#colors)]
+            table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
+        end
 
-        local color = colors[love.math.random(1,#colors)]
-        table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
-    end
-
-    for i, Bubble in ipairs(self.bubbles) do
-        Bubble.type = "Spinner"
-        if love.math.random(1,10) == 1 then
-            Bubble.type = "Squisher"
+        for i, Bubble in ipairs(self.bubbles) do
+            Bubble.type = "Spinner"
+            if love.math.random(1,10) == 1 then
+                Bubble.type = "Squisher"
+            end
         end
     end
 
@@ -250,13 +253,15 @@ end
 
 
 function songSelect:setUpThoseWavesThatIHate(numberOfWaves)
-    local colors = {
-        {1,1,1,0.5},
-        {0,1,1,0.5},
-        {1,0,1,0.5},
-        {0,0,1,0.5}
-    }
-    self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,200, 30, 50, colors)
+    if Settings:getValue("Menu", "Song Select", "Enable Squiglly Lines") then
+        local colors = {
+            {1,1,1,0.5},
+            {0,1,1,0.5},
+            {1,0,1,0.5},
+            {0,0,1,0.5}
+        }
+        self.layerWaves = UILayerWave(0,baseScreenRatio.y-100,baseScreenRatio.x,500,numberOfWaves,200, 30, 50, colors)
+    end
 end
 
 function songSelect:setupSongList()
@@ -487,7 +492,9 @@ function songSelect:update(dt)
         end
     end
 
-    self.layerWaves:update(dt)
+    if self.layerWaves then
+        self.layerWaves:update(dt)
+    end
     self:updateBGImage()
     self:checkForSongButtonClicks(true)
     self:checkForDifficultyButtonClicks()

@@ -6,7 +6,7 @@ Modscript.timedFunctions = {}
 Modscript.shaders = {}
 Modscript.currentShader = ""
 
-Modscript.downscroll = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+Modscript.downscroll = Settings:getValue("Gameplay", "Mania", "Scroll Direction") == "Down"
 
 require(path .. "Modifiers")
 
@@ -49,7 +49,7 @@ end
 
 function Modscript:reset(receptors)
     self:setupDefaultPositions(receptors)
-    self.downscroll = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+    self.downscroll = Settings:getValue("Gameplay", "Mania", "Scroll Direction") == "Down"
     for i = 1, States.game.gameModeManager.gameMode.playField[1].chart.meta.laneCount do
         States.game.gameModeManager.gameMode.playField[1].lanes[i].y = maniaLaneYOffset
     end
@@ -167,7 +167,7 @@ function Modscript:load(script)
         table.insert(receptors, lane.receptor)
     end
     self:reset(receptors)
-    self.downscroll = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+    self.downscroll = Settings:getValue("Gameplay", "Mania", "Scroll Direction") == "Down"
 
     local mods = {
         ConfusionModifier,
@@ -368,7 +368,7 @@ function Modscript:call(func, args)
 end
 
 function Modscript:endSong()
-    self.downscroll = Settings:getValue("Game", "Mania", "Scroll Direction") == "Down"
+    self.downscroll = Settings:getValue("Gameplay", "Mania", "Scroll Direction") == "Down"
 end
 
 return Modscript

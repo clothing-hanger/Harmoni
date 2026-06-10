@@ -3,7 +3,7 @@ local maniaPlayField = Class:extend("maniaPlayField")
 function maniaPlayField:new(chart, parent)
     self.parent = parent
     self.chart = chart
-    self.laneYOffset = maniaLaneYOffset
+    self.laneYOffset = Settings:getValue("Skin", "Mania", "Lane Height") -- ?? Right??
     self.lanes = {}
     self.svMarks = {}
     self.scrollSpeedFactors = chart.scrollSpeedFactors or {}
@@ -13,7 +13,7 @@ function maniaPlayField:new(chart, parent)
     self.currentTime = 0
     self.endNoteTime = 0
     self.totalNotes = 0
-    self.laneSpacing = 0
+    self.laneSpacing = 200
     self.offset = { x = 0, y = 0 }
     self.id = 1
     self.inputAllowed = true

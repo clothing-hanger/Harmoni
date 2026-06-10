@@ -30,7 +30,7 @@ function maniaNote:new(startTime, endTime, lane, mode, initialSVTime, initialSVE
 
     self.image = SkinHandler:getImage("Notes", self.laneCountString, self.laneString)
 
-    self.x = maniaLanePositions[self.laneCountString][self.lane]
+    self.x = getPositionFromLane(tonumber(self.parent.parent.chart.meta.laneCount), lane)
     self.y = self.startTime + (MusicTime or 0)
     self.endY = self.endTime + (MusicTime or 0)
 
@@ -92,9 +92,9 @@ end
 
 function maniaNote:getNotePosition(time, moveWithScroll)
     self.moveWithScroll = moveWithScroll
-    local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
+    local scrollDir = Settings:getValue("Gameplay", "Mania", "Scroll Direction")
     if States.game.gameModeManager.gameMode.ableToModscript then scrollDir = "Up" end
-    local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
+    local scrollSpeed = Settings:getValue("Gameplay", "Mania", "Scroll Speed")
     local multiplier = msToMulti(scrollSpeed)
     local sfMult = self.parent.parent:getScrollSpeedFactorFromTime(self.parent.parent.currentTime)
     local currentTime = self.parent.parent.currentTime
@@ -136,7 +136,7 @@ end
 function maniaNote:draw()
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local noteBatch = SkinHandler:getBatch("Notes")
-    local scrollDir = Settings:getValue("Game", "Mania", "Scroll Direction")
+    local scrollDir = Settings:getValue("Gameplay", "Mania", "Scroll Direction")
 
     local canBatch = not States.game.gameModeManager.gameMode.ableToModscript
     local curBatch = arrowBatch or noteBatch

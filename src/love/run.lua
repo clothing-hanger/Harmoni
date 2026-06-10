@@ -152,13 +152,36 @@ function love.run()
            if a then return a, b end
         end
 
-        local cap = love._framerate
+        local framerate = 60
+        local setting = Settings:getValue("System", " ", "Framerate Limit")
+        if setting == "VSync" then
+            framerate = flags.refreshrate
+        elseif setting == "VSync*2" then
+            framerate = flags.refreshrate*2
+        elseif setting == "Unlimited" then
+            framerate = 2^53 - 1
+        elseif framerate == "Custom" then
+            -- what the fuck
+            framerate = flags.refreshrate*2
+        end
+
+        local inactive = false
+        if Settings:getValue("System", " ", "Lower FPS when Inactive") then
+            if not love.window.hasFocus() then
+                inactive = true
+            end
+        end
+
+        local cap = framerate
         local capDT = 1 / cap
 
         -- Cap the minimum delta time to 1/30 (30 FPS)
         dt = math_min(t_step(), math_max(capDT, 1 / 30))
 
         love_update(dt)
+        if inactive then
+            love.timer.sleep(0.065)
+        end
         drawTmr = drawTmr + dt
 
         if drawTmr >= capDT then

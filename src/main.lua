@@ -94,7 +94,6 @@ function love.load(args)
     State.switch(States.menu.preloadState)
 
     -- load objects
-    print(SkinHandler:getRandomColors())
     throbbert = throbbert(SkinHandler:getRandomColors())
 end
 
@@ -154,6 +153,7 @@ end
 
 function love.quit()
     CHE:exit()
+    Settings:writeSettings()
 
     if State.current() == States.menu.titleScreen then
         if not States.menu.titleScreen.quitInProgress and not AMERICA then
@@ -188,5 +188,3 @@ function love.quit()
         end
     end
 end
-
-

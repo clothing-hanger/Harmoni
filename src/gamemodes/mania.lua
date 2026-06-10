@@ -419,6 +419,11 @@ function mania:draw()
         self.videoBackground:draw()
     end
 
+    local coverAlpha = 1 - (Settings:getValue("Gameplay", "Mania", "Background Brightness") / 100)
+    love.graphics.setColor(0, 0, 0, coverAlpha)
+    love.graphics.rectangle("fill", 0, 0, baseScreenRatio.x, baseScreenRatio.y)
+    love.graphics.setColor(1,1,1)
+
     -- Prepare batches
     local arrowBatch = SkinHandler:getBatch("Arrows")
     local receptorBatch = SkinHandler:getBatch("Receptors")

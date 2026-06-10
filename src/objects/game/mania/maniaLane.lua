@@ -1,5 +1,23 @@
 local maniaLane = Class:extend("maniaLane")
 
+function buildLanePositions(count)
+    local positions = {}
+
+    local center = (count + 1) / 2
+    for i = 1, count do
+        local offset = i - center
+        positions[i] = (baseScreenRatio.x)/2 + offset * (maniaNoteSize + Settings:getValue("Skin", "Mania", "Lane Spacing"))
+    end
+
+    return positions
+end
+
+function getPositionFromLane(count, id)
+    local center = (count + 1) / 2
+    local offset = id - center
+    return (baseScreenRatio.x)/2 + offset * (maniaNoteSize + Settings:getValue("Skin", "Mania", "Lane Spacing"))
+end
+
 function maniaLane:new(mode, laneIndex, spacing, yOffset, hitObjects, parent)
     self.maniaMode = mode
     self.maniaLane = laneIndex
@@ -13,8 +31,7 @@ function maniaLane:new(mode, laneIndex, spacing, yOffset, hitObjects, parent)
 
     self.inputBind = maniaInputs[mode][self.maniaLane]
 
-    local laneCountKey = self.parent.chart.meta.laneCount .. "K"
-    self.x = maniaLanePositions[laneCountKey][self.maniaLane]
+    self.x = getPositionFromLane(tonumber(self.parent.chart.meta.laneCount), self.maniaLane)
     self.y = self.yOffset
 
     self:setUpHitObjects(self.hitObjects)
@@ -253,7 +270,7 @@ function maniaLane:draw()
         self.receptor.z = pos.z * 200
     end
     self.receptor:draw()
-    local scrollSpeed = Settings:getValue("Game", "Mania", "Scroll Speed")
+    local scrollSpeed = Settings:getValue("Gameplay", "Mania", "Scroll Speed")
     local multiplier = msToMulti(scrollSpeed)
     for _, note in ipairs(self.drawableNotes) do
         if States.game.gameModeManager.gameMode.ableToModscript then

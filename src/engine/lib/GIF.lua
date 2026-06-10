@@ -178,7 +178,9 @@ local function blitIndexedToRgba(dst, dstW, indices, palette, transparentIndex, 
         for col = 0, w - 1 do
             local idx = indices[srcOff + col]
             local o = dstOff + col * 4
-            dst[o + 3] = 0
+            if State.current() == States.extra.america then -- awesome hardcode instead of figuring out the error !!!
+                dst[o + 3] = 0
+            end
 
             if transparentIndex ~= nil and idx == transparentIndex then
                 if not isDisposal0 then

@@ -72,7 +72,7 @@ function CHE:init()
     CHETime = {real = 0, session = 0}
     sessionBegin = love.timer.getTime()
 
-    if Settings:getValue("Game", "Mania", "Scroll Direction") == "Down" then
+    if Settings:getValue("Gameplay", "Mania", "Scroll Direction") == "Down" then
         maniaLaneYOffset = baseScreenRatio.y - maniaLaneYOffset
     end
 
@@ -303,23 +303,25 @@ function CHE:draw(dt)
 
     cursor:draw()
 
-    local DPS, UPS = love.timer.getFPS()
-    love.graphics.setColor(0, 0, 0)
+    if Settings:getValue("Debug", " ", "Enable Debug Overlay") then
+        local DPS, UPS = love.timer.getFPS()
+        love.graphics.setColor(0, 0, 0)
 
-    local graphicStats = love.graphics.getStats()
-    local drawCalls = graphicStats.drawcalls or 0
-    local drawCallsBatched = graphicStats.drawcallsbatched or 0
-    local textureMemory = graphicStats.texturememory or 0
+        local graphicStats = love.graphics.getStats()
+        local drawCalls = graphicStats.drawcalls or 0
+        local drawCallsBatched = graphicStats.drawcallsbatched or 0
+        local textureMemory = graphicStats.texturememory or 0
 
-    local str = string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024)
-    for x = -1, 1 do
-        for y = -1, 1 do
-            love.graphics.printf(str, x, y, love.graphics.getWidth(), "right")
+        local str = string.format("UPS: %d, DPS: %d\nDrawCalls: %d (%d batched)\nTextureMemory: %dMB", UPS, DPS, drawCalls, drawCallsBatched, textureMemory/1024/1024)
+        for x = -1, 1 do
+            for y = -1, 1 do
+                love.graphics.printf(str, x, y, love.graphics.getWidth(), "right")
+            end
         end
-    end
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.printf(str, 0, 0, love.graphics.getWidth(), "right")
 
+    end
     love.graphics.setFont(lastFont)
 
     if self.doingflashbang then

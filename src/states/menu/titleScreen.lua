@@ -23,7 +23,6 @@ function titleScreen:enter(from, resetItems, fadeIn)
 
     self.noteImage = love.graphics.newImage("images/menu/note.png")
 
-    print(self.icons["play"])
     self.buttonWidth = 350
     self.buttonHeight = 120
     self.buttonX = 300 - self.buttonWidth / 2 
@@ -50,7 +49,7 @@ function titleScreen:enter(from, resetItems, fadeIn)
         },
         {
             label = LocaleHandler:getText("Menu", "Settings"), 
-            func = function() State.switch(States.menu.settingsMenu) end, 
+            func = function() State.transition("waveDissolve", States.menu.settingsMenu) end, 
             color1 = {147/255,190/255,223/255,1},
             color2 = {106/255,165/255,210/255,1},
             icon = self.icons["settings"]
@@ -252,41 +251,41 @@ end
 
 function titleScreen:setUpThoseBubblesThatIHate(numberOfBubbles)
     self.bubbles = {}
+    
+    if Settings:getValue("Menu", "Title Screen", "Enable Bubbles") then
+        transparency = 0.1
+        local colors = SkinHandler:getRandomColors()
 
-    transparency = 0.1
-    local colors = SkinHandler:getRandomColors()
+        local allArrows = love.math.random(1,1000) == 1 -- had to chance this cuz i used my own chance function comletely incorrectly by accident
 
-    local allArrows = love.math.random(1,1000) == 1 -- had to chance this cuz i used my own chance function comletely incorrectly by accident
+        for i = 1,numberOfBubbles do 
+            ::start::
+            local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
 
-    for i = 1,numberOfBubbles do 
-        ::start::
-        local x,y = love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0)
-
-        local color = colors[love.math.random(1,#colors)]
-        table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
-    end
-
-    for i, Bubble in ipairs(self.bubbles) do
-        Bubble.type = "Spinner"
-        if chance(10) then
-            Bubble.type = "Squisher"
+            local color = colors[love.math.random(1,#colors)]
+            table.insert(self.bubbles, UISquigleCircle("fill", x, y, love.math.random(90,130), 5, 5, 3, color))
         end
-        if chance(10) then
-            Bubble.isNote = true   -- we do it like this instead of setting the type to note so we can have squisher notes (these are super rare so thats cool)
+
+        for i, Bubble in ipairs(self.bubbles) do
+            Bubble.type = "Spinner"
+            if chance(10) then
+                Bubble.type = "Squisher"
+            end
+            if chance(10) then
+                Bubble.isNote = true   -- we do it like this instead of setting the type to note so we can have squisher notes (these are super rare so thats cool)
+            end
+            if allArrows then Bubble.isNote = true end
         end
-        if allArrows then Bubble.isNote = true end
+
+        table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {squishX = 0.5}))
+        table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {rotation = 0}))
+
+        self.bubbles[#self.bubbles].type = "Squisher"
+        self.bubbles[#self.bubbles-1].type = "Spinner"
+
+        self.bubbles[#self.bubbles].isNote = true
     end
-
-    table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {squishX = 0.5}))
-    table.insert(self.bubbles, UISquigleCircle("fill", love.math.random(0, baseScreenRatio.x), love.math.random(baseScreenRatio.y, 0), love.math.random(90,130), 5, 5, 3, colors[love.math.random(1,#colors)], {rotation = 0}))
-
-    self.bubbles[#self.bubbles].type = "Squisher"
-    self.bubbles[#self.bubbles-1].type = "Spinner"
-
-    self.bubbles[#self.bubbles].isNote = true
-
 end
-
 
 function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
     local colors = {
@@ -300,19 +299,22 @@ function titleScreen:setUpThoseWavesThatIHate(numberOfWaves)
     colorsREAL = {}
 
     -- we need to randomly choose numberOfWaves amount of these colors 
-    for _ = 1,numberOfWaves do
-        table.insert(colorsREAL, colors[love.math.random(1,#colors)])
+    if Settings:getValue("Menu", "Title Screen", "Enable Squiglly Lines") then
+        for _ = 1,numberOfWaves do
+            table.insert(colorsREAL, colors[love.math.random(1,#colors)])
+        end
+        self.layerWaves = UILayerWave(0,baseScreenRatio.y+50,baseScreenRatio.x,250,#colorsREAL,300, 30, 50, colorsREAL)
     end
-    self.layerWaves = UILayerWave(0,baseScreenRatio.y+50,baseScreenRatio.x,250,#colorsREAL,300, 30, 50, colorsREAL)
 end
-
 
 function titleScreen:setUpThoseLinesThatIHate(numberOfLines)
     self.squiglyLines = {}
-    for i = 1,numberOfLines do
-        local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
-        local x1,x2 = -50, baseScreenRatio.x+50
-        table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
+    if Settings:getValue("Menu", "Title Screen", "Enable Squiglly Lines") then
+        for i = 1,numberOfLines do
+            local y = ((baseScreenRatio.y+400)/numberOfLines)*(i-2)
+            local x1,x2 = -50, baseScreenRatio.x+50
+            table.insert(self.squiglyLines, UIsquiglyLine(x1,y+300,x2,y-300,10,30,200,1,70,{1,1,1,0.15}))
+        end
     end
 end
 
@@ -354,7 +356,9 @@ function titleScreen:update(dt)
 
     if self.window then self.window:update(dt) end
 
-    self.layerWaves:update(dt)
+    if self.layerWaves then
+        self.layerWaves:update(dt)
+    end
 
     self:updateBubbles(dt) 
 end
@@ -442,7 +446,9 @@ function titleScreen:draw()
     love.graphics.setColor(1,1,1,0.1)
     love.graphics.push()
         love.graphics.translate(0, self.wavesY)
-        self.layerWaves:draw()
+        if self.layerWaves then
+            self.layerWaves:draw()
+        end
     love.graphics.pop()
     love.graphics.setColor(1,1,1,0.05)
     for i, squiglyLines in ipairs(self.squiglyLines) do

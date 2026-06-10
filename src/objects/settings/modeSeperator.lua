@@ -6,6 +6,10 @@ function modeSeperator:new(name)
 end
 
 function modeSeperator:draw(x, y)
+    if self.name == "" or self.name == " " then
+        return 0
+    end
+
     x = x or 0
     y = y or 0
     love.graphics.setFont(self.font)
