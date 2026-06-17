@@ -207,7 +207,7 @@ function print(...)
     end
     oprint("[Jukebox Thread] " .. table.concat(args, "\t"))
 end
-local ChartParse = require("modules.chartParse")
+local ChartParse = require("modules.game.chartParse")
 local musicPath = ...
 
 local loadChannel = love.thread.getChannel("jukebox_song_load")

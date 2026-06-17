@@ -37,7 +37,7 @@ function mania:new(chart, parent, fullChart, mods)
     self.song:setLooping(false)
     self.playField = {maniaPlayField(self.chart, self)}
 
-    mania.judgements = require("modules.maniaJudgements")
+    mania.judgements = require("modules.gamemodes.mania.maniaJudgements")
 
     self.inputsPerSecond = {}
     self.notesPerSecond = {}
@@ -118,7 +118,7 @@ function mania:setUpObjects()
     local backgroundPath = self.chartPath .. self.chart.meta.backgroundFile
     self.background = sharedBackground(backgroundPath, gameplayBackgroundDim, 1)
     self.HUD = maniaHUD(self)
-    self.bpmHandler = require("modules.bpm")
+    self.bpmHandler = require("modules.game.bpm")
     self:resetBpmShit(0)
 
     self.comboAlert = maniaComboAlert()

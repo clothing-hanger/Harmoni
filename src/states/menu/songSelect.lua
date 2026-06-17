@@ -29,7 +29,7 @@ end
 function songSelect:enter()
     self.debug = true
 
-    self.bpmHandler = require("modules.bpm")
+    self.bpmHandler = require("modules.game.bpm")
 
 
     self.currentSongInfo = {}
@@ -53,7 +53,7 @@ end
 require("love.timer")
 require("love.filesystem")
 
-local chartParse = require("modules.chartParse")
+local chartParse = require("modules.game.chartParse")
 
 local channel = love.thread.getChannel("thread.songLoader")
 local outChannel = love.thread.getChannel("thread.songLoader.out")

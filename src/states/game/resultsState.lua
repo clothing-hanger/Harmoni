@@ -7,7 +7,7 @@ function resultsState:enter(s, parent)
     self.performanceRating = parent.scoreHandler.Scores.truePerformanceRating
     
     self.parent = parent
-    self.grades = require("modules.maniaGrades")
+    self.grades = require("modules.gamemodes.mania.maniaGrades")
     self.accuracy = parent.scoreHandler.Scores.trueAccuracy
     self.x, self.y = baseScreenRatio.x / 2, baseScreenRatio.y / 2
     self.width, self.height = 700, 700
