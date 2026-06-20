@@ -1,6 +1,6 @@
 local toggle = settingsbaseshitthingy:extend("toggle")
 
-function stringSplit(str, sep)
+local function stringSplit(str, sep)  -- shouldnt this be local?
     local t = {}
     for s in string.gmatch(str, "([^" .. sep .. "]+)") do
         table.insert(t, s)
@@ -8,7 +8,7 @@ function stringSplit(str, sep)
     return t
 end
 
-function toggle:new(name, val)
+function toggle:new(name, val, width, height)
     self.name = name
 
     self.val = val
@@ -21,6 +21,8 @@ function toggle:new(name, val)
 
     self.x = 0
     self.y = 0
+    self.width = width or 0
+    self.height = height or 0
 end
 
 function toggle:mousepressed(x, y, button)
@@ -68,7 +70,7 @@ function toggle:draw(x, y)
     love.graphics.draw(drawImage, x + w - 5, y - 5,0, dick, balls)
     love.graphics.setStencilTest()
 
-    return 100
+    return 100 -- ??????? 
 end
 
 return toggle

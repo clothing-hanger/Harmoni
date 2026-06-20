@@ -4,6 +4,21 @@ local tabs = {}
 local currentTab = ""
 local tabReference
 
+
+local tabX,tabY = 67, 67 -- killing mysefl
+local tabWidth, tabHeight = 209, 209
+local tabSpacing = 17
+local settingsX,settingY = 505, 67
+local settingsWidth, settingsHeight = 1175, 209
+local settingSpacing = 17
+local previewX, previewY = 1857, 67
+local previewWidth, previewHeight = 248, 248
+local descriptionX, descriptionY = 1857, 816
+local descriptionWidth, descriptionHeight = 1175, 613
+local resetButtonX, resetButtonY = 1857, 1264
+local exitButtonX, exitButtonY = 2505, 1264
+
+
 local function sortedPairs(tbl)
     local keys = {}
 
@@ -28,13 +43,18 @@ local function sortedPairs(tbl)
 end
 
 function settingsMenu:enter()
+
+    self.settingsWidth = settingsWidth
+    self.settingsHeight = settingsHeight
+    self.tabWidth = tabWidth
     tabs = {}
     local id = 0
     for tabName, tabTabs in sortedPairs(Settings.SettingsTable) do
         id = id + 1
         local spacing = 20
         local tab = settingsTabButton(tabName)
-        tab.y = 25 + ((tab.height + spacing) * id)
+        tab.y = tabY + ((tab.height + spacing) * (id-1))
+        tab.x = tabX
 
         for secondaryTabName, secondaryTabs in sortedPairs(tabTabs) do
             if secondaryTabName == "meta" or secondaryTabName == "description" then
@@ -50,11 +70,11 @@ function settingsMenu:enter()
 
                 local set
                 if bullshit.type == "slider" then
-                    set = settingsSlider(theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.min, bullshit.max)
+                    set = settingsSlider( theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.min, bullshit.max)
                 elseif bullshit.type == "dropdown" then
-                    set = settingsDropdown(theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.options)
+                    set = settingsDropdown( theName, Settings:getValue(tabName, secondaryTabName, theName), bullshit.options)
                 elseif bullshit.type == "toggle" then
-                    set = settingsToggle(theName, Settings:getValue(tabName, secondaryTabName, theName))
+                    set = settingsToggle( theName, Settings:getValue(tabName, secondaryTabName, theName))
                 end
 
                 if not set then goto continue end
@@ -73,7 +93,7 @@ function settingsMenu:enter()
 
             ::continue::
         end
-
+        print(tab.x)
         table.insert(tabs, tab)
     end
 end

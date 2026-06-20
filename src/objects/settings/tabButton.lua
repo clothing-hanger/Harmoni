@@ -5,11 +5,11 @@ function tabButton:new(name)
 
     self.members = {}
 
-    self.x = 25
-    self.y = 25
+    self.x = 0
+    self.y = 0
 
-    self.width = 100
-    self.height = 100
+    self.width = States.menu.settingsMenu.tabWidth
+    self.height = States.menu.settingsMenu.tabWidth
 
     self.font = SkinHandler:getFont("Menu", 35)
 end
