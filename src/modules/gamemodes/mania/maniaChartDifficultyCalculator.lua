@@ -18,7 +18,7 @@ function maniaChartDifficultyCalculator:calculateDifficulty(chart)
     if not chunks then
         if AchievementHandler then AchievementHandler:unlock("maniaChartDifficultyCalculator") end
         GlobalNotificationsHandler:addNotification("Diff calc failed! (case 1)" .. chart.meta.title .. " - " ..chart.meta.difficultyName, "error")
-        return "fuck" 
+        return 0
     end
     local chunkDifficultyScores = {}
     for i, Chunk in ipairs(chunks) do

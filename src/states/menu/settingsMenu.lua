@@ -8,7 +8,7 @@ local tabReference
 local tabX,tabY = 67, 67 -- killing mysefl
 local tabWidth, tabHeight = 209, 209
 local tabSpacing = 17
-local settingsX,settingY = 505, 67
+local settingsX,settingsY = 505, 67
 local settingsWidth, settingsHeight = 1175, 209
 local settingSpacing = 17
 local previewX, previewY = 1857, 67
@@ -51,10 +51,15 @@ function settingsMenu:enter()
     local id = 0
     for tabName, tabTabs in sortedPairs(Settings.SettingsTable) do
         id = id + 1
-        local spacing = 20
+        local spacing = tabSpacing
         local tab = settingsTabButton(tabName)
         tab.y = tabY + ((tab.height + spacing) * (id-1))
         tab.x = tabX
+        tab.settingsX = settingsX
+        tab.settingsBaseY = settingsY
+        tab.settingSpacing = settingSpacing
+        tab.settingsWidth = settingsWidth
+        tab.settingsHeight = settingsHeight
 
         for secondaryTabName, secondaryTabs in sortedPairs(tabTabs) do
             if secondaryTabName == "meta" or secondaryTabName == "description" then

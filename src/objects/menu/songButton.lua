@@ -242,7 +242,7 @@ function menuSongButton:draw()
         throbbert:draw(self.x + self.width - (throbbertRadius*2), self.y+self.height/2, throbbertRadius, 15)
     end
 
-    if self.newAlert and self.isNew then
+    if self.newAlert and self.isNew and Settings:getValue("Menu", "Song Select", "Enable New Song Indicator") then
         self.newAlert:draw(self.x, self.y)
     end
 

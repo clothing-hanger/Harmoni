@@ -10,6 +10,12 @@ function tabButton:new(name)
 
     self.width = States.menu.settingsMenu.tabWidth
     self.height = States.menu.settingsMenu.tabWidth
+    
+    self.settingsX = 0
+    self.settingsBaseY = 0
+    self.settingSpacing = 0
+    self.settingsWidth = 0
+    self.settingsHeight = 0
 
     self.font = SkinHandler:getFont("Menu", 35)
 end
@@ -33,8 +39,10 @@ function tabButton:mousemoved(x, y)
 end
 
 function tabButton:mousepressed(x, y, button)
+    local dontContinue = false
     for i, member in ipairs(self.members) do
-        member:mousepressed(x, y, button)
+        dontContinue = member:mousepressed(x, y, button)
+        if dontContinue then break end
     end
 end
 
@@ -59,17 +67,22 @@ function tabButton:getDimensions()
 end
 
 function tabButton:getWidth()
-    return self.width 
+    return self.width
 end
 
 function tabButton:getHeight()
-    return self.height 
+    return self.height
 end
 
 function tabButton:drawMembers()
-    local y = 25
+    local y = self.settingsBaseY
     for i, member in ipairs(self.members) do
-        y = y + member:draw(300, y)
+        if not member:isInstanceOf(settingsModeSeperator) then
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.rectangle("line", self.settingsX, y, self.settingsWidth, self.settingsHeight)
+        end
+        y = y + member:draw(self.settingsWidth, self.settingsHeight, self.settingsX, y)
+        y = y + self.settingSpacing
     end
 end
 

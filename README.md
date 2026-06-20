@@ -6,7 +6,9 @@ Open source rhythm game written in Love2D Lua
 
 # Known Issues
 
-- Theres no big boobies on the logo
+# big boobs
+
+:checkmark: big boobs implemented
 
 # Importing songs
 

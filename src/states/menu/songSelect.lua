@@ -854,23 +854,23 @@ function songSelect:draw(dt)
 end
 
 function songSelect:drawSongInfo(x, y, spacing)
-    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Extra Extra Large"))
+    love.graphics.setFont(SkinHandler:getFont("Menu", 75))
     love.graphics.printf(self.currentSongInfo.name or (LocaleHandler:getText("GeneralErrors", "No Song Name")), x, y, 2000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Extra Extra Large"):getHeight() + spacing
+    y = y + SkinHandler:getFont("Menu", 75):getHeight() + spacing
 
-    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Large"))
+    love.graphics.setFont(SkinHandler:getFont("Menu", 30))
     love.graphics.printf(LocaleHandler:getText("Menu","Song By").. (self.currentSongInfo.artist or (LocaleHandler:getText("GeneralErrors", "No Artist Name"))), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
+    y = y + SkinHandler:getFont("Menu", 30):getHeight() + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","Charted By").. (self.currentSongInfo.charter or LocaleHandler:getText("GeneralErrors", "No Charter Name")), x,y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Large"):getHeight() + spacing
+    y = y + SkinHandler:getFont("Menu", 30):getHeight() + spacing
 
-    love.graphics.setFont(SkinHandler:getFontLegacy("Menu Small"))
+    love.graphics.setFont(SkinHandler:getFont("Menu", 20))
     love.graphics.printf(LocaleHandler:getText("Menu", "Length") .. LocaleHandler:getText("Misc", "Placeholder"), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
+    y = y + SkinHandler:getFont("Menu", 30):getHeight() + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","BPM") .. (self.currentSongInfo.bpm or LocaleHandler:getText("GeneralErrors", "unknown")), x, y, 1000, "left")
-    y = y + SkinHandler:getFontLegacy("Menu Small"):getHeight() + spacing
+    y = y + SkinHandler:getFont("Menu", 30):getHeight() + spacing
 
     love.graphics.printf(LocaleHandler:getText("Menu","LN%") .. LocaleHandler:getText("Misc", "Placeholder"), x, y, 1000, "left")
 end

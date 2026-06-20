@@ -35,7 +35,7 @@ function slider:mousepressed(x, y, button)
     if button ~= 1 then return end
 
     local circleX = remap(self.val, self.min, self.max, self.x, self.x + self.lineWidth)
-    local lineY = self.y + self.font:getHeight() + 20
+    local lineY = self.y + self.font:getHeight() + 100
 
     if distance(x, y, circleX, lineY) <= 15 then
         self.dragging = true
@@ -57,25 +57,26 @@ function slider:mousereleased(x, y, button)
     end
 end
 
-function slider:draw(x, y)
+function slider:draw(width, height, x, y)
     x = x or 0
     y = y or 0
 
-    self.x = x
+    self.x = x + 50
     self.y = y
+    self.lineWidth = width - 100
 
     love.graphics.setFont(self.font)
 
-    local lineY = y + self.font:getHeight() + 20
+    local lineY = y + self.font:getHeight() + 100
 
-    love.graphics.print(self.name, x, y)
+    love.graphics.print(self.name, self.x, y + 15)
 
     local valueText = string.format("%.2f", self.val)
-    love.graphics.print(valueText, x + self.lineWidth + 30, y)
+    love.graphics.print(valueText, self.x + self.lineWidth - self.font:getWidth(valueText) - 25, y + 15)
 
-    love.graphics.line(x, lineY, x + self.lineWidth, lineY)
+    love.graphics.line(self.x, lineY, self.x + self.lineWidth, lineY)
 
-    local circleX = remap(self.val, self.min, self.max, x, x + self.lineWidth)
+    local circleX = remap(self.val, self.min, self.max, self.x, self.x + self.lineWidth)
 
     love.graphics.circle("fill", circleX, lineY, 15)
 
@@ -83,7 +84,7 @@ function slider:draw(x, y)
     love.graphics.circle("line", circleX, lineY, 15)
     love.graphics.setColor(1, 1, 1)
 
-    return 100
+    return height
 end
 
 return slider

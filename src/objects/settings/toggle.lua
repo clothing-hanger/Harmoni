@@ -1,7 +1,7 @@
 local toggle = settingsbaseshitthingy:extend("toggle")
 
-local function stringSplit(str, sep)  -- shouldnt this be local?
-    local t = {}
+function stringSplit(str, sep)  -- shouldnt this be local?
+    local t = {}                -- buirger
     for s in string.gmatch(str, "([^" .. sep .. "]+)") do
         table.insert(t, s)
     end
@@ -42,35 +42,35 @@ local function capitalize(s)
     return s:sub(1,1):upper() .. s:sub(2):lower()
 end
 
-function toggle:draw(x, y)
+function toggle:draw(width, height, x, y)
     x = x or 0
     y = y or 0
 
-    self.x = x
-    self.y = y
+    self.x = x + 15
+    self.y = y + 15
 
     love.graphics.setFont(self.font)
-    love.graphics.print(self.name .. ": ", x, y)
+    love.graphics.print(self.name .. ": ", self.x, self.y)
     love.graphics.setFont(self.font2)
     local w = self.font:getWidth(self.name .. ":   " )
 
     love.graphics.setColor(0,0,0)
-    love.graphics.rectangle("fill", x + w - 5, y - 5, 200, 50, 5, 5)
+    love.graphics.rectangle("fill", self.x + w - 5, self.y - 5, 200, 50, 5, 5)
     love.graphics.setColor(1,1,1)
-    love.graphics.rectangle("line", x + w - 5, y - 5, 200, 50, 5, 5)
+    love.graphics.rectangle("line", self.x + w - 5, self.y - 5, 200, 50, 5, 5)
     local function stencil()
-        love.graphics.rectangle("fill", x + w - 5, y - 5, 200, 50, 5, 5)
+        love.graphics.rectangle("fill", self.x + w - 5, self.y - 5, 200, 50, 5, 5)
     end
     love.graphics.stencil(stencil, "replace", 1)
     love.graphics.setStencilTest("greater", 0)
-    love.graphics.print(capitalize(tostring(self.val)), x + w, y + 7)
+    love.graphics.print(capitalize(tostring(self.val)), self.x + w, self.y + 7)
 
     local drawImage = self.images[tostring(self.val)]
     local dick, balls = 200/drawImage:getWidth(), 50/drawImage:getHeight()
-    love.graphics.draw(drawImage, x + w - 5, y - 5,0, dick, balls)
+    love.graphics.draw(drawImage, self.x + w - 5, self.y - 5,0, dick, balls)
     love.graphics.setStencilTest()
 
-    return 100 -- ??????? 
+    return height -- ??????? 
 end
 
 return toggle

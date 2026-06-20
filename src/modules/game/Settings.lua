@@ -95,7 +95,14 @@ Settings.SettingsTable = {
                 value = true,
                 defaultValue = true,
                 description = "Enables the squiggly line decorations in the Song Select",
-            },   
+            },
+            ["Enable New Song Indicator"] = {
+                meta = {index = 3},
+                type = "toggle",
+                value = true,
+                defaultValue = true,
+                description = "Enables the new song indicator in the Song Select",
+            },
         },
     },
     ["Keybinds"] = {

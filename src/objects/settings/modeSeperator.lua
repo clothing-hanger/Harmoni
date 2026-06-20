@@ -5,7 +5,7 @@ function modeSeperator:new(name)
     self.font = SkinHandler:getFont("Menu", 35)
 end
 
-function modeSeperator:draw(x, y)
+function modeSeperator:draw(width, height, x, y)
     if self.name == "" or self.name == " " then
         return 0
     end
@@ -15,8 +15,8 @@ function modeSeperator:draw(x, y)
     love.graphics.setFont(self.font)
     love.graphics.print(self.name, x, y)
     love.graphics.setLineWidth(5)
-    love.graphics.line(x, y + self.font:getHeight() + 5, x + 700, y + self.font:getHeight())
-
+    love.graphics.line(x, y + self.font:getHeight() + 5, x + width, y + self.font:getHeight())
+    love.graphics.setLineWidth(1)
     return 75
 end
 

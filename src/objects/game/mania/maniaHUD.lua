@@ -3,9 +3,9 @@ local maniaHUD = Class:extend("maniaHUD")
 function maniaHUD:new(parent)
     self.parent = parent
     self.debug = false
-    self.fontLarge = SkinHandler:getFontLegacy("HUD Large")
-    self.fontSmall = SkinHandler:getFontLegacy("HUD Small")
-    self.fontExtraSmall = SkinHandler:getFontLegacy("HUD Extra Small")
+    self.fontLarge = SkinHandler:getFont("HUD", 65)
+    self.fontSmall = SkinHandler:getFont("HUD", 15)
+    self.fontExtraSmall = SkinHandler:getFont("HUD", 12)
 
     self.font = SkinHandler:getFont("HUD", 160)
     self.debugFont = SkinHandler:getFont("HUD", 70)
