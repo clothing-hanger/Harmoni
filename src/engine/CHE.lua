@@ -33,8 +33,8 @@ function CHE:init()
     require("engine.modules.lua")
     Class = require("engine.class.class")
     State = require("engine.state.State")
-    require("modules.Transitions")
-    States = require("modules.States")
+    require("modules.game.Transitions")
+    States = require("modules.game.States")
     Timer = require("engine.lib.Timer")
     Ease = require("engine.lib.Ease")
     GIF = require("engine.lib.GIF")
@@ -44,7 +44,7 @@ function CHE:init()
     WINDOW = require("engine.modules.window")
 
     -- game stufffff :3
-    maniaGrades = require("modules.maniaGrades") -- this is here but judgments isnt because this one isnt just a table like judgements is
+    maniaGrades = require("modules.gamemodes.mania.maniaGrades") -- this is here but judgments isnt because this one isnt just a table like judgements is
 
     if type(WINDOW) ~= "table" then WINDOW = nil end
     if WINDOW then
@@ -55,7 +55,7 @@ function CHE:init()
     end
     NOTIFICATIONS = require("engine.modules.notifications")
     if type(NOTIFICATIONS) ~= "table" then NOTIFICATIONS = nil end
-    require("modules.Objects")
+    require("modules.game.Objects")
 
     cursor = cursor()
 

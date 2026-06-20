@@ -30,7 +30,7 @@ if love.system.getOS() == "OS X" then -- disable jit on arm osx because it perfo
 end
 
 function love.load(args)
-    Settings = require("modules.Settings")
+    Settings = require("modules.game.Settings")
     Settings.default = Settings:defaultSettings()
     Settings:loadSettings()
 
@@ -40,9 +40,9 @@ function love.load(args)
     love.filesystem.createDirectory("Music")
     love.filesystem.createDirectory("Settings")
 
-    SkinHandler = require("modules.skinHandler")
+    SkinHandler = require("modules.game.skinHandler")
     SDL2 = require("engine.modules.SDL2")
-    LocaleHandler = require("modules.localeHandler")
+    LocaleHandler = require("modules.game.localeHandler")
     local preferredLocales
     if SDL2 then
         --preferredLocales = SDL2.getPreferredLocales()
@@ -55,7 +55,7 @@ function love.load(args)
     print("Most preferred locale: " .. mostPreferred.language .. "-" .. mostPreferred.country)
     LocaleHandler:loadLocale(mostPreferred.language .. "-" .. mostPreferred.country .. ".lua")
     if os.getenv("USERNAME") == "Guglio" then LocaleHandler:loadLocale("furry.lua") end
-    CLibs = require("modules.handleCLibs")
+    CLibs = require("modules.game.handleCLibs")
     Settings:addSkinsToSettings(SkinHandler:getAllSkins())
 
     --SongScript = require("scripting.songScript")
@@ -75,15 +75,15 @@ function love.load(args)
     require("bob")  -- bob 💖
     -- bob will not be added
 
-    maniaChartDifficultyCalculator = require("modules.maniaChartDifficultyCalculator")
-    ChartParse = require("modules.chartParse")
-    MusicTimeManager = require("modules.musicTimeManager")
-    ScoreHandler = require("modules.scoreHandler")
-    SongListManager = require("modules.songListManager")
-    CaptionParser = require("modules.captionParser")
-    Point = require("modules.Point")
+    maniaChartDifficultyCalculator = require("modules.gamemodes.mania.maniaChartDifficultyCalculator")
+    ChartParse = require("modules.game.chartParse")
+    MusicTimeManager = require("modules.game.musicTimeManager")
+    ScoreHandler = require("modules.game.scoreHandler")
+    SongListManager = require("modules.game.songListManager")
+    CaptionParser = require("modules.game.captionParser")
+    Point = require("modules.math.Point")
     -- seems to be the best place to load these so,,, we load modifiers in main lol 
-    modifiersTable = require("modules.modifiers")
+    modifiersTable = require("modules.game.data.modifiers")
 
     spookyGlitchShader = love.graphics.newShader("shaders/spookyglitch.glsl")
 

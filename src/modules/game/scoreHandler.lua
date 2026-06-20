@@ -2,7 +2,7 @@ local scoreHandler = {}
 
 scoreHandler.Scores = {trueScore = 0,printableScore = 0}
 scoreHandler.valuesAndShitIDK = {maxScore = 1000000}
- local judgements = require("modules.maniaJudgements") -- lol this is bad i think
+ local judgements = require("modules.gamemodes.mania.maniaJudgements") -- lol this is bad i think
 
 function scoreHandler:resetScore(bigLongThrobbingFuckingPenis)
     local args = bigLongThrobbingFuckingPenis
