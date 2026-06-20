@@ -8,7 +8,7 @@ Open source rhythm game written in Love2D Lua
 
 # big boobs
 
-:checkmark: big boobs implemented
+✅ big boobs implemented
 
 # Importing songs
 
