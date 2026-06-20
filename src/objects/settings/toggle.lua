@@ -2,6 +2,7 @@ local toggle = settingsbaseshitthingy:extend("toggle")
 
 function stringSplit(str, sep)  -- shouldnt this be local?
     local t = {}                -- buirger
+                                -- sorry :(
     for s in string.gmatch(str, "([^" .. sep .. "]+)") do
         table.insert(t, s)
     end
