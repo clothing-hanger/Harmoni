@@ -1,0 +1,24 @@
+[meta]
+difficultyName: funny lol
+initialSV:1
+creator: none lol
+backgroundFile:image.png
+bpm:120
+songPreviewTime:44000
+laneCount:4
+title:heartbeatz ♡
+chartOrigin:
+artist:Shokupanw
+gameMode:mania
+tags:
+audioFile:audio.mp3
+
+[warnings]
+content:unfinishedsong
+content:nochart
+
+[bpm]
+
+[sliderVelocities]
+
+[hitObjects]
