@@ -1,0 +1,25 @@
+[meta]
+difficultyName: funny lol
+initialSV:1
+creator: none lol
+backgroundFile:image.jpg
+bpm:100
+songPreviewTime:44000
+laneCount:4
+title:幻走メズ
+chartOrigin:
+artist:44e-prone feat.唄音ウタ×馬声ウマ
+
+gameMode:mania
+tags:
+audioFile:audio.mp3
+
+[warnings]
+content:unfinishedsong
+content:nochart
+
+[bpm]
+
+[sliderVelocities]
+
+[hitObjects]

@@ -1,0 +1,25 @@
+[meta]
+difficultyName: funny lol
+initialSV:1
+creator: none lol
+backgroundFile:image.jpg
+bpm:116
+songPreviewTime:44000
+laneCount:4
+title:One and Only
+chartOrigin:
+artist:rai1367
+
+gameMode:mania
+tags:
+audioFile:audio.mp3
+
+[warnings]
+content:unfinishedsong
+content:nochart
+
+[bpm]
+
+[sliderVelocities]
+
+[hitObjects]

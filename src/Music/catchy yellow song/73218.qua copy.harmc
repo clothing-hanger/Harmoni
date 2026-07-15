@@ -1,0 +1,24 @@
+[meta]
+difficultyName: funny lol
+initialSV:1
+creator: none lol
+backgroundFile:image.jpg
+bpm:200
+songPreviewTime:44000
+laneCount:4
+title:CATCHY YELLOW SONG
+chartOrigin:
+artist:44e-prone feat.重音テト
+gameMode:mania
+tags:
+audioFile:audio.mp3
+
+[warnings]
+content:unfinishedsong
+content:nochart
+
+[bpm]
+
+[sliderVelocities]
+
+[hitObjects]
